@@ -27,6 +27,7 @@
     "@nuxtjs/axios": "^5.3.6",
     "cross-env": "^7.0.2",
     "koa": "^2.6.2",
+    "koa-helmet": "^5.2.0",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {
