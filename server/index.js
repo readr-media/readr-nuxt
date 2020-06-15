@@ -1,5 +1,6 @@
 const Koa = require('koa')
 const consola = require('consola')
+const helmet = require('koa-helmet')
 const { Nuxt, Builder } = require('nuxt')
 
 const app = new Koa()
@@ -23,6 +24,8 @@ async function start() {
     const builder = new Builder(nuxt)
     await builder.build()
   }
+
+  app.use(helmet())
 
   app.use((ctx) => {
     ctx.status = 200
