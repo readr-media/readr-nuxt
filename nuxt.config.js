@@ -27,7 +27,9 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/requests/index.js'],
+
+  serverMiddleware: [{ path: '/api', handler: '~/api/index.js' }],
   /*
    ** Nuxt.js dev-modules
    */
@@ -42,10 +44,7 @@ module.exports = {
   /*
    ** Nuxt.js modules
    */
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-  ],
+  modules: [],
 
   styleResources: {
     scss: '~/scss/**/*.scss',

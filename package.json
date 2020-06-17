@@ -24,11 +24,13 @@
     }
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.3.6",
+    "axios": "^0.19.2",
     "cross-env": "^7.0.2",
+    "humps": "^2.0.1",
     "koa": "^2.6.2",
     "koa-helmet": "^5.2.0",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "qs": "^6.9.4"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.0.0",
