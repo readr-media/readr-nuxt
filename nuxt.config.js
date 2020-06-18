@@ -1,5 +1,9 @@
 module.exports = {
   mode: 'universal',
+
+  env: {
+    BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
+  },
   /*
    ** Headers of the page
    */
@@ -40,11 +44,15 @@ module.exports = {
     '@nuxtjs/stylelint-module',
     // Doc: https://github.com/nuxt-community/style-resources-module
     '@nuxtjs/style-resources',
+    // Doc: https://github.com/nuxt/components
+    '@nuxt/components',
   ],
   /*
    ** Nuxt.js modules
    */
-  modules: [],
+  modules: ['@nuxtjs/dayjs'],
+
+  components: true,
 
   styleResources: {
     scss: '~/scss/**/*.scss',

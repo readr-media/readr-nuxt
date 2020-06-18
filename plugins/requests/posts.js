@@ -6,8 +6,12 @@ import { apiAxios } from './util.js'
 export { fetchPosts, fetchPostsByTag }
 
 async function fetchPosts(params = {}) {
-  const { data } = await apiAxios.get(`/posts${buildParams(params)}`)
-  return camelizeKeys(data)
+  try {
+    const { data } = await apiAxios.get(`/posts${buildParams(params)}`)
+    return camelizeKeys(data)
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 async function fetchPostsByTag(tagId) {
