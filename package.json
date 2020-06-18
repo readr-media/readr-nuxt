@@ -24,6 +24,7 @@
     }
   },
   "dependencies": {
+    "@nuxtjs/dayjs": "^1.1.7",
     "axios": "^0.19.2",
     "cross-env": "^7.0.2",
     "humps": "^2.0.1",
@@ -33,6 +34,7 @@
     "qs": "^6.9.4"
   },
   "devDependencies": {
+    "@nuxt/components": "^0.3.4",
     "@nuxtjs/eslint-config": "^3.0.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/style-resources": "^1.0.0",
