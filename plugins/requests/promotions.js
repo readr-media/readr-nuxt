@@ -3,9 +3,9 @@ import { stringify as qsStringify } from 'qs'
 
 import { apiAxios } from './util.js'
 
-export { fetchEditorsChoice }
+export { fetchPromotions }
 
-async function fetchEditorsChoice(params = {}) {
+async function fetchPromotions(params = {}) {
   try {
     const { data } = await apiAxios.get(`/promotions${buildParams(params)}`)
     return camelizeKeys(data)
