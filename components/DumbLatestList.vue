@@ -1,9 +1,9 @@
 <template>
-  <div class="latest-section">
-    <article class="latest-section__main">
+  <div class="latest-list">
+    <article class="latest-list__main">
       <a :href="getHref(postMain)" target="_blank">
         <picture>
-          <img :src="getImageSrc(postMain)" alt="" />
+          <img :src="getImage(postMain)" alt="" />
         </picture>
         <h1>{{ postMain.title }}</h1>
         <span class="date">{{ getFormattedDate(postMain.publishedAt) }}</span>
@@ -11,11 +11,11 @@
     </article>
 
     <ul>
-      <li v-for="post in postsSub" :key="post.id" class="latest-section__sub">
+      <li v-for="post in postsSub" :key="post.id" class="latest-list__sub">
         <article>
           <a :href="getHref(post)" target="_blank">
             <picture>
-              <img :src="getImageSrc(post)" alt="" />
+              <img :src="getImage(post)" alt="" />
             </picture>
             <div class="text-wrapper">
               <h1>{{ post.title }}</h1>
@@ -34,7 +34,7 @@
 import defaultImage from '~/assets/og-image.jpg'
 
 export default {
-  name: 'DumbLatestSection',
+  name: 'DumbLatestList',
   props: {
     postMain: {
       type: Object,
@@ -48,7 +48,7 @@ export default {
     },
   },
   methods: {
-    getImageSrc({ heroImage, ogImage } = {}) {
+    getImage({ heroImage, ogImage } = {}) {
       return heroImage || ogImage || defaultImage
     },
     getHref({ type, id, slug }) {
@@ -69,7 +69,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.latest-section {
+.latest-list {
   @include media-breakpoint-up(md) {
     display: flex;
     justify-content: space-between;
@@ -144,7 +144,7 @@ export default {
         margin-top: 20px;
       }
     }
-    + .latest-section__sub {
+    + .latest-list__sub {
       margin-top: 18px;
       @include media-breakpoint-up(md) {
         margin-top: 24px;
