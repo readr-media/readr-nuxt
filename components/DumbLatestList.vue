@@ -19,9 +19,9 @@
             </picture>
             <div class="text-wrapper">
               <h1>{{ post.title }}</h1>
-              <span class="date">
+              <div class="date">
                 {{ getFormattedDate(postMain.publishedAt) }}
-              </span>
+              </div>
             </div>
           </a>
         </article>
@@ -177,7 +177,6 @@ h1 {
   overflow: hidden;
 }
 .date {
-  display: block;
   font-size: 13px;
   line-height: 1.4;
   color: rgba(#000, 0.66);

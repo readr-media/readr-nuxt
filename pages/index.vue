@@ -22,6 +22,16 @@
         :postsSub="latestPostsSub"
       />
     </section>
+
+    <section class="horizontal-container">
+      <DumbSectionHeading
+        title="協作專區"
+        color="#f5ebff"
+        fill="#04295e"
+        class="home__section-heading"
+      />
+      <DumbHorizontalList :projects="collaborativeProjects" />
+    </section>
   </div>
 </template>
 
@@ -36,6 +46,44 @@ export default {
     return {
       editorsChoicePosts: [],
       latestPosts: [],
+      collaborativeProjects: [
+        {
+          id: 1,
+          title: '為了武漢肺炎防疫的需要，你可以接受你的權益被限制嗎？',
+          heroImage:
+            'https://www.readr.tw/assets/images/6324f78e5ddc9774c5e14cb6f2dbc34f/6324f78e5ddc9774c5e14cb6f2dbc34f.jpeg',
+          endTime: 'Tue, 09 Jun 2020 10:00:00 GMT',
+          progress: 37,
+          link: 'https://www.readr.tw/',
+        },
+        {
+          id: 2,
+          title: '港版國安法將成「一國一制」？字詞分析網友怎麼看',
+          heroImage:
+            'https://www.readr.tw/assets/images/830962f5f7f9b90372a60067f0545aea/830962f5f7f9b90372a60067f0545aea.jpg',
+          // endTime: 'Mon, 22 Jun 2020 10:00:00 GMT',
+          progress: 87,
+          link: 'https://www.readr.tw/',
+        },
+        {
+          id: 3,
+          title: '不一樣的彩虹：全台小學晨光時間大解密',
+          heroImage:
+            'https://www.readr.tw/assets/images/5e2ba0d484f8369089f185afcf8b3be4/5e2ba0d484f8369089f185afcf8b3be4.png',
+          endTime: 'Tue, 09 Jun 2020 10:00:00 GMT',
+          // progress: 56,
+          link: 'https://www.readr.tw/',
+        },
+        {
+          id: 4,
+          // title: '不一樣的彩虹：全台小學晨光時間大解密',
+          heroImage:
+            'https://www.readr.tw/assets/images/5e2ba0d484f8369089f185afcf8b3be4/5e2ba0d484f8369089f185afcf8b3be4.png',
+          endTime: 'Tue, 09 Jun 2020 10:00:00 GMT',
+          progress: 56,
+          link: 'https://www.readr.tw/',
+        },
+      ],
     }
   },
   computed: {
@@ -89,6 +137,7 @@ export default {
   }
   &__section-heading {
     margin-bottom: 20px;
+    max-width: 1096px;
     @include media-breakpoint-up(md) {
       margin-bottom: 30px;
     }
@@ -103,6 +152,21 @@ export default {
   @media (min-width: 1136px) {
     padding-left: 0;
     padding-right: 0;
+  }
+}
+.horizontal-container {
+  padding-left: 20px;
+  margin-bottom: 40px;
+  @include media-breakpoint-up(md) {
+    margin-bottom: 60px;
+  }
+  @media (min-width: 1096px) {
+    // (100vw - 1096px) / 2 + 20px
+    padding-left: calc(50vw - 528px);
+  }
+  @media (min-width: 1136px) {
+    // (100vw - 1096px) / 2
+    padding-left: calc(50vw - 548px);
   }
 }
 </style>
