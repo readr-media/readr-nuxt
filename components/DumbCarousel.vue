@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     renderedPosts() {
-      if (this.onlyOnePost) {
+      if (this.hasOnlyOnePost) {
         return [this.posts[this.currentPostIdx]]
       }
 
@@ -110,7 +110,7 @@ export default {
       ]
     },
     translateX() {
-      if (this.onlyOnePost) {
+      if (this.hasOnlyOnePost) {
         return 0
       }
 
@@ -119,15 +119,15 @@ export default {
     totalPosts() {
       return this.posts.length
     },
-    onlyOnePost() {
+    hasOnlyOnePost() {
       return this.totalPosts === 1
     },
     shouldOpenArrow() {
-      return !this.onlyOnePost
+      return !this.hasOnlyOnePost
     },
   },
   mounted() {
-    if (!this.onlyOnePost) {
+    if (!this.hasOnlyOnePost) {
       this.startAutoToNextPost()
     }
   },

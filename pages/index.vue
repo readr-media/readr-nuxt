@@ -1,5 +1,7 @@
 <template>
   <div>
+    <DumbHeader />
+
     <DumbCarousel
       v-if="shouldOpenEditorsChoice"
       :posts="editorsChoicePosts"
@@ -22,6 +24,8 @@
         :postsSub="latestPostsSub"
       />
     </section>
+
+    <DumbDonateButton class="home__donate-btn" />
 
     <section class="horizontal-container">
       <DumbSectionHeading
@@ -130,7 +134,7 @@ export default {
 <style lang="scss" scoped>
 .home {
   &__carousel {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     @include media-breakpoint-up(md) {
       margin-bottom: 60px;
     }
@@ -142,16 +146,29 @@ export default {
       margin-bottom: 30px;
     }
   }
+  &__donate-btn {
+    margin-left: 20px;
+    margin-right: 20px;
+    max-width: 396px;
+    margin-bottom: 40px;
+    @media (min-width: 436px) {
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 110px;
+    }
+  }
 }
 .container {
   max-width: 1096px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 40px;
   padding-left: 20px;
   padding-right: 20px;
   @media (min-width: 1136px) {
     padding-left: 0;
     padding-right: 0;
+    margin-bottom: 60px;
   }
 }
 .horizontal-container {
