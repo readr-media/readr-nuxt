@@ -16,7 +16,6 @@ export default {
 
 <style lang="scss" scoped>
 header {
-  background-color: #fff;
   padding-top: 9px;
   padding-bottom: 9px;
   svg {
