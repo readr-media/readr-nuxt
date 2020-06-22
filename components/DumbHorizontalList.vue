@@ -58,13 +58,9 @@ export default {
 <style lang="scss" scoped>
 .horizontal-list {
   color: rgba(#000, 0.87);
-  font-size: 15px;
   line-height: 1.5;
   display: flex;
   overflow-y: auto;
-  @include media-breakpoint-up(md) {
-    font-size: 18px;
-  }
 }
 article {
   flex: 0 0 63.33%;
@@ -92,12 +88,19 @@ a {
   display: block;
   user-select: none;
   cursor: pointer;
+  &:hover img {
+    transform: scale(1.2);
+  }
+  &:active button {
+    border-width: 2px;
+  }
 }
 picture {
   padding-top: 50%;
   position: relative;
   display: block;
   margin-bottom: 8px;
+  overflow: hidden;
   @include media-breakpoint-up(md) {
     margin-bottom: 11px;
   }
@@ -109,26 +112,29 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s;
 }
 button {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #f5ebff;
+  background-color: #04295e;
   letter-spacing: 2.5px;
-  color: #000928;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  color: #fff;
+  padding-top: 9px;
+  padding-bottom: 9px;
   width: 110px;
   font-weight: 700;
   border-radius: 2px;
   border: 1px solid #fff;
+  outline: none;
   @include media-breakpoint-up(md) {
     width: 160px;
   }
 }
 h1 {
+  font-size: 15px;
   letter-spacing: 2.5px;
   font-weight: 700;
   word-wrap: break-word;
@@ -141,6 +147,9 @@ h1 {
   margin-bottom: 6px;
   @include media-breakpoint-up(md) {
     margin-bottom: 4px;
+    font-size: 18px;
+    // 18 * 1.5 * 2
+    min-height: 54px;
   }
 }
 .progress {
@@ -166,8 +175,12 @@ h1 {
     }
   }
   &__num {
+    font-size: 15px;
     letter-spacing: 2.5px;
     font-weight: 700;
+    @include media-breakpoint-up(md) {
+      font-size: 18px;
+    }
   }
 }
 .date {
