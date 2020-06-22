@@ -4,47 +4,54 @@
       <slot name="heading" />
     </div>
 
-    <div
-      class="posts-wrapper"
-      :class="{ transitioned: isTransitioning }"
-      :style="{ transform: `translate3d(${translateX}, 0, 0)` }"
-      @transitionend="updateRenderedPosts"
-      @webkitTransitionEnd="updateRenderedPosts"
-      @oTransitionEnd="updateRenderedPosts"
-    >
-      <!-- 當 posts prop 只有兩篇文章時，會出現 duplicate keys 的錯誤，故綁定 idx，以提供唯一 key -->
-      <article v-for="(post, idx) in renderedPosts" :key="`${post.id}--${idx}`">
-        <a :href="post.link" target="_blank">
-          <div class="title-wrapper">
-            <h1>{{ post.title }}</h1>
-            <svg
-              class="dialog-box"
-              width="348"
-              height="187"
-              viewBox="0 0 348 187"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M0 0V144.48H30.36V186.64L90.16 144.48H348V133.482H83.72L42.32 161.894V133.482H11.04V0H0Z"
-                fill="#000928"
-              />
-            </svg>
-          </div>
-          <picture>
-            <img :src="getImage(post)" alt="" />
-          </picture>
-        </a>
+    <article>
+      <a :href="activePost.link" target="_blank">
+        <div class="title-wrapper">
+          <h1
+            v-for="(post, idx) in posts"
+            :key="post.id"
+            :class="{ active: shouldActive(idx) }"
+          >
+            {{ post.title }}
+          </h1>
+          <svg
+            class="dialog-box"
+            width="348"
+            height="187"
+            viewBox="0 0 348 187"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M0 0V144.48H30.36V186.64L90.16 144.48H348V133.482H83.72L42.32 161.894V133.482H11.04V0H0Z"
+              fill="#000928"
+            />
+          </svg>
+        </div>
+        <picture>
+          <img
+            v-for="(post, idx) in posts"
+            :key="post.id"
+            :class="{ active: shouldActive(idx) }"
+            :src="shouldActive(idx) && getImage(post, idx)"
+            alt=""
+          />
+        </picture>
+      </a>
+    </article>
 
-        <div
-          class="bg bg--img"
-          :style="{ backgroundImage: `url(${getImage(post)})` }"
-        />
-        <div class="bg bg--color" />
-      </article>
-    </div>
+    <div
+      v-for="(post, idx) in posts"
+      :key="post.id"
+      :class="{ active: shouldActive(idx) }"
+      class="bg bg--img"
+      :style="{
+        backgroundImage: shouldActive(idx) && `url(${getImage(post, idx)})`,
+      }"
+    />
+    <div class="bg bg--color" />
 
     <div
       v-if="shouldOpenArrow"
@@ -77,44 +84,13 @@ export default {
   },
   data() {
     return {
-      x: 1,
-      currentPostIdx: 0,
-      isTransitioning: false,
+      activePostIdx: 0,
       timeoutIdOfAutoToNextPost: undefined,
     }
   },
   computed: {
-    renderedPosts() {
-      if (this.hasOnlyOnePost) {
-        return [this.posts[this.currentPostIdx]]
-      }
-
-      let prevPostIdx = this.currentPostIdx - 1
-      const doesPrevExceedTheFirst = prevPostIdx < 0
-      if (doesPrevExceedTheFirst) {
-        const lastPostIdx = this.totalPosts - 1
-        prevPostIdx = lastPostIdx
-      }
-
-      let nextPostIdx = this.currentPostIdx + 1
-      const doesNextExceedTheLast = nextPostIdx >= this.totalPosts
-      if (doesNextExceedTheLast) {
-        const firstPostIdx = 0
-        nextPostIdx = firstPostIdx
-      }
-
-      return [
-        this.posts[prevPostIdx],
-        this.posts[this.currentPostIdx],
-        this.posts[nextPostIdx],
-      ]
-    },
-    translateX() {
-      if (this.hasOnlyOnePost) {
-        return 0
-      }
-
-      return `${this.x * -100}%`
+    activePost() {
+      return this.posts[this.activePostIdx]
     },
     totalPosts() {
       return this.posts.length
@@ -131,65 +107,41 @@ export default {
       this.startAutoToNextPost()
     }
   },
+  beforeDestroy() {
+    this.stopAutoToNextPost()
+  },
   methods: {
+    shouldActive(idx) {
+      return idx === this.activePostIdx
+    },
     toPrevPost() {
-      if (this.isTransitioning) {
-        return
-      }
-
       this.stopAutoToNextPost()
 
-      this.x -= 1
-      this.isTransitioning = true
+      const hasReachedTheBeginning = this.activePostIdx <= 0
+      if (!hasReachedTheBeginning) {
+        this.activePostIdx -= 1
+      } else {
+        const theLastPostIdx = this.totalPosts - 1
+        this.activePostIdx = theLastPostIdx
+      }
+
+      this.startAutoToNextPost()
     },
     toNextPost() {
-      if (this.isTransitioning) {
-        return
-      }
-
       this.stopAutoToNextPost()
 
-      this.x += 1
-      this.isTransitioning = true
-    },
-    updateRenderedPosts() {
-      this.isTransitioning = false
-
-      switch (this.x) {
-        case 0: {
-          const doesCurrentReachTheFirst = this.currentPostIdx <= 0
-          if (doesCurrentReachTheFirst) {
-            const lastPostIdx = this.totalPosts - 1
-            this.currentPostIdx = lastPostIdx
-            break
-          }
-
-          this.currentPostIdx -= 1
-          break
-        }
-        case 2: {
-          const doesCurrentReachTheLast =
-            this.currentPostIdx >= this.totalPosts - 1
-          if (doesCurrentReachTheLast) {
-            const firstPostIdx = 0
-            this.currentPostIdx = firstPostIdx
-            break
-          }
-
-          this.currentPostIdx += 1
-          break
-        }
+      const hasReachedTheEnd = this.activePostIdx >= this.totalPosts - 1
+      if (!hasReachedTheEnd) {
+        this.activePostIdx += 1
+      } else {
+        const theFirstPostIdx = 0
+        this.activePostIdx = theFirstPostIdx
       }
-
-      this.x = 1
 
       this.startAutoToNextPost()
     },
     startAutoToNextPost() {
-      this.timeoutIdOfAutoToNextPost = setTimeout(() => {
-        this.x += 1
-        this.isTransitioning = true
-      }, 2000)
+      this.timeoutIdOfAutoToNextPost = setTimeout(this.toNextPost, 2000)
     },
     stopAutoToNextPost() {
       clearTimeout(this.timeoutIdOfAutoToNextPost)
@@ -204,31 +156,21 @@ export default {
 <style lang="scss" scoped>
 .carousel {
   position: relative;
-  overflow: hidden;
-}
-.heading-wrapper {
   padding-top: 20px;
-  padding-bottom: 20px;
-  background-color: #ebf02c;
   @include media-breakpoint-up(md) {
     padding-top: 30px;
-    padding-bottom: 30px;
   }
 }
-.posts-wrapper {
-  display: flex;
-  align-items: flex-start;
-  &.transitioned {
-    transition: transform 0.45s;
+.heading-wrapper {
+  margin-bottom: 20px;
+  @include media-breakpoint-up(md) {
+    margin-bottom: 30px;
   }
 }
 article {
   padding-right: 20px;
   padding-left: 20px;
   padding-bottom: 20px;
-  position: relative;
-  overflow: hidden;
-  flex: 0 0 100%;
   @include media-breakpoint-up(md) {
     padding-right: 0px;
     padding-left: 0px;
@@ -253,6 +195,8 @@ a {
   padding-left: 10px;
   margin-bottom: 25px;
   margin-left: -10px;
+  display: flex;
+  align-items: flex-start;
   @include media-breakpoint-up(md) {
     border-left: none;
     padding-left: 0px;
@@ -261,7 +205,6 @@ a {
     width: calc((100% - 66px) * 0.32);
     order: 2;
     position: relative;
-    display: flex;
     align-items: center;
     // 36 * 1.5 * 3
     min-height: 162px;
@@ -277,9 +220,16 @@ h1 {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.6s;
   @include media-breakpoint-up(md) {
     font-size: 36px;
     letter-spacing: 5.4px;
+  }
+  &.active {
+    opacity: 1;
+    position: relative;
   }
 }
 .dialog-box {
@@ -308,6 +258,11 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s;
+  &.active {
+    opacity: 1;
+  }
 }
 .bg {
   position: absolute;
@@ -318,15 +273,19 @@ img {
   z-index: -1;
   &--img {
     height: 100%;
-    opacity: 0.2;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 0.6s;
+    &.active {
+      opacity: 0.2;
+    }
   }
   &--color {
     background-color: #ebf02c;
     @include media-breakpoint-up(md) {
-      height: 71.58%;
+      height: 78.49%;
     }
   }
 }
@@ -341,6 +300,11 @@ img {
   @include media-breakpoint-up(md) {
     // 86 = 60 + 26
     width: 86px;
+  }
+  &:active ::v-deep {
+    circle {
+      fill: #000928;
+    }
   }
   & svg {
     position: absolute;
