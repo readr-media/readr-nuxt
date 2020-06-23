@@ -35,7 +35,7 @@
             v-for="(post, idx) in posts"
             :key="post.id"
             :class="{ active: shouldActive(idx) }"
-            :src="shouldActive(idx) && getImage(post, idx)"
+            :src="getImage(post, idx)"
             alt=""
           />
         </picture>
@@ -48,7 +48,7 @@
       :class="{ active: shouldActive(idx) }"
       class="bg bg--img"
       :style="{
-        backgroundImage: shouldActive(idx) && `url(${getImage(post, idx)})`,
+        backgroundImage: `url(${getImage(post, idx)})`,
       }"
     />
     <div class="bg bg--color" />
@@ -141,7 +141,7 @@ export default {
       this.startAutoToNextPost()
     },
     startAutoToNextPost() {
-      this.timeoutIdOfAutoToNextPost = setTimeout(this.toNextPost, 2000)
+      this.timeoutIdOfAutoToNextPost = setTimeout(this.toNextPost, 3000)
     },
     stopAutoToNextPost() {
       clearTimeout(this.timeoutIdOfAutoToNextPost)
@@ -196,7 +196,9 @@ a {
   margin-bottom: 25px;
   margin-left: -10px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  // 24 * 1.5 * 3
+  min-height: 108px;
   @include media-breakpoint-up(md) {
     border-left: none;
     padding-left: 0px;
@@ -205,7 +207,6 @@ a {
     width: calc((100% - 66px) * 0.32);
     order: 2;
     position: relative;
-    align-items: center;
     // 36 * 1.5 * 3
     min-height: 162px;
   }
@@ -222,7 +223,7 @@ h1 {
   overflow: hidden;
   opacity: 0;
   position: absolute;
-  transition: opacity 0.6s;
+  transition: none;
   @include media-breakpoint-up(md) {
     font-size: 36px;
     letter-spacing: 5.4px;
@@ -230,6 +231,7 @@ h1 {
   &.active {
     opacity: 1;
     position: relative;
+    transition: opacity 2.1s;
   }
 }
 .dialog-box {
@@ -259,9 +261,10 @@ img {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.6s;
+  transition: none;
   &.active {
     opacity: 1;
+    transition: opacity 2.1s;
   }
 }
 .bg {
@@ -277,9 +280,10 @@ img {
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0;
-    transition: opacity 0.6s;
+    transition: none;
     &.active {
       opacity: 0.2;
+      transition: opacity 2.1s;
     }
   }
   &--color {

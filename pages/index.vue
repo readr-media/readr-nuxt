@@ -12,7 +12,7 @@
       </template>
     </DumbCarousel>
 
-    <section class="container">
+    <section class="container container--latest">
       <DumbSectionHeading
         title="最新文章"
         fill="#ebf02c"
@@ -36,71 +36,34 @@
       />
       <DumbHorizontalList :projects="collaborativeProjects" />
     </section>
+
+    <section class="more-section yellow-bg">
+      <div class="container">
+        <DumbSectionHeading title="更多專題" class="home__section-heading" />
+        <div ref="moreListContainer">
+          <DumbMoreList
+            v-for="more in morePosts"
+            :key="more.tag"
+            :topic="more.tag"
+            :posts="more.posts"
+          />
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-const mockCollaborativeProjects = [
-  {
-    id: 1,
-    title: '為了武漢肺炎防疫的需要，你可以接受你的權益被限制嗎？',
-    heroImage:
-      'https://www.readr.tw/assets/images/6324f78e5ddc9774c5e14cb6f2dbc34f/6324f78e5ddc9774c5e14cb6f2dbc34f.jpeg',
-    endTime: 'Tue, 09 Jun 2020 10:00:00 GMT',
-    progress: 37,
-    link: 'https://www.readr.tw/series/Wuhan-pneumonia',
-  },
-  {
-    id: 2,
-    title: '港版國安法將成「一國一制」？字詞分析網友怎麼看',
-    heroImage:
-      'https://www.readr.tw/assets/images/830962f5f7f9b90372a60067f0545aea/830962f5f7f9b90372a60067f0545aea.jpg',
-    // endTime: 'Mon, 22 Jun 2020 10:00:00 GMT',
-    progress: 87,
-    link: 'https://www.readr.tw/series/2020president',
-  },
-  {
-    id: 3,
-    title: '不一樣的彩虹：全台小學晨光時間大解密',
-    heroImage:
-      'https://www.readr.tw/assets/images/5e2ba0d484f8369089f185afcf8b3be4/5e2ba0d484f8369089f185afcf8b3be4.png',
-    endTime: 'Tue, 09 Jun 2020 10:00:00 GMT',
-    // progress: 56,
-    link: 'https://www.readr.tw/series/overseastaiwanese',
-  },
-  {
-    id: 4,
-    // title: '不一樣的彩虹：全台小學晨光時間大解密',
-    heroImage:
-      'https://www.readr.tw/assets/images/5e2ba0d484f8369089f185afcf8b3be4/5e2ba0d484f8369089f185afcf8b3be4.png',
-    endTime: 'Tue, 09 Jun 2020 10:00:00 GMT',
-    progress: 56,
-    link: 'https://www.readr.tw/series/food-delivery',
-  },
-]
-const mockEditorsChoicePosts = [
-  {
-    id: 1,
-    title: '記者來當外送員：開箱美食外送秘辛！',
-    link: 'https://www.readr.tw/series/Wuhan-pneumonia',
-    image:
-      'https://www.readr.tw/assets/images/5e2ba0d484f8369089f185afcf8b3be4/5e2ba0d484f8369089f185afcf8b3be4.png',
-  },
-  {
-    id: 2,
-    title: '不一樣的彩虹：全台小學晨光時間大解密',
-    link: 'https://www.readr.tw/series/food-delivery',
-    image:
-      'https://www.readr.tw/assets/images/830962f5f7f9b90372a60067f0545aea/830962f5f7f9b90372a60067f0545aea.jpg',
-  },
-  {
-    id: 3,
-    title: '港版國安法將成「一國一制」？字詞分析網友怎麼看',
-    link: 'https://www.readr.tw/series/2020president',
-    image:
-      'https://www.readr.tw/assets/images/6324f78e5ddc9774c5e14cb6f2dbc34f/6324f78e5ddc9774c5e14cb6f2dbc34f.jpeg',
-  },
-]
+import {
+  mockCollaborativeProjects,
+  mockEditorsChoicePosts,
+  mockMorePostsNews,
+  mockMorePostsPolitics,
+  mockMorePostsRights,
+  mockMorePostsEnv,
+  mockMorePostsEdu,
+  mockMorePostsOthers,
+} from '~/constants/mock.js'
 
 export default {
   name: 'Home',
@@ -113,6 +76,14 @@ export default {
       editorsChoicePosts: mockEditorsChoicePosts,
       latestPosts: [],
       collaborativeProjects: mockCollaborativeProjects,
+      morePosts: [
+        mockMorePostsNews,
+        mockMorePostsEdu,
+        mockMorePostsPolitics,
+        mockMorePostsRights,
+        mockMorePostsEnv,
+        mockMorePostsOthers,
+      ],
     }
   },
   computed: {
@@ -128,6 +99,17 @@ export default {
     latestPostsSub() {
       return this.latestPosts.slice(1)
     },
+  },
+  mounted() {
+    window.Macy({
+      container: this.$refs.moreListContainer,
+      columns: 3,
+      trueOrder: true,
+      margin: {
+        x: 22,
+        y: 60,
+      },
+    })
   },
   methods: {
     async fetchEditorsChoice() {
@@ -152,6 +134,15 @@ export default {
       })
       this.latestPosts = response?.items ?? []
     },
+  },
+  head() {
+    return {
+      script: [
+        {
+          src: 'https://cdn.jsdelivr.net/npm/macy@2',
+        },
+      ],
+    }
   },
 }
 </script>
@@ -187,13 +178,17 @@ export default {
   max-width: 1096px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 40px;
   padding-left: 20px;
   padding-right: 20px;
   @media (min-width: 1136px) {
     padding-left: 0;
     padding-right: 0;
-    margin-bottom: 60px;
+  }
+  &--latest {
+    margin-bottom: 40px;
+    @media (min-width: 1136px) {
+      margin-bottom: 60px;
+    }
   }
 }
 .horizontal-container {
@@ -210,5 +205,16 @@ export default {
     // (100vw - 1096px) / 2
     padding-left: calc(50vw - 548px);
   }
+}
+.more-section {
+  padding-top: 20px;
+  padding-bottom: 30px;
+  @include media-breakpoint-up(md) {
+    padding-top: 30px;
+    padding-bottom: 0;
+  }
+}
+.yellow-bg {
+  background-color: #ebf02c;
 }
 </style>
