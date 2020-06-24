@@ -7,7 +7,7 @@
         :href="medium.href"
         target="_blank"
         rel="noopener noreferrer"
-        v-html="medium.svg"
+        v-html="medium.svgIcon"
       >
       </a>
     </div>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { SOCIAL_MEDIA_LINKS } from '~/constants/icon.js'
+import { SOCIAL_MEDIA_LINKS } from '~/constants/links.js'
 
 export default {
   name: 'DumbFooter',

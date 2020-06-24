@@ -2,15 +2,17 @@
   <div>
     <DumbHeader />
 
-    <DumbCarousel
-      v-if="shouldOpenEditorsChoice"
-      :posts="editorsChoicePosts"
-      class="home__carousel"
-    >
-      <template #heading>
-        <DumbSectionHeading title="編輯精選" />
-      </template>
-    </DumbCarousel>
+    <section>
+      <DumbCarousel
+        v-if="shouldOpenEditorsChoice"
+        :posts="editorsChoicePosts"
+        class="home__carousel"
+      >
+        <template #heading>
+          <DumbSectionHeading title="編輯精選" />
+        </template>
+      </DumbCarousel>
+    </section>
 
     <section class="container container--latest">
       <DumbSectionHeading
@@ -40,12 +42,13 @@
     <section class="more-section yellow-bg">
       <div class="container">
         <DumbSectionHeading title="更多專題" class="home__section-heading" />
-        <div ref="moreListContainer">
+        <div id="more-list-container">
           <DumbMoreList
             v-for="more in morePosts"
             :key="more.tag"
             :topic="more.tag"
             :posts="more.posts"
+            class="home__more-list"
           />
         </div>
       </div>
@@ -54,16 +57,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
+import styleVariables from '~/scss/_variables.scss'
+import { onDemand } from '~/utils/integrations/index.js'
 import {
-  mockCollaborativeProjects,
   mockEditorsChoicePosts,
+  mockCollaborativeProjects,
   mockMorePostsNews,
   mockMorePostsPolitics,
   mockMorePostsRights,
   mockMorePostsEnv,
   mockMorePostsEdu,
   mockMorePostsOthers,
-} from '~/constants/mock.js'
+} from '~/constants/mocks.js'
 
 export default {
   name: 'Home',
@@ -84,9 +91,15 @@ export default {
         mockMorePostsEnv,
         mockMorePostsOthers,
       ],
+      macyInstance: undefined,
     }
   },
   computed: {
+    ...mapGetters(['viewportWidth']),
+    breakpointMdUp() {
+      const md = parseInt(styleVariables['breakpoint-md'], 10)
+      return this.viewportWidth >= md
+    },
     shouldOpenEditorsChoice() {
       return this.editorsChoicePosts.length > 0
     },
@@ -100,24 +113,19 @@ export default {
       return this.latestPosts.slice(1)
     },
   },
+  watch: {
+    breakpointMdUp: 'handleMacy',
+  },
   mounted() {
-    window.Macy({
-      container: this.$refs.moreListContainer,
-      columns: 3,
-      trueOrder: true,
-      margin: {
-        x: 22,
-        y: 60,
-      },
-    })
+    this.handleMacy(this.breakpointMdUp)
   },
   methods: {
-    async fetchEditorsChoice() {
-      const response = await this.$fetchPromotions({
-        maxResult: 3,
-      })
-      this.editorsChoicePosts = response?.items ?? []
-    },
+    // async fetchEditorsChoice() {
+    //   const response = await this.$fetchPromotions({
+    //     maxResult: 3,
+    //   })
+    //   this.editorsChoicePosts = response?.items ?? []
+    // },
     async fetchLatestPosts() {
       const response = await this.$fetchPosts({
         publishStatus: '{"$in":[2]}',
@@ -134,15 +142,26 @@ export default {
       })
       this.latestPosts = response?.items ?? []
     },
-  },
-  head() {
-    return {
-      script: [
-        {
-          src: 'https://cdn.jsdelivr.net/npm/macy@2',
-        },
-      ],
-    }
+    handleMacy(breakpointMdUp) {
+      if (breakpointMdUp) {
+        if (this.macyInstance) {
+          this.macyInstance.reInit()
+        } else {
+          const loadMacy = onDemand('https://cdn.jsdelivr.net/npm/macy@2')
+          loadMacy(this.initMacy)
+        }
+      } else if (this.macyInstance) {
+        this.macyInstance.remove()
+      }
+    },
+    initMacy() {
+      this.macyInstance = window.Macy({
+        container: '#more-list-container',
+        columns: 3,
+        trueOrder: true,
+        margin: { x: 22, y: 0 },
+      })
+    },
   },
 }
 </script>
@@ -171,6 +190,12 @@ export default {
       margin-left: auto;
       margin-right: auto;
       margin-bottom: 110px;
+    }
+  }
+  &__more-list {
+    padding-bottom: 30px;
+    @include media-breakpoint-up(md) {
+      padding-bottom: 60px;
     }
   }
 }
@@ -208,10 +233,8 @@ export default {
 }
 .more-section {
   padding-top: 20px;
-  padding-bottom: 30px;
   @include media-breakpoint-up(md) {
     padding-top: 30px;
-    padding-bottom: 0;
   }
 }
 .yellow-bg {

@@ -7,8 +7,29 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
-  name: 'Default',
+  beforeMount() {
+    this.updateViewport()
+
+    window.addEventListener('resize', this.updateViewport)
+    window.addEventListener('orientationChange', this.updateViewport)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateViewport)
+    window.removeEventListener('orientationChange', this.updateViewport)
+  },
+  methods: {
+    ...mapMutations(['setViewport']),
+    updateViewport() {
+      const { clientWidth, clientHeight } = document.documentElement
+      this.setViewport({
+        width: clientWidth,
+        height: clientHeight,
+      })
+    },
+  },
 }
 </script>
 
