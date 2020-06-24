@@ -3,7 +3,7 @@ import { fetchPromotions } from './promotions.js'
 
 export default injectRequestMethods
 
-function injectRequestMethods(context, inject) {
+function injectRequestMethods(ctx, inject) {
   inject('fetchPosts', fetchPosts)
   inject('fetchPostsByTag', fetchPostsByTag)
 

@@ -1,7 +1,7 @@
 import { camelizeKeys, decamelizeKeys } from 'humps'
 import { stringify as qsStringify } from 'qs'
 
-import { apiAxios } from './util.js'
+import { apiAxios } from './utils.js'
 
 export { fetchPromotions }
 
