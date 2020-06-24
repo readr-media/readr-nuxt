@@ -61,6 +61,44 @@ export const mockEditorsChoicePosts = [
   },
 ]
 
+export const mockDatabases = [
+  {
+    id: 1,
+    title: '2018年「看板追追追」計畫資料',
+    prompt: 'ddio 這樣用',
+    examples: [
+      {
+        id: 1,
+        image:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQssWzafjgJS-0iF7FBI2MQAG2ECgtAE04H7Q&usqp=CAU',
+      },
+      {
+        id: 2,
+        image:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQfYRBmOT8fT1UiLHRejbDmOeWVAU76Z1UYLA&usqp=CAU',
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: '2020年五一連假期間交通部 1968人潮示警資料',
+    prompt: 'READr 這樣用',
+    examples: [
+      {
+        id: 2,
+        image:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQfYRBmOT8fT1UiLHRejbDmOeWVAU76Z1UYLA&usqp=CAU',
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: '兩岸交流團專題資料',
+    prompt: '分享你怎麼用',
+    examples: [],
+  },
+]
+
 export const mockMorePostsNews = {
   tag: '時事',
   posts: [

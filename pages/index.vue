@@ -27,7 +27,13 @@
       />
     </section>
 
-    <DumbDonateButton class="home__donate-btn" />
+    <section class="container container--database">
+      <div class="database-heading">
+        <h2>開放資料庫</h2>
+      </div>
+      <DumbDatabaseList :databases="databases" class="home__database-list" />
+      <DumbDonateButton class="home__donate-btn" />
+    </section>
 
     <section class="horizontal-container">
       <DumbSectionHeading
@@ -63,6 +69,7 @@ import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
 import {
   mockEditorsChoicePosts,
+  mockDatabases,
   mockCollaborativeProjects,
   mockMorePostsNews,
   mockMorePostsPolitics,
@@ -82,6 +89,7 @@ export default {
     return {
       editorsChoicePosts: mockEditorsChoicePosts,
       latestPosts: [],
+      databases: mockDatabases,
       collaborativeProjects: mockCollaborativeProjects,
       morePosts: [
         mockMorePostsNews,
@@ -181,15 +189,23 @@ export default {
       margin-bottom: 30px;
     }
   }
+  &__database-list {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 18px;
+    @include media-breakpoint-up(md) {
+      padding-left: 13.5%;
+      padding-right: 13.5%;
+      margin-bottom: 22px;
+    }
+  }
   &__donate-btn {
     margin-left: 20px;
     margin-right: 20px;
     max-width: 396px;
-    margin-bottom: 40px;
     @media (min-width: 436px) {
       margin-left: auto;
       margin-right: auto;
-      margin-bottom: 110px;
     }
   }
   &__more-list {
@@ -209,10 +225,20 @@ export default {
     padding-left: 0;
     padding-right: 0;
   }
-  &--latest {
+  &--latest,
+  &--database {
     margin-bottom: 40px;
     @media (min-width: 1136px) {
       margin-bottom: 60px;
+    }
+  }
+  &--database {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 20px;
+    background-color: rgba(245, 235, 255, 0.2);
+    @media (min-width: 1136px) {
+      padding-bottom: 40px;
     }
   }
 }
@@ -229,6 +255,31 @@ export default {
   @media (min-width: 1136px) {
     // (100vw - 1096px) / 2
     padding-left: calc(50vw - 548px);
+  }
+}
+.database-heading {
+  background-color: #04295e;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  @include media-breakpoint-up(md) {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+  h2 {
+    letter-spacing: 2.5px;
+    margin-left: 1.25px;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1.5;
+    color: #ebf02c;
+    @include media-breakpoint-up(md) {
+      font-size: 24px;
+      letter-spacing: 5px;
+      margin-left: 2.5px;
+    }
   }
 }
 .more-section {
