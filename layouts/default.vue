@@ -9,7 +9,7 @@
 <script>
 import { onBeforeMount, onBeforeUnmount } from 'nuxt-composition-api'
 
-import { setViewport } from '~/utils/viewport.js'
+import { setViewport } from '~/store/composition-api/viewport.js'
 
 export default {
   setup() {
