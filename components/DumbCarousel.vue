@@ -159,6 +159,7 @@ export default {
   padding-top: 20px;
   @include media-breakpoint-up(md) {
     padding-top: 30px;
+    overflow: hidden;
   }
 }
 .heading-wrapper {

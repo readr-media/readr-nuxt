@@ -48,6 +48,15 @@ html {
     max-width: 1096px;
     margin-left: auto;
     margin-right: auto;
+    @include media-breakpoint-up(md) {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    // 1136 = 1096 + 20 * 2
+    @media (min-width: 1136px) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }
 </style>
