@@ -9,8 +9,8 @@ async function fetchPromotions(params = {}) {
   try {
     const { data } = await apiAxios.get(`/promotions${buildParams(params)}`)
     return camelizeKeys(data)
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
   }
 }
 

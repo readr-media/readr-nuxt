@@ -9,8 +9,8 @@ async function fetchPosts(params = {}) {
   try {
     const { data } = await apiAxios.get(`/posts${buildParams(params)}`)
     return camelizeKeys(data)
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
   }
 }
 

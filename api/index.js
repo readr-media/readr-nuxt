@@ -19,8 +19,8 @@ async function requestAPI(req, res) {
     })
 
     res.end(JSON.stringify(data))
-  } catch (err) {
+  } catch (error) {
     console.error(`Error API request: ${req.url}`)
-    console.error(err)
+    console.error(error)
   }
 }
