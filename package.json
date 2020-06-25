@@ -35,7 +35,6 @@
     "qs": "^6.9.4"
   },
   "devDependencies": {
-    "@nuxt/components": "^0.3.4",
     "@nuxtjs/eslint-config": "^3.0.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/style-resources": "^1.0.0",

@@ -44,8 +44,7 @@ module.exports = {
     '@nuxtjs/stylelint-module',
     // Doc: https://github.com/nuxt-community/style-resources-module
     '@nuxtjs/style-resources',
-    // Doc: https://github.com/nuxt/components
-    '@nuxt/components',
+
     'nuxt-composition-api',
   ],
   /*
