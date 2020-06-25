@@ -36,13 +36,19 @@
     </section>
 
     <section class="horizontal-container">
-      <DumbSectionHeading
-        title="協作專區"
-        color="#f5ebff"
-        fill="#04295e"
-        class="home__section-heading"
+      <div class="container container--quote">
+        <DumbSectionHeading
+          title="協作專區"
+          color="#f5ebff"
+          fill="#04295e"
+          class="home__section-heading"
+        />
+        <DumbQuoteSlide :quotes="quotes" />
+      </div>
+      <DumbHorizontalList
+        class="home__horizontal-list"
+        :projects="collaborativeProjects"
       />
-      <DumbHorizontalList :projects="collaborativeProjects" />
     </section>
 
     <section class="more-section yellow-bg">
@@ -69,6 +75,7 @@ import { onDemand } from '~/utils/integrations/index.js'
 import {
   mockEditorsChoicePosts,
   mockDatabases,
+  mockQuotes,
   mockCollaborativeProjects,
   mockMorePostsNews,
   mockMorePostsPolitics,
@@ -89,6 +96,7 @@ export default {
       editorsChoicePosts: mockEditorsChoicePosts,
       latestPosts: [],
       databases: mockDatabases,
+      quotes: mockQuotes,
       collaborativeProjects: mockCollaborativeProjects,
       morePosts: [
         mockMorePostsNews,
@@ -191,12 +199,6 @@ export default {
 
 <style lang="scss" scoped>
 .home {
-  &__carousel {
-    margin-bottom: 40px;
-    @include media-breakpoint-up(md) {
-      margin-bottom: 60px;
-    }
-  }
   &__section-heading {
     margin-bottom: 20px;
     max-width: 1096px;
@@ -223,6 +225,17 @@ export default {
       margin-right: auto;
     }
   }
+  &__horizontal-list {
+    padding-left: 20px;
+    @media (min-width: 1096px) {
+      // (100vw - 1096px) / 2 + 20px
+      padding-left: calc(50% - 528px);
+    }
+    @media (min-width: 1136px) {
+      // (100vw - 1096px) / 2
+      padding-left: calc(50% - 548px);
+    }
+  }
   &__more-list {
     padding-bottom: 30px;
     @include media-breakpoint-up(md) {
@@ -241,13 +254,6 @@ export default {
     padding-left: 0;
     padding-right: 0;
   }
-  &--latest,
-  &--database {
-    margin-bottom: 40px;
-    @include media-breakpoint-up(md) {
-      margin-bottom: 60px;
-    }
-  }
   &--database {
     padding-left: 0;
     padding-right: 0;
@@ -257,20 +263,20 @@ export default {
       padding-bottom: 40px;
     }
   }
+  &--quote {
+    margin-bottom: 14px;
+    @include media-breakpoint-up(md) {
+      margin-bottom: 22px;
+    }
+  }
 }
+.home__carousel,
+.container--latest,
+.container--database,
 .horizontal-container {
-  padding-left: 20px;
   margin-bottom: 40px;
   @include media-breakpoint-up(md) {
     margin-bottom: 60px;
-  }
-  @media (min-width: 1096px) {
-    // (100vw - 1096px) / 2 + 20px
-    padding-left: calc(50vw - 528px);
-  }
-  @media (min-width: 1136px) {
-    // (100vw - 1096px) / 2
-    padding-left: calc(50vw - 548px);
   }
 }
 .database-heading {

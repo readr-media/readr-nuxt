@@ -72,7 +72,7 @@ article {
     }
   }
   &:last-child {
-    padding-right: 14px;
+    padding-right: 20px;
     box-sizing: content-box;
     @media (min-width: 1096px) {
       // (100vw - 1096px) / 2 + 20px
