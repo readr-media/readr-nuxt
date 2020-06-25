@@ -98,13 +98,17 @@ export default {
         mockMorePostsEnv,
         mockMorePostsOthers,
       ],
+      isLoadingMacy: false,
       macyInstance: undefined,
+      unwatchIsViewportWidthUpMd: undefined,
     }
   },
   computed: {
     isViewportWidthUpMd() {
-      const md = parseInt(styleVariables['breakpoint-md'], 10)
-      return viewportWidth.value >= md
+      return viewportWidth.value >= this.breakpointMd
+    },
+    breakpointMd() {
+      return parseInt(styleVariables['breakpoint-md'], 10)
     },
     shouldOpenEditorsChoice() {
       return this.editorsChoicePosts.length > 0
@@ -119,11 +123,12 @@ export default {
       return this.latestPosts.slice(1)
     },
   },
-  watch: {
-    isViewportWidthUpMd: 'handleMacy',
-  },
   mounted() {
-    this.handleMacy(this.isViewportWidthUpMd)
+    this.unwatchIsViewportWidthUpMd = this.$watch(
+      'isViewportWidthUpMd',
+      this.handleMacy,
+      { immediate: true }
+    )
   },
   methods: {
     // async fetchEditorsChoice() {
@@ -148,24 +153,36 @@ export default {
       })
       this.latestPosts = response?.items ?? []
     },
-    handleMacy(isViewportWidthUpMd) {
-      if (isViewportWidthUpMd) {
-        if (this.macyInstance) {
-          this.macyInstance.reInit()
-        } else {
-          const loadMacy = onDemand('https://cdn.jsdelivr.net/npm/macy@2')
-          loadMacy(this.initMacy)
+    async handleMacy(isViewportWidthUpMd) {
+      if (this.macyInstance) {
+        this.unwatchIsViewportWidthUpMd()
+        return
+      }
+
+      if (isViewportWidthUpMd && !this.isLoadingMacy) {
+        const loadMacy = onDemand('https://cdn.jsdelivr.net/npm/macy@2')
+        this.isLoadingMacy = true
+        try {
+          await loadMacy()
+          this.initMacy()
+        } catch (error) {
+          console.error(error)
         }
-      } else if (this.macyInstance) {
-        this.macyInstance.remove()
+        this.isLoadingMacy = false
       }
     },
     initMacy() {
       this.macyInstance = window.Macy({
         container: '#more-list-container',
-        columns: 3,
+        mobileFirst: true,
         trueOrder: true,
-        margin: { x: 22, y: 0 },
+        columns: 1,
+        breakAt: {
+          [this.breakpointMd]: {
+            margin: { x: 22 },
+            columns: 3,
+          },
+        },
       })
     },
   },
