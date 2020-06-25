@@ -53,6 +53,11 @@ module.exports = {
   modules: ['@nuxtjs/dayjs'],
 
   components: true,
+  // telemetry: true,
+  telemetry: {
+    enabled: true,
+    consent: true,
+  },
 
   styleResources: {
     scss: '~/scss/**/*.scss',
