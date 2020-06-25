@@ -7,29 +7,35 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { onBeforeMount, onBeforeUnmount } from 'nuxt-composition-api'
+
+import { setViewport } from '~/utils/viewport.js'
 
 export default {
-  beforeMount() {
-    this.updateViewport()
+  setup() {
+    useUpdateViewport()
+  },
+}
 
-    window.addEventListener('resize', this.updateViewport)
-    window.addEventListener('orientationChange', this.updateViewport)
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.updateViewport)
-    window.removeEventListener('orientationChange', this.updateViewport)
-  },
-  methods: {
-    ...mapMutations(['setViewport']),
-    updateViewport() {
-      const { clientWidth, clientHeight } = document.documentElement
-      this.setViewport({
-        width: clientWidth,
-        height: clientHeight,
-      })
-    },
-  },
+function useUpdateViewport() {
+  onBeforeMount(() => {
+    updateViewport()
+
+    window.addEventListener('resize', updateViewport)
+    window.addEventListener('orientationChange', updateViewport)
+  })
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateViewport)
+    window.removeEventListener('orientationChange', updateViewport)
+  })
+
+  function updateViewport() {
+    const { clientWidth, clientHeight } = document.documentElement
+    setViewport({
+      width: clientWidth,
+      height: clientHeight,
+    })
+  }
 }
 </script>
 

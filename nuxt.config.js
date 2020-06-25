@@ -46,6 +46,7 @@ module.exports = {
     '@nuxtjs/style-resources',
     // Doc: https://github.com/nuxt/components
     '@nuxt/components',
+    'nuxt-composition-api',
   ],
   /*
    ** Nuxt.js modules

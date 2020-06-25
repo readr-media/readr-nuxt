@@ -63,8 +63,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
+import { viewportWidth } from '~/utils/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
 import {
@@ -103,10 +102,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['viewportWidth']),
-    breakpointMdUp() {
+    isViewportWidthUpMd() {
       const md = parseInt(styleVariables['breakpoint-md'], 10)
-      return this.viewportWidth >= md
+      return viewportWidth.value >= md
     },
     shouldOpenEditorsChoice() {
       return this.editorsChoicePosts.length > 0
@@ -122,10 +120,10 @@ export default {
     },
   },
   watch: {
-    breakpointMdUp: 'handleMacy',
+    isViewportWidthUpMd: 'handleMacy',
   },
   mounted() {
-    this.handleMacy(this.breakpointMdUp)
+    this.handleMacy(this.isViewportWidthUpMd)
   },
   methods: {
     // async fetchEditorsChoice() {
@@ -150,8 +148,8 @@ export default {
       })
       this.latestPosts = response?.items ?? []
     },
-    handleMacy(breakpointMdUp) {
-      if (breakpointMdUp) {
+    handleMacy(isViewportWidthUpMd) {
+      if (isViewportWidthUpMd) {
         if (this.macyInstance) {
           this.macyInstance.reInit()
         } else {
