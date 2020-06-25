@@ -1,5 +1,6 @@
 module.exports = {
   mode: 'universal',
+  modern: 'server',
 
   env: {
     BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
@@ -53,7 +54,7 @@ module.exports = {
   modules: ['@nuxtjs/dayjs'],
 
   components: true,
-  // telemetry: true,
+
   telemetry: {
     enabled: true,
     consent: true,
@@ -62,11 +63,6 @@ module.exports = {
   styleResources: {
     scss: '~/scss/**/*.scss',
   },
-  /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
-  axios: {},
   /*
    ** Build configuration
    */
