@@ -236,6 +236,7 @@ export default {
   margin-right: auto;
   padding-left: 20px;
   padding-right: 20px;
+  // 1136 = 1096 + 20 * 2
   @media (min-width: 1136px) {
     padding-left: 0;
     padding-right: 0;
@@ -243,7 +244,7 @@ export default {
   &--latest,
   &--database {
     margin-bottom: 40px;
-    @media (min-width: 1136px) {
+    @include media-breakpoint-up(md) {
       margin-bottom: 60px;
     }
   }
@@ -252,7 +253,7 @@ export default {
     padding-right: 0;
     padding-bottom: 20px;
     background-color: rgba(245, 235, 255, 0.2);
-    @media (min-width: 1136px) {
+    @include media-breakpoint-up(md) {
       padding-bottom: 40px;
     }
   }
