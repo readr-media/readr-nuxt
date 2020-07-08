@@ -35,7 +35,7 @@
             v-for="(post, idx) in posts"
             :key="post.id"
             :class="{ active: shouldActive(idx) }"
-            :src="getImage(post, idx)"
+            :src="$getImage(post)"
             alt=""
           />
         </picture>
@@ -48,7 +48,7 @@
       :class="{ active: shouldActive(idx) }"
       class="bg bg--img"
       :style="{
-        backgroundImage: `url(${getImage(post, idx)})`,
+        backgroundImage: `url(${$getImage(post)})`,
       }"
     />
     <div class="bg bg--color" />
@@ -71,8 +71,6 @@
 </template>
 
 <script>
-import defaultImage from '~/assets/og-image.jpg'
-
 export default {
   name: 'DumbCarousel',
   props: {
@@ -145,9 +143,6 @@ export default {
     },
     stopAutoToNextPost() {
       clearTimeout(this.timeoutIdOfAutoToNextPost)
-    },
-    getImage({ image } = {}) {
-      return image || defaultImage
     },
   },
 }
@@ -245,7 +240,6 @@ h1 {
   }
 }
 picture {
-  display: block;
   position: relative;
   padding-top: 50%;
   @include media-breakpoint-up(md) {

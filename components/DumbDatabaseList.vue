@@ -160,9 +160,6 @@ h1 {
       }
     }
   }
-  picture {
-    display: block;
-  }
   img {
     position: absolute;
     width: 100%;

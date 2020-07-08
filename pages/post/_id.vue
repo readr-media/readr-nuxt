@@ -2,6 +2,11 @@
   <article>
     <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
     <h1>{{ post.title }}</h1>
+    <div class="container">
+      <picture class="hero-img">
+        <img :src="$getImage(post)" alt="" />
+      </picture>
+    </div>
   </article>
 </template>
 
@@ -48,10 +53,36 @@ h1 {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 20px;
   @include media-breakpoint-up(md) {
     text-align: center;
     font-size: 36px;
     line-height: 1.33;
+    margin-bottom: 30px;
+  }
+  @media (min-width: 840px) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+.container {
+  max-width: 660px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-img {
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  padding-top: 50%;
+  background-color: #d8d8d8;
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 </style>

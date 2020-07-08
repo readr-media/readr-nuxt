@@ -87,7 +87,6 @@ a {
   cursor: pointer;
 }
 picture {
-  display: block;
   position: relative;
   width: calc((100% - 16px) * 0.49);
   // 0.33 = 0.49 * 0.67

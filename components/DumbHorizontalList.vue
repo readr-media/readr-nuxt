@@ -98,7 +98,6 @@ a {
 picture {
   padding-top: 50%;
   position: relative;
-  display: block;
   margin-bottom: 8px;
   overflow: hidden;
   @include media-breakpoint-up(md) {
