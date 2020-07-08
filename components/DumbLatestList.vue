@@ -3,7 +3,7 @@
     <article class="latest-list__main">
       <a :href="getHref(postMain)" target="_blank">
         <picture>
-          <img :src="getImage(postMain)" alt="" />
+          <img :src="$getImage(postMain)" alt="" />
         </picture>
         <h1>{{ postMain.title }}</h1>
         <span class="date">{{ $getFormattedDate(postMain.publishedAt) }}</span>
@@ -15,7 +15,7 @@
         <article>
           <a :href="getHref(post)" target="_blank">
             <picture>
-              <img :src="getImage(post)" alt="" />
+              <img :src="$getImage(post)" alt="" />
             </picture>
             <div class="text-wrapper">
               <h1>{{ post.title }}</h1>
@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import defaultImage from '~/assets/og-image.jpg'
-
 export default {
   name: 'DumbLatestList',
   props: {
@@ -48,9 +46,6 @@ export default {
     },
   },
   methods: {
-    getImage({ heroImage, ogImage } = {}) {
-      return heroImage || ogImage || defaultImage
-    },
     getHref({ type, id, slug }) {
       switch (type) {
         case 1:
@@ -154,7 +149,6 @@ a {
   cursor: pointer;
 }
 picture {
-  display: block;
   position: relative;
 }
 img {
