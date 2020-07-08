@@ -6,7 +6,7 @@
           <img :src="getImage(postMain)" alt="" />
         </picture>
         <h1>{{ postMain.title }}</h1>
-        <span class="date">{{ getFormattedDate(postMain.publishedAt) }}</span>
+        <span class="date">{{ $getFormattedDate(postMain.publishedAt) }}</span>
       </a>
     </article>
 
@@ -20,7 +20,7 @@
             <div class="text-wrapper">
               <h1>{{ post.title }}</h1>
               <div class="date">
-                {{ getFormattedDate(postMain.publishedAt) }}
+                {{ $getFormattedDate(postMain.publishedAt) }}
               </div>
             </div>
           </a>
@@ -60,9 +60,6 @@ export default {
         default:
           return undefined
       }
-    },
-    getFormattedDate(datetime = '') {
-      return this.$dayjs(datetime).format('MMM D, YYYY')
     },
   },
 }
