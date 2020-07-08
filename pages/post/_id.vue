@@ -6,6 +6,7 @@
       <picture class="hero-img">
         <img :src="$getImage(post)" alt="" />
       </picture>
+      <div class="content" v-html="post.content" />
     </div>
   </article>
 </template>
@@ -83,6 +84,37 @@ h1 {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+}
+.content {
+  padding: 20px 30px 70px 30px;
+  font-size: 15px;
+  line-height: 2;
+  letter-spacing: 0.6px;
+  color: rgba(#000, 0.87);
+  @include media-breakpoint-up(md) {
+    font-size: 18px;
+    line-height: 1.89;
+    padding-top: 30px;
+  }
+  ::v-deep {
+    h2 {
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 1.5;
+      margin-top: 60px;
+      margin-bottom: 40px;
+      letter-spacing: 0;
+      @include media-breakpoint-up(md) {
+        font-size: 26px;
+        margin-bottom: 30px;
+        line-height: 1.46;
+      }
+    }
+    a {
+      color: #04295e;
+      border-bottom: 1px solid #04295e;
+    }
   }
 }
 </style>
