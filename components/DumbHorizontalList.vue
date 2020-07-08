@@ -86,8 +86,6 @@ article {
 }
 a {
   display: block;
-  user-select: none;
-  cursor: pointer;
   &:hover img {
     transform: scale(1.2);
   }

@@ -144,10 +144,6 @@ export default {
     }
   }
 }
-a {
-  user-select: none;
-  cursor: pointer;
-}
 picture {
   position: relative;
 }

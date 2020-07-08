@@ -175,8 +175,6 @@ article {
 }
 a {
   display: block;
-  user-select: none;
-  cursor: pointer;
   @include media-breakpoint-up(md) {
     display: flex;
     max-width: 1096px;

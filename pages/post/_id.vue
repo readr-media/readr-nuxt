@@ -72,11 +72,13 @@ h1 {
   margin-right: auto;
 }
 .hero-img {
-  border-radius: 2px;
-  overflow: hidden;
   position: relative;
   padding-top: 50%;
   background-color: #d8d8d8;
+  @include media-breakpoint-up(md) {
+    border-radius: 2px;
+    overflow: hidden;
+  }
   img {
     position: absolute;
     top: 0;
@@ -87,7 +89,8 @@ h1 {
   }
 }
 .content {
-  padding: 20px 30px 70px 30px;
+  padding-top: 20px;
+  padding-bottom: 70px;
   font-size: 15px;
   line-height: 2;
   letter-spacing: 0.6px;
@@ -98,6 +101,16 @@ h1 {
     padding-top: 30px;
   }
   ::v-deep {
+    p,
+    h2 {
+      max-width: 600px;
+      margin-left: 30px;
+      margin-right: 30px;
+      @media (min-width: 660px) {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
     h2 {
       font-weight: 900;
       font-size: 24px;
@@ -111,9 +124,56 @@ h1 {
         line-height: 1.46;
       }
     }
+    p + p {
+      margin-top: 30px;
+      @include media-breakpoint-up(md) {
+        margin-top: 34px;
+      }
+    }
     a {
       color: #04295e;
       border-bottom: 1px solid #04295e;
+    }
+    .readme-image {
+      margin: 40px auto;
+      max-width: 600px;
+      @include media-breakpoint-up(md) {
+        margin-top: 30px;
+        margin-bottom: 30px;
+      }
+      img {
+        width: 100%;
+        background-color: rgba(216, 216, 216, 0.15);
+        @include media-breakpoint-up(md) {
+          border-radius: 4px;
+        }
+      }
+      &::after {
+        display: block;
+        content: attr(text);
+        font-size: 13px;
+        line-height: 1.46;
+        letter-spacing: 1px;
+        color: rgba(#000, 0.66);
+        margin-left: 30px;
+        margin-right: 30px;
+        margin-top: 10px;
+        @media (min-width: 600px) {
+          margin-left: calc(30px - (100vw - 600px) / 2);
+          margin-right: calc(30px - (100vw - 600px) / 2);
+        }
+        @media (min-width: 660px) {
+          margin-left: 1px;
+          margin-right: 1px;
+        }
+        @include media-breakpoint-up(md) {
+          font-size: 15px;
+          line-height: 1.27;
+        }
+      }
+      &[text='undefined']::after {
+        content: none;
+      }
     }
   }
 }

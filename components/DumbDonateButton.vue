@@ -25,8 +25,6 @@ a {
   font-weight: 700;
   padding-top: 12px;
   padding-bottom: 12px;
-  cursor: pointer;
-  user-select: none;
   border-radius: 2px;
   text-align: center;
   position: relative;

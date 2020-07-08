@@ -83,8 +83,6 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  user-select: none;
-  cursor: pointer;
 }
 picture {
   position: relative;
