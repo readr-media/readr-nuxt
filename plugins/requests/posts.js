@@ -3,7 +3,7 @@ import { stringify as qsStringify } from 'qs'
 
 import { apiAxios } from './utils.js'
 
-export { fetchPosts, fetchPostsByTag }
+export { fetchPosts, fetchPostsByTag, fetchPost }
 
 async function fetchPosts(params = {}) {
   try {
@@ -12,6 +12,11 @@ async function fetchPosts(params = {}) {
   } catch (error) {
     console.error(error)
   }
+}
+
+async function fetchPost(postId) {
+  const { data } = await apiAxios.get(`/post/${postId}`)
+  return camelizeKeys(data)
 }
 
 async function fetchPostsByTag(tagId) {
