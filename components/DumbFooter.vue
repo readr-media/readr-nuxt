@@ -93,7 +93,5 @@ footer {
 }
 a {
   display: block;
-  cursor: pointer;
-  user-select: none;
 }
 </style>

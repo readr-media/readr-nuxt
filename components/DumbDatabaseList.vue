@@ -117,10 +117,6 @@ article {
     align-items: center;
   }
 }
-a {
-  cursor: pointer;
-  user-select: none;
-}
 .database-title {
   display: inline-block;
   margin-bottom: 18px;
