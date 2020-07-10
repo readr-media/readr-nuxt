@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { viewportWidth } from '~/store/composition-api/viewport.js'
+import { viewportWidth } from '~/store/composition/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
 import {

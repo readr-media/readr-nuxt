@@ -1,10 +1,6 @@
 <template>
   <header>
-    <h1>
-      <nuxt-link to="/">
-        <DumbReadrLogo />
-      </nuxt-link>
-    </h1>
+    <DumbReadrLogoOfHeader />
   </header>
 </template>
 
@@ -18,7 +14,7 @@ export default {
 header {
   padding-top: 9px;
   padding-bottom: 9px;
-  svg {
+  ::v-deep svg {
     width: 48px;
     margin-left: auto;
     margin-right: auto;
