@@ -1,14 +1,18 @@
 <template>
-  <article>
-    <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
-    <h1>{{ post.title }}</h1>
-    <div class="container">
-      <picture class="hero-img">
-        <img :src="$getImage(post)" alt="" />
-      </picture>
-      <div class="content" v-html="post.content" />
-    </div>
-  </article>
+  <div class="post-page">
+    <DumbHeaderProgress />
+
+    <article id="post">
+      <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
+      <h1>{{ post.title }}</h1>
+      <div class="container">
+        <picture class="hero-img">
+          <img :src="$getImage(post)" alt="" />
+        </picture>
+        <div class="content" v-html="post.content" />
+      </div>
+    </article>
+  </div>
 </template>
 
 <script>
@@ -33,6 +37,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.post-page {
+  padding-top: 68.63px;
+}
+article {
+  padding-top: 14px;
+}
 .date {
   text-align: center;
   font-size: 13px;

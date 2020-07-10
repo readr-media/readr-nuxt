@@ -8,10 +8,11 @@ const state = reactive({
 })
 
 const viewportWidth = computed(() => state.viewport.width)
+const viewportHeight = computed(() => state.viewport.height)
 
 function setViewport({ width = 0, height = 0 } = {}) {
   state.viewport.width = width
   state.viewport.height = height
 }
 
-export { viewportWidth, setViewport }
+export { viewportWidth, viewportHeight, setViewport }
