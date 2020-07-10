@@ -20,7 +20,7 @@
         fill="#ebf02c"
         class="home__section-heading"
       />
-      <DumbLatestList
+      <DumbPostLatestList
         v-if="shouldOpenLatestList"
         :postMain="latestPostMain"
         :postsSub="latestPostsSub"

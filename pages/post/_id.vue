@@ -12,6 +12,13 @@
         <div class="content" v-html="post.content" />
       </div>
     </article>
+
+    <section class="latest-posts">
+      <h2>
+        <div>最新報導</div>
+      </h2>
+      <DumbPostList :posts="latestPosts" />
+    </section>
   </div>
 </template>
 
@@ -22,15 +29,32 @@ export default {
   name: 'Post',
   setup() {
     const post = ref({})
-    const { $fetchPost, route } = useContext()
+    const latestPosts = ref([])
+    const { $fetchPost, route, $fetchPosts } = useContext()
 
-    useFetch(async function fetchPost() {
-      const response = await $fetchPost(route.value.params.id)
-      post.value = response?.items?.[0] ?? {}
+    useFetch(async () => {
+      const responseOfPost = await $fetchPost(route.value.params.id)
+      post.value = responseOfPost?.items?.[0] ?? {}
+
+      const responseOfPosts = await $fetchPosts({
+        publishStatus: '{"$in":[2]}',
+        type: '{"$in":[1,4]}',
+        // type: '{"$in":[4]}',
+        maxResult: 3,
+        page: 1,
+        sort: '-published_at',
+        showAuthor: false,
+        showUpdater: false,
+        showTag: false,
+        showComment: false,
+        showProject: false,
+      })
+      latestPosts.value = responseOfPosts?.items ?? []
     })
 
     return {
       post,
+      latestPosts,
     }
   },
 }
@@ -185,6 +209,35 @@ h1 {
         content: none;
       }
     }
+  }
+}
+
+.latest-posts {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 50px;
+  max-width: 600px;
+  @media (min-width: 620px) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @include media-breakpoint-up(md) {
+    margin-bottom: 22px;
+  }
+  h2 {
+    background-color: #f5ebff;
+    border-radius: 2px;
+    text-align: center;
+    letter-spacing: 5px;
+    // to offset letter-spacing at the rightmost
+    margin-left: 2.5px;
+
+    color: #04295e;
+    font-weight: 900;
+    font-size: 18px;
+    line-height: 1.5;
+    padding: 8px 24px;
+    margin-bottom: 14px;
   }
 }
 </style>

@@ -38,6 +38,7 @@ function useProgress(elemId) {
   onMounted(() => {
     elem = document.getElementById(elemId)
 
+    calculateProgressPercent()
     window.addEventListener('scroll', calculateProgressPercent)
   })
 
