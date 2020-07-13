@@ -164,17 +164,51 @@ h1 {
         margin-top: 34px;
       }
     }
+    blockquote {
+      background-color: rgba(245, 235, 255, 0.2);
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 2;
+      letter-spacing: 0.6px;
+      padding: 20px 30px 30px 30px;
+      margin: 30px auto;
+      max-width: 600px;
+      @media (min-width: 600px) {
+        border-radius: 2px;
+      }
+      @include media-breakpoint-up(md) {
+        font-size: 18px;
+        line-height: 1.8;
+        letter-spacing: 2.5px;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-bottom: 35px;
+      }
+      &::before {
+        content: url(~assets/quotation-mark.svg);
+        display: block;
+        text-align: center;
+        // 11 = 30 - 19
+        margin-bottom: 11px;
+        @include media-breakpoint-up(md) {
+          margin-bottom: 13px;
+        }
+      }
+    }
     a {
       color: #04295e;
       border-bottom: 1px solid #04295e;
     }
-    .readme-image {
+    .readme-image,
+    .readme-embed {
       margin: 40px auto;
       max-width: 600px;
       @include media-breakpoint-up(md) {
         margin-top: 30px;
         margin-bottom: 30px;
       }
+    }
+    .readme-image {
       img {
         width: 100%;
         background-color: rgba(216, 216, 216, 0.15);
