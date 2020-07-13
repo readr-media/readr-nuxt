@@ -1,0 +1,10 @@
+defaults
+not ie <= 11
+Edge >= 18
+Chrome >= 49
+Firefox >= 71
+Safari >= 12.1
+iOS >= 10.0
+Samsung >= 9.2
+Opera >= 46
+OperaMobile >= 12
