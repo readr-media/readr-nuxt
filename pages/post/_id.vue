@@ -63,6 +63,7 @@ export default {
 <style lang="scss" scoped>
 .post-page {
   padding-top: 68.63px;
+  overflow: hidden;
 }
 article {
   padding-top: 14px;
@@ -158,10 +159,13 @@ h1 {
         line-height: 1.46;
       }
     }
-    p + p {
+    p {
       margin-top: 30px;
+      margin-bottom: 30px;
+      @include word-wrap;
       @include media-breakpoint-up(md) {
         margin-top: 34px;
+        margin-bottom: 34px;
       }
     }
     blockquote {
@@ -310,6 +314,9 @@ h1 {
         }
       }
     }
+    hr {
+      display: none;
+    }
   }
 }
 
@@ -329,16 +336,17 @@ h1 {
     background-color: #f5ebff;
     border-radius: 2px;
     text-align: center;
-    letter-spacing: 5px;
-    // to offset letter-spacing at the rightmost
-    margin-left: 2.5px;
-
     color: #04295e;
     font-weight: 900;
     font-size: 18px;
     line-height: 1.5;
     padding: 8px 24px;
     margin-bottom: 14px;
+  }
+  div {
+    letter-spacing: 5px;
+    // to offset letter-spacing at the rightmost
+    margin-left: 2.5px;
   }
 }
 </style>
