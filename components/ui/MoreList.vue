@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  name: 'DumbMoreList',
+  name: 'MoreList',
   props: {
     topic: {
       type: String,

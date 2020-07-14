@@ -1,13 +1,13 @@
 <template>
   <h1>
     <nuxt-link to="/">
-      <DumbReadrLogo />
+      <UiReadrLogo />
     </nuxt-link>
   </h1>
 </template>
 
 <script>
 export default {
-  name: 'DumbReadrLogoOfHeader',
+  name: 'ReadrLogoOfHeader',
 }
 </script>

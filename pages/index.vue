@@ -1,26 +1,26 @@
 <template>
   <div>
-    <DumbHeader />
+    <UiHeader />
 
     <section>
-      <DumbCarousel
+      <UiCarousel
         v-if="shouldOpenEditorsChoice"
         :posts="editorsChoicePosts"
         class="home__carousel"
       >
         <template #heading>
-          <DumbSectionHeading title="編輯精選" />
+          <UiSectionHeading title="編輯精選" />
         </template>
-      </DumbCarousel>
+      </UiCarousel>
     </section>
 
     <section class="container container--latest">
-      <DumbSectionHeading
+      <UiSectionHeading
         title="最新文章"
         fill="#ebf02c"
         class="home__section-heading"
       />
-      <DumbPostLatestList
+      <UiPostLatestList
         v-if="shouldOpenLatestList"
         :postMain="latestPostMain"
         :postsSub="latestPostsSub"
@@ -31,21 +31,21 @@
       <div class="database-heading">
         <h2>開放資料庫</h2>
       </div>
-      <DumbDatabaseList :databases="databases" class="home__database-list" />
-      <DumbDonateButton class="home__donate-btn" />
+      <UiDatabaseList :databases="databases" class="home__database-list" />
+      <UiDonateButton class="home__donate-btn" />
     </section>
 
     <section class="horizontal-container">
       <div class="container container--quote">
-        <DumbSectionHeading
+        <UiSectionHeading
           title="協作專區"
           color="#f5ebff"
           fill="#04295e"
           class="home__section-heading"
         />
-        <DumbQuoteSlide :quotes="quotes" />
+        <UiQuoteSlide :quotes="quotes" />
       </div>
-      <DumbHorizontalList
+      <UiHorizontalList
         class="home__horizontal-list"
         :projects="collaborativeProjects"
       />
@@ -53,9 +53,9 @@
 
     <section class="more-section yellow-bg">
       <div class="container">
-        <DumbSectionHeading title="更多專題" class="home__section-heading" />
+        <UiSectionHeading title="更多專題" class="home__section-heading" />
         <div id="more-list-container">
-          <DumbMoreList
+          <UiMoreList
             v-for="more in morePosts"
             :key="more.tag"
             :topic="more.tag"

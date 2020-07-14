@@ -1,12 +1,12 @@
 <template>
   <header>
-    <DumbReadrLogoOfHeader />
+    <UiReadrLogoOfHeader />
   </header>
 </template>
 
 <script>
 export default {
-  name: 'DumbHeader',
+  name: 'Header',
 }
 </script>
 

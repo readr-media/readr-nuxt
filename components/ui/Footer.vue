@@ -31,7 +31,7 @@
 import { SOCIAL_MEDIA_LINKS } from '~/constants/links.js'
 
 export default {
-  name: 'DumbFooter',
+  name: 'Footer',
   data() {
     return {
       socialMediaLinks: SOCIAL_MEDIA_LINKS,

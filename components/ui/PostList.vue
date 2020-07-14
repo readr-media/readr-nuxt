@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'DumbPostList',
+  name: 'PostList',
   props: {
     posts: {
       type: Array,

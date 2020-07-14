@@ -1,1 +1,1 @@
-export { default as onDemand } from './onDemand.js'
+export { default as onDemand } from './on-demand.js'

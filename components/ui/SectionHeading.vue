@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: 'DumbSectionHeading',
+  name: 'SectionHeading',
   props: {
     title: {
       type: String,

@@ -13,8 +13,8 @@
       filterUnits="userSpaceOnUse"
       height="19.3971"
       width="12.7659"
-      x="12.8115"
-      y="8.00146"
+      x="10.4215"
+      y="8.60144"
     >
       <feFlood flood-opacity="0" result="BackgroundImageFix" />
       <feColorMatrix
@@ -40,16 +40,10 @@
         result="shape"
       />
     </filter>
-    <circle
-      cx="18"
-      cy="18"
-      fill="#04295e"
-      r="18"
-      transform="matrix(-1 0 0 -1 36 36)"
-    />
+    <circle cx="18" cy="18" fill="#04295e" r="18" />
     <g filter="url(#a)">
       <path
-        d="m23.2809 16.9893c.3954.3913.3954 1.0301 0 1.4215l-6.7659 6.6965c-.6315.625-1.7035.1777-1.7035-.7107v-13.3931c0-.8885 1.072-1.33574 1.7035-.7108z"
+        d="m12.7181 19.0107c-.3954-.3913-.3954-1.0301 0-1.4215l6.7659-6.6965c.6315-.625 1.7035-.1777 1.7035.7107v13.3931c0 .8885-1.072 1.3357-1.7035.7108z"
         fill="#fff"
       />
     </g>
@@ -58,6 +52,6 @@
 
 <script>
 export default {
-  name: 'DumbCarouselArrowRight',
+  name: 'CarouselArrowLeft',
 }
 </script>

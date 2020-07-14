@@ -58,21 +58,21 @@
       class="arrow-wrapper arrow-wrapper--prev"
       @click="toPrevPost"
     >
-      <DumbCarouselArrowLeft />
+      <UiCarouselArrowLeft />
     </div>
     <div
       v-if="shouldOpenArrow"
       class="arrow-wrapper arrow-wrapper--next"
       @click="toNextPost"
     >
-      <DumbCarouselArrowRight />
+      <UiCarouselArrowRight />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'DumbCarousel',
+  name: 'Carousel',
   props: {
     posts: {
       type: Array,

@@ -53,7 +53,7 @@ module.exports = {
    */
   modules: ['@nuxtjs/dayjs'],
 
-  components: true,
+  components: ['~/components', { path: '~/components/ui/', prefix: 'ui' }],
 
   telemetry: {
     enabled: true,

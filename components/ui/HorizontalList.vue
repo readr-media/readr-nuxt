@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: 'DumbHorizontalList',
+  name: 'HorizontalList',
   props: {
     projects: {
       type: Array,

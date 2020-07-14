@@ -34,6 +34,6 @@
 
 <script>
 export default {
-  name: 'DumbReadrLogo',
+  name: 'ReadrLogo',
 }
 </script>

@@ -51,7 +51,7 @@
 
 <script>
 export default {
-  name: 'DumbDatabaseList',
+  name: 'DatabaseList',
   props: {
     databases: {
       type: Array,

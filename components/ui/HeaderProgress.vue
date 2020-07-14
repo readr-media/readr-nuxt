@@ -1,7 +1,7 @@
 <template>
   <header :class="{ hidden: doesScrollDown }">
     <div class="logo-wrapper">
-      <DumbReadrLogoOfHeader />
+      <UiReadrLogoOfHeader />
       <div class="progress-percent">
         閱讀進度<span>{{ percent }}%</span>
       </div>
@@ -19,7 +19,7 @@ import { viewportHeight } from '~/store/composition/viewport.js'
 import { rAFWithDebounce } from '~/utils/index.js'
 
 export default {
-  name: 'DumbHeaderProgress',
+  name: 'HeaderProgress',
   setup() {
     const percent = useProgress('post')
     const doesScrollDown = useScrollDirection()
