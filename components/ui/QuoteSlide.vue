@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'DumbQuoteSlide',
+  name: 'QuoteSlide',
   props: {
     quotes: {
       type: Array,

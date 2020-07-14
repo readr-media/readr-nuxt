@@ -2,7 +2,7 @@
   <div class="default">
     <nuxt />
 
-    <DumbFooter class="default__footer" />
+    <UiFooter class="default__footer" />
   </div>
 </template>
 

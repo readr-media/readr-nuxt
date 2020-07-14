@@ -10,13 +10,13 @@
       </a>
     </article>
 
-    <DumbPostList :posts="postsSub" class="latest-list__sub" />
+    <UiPostList :posts="postsSub" class="latest-list__sub" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'DumbPostLatestList',
+  name: 'PostLatestList',
   props: {
     postMain: {
       type: Object,

@@ -1,6 +1,6 @@
 <template>
   <div class="post-page">
-    <DumbHeaderProgress />
+    <UiHeaderProgress />
 
     <article id="post">
       <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
@@ -17,7 +17,7 @@
       <h2>
         <div>最新報導</div>
       </h2>
-      <DumbPostList :posts="latestPosts" />
+      <UiPostList :posts="latestPosts" />
     </section>
   </div>
 </template>
