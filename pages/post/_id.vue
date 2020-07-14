@@ -243,6 +243,73 @@ h1 {
         content: none;
       }
     }
+    ul,
+    ol {
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 1.8;
+      letter-spacing: 0.6px;
+      margin: 40px 30px;
+      max-width: 500px;
+      @media (min-width: 560px) {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      @include media-breakpoint-up(md) {
+        font-size: 18px;
+        letter-spacing: 2.5px;
+      }
+      li {
+        position: relative;
+        padding-left: 30px;
+        margin-top: 12px;
+        margin-bottom: 12px;
+        @include media-breakpoint-up(md) {
+          padding-left: 40px;
+        }
+        &::before {
+          display: block;
+          position: absolute;
+        }
+      }
+    }
+    ul {
+      li {
+        &::before {
+          content: '';
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: #04295e;
+          left: 9px;
+          // (15 * 1.8 - 6) / 2
+          top: 10.5px;
+          @include media-breakpoint-up(md) {
+            width: 8px;
+            height: 8px;
+            left: 14px;
+            // (18 * 1.8 - 8) / 2
+            top: 12.2px;
+          }
+        }
+      }
+    }
+    ol {
+      counter-reset: num;
+      li {
+        &::before {
+          top: 0;
+          left: 0;
+          counter-increment: num;
+          content: counter(num) '.';
+          width: 24px;
+          text-align: center;
+          @include media-breakpoint-up(md) {
+            width: 36px;
+          }
+        }
+      }
+    }
   }
 }
 
