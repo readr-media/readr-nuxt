@@ -13,16 +13,30 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount } from 'nuxt-composition-api'
+import { ref, watch, onMounted, onBeforeUnmount } from 'nuxt-composition-api'
 
+import { setUserFinishedReading } from '~/composition/store/user.js'
 import { viewportHeight } from '~/store/composition/viewport.js'
 import { rAFWithDebounce } from '~/utils/index.js'
 
 export default {
   name: 'HeaderProgress',
   setup() {
-    const percent = useProgress('post')
+    const { percent, hasFinishedReading } = useProgress('post')
+
+    const stopWatchingHasFinishedReading = watch(
+      hasFinishedReading,
+      commitSetUserFinishedReading
+    )
+
     const doesScrollDown = useScrollDirection()
+
+    function commitSetUserFinishedReading(hasFinished) {
+      if (hasFinished === true) {
+        setUserFinishedReading(true)
+        stopWatchingHasFinishedReading()
+      }
+    }
 
     return {
       percent,
@@ -33,6 +47,7 @@ export default {
 
 function useProgress(elemId) {
   const percent = ref(0)
+  const hasFinishedReading = ref(false)
   let elem
 
   onMounted(() => {
@@ -54,6 +69,9 @@ function useProgress(elemId) {
 
       if (bottom - viewportHeight.value < 0) {
         percent.value = 100
+        if (hasFinishedReading.value === false) {
+          hasFinishedReading.value = true
+        }
         return
       }
 
@@ -63,7 +81,10 @@ function useProgress(elemId) {
     })
   }
 
-  return percent
+  return {
+    percent,
+    hasFinishedReading,
+  }
 }
 
 function useScrollDirection() {

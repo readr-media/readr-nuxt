@@ -1,4 +1,4 @@
-import defaultImage from '~/assets/og-image.jpg'
+import defaultImage from '~/assets/og-img.jpg'
 
 export { getImage }
 

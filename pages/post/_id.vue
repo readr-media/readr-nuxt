@@ -13,6 +13,32 @@
       </div>
     </article>
 
+    <ClientOnly>
+      <UiRecordBox
+        v-if="shouldActivateRecordWord"
+        class="post-page__record-box"
+        :class="{ hidden: !hasWordPerSecond }"
+        @cancel="deactivateRecordWord"
+      >
+        <template #record>
+          <div class="record-word">
+            你閱讀了 <span>{{ wordCount }}</span> 字，平均每字
+            <span>{{ wordReadingPerSecond }}</span> 秒鐘
+          </div>
+        </template>
+        <template #feedback>
+          <UiRecordFeedback
+            :options="[
+              '這訊息沒意義',
+              '你知道太多了',
+              '看了壓力很大',
+              '沒有特別原因',
+            ]"
+          />
+        </template>
+      </UiRecordBox>
+    </ClientOnly>
+
     <section class="latest-posts">
       <h2>
         <div>最新報導</div>
@@ -23,23 +49,45 @@
 </template>
 
 <script>
-import { ref, useFetch, useContext } from 'nuxt-composition-api'
+import {
+  ref,
+  computed,
+  watch,
+  toRef,
+  useFetch,
+  useContext,
+  onMounted,
+} from 'nuxt-composition-api'
+
+import { state as userState } from '~/composition/store/user.js'
+
+if (process.browser) {
+  // eslint-disable-next-line no-var
+  var {
+    state: { shouldActivateRecordWord },
+    deactivateRecordWord,
+  } = require('~/composition/store/local-storage.js')
+}
 
 export default {
   name: 'Post',
   setup() {
     const post = ref({})
     const latestPosts = ref([])
-    const { $fetchPost, route, $fetchPosts } = useContext()
 
     useFetch(async () => {
-      const responseOfPost = await $fetchPost(route.value.params.id)
-      post.value = responseOfPost?.items?.[0] ?? {}
-
-      const responseOfPosts = await $fetchPosts({
+      await fetchPost()
+      await fetchLatestPosts()
+    })
+    const { $fetchPost, route, $fetchPosts } = useContext()
+    async function fetchPost() {
+      const response = await $fetchPost(route.value.params.id)
+      post.value = response?.items?.[0] ?? {}
+    }
+    async function fetchLatestPosts() {
+      const response = await $fetchPosts({
         publishStatus: '{"$in":[2]}',
         type: '{"$in":[1,4]}',
-        // type: '{"$in":[4]}',
         maxResult: 3,
         page: 1,
         sort: '-published_at',
@@ -49,14 +97,64 @@ export default {
         showComment: false,
         showProject: false,
       })
-      latestPosts.value = responseOfPosts?.items ?? []
+      latestPosts.value = response?.items ?? []
+    }
+
+    const wordCount = 100
+    const userReadingTime = useUserReadingTime(
+      toRef(userState, 'hasUserFinishedReading')
+    )
+    const wordReadingPerSecond = computed(() => {
+      if (userReadingTime.value !== undefined) {
+        return (userReadingTime.value / 1000 / wordCount).toFixed(2)
+      }
     })
+    const hasWordPerSecond = computed(
+      () => wordReadingPerSecond.value !== undefined
+    )
 
     return {
       post,
       latestPosts,
+
+      wordCount,
+      wordReadingPerSecond,
+      hasWordPerSecond,
+
+      shouldActivateRecordWord,
+      deactivateRecordWord,
     }
   },
+}
+
+function useUserReadingTime(hasUserFinishedReading) {
+  let userStartReadingTime
+  const userFinishedReadingTime = ref(undefined)
+
+  onMounted(setUserStartReadingTime)
+
+  const stopWatchingHasUserFinishedReading = watch(
+    hasUserFinishedReading,
+    setUserFinishedReadingTime
+  )
+
+  const userReadingTime = computed(() => {
+    if (userFinishedReadingTime.value !== undefined) {
+      return userFinishedReadingTime.value - userStartReadingTime
+    }
+  })
+
+  function setUserStartReadingTime() {
+    userStartReadingTime = Date.now()
+  }
+  function setUserFinishedReadingTime(hasFinished) {
+    if (hasFinished === true) {
+      userFinishedReadingTime.value = Date.now()
+      stopWatchingHasUserFinishedReading()
+    }
+  }
+
+  return userReadingTime
 }
 </script>
 
@@ -64,6 +162,20 @@ export default {
 .post-page {
   padding-top: 68.63px;
   overflow: hidden;
+  &__record-box {
+    margin-bottom: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: opacity 0.3s, transform 0.3s;
+    &.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    @include media-breakpoint-up(md) {
+      margin-bottom: 30px;
+    }
+  }
 }
 article {
   padding-top: 14px;
@@ -319,7 +431,28 @@ h1 {
     }
   }
 }
-
+.record-word {
+  font-size: 15px;
+  text-align: center;
+  line-height: 2;
+  letter-spacing: 0.6px;
+  @include media-breakpoint-up(md) {
+    font-size: 18px;
+    line-height: 1.8;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+  }
+  span {
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 1.5;
+    color: #04295e;
+    @include media-breakpoint-up(md) {
+      font-size: 26px;
+      line-height: 1.8;
+    }
+  }
+}
 .latest-posts {
   margin-left: 10px;
   margin-right: 10px;
