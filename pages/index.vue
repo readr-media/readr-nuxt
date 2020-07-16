@@ -32,7 +32,7 @@
         <h2>開放資料庫</h2>
       </div>
       <UiDatabaseList :databases="databases" class="home__database-list" />
-      <UiDonateButton class="home__donate-btn" />
+      <UiButtonDonate class="home__donate-btn" />
     </section>
 
     <section class="horizontal-container">

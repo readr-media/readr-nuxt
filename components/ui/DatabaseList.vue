@@ -40,6 +40,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
               >
+                <UiPlusIcon />
               </a>
             </div>
           </article>
@@ -167,30 +168,8 @@ h1 {
 }
 .add {
   background-color: #f5ebff;
-  position: relative;
-  &::before,
-  &::after {
-    content: '';
-    display: block;
-    background-color: #000928;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  &::before {
-    width: 16px;
-    height: 4px;
-    @include media-breakpoint-up(md) {
-      width: 20px;
-    }
-  }
-  &::after {
-    width: 4px;
-    height: 16px;
-    @include media-breakpoint-up(md) {
-      height: 20px;
-    }
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

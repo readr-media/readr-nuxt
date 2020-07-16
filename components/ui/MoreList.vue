@@ -20,26 +20,20 @@
 
       <div class="load-more-wrapper">
         <button type="button">看更多</button>
-        <svg
-          fill="none"
-          height="8"
-          viewBox="0 0 13 8"
-          width="13"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="m6.9622 7.67246c-.39166.39736-1.03274.39736-1.4244 0l-5.187961-5.26348c-.622955-.63202-.175226-1.701977.712201-1.701977l10.37596.000001c.8874 0 1.3351 1.069956.7122 1.701976z"
-            fill="#000928"
-          />
-        </svg>
+        <SvgMoreIcon />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import SvgMoreIcon from '~/assets/more-icon.svg?inline'
+
 export default {
   name: 'MoreList',
+  components: {
+    SvgMoreIcon,
+  },
   props: {
     topic: {
       type: String,

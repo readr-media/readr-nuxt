@@ -14,21 +14,7 @@
           >
             {{ post.title }}
           </h1>
-          <svg
-            class="dialog-box"
-            width="348"
-            height="187"
-            viewBox="0 0 348 187"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M0 0V144.48H30.36V186.64L90.16 144.48H348V133.482H83.72L42.32 161.894V133.482H11.04V0H0Z"
-              fill="#000928"
-            />
-          </svg>
+          <SvgDialogBox class="dialog-box" />
         </div>
         <picture>
           <img
@@ -58,21 +44,30 @@
       class="arrow-wrapper arrow-wrapper--prev"
       @click="toPrevPost"
     >
-      <UiCarouselArrowLeft />
+      <SvgArrowPrev />
     </div>
     <div
       v-if="shouldOpenArrow"
       class="arrow-wrapper arrow-wrapper--next"
       @click="toNextPost"
     >
-      <UiCarouselArrowRight />
+      <SvgArrowNext />
     </div>
   </div>
 </template>
 
 <script>
+import SvgDialogBox from '~/assets/dialog-box.svg?inline'
+import SvgArrowPrev from '~/assets/arrow-prev.svg?inline'
+import SvgArrowNext from '~/assets/arrow-next.svg?inline'
+
 export default {
   name: 'Carousel',
+  components: {
+    SvgDialogBox,
+    SvgArrowPrev,
+    SvgArrowNext,
+  },
   props: {
     posts: {
       type: Array,

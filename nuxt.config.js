@@ -38,7 +38,7 @@ Object.assign(module.exports, {
   /*
    ** Global CSS
    */
-  css: ['~/css/base.css', '~/css/readr.css'],
+  css: ['~/css/base.css', '~/css/readr.scss', '~/css/buttons.scss'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -61,7 +61,7 @@ Object.assign(module.exports, {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/dayjs', '@nuxtjs/apollo'],
+  modules: ['@nuxtjs/dayjs', '@nuxtjs/apollo', '@nuxtjs/svg'],
 
   components: ['~/components', { path: '~/components/ui/', prefix: 'ui' }],
 
