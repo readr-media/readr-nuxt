@@ -2,38 +2,77 @@ export const mockCollaborativeProjects = [
   {
     id: 1,
     title: '為了武漢肺炎防疫的需要，你可以接受你的權益被限制嗎？',
-    heroImage:
-      'https://www.readr.tw/assets/images/6324f78e5ddc9774c5e14cb6f2dbc34f/6324f78e5ddc9774c5e14cb6f2dbc34f.jpeg',
-    endTime: 'Tue, 09 Jun 2020 10:00:00 GMT',
+    description:
+      '在爭議聲中，換發搭載晶片的數位身分證（New eID）工作仍持續推行。',
+    heroImage: {
+      urlTinySized: '',
+      urlMobileSized: '',
+      urlTabletSized: '',
+      urlDesktopSized:
+        'https://www.readr.tw/assets/images/6324f78e5ddc9774c5e14cb6f2dbc34f/6324f78e5ddc9774c5e14cb6f2dbc34f.jpeg',
+      urlOriginal: '',
+    },
+    requireTime: 3,
+    endTime: 'Mon, 03 Aug 2020 10:00:00 GMT',
     progress: 37,
-    link: 'https://www.readr.tw/series/Wuhan-pneumonia',
+    collabLink: 'https://www.readr.tw/series/Wuhan-pneumonia',
+    achvLink: undefined,
   },
   {
     id: 2,
     title: '港版國安法將成「一國一制」？字詞分析網友怎麼看',
-    heroImage:
-      'https://www.readr.tw/assets/images/830962f5f7f9b90372a60067f0545aea/830962f5f7f9b90372a60067f0545aea.jpg',
-    // endTime: 'Mon, 22 Jun 2020 10:00:00 GMT',
+    description: '在爭議聲中',
+    heroImage: {
+      urlTinySized: '',
+      urlMobileSized: '',
+      urlTabletSized: '',
+      urlDesktopSized:
+        'https://www.readr.tw/assets/images/830962f5f7f9b90372a60067f0545aea/830962f5f7f9b90372a60067f0545aea.jpg',
+      urlOriginal: '',
+    },
+    requireTime: 12,
+    endTime: 'Mon, 22 Jun 2020 10:00:00 GMT',
     progress: 87,
-    link: 'https://www.readr.tw/series/2020president',
+    collabLink: 'https://www.readr.tw/series/2020president',
+    achvLink: 'https://www.readr.tw/series/election-board',
   },
   {
     id: 3,
     title: '不一樣的彩虹：全台小學晨光時間大解密',
-    heroImage:
-      'https://www.readr.tw/assets/images/5e2ba0d484f8369089f185afcf8b3be4/5e2ba0d484f8369089f185afcf8b3be4.png',
+    description:
+      '在爭議聲中，換發搭載晶片的數位身分證（New eID）工作仍持續推行。臺灣人的身分證已經歷經 6 次轉變，政府的規劃都是你想要的嗎？',
+    heroImage: {
+      urlTinySized: '',
+      urlMobileSized: '',
+      urlTabletSized: '',
+      urlDesktopSized:
+        'https://www.readr.tw/assets/images/5e2ba0d484f8369089f185afcf8b3be4/5e2ba0d484f8369089f185afcf8b3be4.png',
+      urlOriginal: '',
+    },
+    // requireTime: 4,
     endTime: 'Tue, 09 Jun 2020 10:00:00 GMT',
     // progress: 56,
-    link: 'https://www.readr.tw/series/overseastaiwanese',
+    collabLink: 'https://www.readr.tw/series/overseastaiwanese',
+    achvLink: undefined,
   },
   {
     id: 4,
     // title: '不一樣的彩虹：全台小學晨光時間大解密',
-    heroImage:
-      'https://www.readr.tw/assets/images/5e2ba0d484f8369089f185afcf8b3be4/5e2ba0d484f8369089f185afcf8b3be4.png',
+    description:
+      '在爭議聲中，換發搭載晶片的數位身分證（New eID）工作仍持續推行。',
+    heroImage: {
+      urlTinySized: '',
+      urlMobileSized: '',
+      urlTabletSized: '',
+      urlDesktopSized:
+        'https://www.readr.tw/assets/images/5e2ba0d484f8369089f185afcf8b3be4/5e2ba0d484f8369089f185afcf8b3be4.png',
+      urlOriginal: '',
+    },
+    requireTime: 8,
     endTime: 'Tue, 09 Jun 2020 10:00:00 GMT',
     progress: 56,
-    link: 'https://www.readr.tw/series/food-delivery',
+    collabLink: 'https://www.readr.tw/series/food-delivery',
+    achvLink: undefined,
   },
 ]
 
