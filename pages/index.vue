@@ -47,7 +47,7 @@
       </div>
       <UiHorizontalList
         class="home__horizontal-list"
-        :projects="collaborativeProjects"
+        :items="collaborativeProjects"
       />
     </section>
 
@@ -69,6 +69,8 @@
 </template>
 
 <script>
+// import allCollaborations from '~/apollo/queries/allCollaborations'
+
 import { viewportWidth } from '~/store/composition/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
@@ -87,6 +89,11 @@ import {
 
 export default {
   name: 'Home',
+  // apollo: {
+  //   allCollaborations: {
+  //     query: allCollaborations,
+  //   },
+  // },
   async fetch() {
     // await this.fetchEditorsChoice()
     await this.fetchLatestPosts()

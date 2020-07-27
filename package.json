@@ -24,9 +24,11 @@
     }
   },
   "dependencies": {
+    "@nuxtjs/apollo": "^4.0.1-rc.1",
     "@nuxtjs/dayjs": "^1.1.7",
     "axios": "^0.19.2",
     "cross-env": "^7.0.2",
+    "graphql-tag": "^2.10.4",
     "humps": "^2.0.1",
     "koa": "^2.6.2",
     "koa-helmet": "^5.2.0",
@@ -35,11 +37,13 @@
     "qs": "^6.9.4"
   },
   "devDependencies": {
+    "@babel/runtime-corejs3": "^7.10.5",
     "@nuxtjs/eslint-config": "^3.0.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/stylelint-module": "^4.0.0",
     "babel-eslint": "^10.0.1",
+    "core-js": "3",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-nuxt": ">=0.4.2",

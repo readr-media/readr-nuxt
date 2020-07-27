@@ -1,4 +1,6 @@
-module.exports = {
+const { API_ENDPOINT } = require('./configs/config.js')
+
+Object.assign(module.exports, {
   mode: 'universal',
   modern: 'server',
 
@@ -20,6 +22,14 @@ module.exports = {
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+  },
+
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: API_ENDPOINT,
+      },
+    },
   },
   /*
    ** Customize the progress-bar color
@@ -51,7 +61,7 @@ module.exports = {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/dayjs'],
+  modules: ['@nuxtjs/dayjs', '@nuxtjs/apollo'],
 
   components: ['~/components', { path: '~/components/ui/', prefix: 'ui' }],
 
@@ -104,6 +114,7 @@ module.exports = {
             '@nuxt/babel-preset-app',
             {
               targets: envTargets[envName],
+              corejs: { version: 3 },
             },
           ],
         ]
@@ -114,4 +125,4 @@ module.exports = {
      */
     extend(config, ctx) {},
   },
-}
+})

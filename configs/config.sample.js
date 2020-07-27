@@ -3,4 +3,6 @@ Object.assign(module.exports, {
   API_HOST: '',
   API_PORT: '',
   API_TIMEOUT: 10000,
+
+  API_ENDPOINT: '',
 })
