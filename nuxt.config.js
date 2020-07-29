@@ -44,7 +44,10 @@ Object.assign(module.exports, {
    */
   plugins: ['~/plugins/index.js', '~/plugins/requests/index.js'],
 
-  serverMiddleware: [{ path: '/api', handler: '~/api/index.js' }],
+  serverMiddleware: [
+    { path: '/api', handler: '~/api/index.js' },
+    { path: '/google-sheets', handler: '~/api/google-sheets.js' },
+  ],
   /*
    ** Nuxt.js dev-modules
    */

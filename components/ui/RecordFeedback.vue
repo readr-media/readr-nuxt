@@ -29,7 +29,8 @@
 </template>
 
 <script>
-import { ref, computed } from 'nuxt-composition-api'
+import { ref, computed, useContext } from 'nuxt-composition-api'
+import { post as axiosPost } from 'axios'
 
 import CheckIcon from '~/assets/check-icon.svg?inline'
 
@@ -50,7 +51,25 @@ export default {
     const shouldOpenFeedback = ref(true)
     const hadFeedback = computed(() => feedback.value.length)
 
+    const { route } = useContext()
+
     function handleBtnFeedbackClick() {
+      sendFeedbackToGoogleSheet()
+      closeFeedback()
+    }
+
+    function sendFeedbackToGoogleSheet() {
+      axiosPost('/google-sheets/append', {
+        spreadsheetId: '1YokH0yMyuc8D50XSBkN5jMTRbSXYll74OWeOs1tMXag',
+        range: '閱讀字數回饋!A:C',
+        valueInputOption: 'RAW',
+        resource: {
+          values: [[route.value.params.id, feedback.value, Date.now()]],
+        },
+      })
+    }
+
+    function closeFeedback() {
       shouldOpenFeedback.value = false
     }
 
