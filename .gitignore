@@ -91,3 +91,4 @@ sw.*
 
 # Config
 config.js
+configs/google-sheets/
