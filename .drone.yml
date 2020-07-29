@@ -31,7 +31,7 @@ pipeline:
     secrets: [google_credentials]
     commands:
     - gcloud source repos clone configs ../configs
-    - cp ../configs/readr-media/readr-nuxt/dev/configs ./configs
+    - cp -R ../configs/readr-media/readr-nuxt/dev/configs/* ./configs
     when:
       event: [push]
       branch: [dev]
