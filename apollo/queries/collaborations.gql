@@ -1,0 +1,17 @@
+#import '~/apollo/fragments/hero-image.gql'
+
+query allCollaborations {
+  allCollaborations(sortBy: [publishTime_DESC], first: 10, where: {state: published}) {
+    id
+    title
+    description
+    heroImage {
+      ...urls
+    }
+    progress
+    collabLink
+    achvLink
+    requireTime
+    endTime
+  }
+}

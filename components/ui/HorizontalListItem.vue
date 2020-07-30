@@ -82,6 +82,7 @@ export default {
 <style lang="scss" scoped>
 a {
   display: block;
+  letter-spacing: 2.5px;
   &:hover {
     ::v-deep {
       img {
@@ -192,7 +193,6 @@ button {
 
 h1 {
   font-size: 15px;
-  letter-spacing: 2.5px;
   font-weight: 700;
   word-wrap: break-word;
   -webkit-line-clamp: 2;
@@ -233,10 +233,10 @@ h1 {
   }
   &__num {
     font-size: 15px;
-    letter-spacing: 2.5px;
     font-weight: 700;
     text-align: right;
     flex: 0 0 auto;
+    margin-left: 12px;
     @include media-breakpoint-up(md) {
       font-size: 18px;
     }
