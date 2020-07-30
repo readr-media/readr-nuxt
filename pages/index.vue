@@ -4,8 +4,8 @@
 
     <section>
       <UiCarousel
-        v-if="shouldOpenEditorsChoice"
-        :posts="editorsChoicePosts"
+        v-if="shouldOpenEditorChoices"
+        :posts="allEditorChoices"
         class="home__carousel"
       >
         <template #heading>
@@ -70,12 +70,12 @@
 
 <script>
 // import allCollaborations from '~/apollo/queries/allCollaborations'
+import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
 
 import { viewportWidth } from '~/store/composition/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
 import {
-  mockEditorsChoicePosts,
   mockDatabases,
   mockQuotes,
   mockCollaborativeProjects,
@@ -89,18 +89,17 @@ import {
 
 export default {
   name: 'Home',
-  // apollo: {
-  //   allCollaborations: {
-  //     query: allCollaborations,
-  //   },
-  // },
+  apollo: {
+    allEditorChoices: {
+      query: allEditorChoices,
+    },
+  },
   async fetch() {
-    // await this.fetchEditorsChoice()
     await this.fetchLatestPosts()
   },
   data() {
     return {
-      editorsChoicePosts: mockEditorsChoicePosts,
+      allEditorChoices: [],
       latestPosts: [],
       databases: mockDatabases,
       quotes: mockQuotes,
@@ -125,8 +124,8 @@ export default {
     breakpointMd() {
       return parseInt(styleVariables['breakpoint-md'], 10)
     },
-    shouldOpenEditorsChoice() {
-      return this.editorsChoicePosts.length > 0
+    shouldOpenEditorChoices() {
+      return this.allEditorChoices && this.allEditorChoices.length > 0
     },
     shouldOpenLatestList() {
       return this.latestPosts.length > 0
@@ -146,12 +145,6 @@ export default {
     )
   },
   methods: {
-    // async fetchEditorsChoice() {
-    //   const response = await this.$fetchPromotions({
-    //     maxResult: 3,
-    //   })
-    //   this.editorsChoicePosts = response?.items ?? []
-    // },
     async fetchLatestPosts() {
       const response = await this.$fetchPosts({
         publishStatus: '{"$in":[2]}',
