@@ -21,7 +21,7 @@
             v-for="(post, idx) in posts"
             :key="post.id"
             :class="{ active: shouldActive(idx) }"
-            :src="$getImage(post)"
+            :src="heroImage(post)"
             alt=""
           />
         </picture>
@@ -34,7 +34,7 @@
       :class="{ active: shouldActive(idx) }"
       class="bg bg--img"
       :style="{
-        backgroundImage: `url(${$getImage(post)})`,
+        backgroundImage: `url(${heroImage(post)})`,
       }"
     />
     <div class="bg bg--color" />
@@ -60,6 +60,7 @@
 import SvgDialogBox from '~/assets/dialog-box.svg?inline'
 import SvgArrowPrev from '~/assets/arrow-prev.svg?inline'
 import SvgArrowNext from '~/assets/arrow-next.svg?inline'
+import defaultImage from '~/assets/og-img.jpg'
 
 export default {
   name: 'Carousel',
@@ -138,6 +139,9 @@ export default {
     },
     stopAutoToNextPost() {
       clearTimeout(this.timeoutIdOfAutoToNextPost)
+    },
+    heroImage({ heroImage = {} }) {
+      return heroImage?.urlTabletSized || defaultImage
     },
   },
 }

@@ -76,30 +76,6 @@ export const mockCollaborativeProjects = [
   },
 ]
 
-export const mockEditorsChoicePosts = [
-  {
-    id: 1,
-    title: '記者來當外送員：開箱美食外送秘辛！記者來當外送員',
-    link: 'https://www.readr.tw/series/Wuhan-pneumonia',
-    image:
-      'https://www.readr.tw/assets/images/5e2ba0d484f8369089f185afcf8b3be4/5e2ba0d484f8369089f185afcf8b3be4.png',
-  },
-  {
-    id: 2,
-    title: '不一樣的彩虹：全台小學晨光',
-    link: 'https://www.readr.tw/series/food-delivery',
-    image:
-      'https://www.readr.tw/assets/images/830962f5f7f9b90372a60067f0545aea/830962f5f7f9b90372a60067f0545aea.jpg',
-  },
-  {
-    id: 3,
-    title: '港版國安法',
-    link: 'https://www.readr.tw/series/2020president',
-    image:
-      'https://www.readr.tw/assets/images/6324f78e5ddc9774c5e14cb6f2dbc34f/6324f78e5ddc9774c5e14cb6f2dbc34f.jpeg',
-  },
-]
-
 export const mockDatabases = [
   {
     id: 1,
