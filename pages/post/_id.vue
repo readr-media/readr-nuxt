@@ -15,7 +15,7 @@
 
     <ClientOnly>
       <UiRecordBox
-        v-if="shouldActivateRecordWord"
+        v-if="shouldOpenRecordWord"
         class="post-page__record-box"
         :class="{ hidden: !hasWordPerSecond }"
         @cancel="deactivateRecordWord"
@@ -113,6 +113,8 @@ export default {
       () => wordReadingPerSecond.value !== undefined
     )
 
+    const shouldOpenRecordWord = shouldActivateRecordWord === true
+
     return {
       post,
       latestPosts,
@@ -121,7 +123,7 @@ export default {
       wordReadingPerSecond,
       hasWordPerSecond,
 
-      shouldActivateRecordWord,
+      shouldOpenRecordWord,
       deactivateRecordWord,
     }
   },
