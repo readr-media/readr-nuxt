@@ -120,7 +120,7 @@ header {
   background-color: #fff;
   box-shadow: 0 0 2px rgba(#000, 0.15);
   transition: transform 0.3s;
-  z-index: 999;
+  z-index: 499;
   &.hidden {
     transform: translateY(-62.63px);
   }

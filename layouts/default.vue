@@ -3,6 +3,10 @@
     <nuxt />
 
     <UiFooter class="default__footer" />
+
+    <ClientOnly>
+      <TheGdpr v-if="shouldOpenGdpr" @cancel="closeGdpr" />
+    </ClientOnly>
   </div>
 </template>
 
@@ -12,9 +16,22 @@ import { onBeforeMount, onBeforeUnmount } from 'nuxt-composition-api'
 import { setViewport } from '~/store/composition/viewport.js'
 import { rAFWithDebounce } from '~/utils/index.js'
 
+if (process.browser) {
+  // eslint-disable-next-line no-var
+  var {
+    state: { shouldOpenGdpr },
+    closeGdpr,
+  } = require('~/composition/store/local-storage.js')
+}
+
 export default {
   setup() {
     useUpdateViewport()
+
+    return {
+      shouldOpenGdpr,
+      closeGdpr,
+    }
   },
 }
 
