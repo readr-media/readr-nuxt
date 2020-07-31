@@ -27,7 +27,8 @@ export default {
   overflow-y: auto;
 }
 article {
-  flex: 1 0 auto;
+  flex: 0 0 auto;
+  width: 100%;
   max-width: 190px;
   @include media-breakpoint-up(md) {
     max-width: 342px;
