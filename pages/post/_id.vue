@@ -113,7 +113,13 @@ export default {
       () => wordReadingPerSecond.value !== undefined
     )
 
-    const shouldOpenRecordWord = shouldActivateRecordWord === true
+    const shouldOpenRecordWord = ref(false)
+    onMounted(() => {
+      setShouldOpenRecordWord()
+    })
+    function setShouldOpenRecordWord() {
+      shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
+    }
 
     return {
       post,
