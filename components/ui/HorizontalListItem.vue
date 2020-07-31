@@ -58,7 +58,7 @@ export default {
       return this.remainingDays === '已結束'
     },
     hasAchvLink() {
-      return this.item.achvLink !== undefined
+      return this.item.achvLink !== null
     },
     canCollaborate() {
       return !this.hasAchvLink && !this.beyondEndTime
