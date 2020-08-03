@@ -1,0 +1,18 @@
+query allDatas {
+  allDatas(sortBy: [publishTime_DESC], first: 10, where: {state: published}) {
+    id
+    title
+    link
+    relatedGallery(sortBy: [createdAt_DESC], first: 3) {
+      id
+      link
+      writers {
+        id
+        name
+      }
+      heroImage {
+        urlTinySized
+      }
+    }
+  }
+}
