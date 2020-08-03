@@ -31,7 +31,7 @@
       <div class="database-heading">
         <h2>開放資料庫</h2>
       </div>
-      <UiDatabaseList :databases="databases" class="home__database-list" />
+      <UiDatabaseList :list="allDatas" class="home__database-list" />
       <UiButtonDonate class="home__donate-btn" />
     </section>
 
@@ -71,12 +71,12 @@
 <script>
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
+import { allDatas } from '~/apollo/queries/data.gql'
 
 import { viewportWidth } from '~/store/composition/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
 import {
-  mockDatabases,
   mockQuotes,
   mockMorePostsNews,
   mockMorePostsPolitics,
@@ -95,6 +95,9 @@ export default {
     allCollaborations: {
       query: allCollaborations,
     },
+    allDatas: {
+      query: allDatas,
+    },
   },
   async fetch() {
     await this.fetchLatestPosts()
@@ -103,8 +106,8 @@ export default {
     return {
       allEditorChoices: [],
       allCollaborations: [],
+      allDatas: [],
       latestPosts: [],
-      databases: mockDatabases,
       quotes: mockQuotes,
       morePosts: [
         mockMorePostsNews,

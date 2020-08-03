@@ -10,33 +10,36 @@
         <span>資料怎麼用</span>
       </div>
       <ul>
-        <li v-for="database in databases" :key="database.id">
+        <li v-for="item in list" :key="item.id">
           <article>
             <a
               class="database-title"
-              href="http://"
+              :href="item.link"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <h1>{{ database.title }}</h1>
+              <h1>{{ item.title }}</h1>
             </a>
-            <div class="example-wrapper">
-              <span>{{ database.prompt }}</span>
+            <div class="gallery">
+              <span v-if="firstGallery(item)"
+                >{{ firstWriterName(firstGallery(item)) }}這樣用</span
+              >
+              <span v-else>分享你怎麼用</span>
               <a
-                v-for="example in database.examples"
-                :key="example.id"
-                href="http://"
+                v-for="gallery in item.relatedGallery"
+                :key="gallery.id"
+                :href="gallery.link"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <picture>
-                  <img :src="example.image" alt="" />
+                  <img :src="getImage(gallery)" alt="" />
                 </picture>
               </a>
 
               <a
                 class="add"
-                href="http://"
+                href="https://forms.gle/2JKrGUfherYagj3P6"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -51,13 +54,31 @@
 </template>
 
 <script>
+import defaultImage from '~/assets/og-img.jpg'
+
 export default {
   name: 'DatabaseList',
   props: {
-    databases: {
+    list: {
       type: Array,
       required: true,
       default: () => [],
+    },
+  },
+  methods: {
+    getImage({ heroImage }) {
+      return heroImage?.urlTinySized || defaultImage
+    },
+    firstGallery({ relatedGallery = [] }) {
+      return relatedGallery[0]
+    },
+    firstWriterName(gallery) {
+      if (!gallery) {
+        return
+      }
+
+      const names = gallery.writers.map((writer) => writer.name)
+      return names[0]
     },
   },
 }
@@ -128,7 +149,7 @@ article {
 h1 {
   text-decoration: underline;
 }
-.example-wrapper {
+.gallery {
   display: flex;
   justify-content: flex-end;
   align-items: center;
