@@ -45,6 +45,14 @@
         />
         <UiQuoteSlide :quotes="quotes" />
       </div>
+      <div class="container container--wall">
+        <UiCollaboratorWall
+          v-if="countOfCollaboratorWall"
+          :count="countOfCollaboratorWall"
+          :names="namesOfCollaboratorWall"
+          @open="handleOpenNameList"
+        />
+      </div>
       <UiHorizontalList
         class="home__horizontal-list"
         :items="allCollaborations"
@@ -69,6 +77,8 @@
 </template>
 
 <script>
+import { get as axiosGet } from 'axios'
+
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
 import { allDatas } from '~/apollo/queries/data.gql'
@@ -85,6 +95,8 @@ import {
   mockMorePostsEdu,
   mockMorePostsOthers,
 } from '~/constants/mocks.js'
+
+const NUMBER_OF_FETCHED_COLLABORATOR_NAMES = 80
 
 export default {
   name: 'Home',
@@ -108,6 +120,10 @@ export default {
       allCollaborations: [],
       allDatas: [],
       latestPosts: [],
+      collaboratorWall: {
+        count: 0,
+        names: '',
+      },
       quotes: mockQuotes,
       morePosts: [
         mockMorePostsNews,
@@ -141,13 +157,32 @@ export default {
     latestPostsSub() {
       return this.latestPosts.slice(1)
     },
+    countOfCollaboratorWall: {
+      get() {
+        return this.collaboratorWall.count
+      },
+      set(num) {
+        this.collaboratorWall.count = num
+      },
+    },
+    namesOfCollaboratorWall: {
+      get() {
+        return this.collaboratorWall.names
+      },
+      set(names) {
+        this.collaboratorWall.names = names
+      },
+    },
   },
-  mounted() {
+  async mounted() {
     this.unwatchIsViewportWidthUpMd = this.$watch(
       'isViewportWidthUpMd',
       this.handleMacy,
       { immediate: true }
     )
+
+    this.countOfCollaboratorWall =
+      (await this.fetchCountOfCollaboratorWall()) || 0
   },
   methods: {
     async fetchLatestPosts() {
@@ -165,6 +200,42 @@ export default {
         showProject: false,
       })
       this.latestPosts = response?.items ?? []
+    },
+    async fetchCountOfCollaboratorWall() {
+      try {
+        const response = await axiosGet('/google-sheets', {
+          params: {
+            spreadsheetId: '1vEuoCAAXR8NMoh6qiOnj6kNdLv0lc-CaInLnWUuvySo',
+            range: '名稱列表!F1',
+          },
+        })
+
+        return Number(response.data.values[0][0])
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async handleOpenNameList() {
+      this.namesOfCollaboratorWall =
+        (await this.fetchNamesOfCollaboratorWall()) || ''
+    },
+    async fetchNamesOfCollaboratorWall() {
+      const theEndRowNum = this.countOfCollaboratorWall + 1
+      const theBeginningRowNum =
+        theEndRowNum - NUMBER_OF_FETCHED_COLLABORATOR_NAMES + 1
+      try {
+        const response = await axiosGet('/google-sheets', {
+          params: {
+            spreadsheetId: '1vEuoCAAXR8NMoh6qiOnj6kNdLv0lc-CaInLnWUuvySo',
+            range: `名稱列表!B${theBeginningRowNum}:B${theEndRowNum}`,
+            majorDimension: 'COLUMNS',
+          },
+        })
+
+        return response.data.values[0].join(' ')
+      } catch (error) {
+        console.error(error)
+      }
     },
     async handleMacy(isViewportWidthUpMd) {
       if (this.macyInstance) {
@@ -269,9 +340,16 @@ export default {
     }
   }
   &--quote {
-    margin-bottom: 14px;
+    margin-bottom: 20px;
     @include media-breakpoint-up(md) {
-      margin-bottom: 22px;
+      margin-bottom: 24px;
+    }
+  }
+  &--wall {
+    margin-bottom: 14px;
+    max-width: 1070px;
+    @include media-breakpoint-up(md) {
+      margin-bottom: 20px;
     }
   }
 }

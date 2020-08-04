@@ -61,7 +61,7 @@ function useUpdateViewport() {
 
 <style lang="scss">
 html {
-  font-family: Inter, 'Noto Sans CJK TC', sans-serif;
+  font-family: 'Futura PT', 'Noto Sans CJK TC', sans-serif;
 }
 .default {
   &__footer {
