@@ -18,12 +18,40 @@ export default {
 
 const router = new Router()
 
-app.use(bodyParser())
-app.use(router.routes())
+app.use(bodyParser()).use(router.routes())
 
 const sheets = google.sheets({
   version: 'v4',
   auth,
+})
+
+router.get('/', async function getFromGoogleSheet(ctx) {
+  const sheetsRequest = ctx.query
+  const { spreadsheetId } = sheetsRequest
+
+  try {
+    const { data, status = 200 } = await sheets.spreadsheets.values.get(
+      sheetsRequest
+    )
+
+    ctx.status = status
+    ctx.body =
+      data ||
+      `
+        api: google sheets
+        method: spreadsheets.values.get
+        message: no data found
+        spreadsheet id: ${spreadsheetId}
+      `
+  } catch (error) {
+    ctx.status = error.code
+    ctx.body = `
+      api: google sheets
+      method: spreadsheets.values.get
+      message: ${error.message}
+      spreadsheet id: ${spreadsheetId}
+    `
+  }
 })
 
 router.post('/append', async function appendToGoogleSheet(ctx) {
