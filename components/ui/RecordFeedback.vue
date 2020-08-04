@@ -61,7 +61,7 @@ export default {
     function sendFeedbackToGoogleSheet() {
       axiosPost('/google-sheets/append', {
         spreadsheetId: '1YokH0yMyuc8D50XSBkN5jMTRbSXYll74OWeOs1tMXag',
-        range: '閱讀字數回饋!A:C',
+        range: '閱讀字數回饋!A2:C',
         valueInputOption: 'RAW',
         resource: {
           values: [[route.value.params.id, feedback.value, Date.now()]],

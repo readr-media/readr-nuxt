@@ -37,48 +37,53 @@ router.get('/', async function getFromGoogleSheet(ctx) {
     ctx.status = status
     ctx.body =
       data ||
-      `
-        api: google sheets
-        method: spreadsheets.values.get
-        message: no data found
-        spreadsheet id: ${spreadsheetId}
-      `
+      createErrorBodyOfGoogleSheets({
+        method: 'spreadsheets.values.get',
+        message: 'no data found',
+        spreadsheetId,
+      })
   } catch (error) {
-    ctx.status = error.code
-    ctx.body = `
-      api: google sheets
-      method: spreadsheets.values.get
-      message: ${error.message}
-      spreadsheet id: ${spreadsheetId}
-    `
+    ctx.status = 500
+    ctx.body = createErrorBodyOfGoogleSheets({
+      method: 'spreadsheets.values.get',
+      message: error.message,
+      spreadsheetId,
+    })
   }
 })
 
 router.post('/append', async function appendToGoogleSheet(ctx) {
   const { body: sheetsRequest } = ctx.request
   const { spreadsheetId } = sheetsRequest
+
   try {
-    const {
-      data: { updates } = {},
-      status = 200,
-    } = await sheets.spreadsheets.values.append(sheetsRequest)
+    const { data, status = 200 } = await sheets.spreadsheets.values.append(
+      sheetsRequest
+    )
 
     ctx.status = status
     ctx.body =
-      updates ||
-      `
-        api: google sheets
-        method: append
-        message: no updates found
-        spreadsheet id: ${spreadsheetId}
-      `
+      data ||
+      createErrorBodyOfGoogleSheets({
+        method: 'spreadsheets.values.append',
+        message: 'no data found',
+        spreadsheetId,
+      })
   } catch (error) {
-    ctx.status = error.code
-    ctx.body = `
-      api: google sheets
-      method: append
-      message: ${error.message}
-      spreadsheet id: ${spreadsheetId}
-    `
+    ctx.status = 500
+    ctx.body = createErrorBodyOfGoogleSheets({
+      method: 'spreadsheets.values.append',
+      message: error.message,
+      spreadsheetId,
+    })
   }
 })
+
+function createErrorBodyOfGoogleSheets({ method, message, spreadsheetId }) {
+  return `
+    api: google sheets
+    method: ${method}
+    message: ${message}
+    spreadsheet id: ${spreadsheetId}
+  `
+}
