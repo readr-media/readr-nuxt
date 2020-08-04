@@ -8,7 +8,7 @@
         <label v-for="option in options" :key="option">
           <input v-model="feedback" type="radio" :value="option" />
           <div class="mark">
-            <CheckIcon />
+            <SvgCheckIcon />
           </div>
           {{ option }}
         </label>
@@ -32,12 +32,12 @@
 import { ref, computed, useContext } from 'nuxt-composition-api'
 import { post as axiosPost } from 'axios'
 
-import CheckIcon from '~/assets/check-icon.svg?inline'
+import SvgCheckIcon from '~/assets/check-icon.svg?inline'
 
 export default {
   name: 'RecordFeedback',
   components: {
-    CheckIcon,
+    SvgCheckIcon,
   },
   props: {
     options: {
