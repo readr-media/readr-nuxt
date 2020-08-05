@@ -1,9 +1,17 @@
-query allDatas {
-  allDatas(sortBy: [publishTime_DESC], first: 10, where: {state: published}) {
+query databases($first: Int! = 3, $skip: Int, $hasMeta: Boolean! = false) {
+  all: allDatas(
+    sortBy: [publishTime_DESC],
+    first: $first,
+    skip: $skip,
+    where: { state: published }
+  ) {
     id
     title
     link
-    relatedGallery(sortBy: [createdAt_DESC], first: 3) {
+    relatedGallery(
+      sortBy: [createdAt_DESC],
+      first: 3
+    ) {
       id
       link
       writers {
@@ -14,5 +22,9 @@ query allDatas {
         urlTinySized
       }
     }
+  }
+
+  meta: _allDatasMeta @skip(if: $hasMeta) {
+    count
   }
 }

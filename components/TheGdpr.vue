@@ -1,6 +1,6 @@
 <template>
   <div class="the-gdpr">
-    <button class="btn" type="button" @click="$emit('cancel')">
+    <button type="button" @click="$emit('cancel')">
       <span>我知道了</span>
     </button>
     <div class="explan">

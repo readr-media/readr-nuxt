@@ -31,7 +31,13 @@
       <div class="database-heading">
         <h2>開放資料庫</h2>
       </div>
-      <UiDatabaseList :list="allDatas" class="home__database-list" />
+      <UiDatabaseList
+        :list="databases.all"
+        :loadMore="loadMoreDatabases"
+        :shouldLoadMore="shouldLoadMoreDatabases"
+        class="home__database-list"
+      />
+
       <UiButtonDonate class="home__donate-btn" />
     </section>
 
@@ -81,7 +87,7 @@ import { get as axiosGet } from 'axios'
 
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
-import { allDatas } from '~/apollo/queries/data.gql'
+import { databases } from '~/apollo/queries/data.gql'
 
 import { viewportWidth } from '~/store/composition/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
@@ -96,6 +102,8 @@ import {
   mockMorePostsOthers,
 } from '~/constants/mocks.js'
 
+const DATABASES_PAGE_SIZE = 3
+
 const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
 
 export default {
@@ -107,8 +115,9 @@ export default {
     allCollaborations: {
       query: allCollaborations,
     },
-    allDatas: {
-      query: allDatas,
+    databases: {
+      query: databases,
+      update: (data) => data,
     },
   },
   async fetch() {
@@ -118,7 +127,13 @@ export default {
     return {
       allEditorChoices: [],
       allCollaborations: [],
-      allDatas: [],
+
+      databases: {
+        all: [],
+        meta: {},
+      },
+      databasesPage: 0,
+
       latestPosts: [],
       collaboratorWall: {
         count: 0,
@@ -157,6 +172,17 @@ export default {
     latestPostsSub() {
       return this.latestPosts.slice(1)
     },
+
+    prevNumOfDatabases() {
+      return DATABASES_PAGE_SIZE * this.databasesPage
+    },
+    currentNumOfDatabases() {
+      return this.prevNumOfDatabases + DATABASES_PAGE_SIZE
+    },
+    shouldLoadMoreDatabases() {
+      return this.databases.meta.count > 3 && this.currentNumOfDatabases < 9
+    },
+
     countOfCollaboratorWall: {
       get() {
         return this.collaboratorWall.count
@@ -273,6 +299,20 @@ export default {
         },
       })
     },
+    loadMoreDatabases() {
+      this.databasesPage += 1
+      this.$apollo.queries.databases.fetchMore({
+        variables: {
+          first: DATABASES_PAGE_SIZE,
+          skip: this.prevNumOfDatabases,
+          hasMeta: true,
+        },
+        updateQuery: (prevResult, { fetchMoreResult }) => ({
+          all: [...prevResult.all, ...fetchMoreResult.all],
+          meta: this.databases.meta,
+        }),
+      })
+    },
   },
 }
 </script>
@@ -323,6 +363,7 @@ export default {
     }
   }
 }
+
 .container {
   max-width: 1096px;
   margin-left: auto;
@@ -357,6 +398,7 @@ export default {
     }
   }
 }
+
 .home__carousel,
 .container--latest,
 .container--database,
@@ -366,6 +408,7 @@ export default {
     margin-bottom: 60px;
   }
 }
+
 .database-heading {
   background-color: #04295e;
   border-top-left-radius: 2px;
@@ -391,12 +434,14 @@ export default {
     }
   }
 }
+
 .more-section {
   padding-top: 20px;
   @include media-breakpoint-up(md) {
     padding-top: 30px;
   }
 }
+
 .yellow-bg {
   background-color: #ebf02c;
 }

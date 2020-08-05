@@ -18,22 +18,14 @@
         </li>
       </ul>
 
-      <div class="load-more-wrapper">
-        <button type="button">看更多</button>
-        <SvgMoreIcon />
-      </div>
+      <!-- <UiLoadMore class="more-list__load-more" /> -->
     </div>
   </div>
 </template>
 
 <script>
-import SvgMoreIcon from '~/assets/more-icon.svg?inline'
-
 export default {
   name: 'MoreList',
-  components: {
-    SvgMoreIcon,
-  },
   props: {
     topic: {
       type: String,
@@ -49,6 +41,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// .more-list {
+//   &__load-more {
+//     margin-top: 20px;
+//     @include media-breakpoint-up(md) {
+//       margin-top: 26px;
+//     }
+//   }
+// }
 h3 {
   color: #000928;
   letter-spacing: 2.8px;
@@ -121,29 +121,5 @@ h1 {
   color: rgba(#000, 0.66);
   line-height: 1.4;
   margin-top: 10px;
-}
-.load-more-wrapper {
-  text-align: center;
-  margin-top: 20px;
-  user-select: none;
-  cursor: pointer;
-  @include media-breakpoint-up(md) {
-    margin-top: 26px;
-  }
-}
-button {
-  color: #000928;
-  letter-spacing: 2.5px;
-  // to offset letter-spacing at the rightmost
-  margin-left: 1.75px;
-
-  font-size: 15px;
-  line-height: 1.5;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-svg {
-  margin-left: auto;
-  margin-right: auto;
 }
 </style>

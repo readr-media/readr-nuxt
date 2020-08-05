@@ -4,52 +4,57 @@
       READr
       致力於產製數據驅動的新聞報導，並將所使用的資料公開，以下為公開的資料，歡迎再加以利用！
     </p>
-    <div>
-      <div class="list-title-wrapper">
-        <span>資料列表</span>
-        <span>資料怎麼用</span>
-      </div>
-      <ul>
-        <li v-for="item in list" :key="item.id">
-          <article>
+
+    <div class="list-title-wrapper">
+      <span>資料列表</span>
+      <span>資料怎麼用</span>
+    </div>
+    <ul>
+      <li v-for="item in list" :key="item.id">
+        <article>
+          <a
+            class="database-title"
+            :href="item.link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <h1>{{ item.title }}</h1>
+          </a>
+          <div class="gallery">
+            <span v-if="firstGallery(item)"
+              >{{ firstWriterName(firstGallery(item)) }}這樣用</span
+            >
+            <span v-else>分享你怎麼用</span>
             <a
-              class="database-title"
-              :href="item.link"
+              v-for="gallery in item.relatedGallery"
+              :key="gallery.id"
+              :href="gallery.link"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <h1>{{ item.title }}</h1>
+              <picture>
+                <img :src="getImage(gallery)" alt="" />
+              </picture>
             </a>
-            <div class="gallery">
-              <span v-if="firstGallery(item)"
-                >{{ firstWriterName(firstGallery(item)) }}這樣用</span
-              >
-              <span v-else>分享你怎麼用</span>
-              <a
-                v-for="gallery in item.relatedGallery"
-                :key="gallery.id"
-                :href="gallery.link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <picture>
-                  <img :src="getImage(gallery)" alt="" />
-                </picture>
-              </a>
 
-              <a
-                class="add"
-                href="https://forms.gle/2JKrGUfherYagj3P6"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <UiPlusIcon />
-              </a>
-            </div>
-          </article>
-        </li>
-      </ul>
-    </div>
+            <a
+              class="add"
+              href="https://forms.gle/2JKrGUfherYagj3P6"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <UiPlusIcon />
+            </a>
+          </div>
+        </article>
+      </li>
+    </ul>
+
+    <UiLoadMore
+      v-if="shouldLoadMore"
+      :loadMore="loadMore"
+      class="database-list__load-more"
+    />
   </div>
 </template>
 
@@ -63,6 +68,15 @@ export default {
       type: Array,
       required: true,
       default: () => [],
+    },
+    loadMore: {
+      type: Function,
+      required: true,
+    },
+    shouldLoadMore: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
   },
   methods: {
@@ -93,6 +107,12 @@ export default {
   @include media-breakpoint-up(md) {
     font-size: 18px;
     padding-top: 30px;
+  }
+  &__load-more {
+    margin-top: 8px;
+    @include media-breakpoint-up(md) {
+      margin-top: 10px;
+    }
   }
 }
 h1,
