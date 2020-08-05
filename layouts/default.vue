@@ -13,7 +13,7 @@
 <script>
 import { onBeforeMount, onBeforeUnmount } from 'nuxt-composition-api'
 
-import { setViewport } from '~/store/composition/viewport.js'
+import { setViewport } from '~/composition/store/viewport.js'
 import { rAFWithDebounce } from '~/utils/index.js'
 
 if (process.browser) {
@@ -50,10 +50,7 @@ function useUpdateViewport() {
   function updateViewport() {
     rAFWithDebounce(() => {
       const { clientWidth, clientHeight } = document.documentElement
-      setViewport({
-        width: clientWidth,
-        height: clientHeight,
-      })
+      setViewport(clientWidth, clientHeight)
     })
   }
 }
