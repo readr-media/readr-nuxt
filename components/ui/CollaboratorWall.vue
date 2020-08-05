@@ -36,12 +36,19 @@ export default {
       type: String,
       default: '',
     },
+    loadNames: {
+      type: Function,
+      default: undefined,
+    },
   },
   setup(props, { emit }) {
     const shouldOpenNameList = ref(false)
     function handleUnfold() {
       shouldOpenNameList.value = !shouldOpenNameList.value
-      emit('open')
+
+      if (props.loadNames) {
+        props.loadNames()
+      }
     }
 
     const today = new Date()

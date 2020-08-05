@@ -50,7 +50,7 @@
           v-if="countOfCollaboratorWall"
           :count="countOfCollaboratorWall"
           :names="namesOfCollaboratorWall"
-          @open="handleOpenNameList"
+          :loadNames="loadCollaboratorNames"
         />
       </div>
       <UiHorizontalList
@@ -96,7 +96,7 @@ import {
   mockMorePostsOthers,
 } from '~/constants/mocks.js'
 
-const NUMBER_OF_FETCHED_COLLABORATOR_NAMES = 80
+const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
 
 export default {
   name: 'Home',
@@ -215,14 +215,18 @@ export default {
         console.error(error)
       }
     },
-    async handleOpenNameList() {
+    async loadCollaboratorNames() {
+      if (this.namesOfCollaboratorWall) {
+        return
+      }
+
       this.namesOfCollaboratorWall =
         (await this.fetchNamesOfCollaboratorWall()) || ''
     },
     async fetchNamesOfCollaboratorWall() {
       const theEndRowNum = this.countOfCollaboratorWall + 1
       const theBeginningRowNum =
-        theEndRowNum - NUMBER_OF_FETCHED_COLLABORATOR_NAMES + 1
+        theEndRowNum - NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH + 1
       try {
         const response = await axiosGet('/google-sheets', {
           params: {
