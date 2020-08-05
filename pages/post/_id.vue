@@ -53,7 +53,6 @@ import {
   ref,
   computed,
   watch,
-  toRef,
   useFetch,
   useContext,
   onMounted,
@@ -101,9 +100,7 @@ export default {
     }
 
     const wordCount = 100
-    const userReadingTime = useUserReadingTime(
-      toRef(userState, 'hasUserFinishedReading')
-    )
+    const userReadingTime = useUserReadingTime(userState.hasUserFinishedReading)
     const wordReadingPerSecond = computed(() => {
       if (userReadingTime.value !== undefined) {
         return (userReadingTime.value / 1000 / wordCount).toFixed(2)
