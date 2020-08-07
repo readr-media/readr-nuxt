@@ -88,6 +88,7 @@
 <script>
 import {
   ref,
+  reactive,
   computed,
   watch,
   useFetch,
@@ -157,13 +158,21 @@ export default {
       shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
     }
 
-    const rating = ref(0)
-    const hasRating = computed(() => rating.value > 0)
+    const postFeedback = reactive({
+      rating: 0,
+      opinion: {
+        nickname: '',
+        email: '',
+        content: '',
+      },
+    })
+
+    const hasRating = computed(() => postFeedback.rating > 0)
     function setRating(val) {
-      rating.value = val
+      postFeedback.rating = val
     }
     const starRatingBtnText = computed(() =>
-      hasRating.value ? `確定給 ${rating.value} 顆星` : '傳送給 READr'
+      hasRating.value ? `確定給 ${postFeedback.rating} 顆星` : '傳送給 READr'
     )
     function handleClickRatingBtn() {
       sendRatingToGoogleSheet()
@@ -175,26 +184,23 @@ export default {
         range: '評分!A2:D',
         valueInputOption: 'RAW',
         resource: {
-          values: [[Date.now(), userUuid.value, postId, rating.value]],
+          values: [[Date.now(), userUuid.value, postId, postFeedback.rating]],
         },
       })
     }
 
-    const opinion = ref({
-      nickname: '',
-      email: '',
-      content: '',
-    })
-    const hasOpinionContent = computed(() => opinion.value.content !== '')
+    const hasOpinionContent = computed(
+      () => postFeedback.opinion.content !== ''
+    )
     function setOpinion(val) {
-      opinion.value = val
+      postFeedback.opinion = val
     }
     function handleClickOpinionBtn() {
       sendOpinionToGoogleSheet()
       goToPostFeedbackStep('thanks')
     }
     function sendOpinionToGoogleSheet() {
-      const { nickname, email, content } = opinion.value
+      const { nickname, email, content } = postFeedback.opinion
       axiosPost('/google-sheets/append', {
         spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
         range: '回饋!A2:F',
@@ -223,7 +229,6 @@ export default {
       shouldOpenRecordWord,
       deactivateRecordWord,
 
-      rating,
       hasRating,
       starRatingBtnText,
       setRating,
