@@ -5,7 +5,7 @@
     <article id="post">
       <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
       <h1>{{ post.title }}</h1>
-      <div class="container">
+      <div class="container container--post">
         <picture class="hero-img">
           <img :src="$getImage(post)" alt="" />
         </picture>
@@ -16,7 +16,7 @@
     <ClientOnly>
       <UiRecordBox
         v-if="shouldOpenRecordWord"
-        class="post-page__record-box"
+        class="post-page__record-box container"
         :class="{ hidden: !hasWordPerSecond }"
         @cancel="deactivateRecordWord"
       >
@@ -39,7 +39,24 @@
       </UiRecordBox>
     </ClientOnly>
 
-    <section class="latest-posts">
+    <ClientOnly>
+      <section class="post-feedback container">
+        <div class="post-feedback__title">這篇報導如何？</div>
+        <UiStarRating
+          class="post-feedback__star-rating"
+          @userGiveRating="setRating"
+        />
+        <UiButtonPrimary
+          subtype="feedback"
+          :text="starRatingBtnText"
+          :disabled="!hasRating"
+          class="post-feedback__btn"
+          @click.native="handleClickRatingBtn"
+        />
+      </section>
+    </ClientOnly>
+
+    <section class="latest-posts container">
       <h2>
         <div>最新報導</div>
       </h2>
@@ -57,6 +74,7 @@ import {
   useContext,
   onMounted,
 } from 'nuxt-composition-api'
+import { post as axiosPost } from 'axios'
 
 import { state as userState } from '~/composition/store/user.js'
 
@@ -79,8 +97,9 @@ export default {
       await fetchLatestPosts()
     })
     const { $fetchPost, route, $fetchPosts } = useContext()
+    const postId = route.value.params.id
     async function fetchPost() {
-      const response = await $fetchPost(route.value.params.id)
+      const response = await $fetchPost(postId)
       post.value = response?.items?.[0] ?? {}
     }
     async function fetchLatestPosts() {
@@ -118,6 +137,28 @@ export default {
       shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
     }
 
+    const rating = ref(0)
+    const hasRating = computed(() => rating.value > 0)
+    function setRating(val) {
+      rating.value = val
+    }
+    const starRatingBtnText = computed(() =>
+      hasRating.value ? `確定給 ${rating.value} 顆星` : '傳送給 READr'
+    )
+    function handleClickRatingBtn() {
+      sendRatingToGoogleSheet()
+    }
+    function sendRatingToGoogleSheet() {
+      axiosPost('/google-sheets/append', {
+        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
+        range: '評分!A2:C',
+        valueInputOption: 'RAW',
+        resource: {
+          values: [[Date.now(), null, postId, rating.value]],
+        },
+      })
+    }
+
     return {
       post,
       latestPosts,
@@ -128,6 +169,12 @@ export default {
 
       shouldOpenRecordWord,
       deactivateRecordWord,
+
+      rating,
+      hasRating,
+      starRatingBtnText,
+      setRating,
+      handleClickRatingBtn,
     }
   },
 }
@@ -169,16 +216,13 @@ function useUserReadingTime(hasUserFinishedReading) {
   overflow: hidden;
   &__record-box {
     margin-bottom: 20px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
     transition: opacity 0.3s, transform 0.3s;
+    @include media-breakpoint-up(md) {
+      margin-bottom: 30px;
+    }
     &.hidden {
       opacity: 0;
       transform: translateY(20px);
-    }
-    @include media-breakpoint-up(md) {
-      margin-bottom: 30px;
     }
   }
 }
@@ -218,11 +262,7 @@ h1 {
     padding-right: 0;
   }
 }
-.container {
-  max-width: 660px;
-  margin-left: auto;
-  margin-right: auto;
-}
+
 .hero-img {
   position: relative;
   padding-top: 50%;
@@ -436,6 +476,7 @@ h1 {
     }
   }
 }
+
 .record-word {
   font-size: 15px;
   text-align: center;
@@ -458,14 +499,57 @@ h1 {
     }
   }
 }
-.latest-posts {
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-bottom: 50px;
-  max-width: 600px;
-  @media (min-width: 620px) {
+
+.post-feedback {
+  background-color: rgba(#f5ebff, 0.2);
+  border-radius: 2px;
+  margin-bottom: 20px;
+  padding: 30px;
+  text-align: center;
+  color: rgba(#000, 0.87);
+  @include media-breakpoint-up(md) {
+    margin-bottom: 30px;
+    padding: 22px 50px;
+  }
+  &__title {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1;
+    letter-spacing: 1.5px;
+    // to offset letter-spacing at the rightmost
+    padding-left: 1.5px;
+
+    margin-bottom: 20px;
+    @include media-breakpoint-up(md) {
+      margin-bottom: 22px;
+      font-size: 18px;
+      letter-spacing: 2.5px;
+      // to offset letter-spacing at the rightmost
+      padding-left: 2.5px;
+    }
+  }
+  &__star-rating {
+    max-width: 260px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 20px;
+    @include media-breakpoint-up(md) {
+      margin-bottom: 22px;
+    }
+  }
+  &__btn {
+    max-width: 240px;
+    width: 100%;
+  }
+}
+
+.latest-posts {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 50px;
+  @media (min-width: 620px) {
+    padding-left: 0;
+    padding-right: 0;
   }
   @include media-breakpoint-up(md) {
     margin-bottom: 22px;
@@ -485,6 +569,15 @@ h1 {
     letter-spacing: 5px;
     // to offset letter-spacing at the rightmost
     margin-left: 2.5px;
+  }
+}
+
+.container {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  &--post {
+    max-width: 660px;
   }
 }
 </style>
