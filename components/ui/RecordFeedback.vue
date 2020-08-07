@@ -46,7 +46,7 @@ export default {
   setup(props, { emit }) {
     const feedback = ref('')
     const shouldOpenFeedback = ref(true)
-    const hasFeedback = computed(() => feedback.value.length)
+    const hasFeedback = computed(() => feedback.value !== '')
 
     function handleClickFeedbackBtn() {
       emit('userGiveFeedback', feedback.value)
