@@ -101,7 +101,7 @@ import { state as userState } from '~/composition/store/user.js'
 if (process.browser) {
   // eslint-disable-next-line no-var
   var {
-    state: { shouldActivateRecordWord },
+    state: { userUuid, shouldActivateRecordWord },
     deactivateRecordWord,
   } = require('~/composition/store/local-storage.js')
 }
@@ -172,10 +172,10 @@ export default {
     function sendRatingToGoogleSheet() {
       axiosPost('/google-sheets/append', {
         spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-        range: '評分!A2:C',
+        range: '評分!A2:D',
         valueInputOption: 'RAW',
         resource: {
-          values: [[Date.now(), null, postId, rating.value]],
+          values: [[Date.now(), userUuid.value, postId, rating.value]],
         },
       })
     }
@@ -197,10 +197,12 @@ export default {
       const { nickname, email, content } = opinion.value
       axiosPost('/google-sheets/append', {
         spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-        range: '回饋!A2:C',
+        range: '回饋!A2:F',
         valueInputOption: 'RAW',
         resource: {
-          values: [[Date.now(), null, postId, nickname, email, content]],
+          values: [
+            [Date.now(), userUuid.value, postId, nickname, email, content],
+          ],
         },
       })
     }
