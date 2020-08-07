@@ -27,17 +27,9 @@
 </template>
 
 <script>
-import { ref, computed, useContext } from 'nuxt-composition-api'
-import { post as axiosPost } from 'axios'
+import { ref, computed } from 'nuxt-composition-api'
 
 import SvgCheckIcon from '~/assets/check-icon.svg?inline'
-
-if (process.browser) {
-  // eslint-disable-next-line no-var
-  var {
-    state: { userUuid },
-  } = require('~/composition/store/local-storage.js')
-}
 
 export default {
   name: 'RecordFeedback',
@@ -51,28 +43,14 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props, { emit }) {
     const feedback = ref('')
     const shouldOpenFeedback = ref(true)
     const hadFeedback = computed(() => feedback.value.length)
 
-    const { route } = useContext()
-    const postId = route.value.params.id
-
     function handleBtnFeedbackClick() {
-      sendFeedbackToGoogleSheet()
+      emit('userGiveFeedback', feedback.value)
       closeFeedback()
-    }
-
-    function sendFeedbackToGoogleSheet() {
-      axiosPost('/google-sheets/append', {
-        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-        range: '閱讀字數回饋!A2:D',
-        valueInputOption: 'RAW',
-        resource: {
-          values: [[Date.now(), userUuid.value, postId, feedback.value]],
-        },
-      })
     }
 
     function closeFeedback() {
