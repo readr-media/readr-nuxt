@@ -41,7 +41,7 @@
 
     <ClientOnly>
       <section class="post-feedback container">
-        <template v-if="postFeedbackStep === 'rating'">
+        <div v-if="postFeedbackStep === 'rating'" class="post-feedback__step">
           <div class="post-feedback__title">這篇報導如何？</div>
           <UiStarRating
             class="post-feedback__star-rating"
@@ -54,8 +54,11 @@
             class="post-feedback__btn"
             @click.native="handleClickRatingBtn"
           />
-        </template>
-        <template v-else-if="postFeedbackStep === 'opinion'">
+        </div>
+        <div
+          v-else-if="postFeedbackStep === 'opinion'"
+          class="post-feedback__step"
+        >
           <div class="post-feedback__title">可以的話，給我們一些回饋吧</div>
           <UiFeedbackForm
             class="post-feedback__feedback-form"
@@ -68,7 +71,8 @@
             class="post-feedback__btn"
             @click.native="handleClickOpinionBtn"
           />
-        </template>
+        </div>
+        <UiFeedbackThanks v-else />
       </section>
     </ClientOnly>
 
@@ -187,6 +191,7 @@ export default {
     }
     function handleClickOpinionBtn() {
       sendOpinionToGoogleSheet()
+      goToPostFeedbackStep('thanks')
     }
     function sendOpinionToGoogleSheet() {
       const { nickname, email, content } = opinion.value
@@ -200,7 +205,7 @@ export default {
       })
     }
 
-    const postFeedbackStep = ref('opinion')
+    const postFeedbackStep = ref('rating')
     function goToPostFeedbackStep(name) {
       postFeedbackStep.value = name
     }
@@ -556,12 +561,16 @@ h1 {
   background-color: rgba(#f5ebff, 0.2);
   border-radius: 2px;
   margin-bottom: 20px;
-  padding: 30px;
   text-align: center;
   color: rgba(#000, 0.87);
   @include media-breakpoint-up(md) {
     margin-bottom: 30px;
-    padding: 22px 50px;
+  }
+  &__step {
+    padding: 30px;
+    @include media-breakpoint-up(md) {
+      padding: 22px 50px;
+    }
   }
   &__title {
     font-weight: 500;

@@ -22,9 +22,7 @@
       />
     </div>
 
-    <div v-else class="thanks">
-      感謝你的回饋，<br />READr 會繼續努力提供更好的內容給你
-    </div>
+    <UiFeedbackThanks v-else />
   </div>
 </template>
 
@@ -101,23 +99,12 @@ export default {
     max-width: 240px;
   }
 }
-.feedback,
-.thanks {
+.feedback {
   padding: 30px;
   @include media-breakpoint-up(md) {
     padding-left: 50px;
     padding-right: 50px;
-  }
-}
-.feedback {
-  @include media-breakpoint-up(md) {
     padding-bottom: 22px;
-  }
-}
-.thanks {
-  @include media-breakpoint-up(md) {
-    padding-top: 48px;
-    padding-bottom: 48px;
   }
 }
 .question {
