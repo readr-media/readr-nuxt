@@ -17,8 +17,8 @@
         text="傳送給 READr"
         subtype="feedback"
         class="record-feedback__btn"
-        :disabled="!hadFeedback"
-        @click.native="handleBtnFeedbackClick"
+        :disabled="!hasFeedback"
+        @click.native="handleClickFeedbackBtn"
       />
     </div>
 
@@ -46,9 +46,9 @@ export default {
   setup(props, { emit }) {
     const feedback = ref('')
     const shouldOpenFeedback = ref(true)
-    const hadFeedback = computed(() => feedback.value.length)
+    const hasFeedback = computed(() => feedback.value.length)
 
-    function handleBtnFeedbackClick() {
+    function handleClickFeedbackBtn() {
       emit('userGiveFeedback', feedback.value)
       closeFeedback()
     }
@@ -60,8 +60,8 @@ export default {
     return {
       shouldOpenFeedback,
       feedback,
-      hadFeedback,
-      handleBtnFeedbackClick,
+      hasFeedback,
+      handleClickFeedbackBtn,
     }
   },
 }
