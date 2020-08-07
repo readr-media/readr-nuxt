@@ -34,6 +34,7 @@
               '看了壓力很大',
               '沒有特別原因',
             ]"
+            @userGiveFeedback="sendFeedbackOfRecordWordToGoogleSheet"
           />
         </template>
       </UiRecordBox>
@@ -158,6 +159,17 @@ export default {
       shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
     }
 
+    function sendFeedbackOfRecordWordToGoogleSheet(feedback) {
+      axiosPost('/google-sheets/append', {
+        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
+        range: '閱讀字數回饋!A2:D',
+        valueInputOption: 'RAW',
+        resource: {
+          values: [[Date.now(), userUuid.value, postId, feedback]],
+        },
+      })
+    }
+
     const postFeedback = reactive({
       rating: 0,
       opinion: {
@@ -225,6 +237,7 @@ export default {
       wordCount,
       wordReadingPerSecond,
       hasWordPerSecond,
+      sendFeedbackOfRecordWordToGoogleSheet,
 
       shouldOpenRecordWord,
       deactivateRecordWord,
