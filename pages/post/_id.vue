@@ -41,18 +41,34 @@
 
     <ClientOnly>
       <section class="post-feedback container">
-        <div class="post-feedback__title">這篇報導如何？</div>
-        <UiStarRating
-          class="post-feedback__star-rating"
-          @userGiveRating="setRating"
-        />
-        <UiButtonPrimary
-          subtype="feedback"
-          :text="starRatingBtnText"
-          :disabled="!hasRating"
-          class="post-feedback__btn"
-          @click.native="handleClickRatingBtn"
-        />
+        <template v-if="postFeedbackStep === 'rating'">
+          <div class="post-feedback__title">這篇報導如何？</div>
+          <UiStarRating
+            class="post-feedback__star-rating"
+            @userGiveRating="setRating"
+          />
+          <UiButtonPrimary
+            subtype="feedback"
+            :text="starRatingBtnText"
+            :disabled="!hasRating"
+            class="post-feedback__btn"
+            @click.native="handleClickRatingBtn"
+          />
+        </template>
+        <template v-else-if="postFeedbackStep === 'opinion'">
+          <div class="post-feedback__title">可以的話，給我們一些回饋吧</div>
+          <UiFeedbackForm
+            class="post-feedback__feedback-form"
+            @userGiveFeedback="setOpinion"
+          />
+          <UiButtonPrimary
+            subtype="feedback"
+            text="傳送給 READr"
+            :disabled="!hasOpinionContent"
+            class="post-feedback__btn"
+            @click.native="handleClickOpinionBtn"
+          />
+        </template>
       </section>
     </ClientOnly>
 
@@ -147,6 +163,7 @@ export default {
     )
     function handleClickRatingBtn() {
       sendRatingToGoogleSheet()
+      goToPostFeedbackStep('opinion')
     }
     function sendRatingToGoogleSheet() {
       axiosPost('/google-sheets/append', {
@@ -157,6 +174,35 @@ export default {
           values: [[Date.now(), null, postId, rating.value]],
         },
       })
+    }
+
+    const opinion = ref({
+      nickname: '',
+      email: '',
+      content: '',
+    })
+    const hasOpinionContent = computed(() => opinion.value.content !== '')
+    function setOpinion(val) {
+      opinion.value = val
+    }
+    function handleClickOpinionBtn() {
+      sendOpinionToGoogleSheet()
+    }
+    function sendOpinionToGoogleSheet() {
+      const { nickname, email, content } = opinion.value
+      axiosPost('/google-sheets/append', {
+        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
+        range: '回饋!A2:C',
+        valueInputOption: 'RAW',
+        resource: {
+          values: [[Date.now(), null, postId, nickname, email, content]],
+        },
+      })
+    }
+
+    const postFeedbackStep = ref('opinion')
+    function goToPostFeedbackStep(name) {
+      postFeedbackStep.value = name
     }
 
     return {
@@ -175,6 +221,12 @@ export default {
       starRatingBtnText,
       setRating,
       handleClickRatingBtn,
+
+      hasOpinionContent,
+      setOpinion,
+      handleClickOpinionBtn,
+
+      postFeedbackStep,
     }
   },
 }
@@ -528,6 +580,10 @@ h1 {
       padding-left: 2.5px;
     }
   }
+  &__btn {
+    max-width: 240px;
+    width: 100%;
+  }
   &__star-rating {
     max-width: 260px;
     margin-left: auto;
@@ -537,9 +593,11 @@ h1 {
       margin-bottom: 22px;
     }
   }
-  &__btn {
-    max-width: 240px;
-    width: 100%;
+  &__feedback-form {
+    margin-bottom: 20px;
+    @include media-breakpoint-up(md) {
+      margin-bottom: 22px;
+    }
   }
 }
 
