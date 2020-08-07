@@ -1,8 +1,10 @@
 import { reactive, watchEffect, toRefs } from 'nuxt-composition-api'
+import { v4 as createUuid } from 'uuid'
 
 const savedState = JSON.parse(window.localStorage.getItem('readr3')) || {}
 
 const state = reactive({
+  userUuid: createUuid(),
   shouldActivateRecordWord: true,
   shouldOpenGdpr: true,
   ...savedState,

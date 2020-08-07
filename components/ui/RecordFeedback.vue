@@ -32,6 +32,13 @@ import { post as axiosPost } from 'axios'
 
 import SvgCheckIcon from '~/assets/check-icon.svg?inline'
 
+if (process.browser) {
+  // eslint-disable-next-line no-var
+  var {
+    state: { userUuid },
+  } = require('~/composition/store/local-storage.js')
+}
+
 export default {
   name: 'RecordFeedback',
   components: {
@@ -50,6 +57,7 @@ export default {
     const hadFeedback = computed(() => feedback.value.length)
 
     const { route } = useContext()
+    const postId = route.value.params.id
 
     function handleBtnFeedbackClick() {
       sendFeedbackToGoogleSheet()
@@ -58,11 +66,11 @@ export default {
 
     function sendFeedbackToGoogleSheet() {
       axiosPost('/google-sheets/append', {
-        spreadsheetId: '1YokH0yMyuc8D50XSBkN5jMTRbSXYll74OWeOs1tMXag',
-        range: '閱讀字數回饋!A2:C',
+        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
+        range: '閱讀字數回饋!A2:D',
         valueInputOption: 'RAW',
         resource: {
-          values: [[route.value.params.id, feedback.value, Date.now()]],
+          values: [[Date.now(), userUuid.value, postId, feedback.value]],
         },
       })
     }
