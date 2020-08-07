@@ -117,7 +117,7 @@ Object.assign(module.exports, {
             '@nuxt/babel-preset-app',
             {
               targets: envTargets[envName],
-              corejs: { version: 3 },
+              corejs: { version: 3, proposals: true },
             },
           ],
         ]
