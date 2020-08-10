@@ -4,5 +4,5 @@ Object.assign(module.exports, {
   API_PORT: '',
   API_TIMEOUT: 10000,
 
-  API_ENDPOINT: '',
+  CMS_ENDPOINT: '',
 })

@@ -1,11 +1,11 @@
-const { API_ENDPOINT } = require('./configs/config.js')
+const BASE_URL = 'http://localhost:3000'
 
 Object.assign(module.exports, {
   mode: 'universal',
   modern: 'server',
 
   env: {
-    BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
+    BASE_URL,
   },
   /*
    ** Headers of the page
@@ -27,7 +27,8 @@ Object.assign(module.exports, {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: API_ENDPOINT,
+        httpEndpoint: `${BASE_URL}/cms`,
+        browserHttpEndpoint: '/cms',
       },
     },
   },
@@ -46,6 +47,7 @@ Object.assign(module.exports, {
 
   serverMiddleware: [
     { path: '/api', handler: '~/api/index.js' },
+    { path: '/cms', handler: '~/api/cms.js' },
     { path: '/google-sheets', handler: '~/api/google-sheets.js' },
   ],
   /*
