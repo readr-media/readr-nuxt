@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import defaultImage from '~/assets/og-img.jpg'
+import defaultImgDatabase from '~/assets/default/database.jpg'
 
 export default {
   name: 'DatabaseList',
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     getImage({ heroImage }) {
-      return heroImage?.urlTinySized || defaultImage
+      return heroImage?.urlTinySized || defaultImgDatabase
     },
     firstGallery({ relatedGallery = [] }) {
       return relatedGallery[0]

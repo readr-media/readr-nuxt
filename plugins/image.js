@@ -1,4 +1,4 @@
-import defaultImage from '~/assets/og-img.jpg'
+import defaultImgPost from '~/assets/default/post.jpg'
 
 export { getImage }
 
@@ -7,6 +7,6 @@ function getImage({ heroImage, ogImage, image } = {}, needDefaultImage = true) {
     heroImage ||
     ogImage ||
     image ||
-    (needDefaultImage ? defaultImage : undefined)
+    (needDefaultImage ? defaultImgPost : undefined)
   )
 }
