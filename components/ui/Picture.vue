@@ -10,7 +10,7 @@
 <script>
 import styleVariables from '~/scss/_variables.scss'
 
-import defaultImgCollaboration from '~/assets/default/collaboration.jpg'
+import defaultImgCollaboration from '~/assets/default/collaboration.svg'
 
 export default {
   name: 'Picture',

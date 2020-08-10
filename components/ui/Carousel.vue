@@ -60,7 +60,7 @@
 import SvgDialogBox from '~/assets/dialog-box.svg?inline'
 import SvgArrowPrev from '~/assets/arrow-prev.svg?inline'
 import SvgArrowNext from '~/assets/arrow-next.svg?inline'
-import defaultImgPost from '~/assets/default/post.jpg'
+import defaultImgPost from '~/assets/default/post.svg'
 
 export default {
   name: 'Carousel',

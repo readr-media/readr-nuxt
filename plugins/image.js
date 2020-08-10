@@ -1,4 +1,4 @@
-import defaultImgPost from '~/assets/default/post.jpg'
+import defaultImgPost from '~/assets/default/post.svg'
 
 export { getImage }
 

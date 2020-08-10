@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import defaultImgDatabase from '~/assets/default/database.jpg'
+import defaultImgDatabase from '~/assets/default/database.svg'
 
 export default {
   name: 'DatabaseList',
