@@ -60,7 +60,7 @@
 import SvgDialogBox from '~/assets/dialog-box.svg?inline'
 import SvgArrowPrev from '~/assets/arrow-prev.svg?inline'
 import SvgArrowNext from '~/assets/arrow-next.svg?inline'
-import defaultImage from '~/assets/og-img.jpg'
+import defaultImgPost from '~/assets/default/post.jpg'
 
 export default {
   name: 'Carousel',
@@ -141,7 +141,7 @@ export default {
       clearTimeout(this.timeoutIdOfAutoToNextPost)
     },
     heroImage({ heroImage = {} }) {
-      return heroImage?.urlTabletSized || defaultImage
+      return heroImage?.urlTabletSized || defaultImgPost
     },
   },
 }

@@ -10,7 +10,7 @@
 <script>
 import styleVariables from '~/scss/_variables.scss'
 
-import defaultImage from '~/assets/og-img.jpg'
+import defaultImgCollaboration from '~/assets/default/collaboration.jpg'
 
 export default {
   name: 'Picture',
@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     getImage(sized = 'urlOriginal') {
-      return this.images?.[sized] || defaultImage
+      return this.images?.[sized] || defaultImgCollaboration
     },
     breakpointUp(size) {
       const minWidth = styleVariables[`breakpoint-${size}`]
