@@ -1,3 +1,32 @@
+const SITE_TITLE = 'READr 讀+'
+const SITE_DESCRIPTION =
+  'READr 是一個新聞媒體，致力於透過內容實驗，增加使用者的媒體識讀能力。團隊組成為工程師、設計師、記者、產品經理，多元專業背景的成員共同完成新聞的產製，並在專案中加上讀者參與的元素，讓以往封閉的新聞編輯室有開放的可能。'
+const SITE_URL = 'https://www.readr.tw'
+
+const metaOg = [
+  { hid: 'og:title', property: 'og:title', content: SITE_TITLE },
+  {
+    hid: 'og:description',
+    property: 'og:description',
+    content: SITE_DESCRIPTION,
+  },
+  { hid: 'og:image', property: 'og:image', content: `${SITE_URL}/og.jpg` },
+  { hid: 'og:url', property: 'og:url', content: SITE_URL },
+  { hid: 'og:type', property: 'og:type', content: 'website' },
+  { hid: 'og:site_name', property: 'og:site_name', content: SITE_TITLE },
+  { hid: 'og:locale', property: 'og:locale', content: 'zh_TW' },
+]
+
+const metaFb = [
+  { hid: 'fb:app_id', property: 'fb:app_id', content: '175313259598308' },
+  { hid: 'fb:pages', property: 'fb:pages', content: '1855418728011324' },
+]
+
+const metaTwitter = [
+  { hid: 'twitter:card', name: 'twitter:card', content: 'summary_large_image' },
+  { hid: 'twitter:site', name: 'twitter:site', content: '@READr_news' },
+]
+
 const BASE_URL = 'http://localhost:3000'
 
 Object.assign(module.exports, {
@@ -11,15 +40,18 @@ Object.assign(module.exports, {
    ** Headers of the page
    */
   head: {
-    title: process.env.npm_package_name || '',
+    title: SITE_TITLE,
+    htmlAttrs: {
+      lang: 'zh-Hant',
+    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        hid: 'description',
-        name: 'description',
-        content: process.env.npm_package_description || '',
-      },
+      { hid: 'description', name: 'description', content: SITE_DESCRIPTION },
+      ...metaOg,
+      ...metaFb,
+      ...metaTwitter,
+      { hid: 'theme-color', name: 'theme-color', content: '#04295e' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
