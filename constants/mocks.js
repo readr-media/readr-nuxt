@@ -1,16 +1,3 @@
-export const mockQuotes = [
-  {
-    id: 1,
-    title: '協作因你而美麗',
-    author: 'Lilian',
-  },
-  {
-    id: 2,
-    title: '協作真的很吃力吃力吃力吃力吃力吃力吃力吃力吃力吃力',
-    author: 'READr',
-  },
-]
-
 export const mockMorePostsNews = {
   tag: '時事',
   posts: [
