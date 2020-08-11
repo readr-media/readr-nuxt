@@ -88,12 +88,12 @@ import { get as axiosGet } from 'axios'
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
 import { databases } from '~/apollo/queries/data.gql'
+import { quotes } from '~/apollo/queries/quotes.gql'
 
 import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
 import {
-  mockQuotes,
   mockMorePostsNews,
   mockMorePostsPolitics,
   mockMorePostsRights,
@@ -119,6 +119,9 @@ export default {
       query: databases,
       update: (data) => data,
     },
+    quotes: {
+      query: quotes,
+    },
   },
   async fetch() {
     await this.fetchLatestPosts()
@@ -139,7 +142,7 @@ export default {
         count: 0,
         names: '',
       },
-      quotes: mockQuotes,
+      quotes: [],
       morePosts: [
         mockMorePostsNews,
         mockMorePostsEdu,
