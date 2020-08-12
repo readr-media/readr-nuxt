@@ -26,6 +26,7 @@
             <span>{{ wordReadingPerSecond }}</span> 秒鐘
           </div>
         </template>
+
         <template #feedback>
           <UiRecordFeedback
             :options="[
@@ -44,10 +45,12 @@
       <section class="post-feedback container">
         <div v-if="postFeedbackStep === 'rating'" class="post-feedback__step">
           <div class="post-feedback__title">這篇報導如何？</div>
+
           <UiStarRating
             class="post-feedback__star-rating"
             @userGiveRating="setRating"
           />
+
           <LazyUiButtonPrimary
             v-if="hasRating"
             subtype="feedback"
@@ -56,12 +59,15 @@
             @click.native="handleClickRatingBtn"
           />
         </div>
+
         <div
           v-else-if="postFeedbackStep === 'opinion'"
           class="post-feedback__step"
         >
           <div class="post-feedback__title">可以的話，給我們一些回饋吧</div>
+
           <UiFeedbackForm @userGiveFeedback="setOpinion" />
+
           <LazyUiButtonPrimary
             v-if="hasOpinionContent"
             subtype="feedback"
@@ -70,6 +76,7 @@
             @click.native="handleClickOpinionBtn"
           />
         </div>
+
         <UiFeedbackThanks v-else />
       </section>
     </ClientOnly>
@@ -337,21 +344,25 @@ function useUserReadingTime(hasUserFinishedReading) {
 .post-page {
   padding-top: 68.63px;
   overflow: hidden;
+
   &__record-box {
     margin-bottom: 20px;
     transition: opacity 0.3s, transform 0.3s;
     @include media-breakpoint-up(md) {
       margin-bottom: 30px;
     }
+
     &.hidden {
       opacity: 0;
       transform: translateY(20px);
     }
   }
 }
+
 article {
   padding-top: 14px;
 }
+
 .date {
   text-align: center;
   font-size: 13px;
@@ -363,6 +374,7 @@ article {
     margin-bottom: 20px;
   }
 }
+
 h1 {
   font-weight: 900;
   font-size: 30px;
@@ -394,6 +406,7 @@ h1 {
     border-radius: 2px;
     overflow: hidden;
   }
+
   img {
     position: absolute;
     top: 0;
@@ -403,6 +416,7 @@ h1 {
     object-fit: cover;
   }
 }
+
 .content {
   padding-top: 20px;
   padding-bottom: 70px;
@@ -415,6 +429,7 @@ h1 {
     line-height: 1.89;
     padding-top: 30px;
   }
+
   ::v-deep {
     p,
     h2 {
@@ -426,6 +441,7 @@ h1 {
         margin-right: auto;
       }
     }
+
     h2 {
       font-weight: 900;
       font-size: 24px;
@@ -439,6 +455,7 @@ h1 {
         line-height: 1.46;
       }
     }
+
     p {
       margin-top: 30px;
       margin-bottom: 30px;
@@ -448,6 +465,7 @@ h1 {
         margin-bottom: 34px;
       }
     }
+
     blockquote {
       background-color: rgba(245, 235, 255, 0.2);
       font-weight: 500;
@@ -468,6 +486,7 @@ h1 {
         padding-right: 50px;
         padding-bottom: 35px;
       }
+
       &::before {
         content: url(~assets/quotation-mark.svg);
         display: block;
@@ -479,10 +498,12 @@ h1 {
         }
       }
     }
+
     a {
       color: #04295e;
       border-bottom: 1px solid #04295e;
     }
+
     .readme-image,
     .readme-embed {
       margin: 40px auto;
@@ -492,6 +513,7 @@ h1 {
         margin-bottom: 30px;
       }
     }
+
     .readme-image {
       img {
         width: 100%;
@@ -500,6 +522,7 @@ h1 {
           border-radius: 4px;
         }
       }
+
       &::after {
         display: block;
         content: attr(text);
@@ -523,10 +546,12 @@ h1 {
           line-height: 1.27;
         }
       }
+
       &[text='undefined']::after {
         content: none;
       }
     }
+
     ul,
     ol {
       font-weight: 500;
@@ -543,6 +568,7 @@ h1 {
         font-size: 18px;
         letter-spacing: 2.5px;
       }
+
       li {
         position: relative;
         padding-left: 30px;
@@ -551,49 +577,50 @@ h1 {
         @include media-breakpoint-up(md) {
           padding-left: 40px;
         }
+
         &::before {
           display: block;
           position: absolute;
         }
       }
     }
+
     ul {
-      li {
-        &::before {
-          content: '';
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background-color: #04295e;
-          left: 9px;
-          // (15 * 1.8 - 6) / 2
-          top: 10.5px;
-          @include media-breakpoint-up(md) {
-            width: 8px;
-            height: 8px;
-            left: 14px;
-            // (18 * 1.8 - 8) / 2
-            top: 12.2px;
-          }
+      li::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #04295e;
+        left: 9px;
+        // (15 * 1.8 - 6) / 2
+        top: 10.5px;
+        @include media-breakpoint-up(md) {
+          width: 8px;
+          height: 8px;
+          left: 14px;
+          // (18 * 1.8 - 8) / 2
+          top: 12.2px;
         }
       }
     }
+
     ol {
       counter-reset: num;
-      li {
-        &::before {
-          top: 0;
-          left: 0;
-          counter-increment: num;
-          content: counter(num) '.';
-          width: 24px;
-          text-align: center;
-          @include media-breakpoint-up(md) {
-            width: 36px;
-          }
+
+      li::before {
+        top: 0;
+        left: 0;
+        counter-increment: num;
+        content: counter(num) '.';
+        width: 24px;
+        text-align: center;
+        @include media-breakpoint-up(md) {
+          width: 36px;
         }
       }
     }
+
     hr {
       display: none;
     }
@@ -611,6 +638,7 @@ h1 {
     letter-spacing: 2.5px;
     font-weight: 500;
   }
+
   span {
     font-weight: 900;
     font-size: 24px;
@@ -632,12 +660,14 @@ h1 {
   @include media-breakpoint-up(md) {
     margin-bottom: 30px;
   }
+
   &__step {
     padding: 30px;
     @include media-breakpoint-up(md) {
       padding: 22px 50px;
     }
   }
+
   &__title {
     font-weight: 500;
     font-size: 15px;
@@ -655,6 +685,7 @@ h1 {
       padding-left: 2.5px;
     }
   }
+
   &__btn {
     max-width: 240px;
     width: 100%;
@@ -663,6 +694,7 @@ h1 {
       margin-top: 22px;
     }
   }
+
   &__star-rating {
     max-width: 260px;
     margin-left: auto;
@@ -681,6 +713,7 @@ h1 {
   @include media-breakpoint-up(md) {
     margin-bottom: 22px;
   }
+
   h2 {
     background-color: #f5ebff;
     border-radius: 2px;
@@ -692,6 +725,7 @@ h1 {
     padding: 8px 24px;
     margin-bottom: 14px;
   }
+
   div {
     letter-spacing: 5px;
     // to offset letter-spacing at the rightmost
@@ -703,6 +737,7 @@ h1 {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+
   &--post {
     max-width: 660px;
   }

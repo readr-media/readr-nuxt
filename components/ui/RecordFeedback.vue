@@ -4,6 +4,7 @@
       <div class="question">
         方便跟我們分享，<br />你選擇關閉這則提示的原因嗎？
       </div>
+
       <div class="answer">
         <label v-for="option in options" :key="option">
           <input v-model="feedback" type="radio" :value="option" />
@@ -13,6 +14,7 @@
           {{ option }}
         </label>
       </div>
+
       <LazyUiButtonPrimary
         v-if="hasFeedback"
         text="傳送給 READr"
@@ -80,6 +82,7 @@ export default {
     letter-spacing: 2.5px;
     line-height: 1.8;
   }
+
   &__btn {
     width: 100%;
     max-width: 240px;
@@ -89,6 +92,7 @@ export default {
     }
   }
 }
+
 .feedback {
   padding: 30px;
   @include media-breakpoint-up(md) {
@@ -96,15 +100,18 @@ export default {
     padding-right: 50px;
   }
 }
+
 .question {
   margin-bottom: 16px;
   @include media-breakpoint-up(md) {
     margin-bottom: 22px;
+
     br {
       display: none;
     }
   }
 }
+
 .answer {
   line-height: 1.2;
   @include media-breakpoint-up(md) {
@@ -117,6 +124,7 @@ export default {
     margin-right: auto;
   }
 }
+
 label {
   width: fit-content;
   margin-right: auto;
@@ -129,16 +137,12 @@ label {
   @include media-breakpoint-up(md) {
     margin-right: 0;
     margin-left: 0;
+
     &:nth-child(n + 3) {
       margin-top: 10px;
     }
-    // &:nth-child(odd) {
-    //   justify-content: flex-start;
-    // }
-    // &:nth-child(even) {
-    //   justify-content: flex-end;
-    // }
   }
+
   + label {
     margin-top: 10px;
     @include media-breakpoint-up(md) {
@@ -146,18 +150,22 @@ label {
     }
   }
 }
+
 input {
   display: none;
+
   &:checked ~ .mark {
     background-color: #f5ebff;
     display: flex;
     justify-content: center;
     align-items: center;
+
     svg {
       display: block;
     }
   }
 }
+
 .mark {
   background-color: rgba(#f5ebff, 0.5);
   border: 2px solid #f5ebff;
@@ -166,6 +174,7 @@ input {
   height: 18px;
   margin-right: 13px;
   transition: background-color 0.3s;
+
   svg {
     display: none;
   }
