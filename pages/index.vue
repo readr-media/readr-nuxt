@@ -185,6 +185,9 @@ export default {
     shouldLoadMoreDatabases() {
       return this.databases.meta.count > 3 && this.currentNumOfDatabases < 9
     },
+    isDatabasesLoading() {
+      return this.$apollo.queries.databases.loading
+    },
 
     countOfCollaboratorWall: {
       get() {
@@ -303,6 +306,10 @@ export default {
       })
     },
     loadMoreDatabases() {
+      if (this.isDatabasesLoading) {
+        return
+      }
+
       this.databasesPage += 1
       this.$apollo.queries.databases.fetchMore({
         variables: {
