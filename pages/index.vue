@@ -183,7 +183,10 @@ export default {
       return this.prevNumOfDatabases + DATABASES_PAGE_SIZE
     },
     shouldLoadMoreDatabases() {
-      return this.databases.meta.count > 3 && this.currentNumOfDatabases < 9
+      return (
+        (this.databases.meta.count > 3 && this.currentNumOfDatabases < 9) ||
+        this.isDatabasesLoading
+      )
     },
     isDatabasesLoading() {
       return this.$apollo.queries.databases.loading
