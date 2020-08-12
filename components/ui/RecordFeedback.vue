@@ -13,11 +13,11 @@
           {{ option }}
         </label>
       </div>
-      <UiButtonPrimary
+      <LazyUiButtonPrimary
+        v-if="hasFeedback"
         text="傳送給 READr"
         subtype="feedback"
         class="record-feedback__btn"
-        :disabled="!hasFeedback"
         @click.native="handleClickFeedbackBtn"
       />
     </div>
@@ -83,6 +83,10 @@ export default {
   &__btn {
     width: 100%;
     max-width: 240px;
+    margin-top: 20px;
+    @include media-breakpoint-up(md) {
+      margin-top: 22px;
+    }
   }
 }
 .feedback {
@@ -90,7 +94,6 @@ export default {
   @include media-breakpoint-up(md) {
     padding-left: 50px;
     padding-right: 50px;
-    padding-bottom: 22px;
   }
 }
 .question {
@@ -103,11 +106,9 @@ export default {
   }
 }
 .answer {
-  margin-bottom: 20px;
   line-height: 1.2;
   @include media-breakpoint-up(md) {
     line-height: 1;
-    margin-bottom: 22px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

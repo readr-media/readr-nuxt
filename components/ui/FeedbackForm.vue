@@ -1,7 +1,15 @@
 <template>
   <form class="feedback-form">
-    <input v-model="feedback.nickname" type="text" placeholder="姓名暱稱" />
-    <input v-model="feedback.email" type="email" placeholder="電子信箱" />
+    <input
+      v-model="feedback.nickname"
+      type="text"
+      placeholder="姓名暱稱（非必填）"
+    />
+    <input
+      v-model="feedback.email"
+      type="email"
+      placeholder="電子信箱（非必填）"
+    />
     <textarea
       v-model="feedback.content"
       placeholder="針對這篇報導有什麼想法？"

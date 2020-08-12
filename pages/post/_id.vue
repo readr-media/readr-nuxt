@@ -48,10 +48,10 @@
             class="post-feedback__star-rating"
             @userGiveRating="setRating"
           />
-          <UiButtonPrimary
+          <LazyUiButtonPrimary
+            v-if="hasRating"
             subtype="feedback"
             :text="starRatingBtnText"
-            :disabled="!hasRating"
             class="post-feedback__btn"
             @click.native="handleClickRatingBtn"
           />
@@ -61,14 +61,11 @@
           class="post-feedback__step"
         >
           <div class="post-feedback__title">可以的話，給我們一些回饋吧</div>
-          <UiFeedbackForm
-            class="post-feedback__feedback-form"
-            @userGiveFeedback="setOpinion"
-          />
-          <UiButtonPrimary
+          <UiFeedbackForm @userGiveFeedback="setOpinion" />
+          <LazyUiButtonPrimary
+            v-if="hasOpinionContent"
             subtype="feedback"
             text="傳送給 READr"
-            :disabled="!hasOpinionContent"
             class="post-feedback__btn"
             @click.native="handleClickOpinionBtn"
           />
@@ -661,21 +658,15 @@ h1 {
   &__btn {
     max-width: 240px;
     width: 100%;
+    margin-top: 20px;
+    @include media-breakpoint-up(md) {
+      margin-top: 22px;
+    }
   }
   &__star-rating {
     max-width: 260px;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 20px;
-    @include media-breakpoint-up(md) {
-      margin-bottom: 22px;
-    }
-  }
-  &__feedback-form {
-    margin-bottom: 20px;
-    @include media-breakpoint-up(md) {
-      margin-bottom: 22px;
-    }
   }
 }
 
