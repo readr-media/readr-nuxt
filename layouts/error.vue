@@ -29,6 +29,8 @@
 <script>
 import { ref, computed, useFetch, useContext } from 'nuxt-composition-api'
 
+import { SITE_TITLE } from '~/constants/metadata.js'
+
 export default {
   name: 'Error',
   components: {
@@ -76,6 +78,15 @@ export default {
       latestPosts,
 
       backToHome,
+    }
+  },
+
+  head() {
+    const metaTitle = `頁面不存在 - ${SITE_TITLE}`
+
+    return {
+      title: metaTitle,
+      meta: [{ hid: 'og:title', property: 'og:title', content: metaTitle }],
     }
   },
 }

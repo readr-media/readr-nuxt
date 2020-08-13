@@ -103,6 +103,7 @@ import {
 import { post as axiosPost } from 'axios'
 
 import { state as userState } from '~/composition/store/user.js'
+import { SITE_TITLE } from '~/constants/metadata.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
@@ -259,7 +260,6 @@ export default {
     }
   },
   head() {
-    const SITE_TITLE = 'READr 讀+'
     const SITE_URL = 'https://www.readr.tw'
     const {
       ogTitle,
