@@ -57,9 +57,6 @@ function useUpdateViewport() {
 </script>
 
 <style lang="scss">
-html {
-  font-family: 'Futura PT', 'Noto Sans CJK TC', sans-serif;
-}
 .default {
   &__footer {
     max-width: 1096px;
