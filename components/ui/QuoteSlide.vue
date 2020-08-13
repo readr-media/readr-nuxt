@@ -117,6 +117,9 @@ p {
   justify-content: center;
   @include media-breakpoint-up(md) {
     font-size: 36px;
+    letter-spacing: 0.15em;
+    // to offset letter-spacing at the rightmost
+    margin-left: 0.15em;
   }
 }
 
