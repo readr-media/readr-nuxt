@@ -1,3 +1,5 @@
+const { ADOBE_FONTS_KIT_ID } = require('./configs/config.js')
+
 const SITE_TITLE = 'READr 讀+'
 const SITE_DESCRIPTION =
   'READr 是一個新聞媒體，致力於透過內容實驗，增加使用者的媒體識讀能力。團隊組成為工程師、設計師、記者、產品經理，多元專業背景的成員共同完成新聞的產製，並在專案中加上讀者參與的元素，讓以往封閉的新聞編輯室有開放的可能。'
@@ -53,7 +55,25 @@ Object.assign(module.exports, {
       ...metaTwitter,
       { hid: 'theme-color', name: 'theme-color', content: '#04295e' },
     ],
+    script: [
+      {
+        hid: 'adobe-fonts',
+        innerHTML: `
+          (function(d) {
+            var config = {
+              kitId: '${ADOBE_FONTS_KIT_ID}',
+              scriptTimeout: 3000,
+              async: true
+            },
+            h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+          })(document);
+        `,
+      },
+    ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    __dangerouslyDisableSanitizersByTagID: {
+      'adobe-fonts': ['innerHTML'],
+    },
   },
 
   apollo: {
