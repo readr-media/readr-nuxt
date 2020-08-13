@@ -8,6 +8,7 @@
         :class="{ appeared: shouldAppear(idx) }"
       >
         <p>{{ quote.title }}</p>
+
         <div class="byline">{{ byline(quote) }}</div>
       </div>
     </div>
@@ -81,9 +82,11 @@ export default {
     padding: 48px 98px 32px 98px;
   }
 }
+
 .quote-wrapper {
   position: relative;
 }
+
 .quote {
   position: absolute;
   width: 100%;
@@ -91,6 +94,7 @@ export default {
   left: 0;
   opacity: 0;
   transition: none;
+
   &.appeared {
     position: relative;
     opacity: 1;
@@ -98,6 +102,7 @@ export default {
     z-index: 1;
   }
 }
+
 p {
   font-weight: 900;
   font-size: 24px;
@@ -114,6 +119,7 @@ p {
     font-size: 36px;
   }
 }
+
 .byline {
   font-size: 15px;
   font-weight: 700;
