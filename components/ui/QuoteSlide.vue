@@ -110,7 +110,6 @@ p {
   overflow-y: auto;
   display: flex;
   justify-content: center;
-  align-items: center;
   @include media-breakpoint-up(md) {
     font-size: 36px;
   }
