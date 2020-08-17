@@ -65,15 +65,19 @@
       />
     </section>
 
-    <section class="more-section yellow-bg">
+    <section
+      v-if="hasAnyMorePosts"
+      v-show="shouldShowMoreSection"
+      class="more-section yellow-bg"
+    >
       <div class="container">
         <UiSectionHeading title="更多專題" class="home__section-heading" />
         <div id="more-list-container">
           <UiMoreList
-            v-for="more in morePosts"
-            :key="more.tag"
-            :topic="more.tag"
-            :posts="more.posts"
+            v-for="morePosts in displayedAllMorePosts"
+            :key="morePosts.tag"
+            :topic="morePosts.tag"
+            :posts="morePosts.posts"
             class="home__more-list"
           />
         </div>
@@ -93,18 +97,21 @@ import { quotes } from '~/apollo/queries/quotes.gql'
 import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
-import {
-  mockMorePostsNews,
-  mockMorePostsPolitics,
-  mockMorePostsRights,
-  mockMorePostsEnv,
-  mockMorePostsEdu,
-  mockMorePostsOthers,
-} from '~/constants/mocks.js'
 
 const DATABASES_PAGE_SIZE = 3
 
 const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
+
+if (process.browser) {
+  /* eslint-disable no-var */
+  var TAG_ID_CURRENT_EVENTS = inProdEnv() ? 1184 : 103
+  var TAG_ID_EDUCATION = inProdEnv() ? 1185 : 104
+  var TAG_ID_POLITICS = inProdEnv() ? 1186 : 14
+  var TAG_ID_HUMAN_RIGHTS = inProdEnv() ? 1187 : 105
+  var TAG_ID_ENVIRONMENT = inProdEnv() ? 1188 : 106
+  var TAG_ID_NEWS = inProdEnv() ? 1189 : 107
+  /* eslint-enable no-var */
+}
 
 export default {
   name: 'Home',
@@ -143,17 +150,19 @@ export default {
         names: '',
       },
       quotes: [],
-      morePosts: [
-        mockMorePostsNews,
-        mockMorePostsEdu,
-        mockMorePostsPolitics,
-        mockMorePostsRights,
-        mockMorePostsEnv,
-        mockMorePostsOthers,
+      allMorePosts: [
+        { tag: '時事', posts: [] },
+        { tag: '教育', posts: [] },
+        { tag: '政治', posts: [] },
+        { tag: '人權', posts: [] },
+        { tag: '環境', posts: [] },
+        { tag: '新鮮事', posts: [] },
       ],
       isLoadingMacy: false,
       macyInstance: undefined,
       unwatchIsViewportWidthUpMd: undefined,
+
+      shouldShowMoreSection: false,
     }
   },
   computed: {
@@ -208,8 +217,17 @@ export default {
         this.collaboratorWall.names = names
       },
     },
+
+    hasAnyMorePosts() {
+      return this.allMorePosts.some(this.hasPosts)
+    },
+    displayedAllMorePosts() {
+      return this.allMorePosts.filter(this.hasPosts)
+    },
   },
   async mounted() {
+    await this.loadAllMorePosts()
+
     this.unwatchIsViewportWidthUpMd = this.$watch(
       'isViewportWidthUpMd',
       this.handleMacy,
@@ -276,21 +294,67 @@ export default {
         console.error(error)
       }
     },
+
+    async loadAllMorePosts() {
+      const data = await this.fetchAllMorePosts()
+      this.setAllMorePosts(data)
+    },
+    fetchAllMorePosts() {
+      return Promise.allSettled([
+        this.$fetchPostsByTag(TAG_ID_CURRENT_EVENTS),
+        this.$fetchPostsByTag(TAG_ID_EDUCATION),
+        this.$fetchPostsByTag(TAG_ID_POLITICS),
+        this.$fetchPostsByTag(TAG_ID_HUMAN_RIGHTS),
+        this.$fetchPostsByTag(TAG_ID_ENVIRONMENT),
+        this.$fetchPostsByTag(TAG_ID_NEWS),
+      ])
+        .then(function settled(allPosts) {
+          return allPosts.filter(isFulfilled).map(extractValue)
+
+          function isFulfilled(postsByTag) {
+            return postsByTag.status === 'fulfilled'
+          }
+
+          function extractValue(postsByTag) {
+            return postsByTag.value
+          }
+        })
+        .catch(function handleError(error) {
+          console.error(error)
+
+          return []
+        })
+    },
+    setAllMorePosts(allPosts) {
+      allPosts.forEach(
+        function insertPosts(postsByTag, idx) {
+          this.allMorePosts[idx].posts = postsByTag
+        }.bind(this)
+      )
+    },
+    hasPosts(item) {
+      return item.posts.length > 0
+    },
+
     async handleMacy(isViewportWidthUpMd) {
       if (this.macyInstance) {
         this.unwatchIsViewportWidthUpMd()
         return
       }
 
-      if (isViewportWidthUpMd && !this.isLoadingMacy) {
+      if (isViewportWidthUpMd && this.hasAnyMorePosts && !this.isLoadingMacy) {
         const loadMacy = onDemand('https://cdn.jsdelivr.net/npm/macy@2')
         this.isLoadingMacy = true
+
         try {
           await loadMacy()
           this.initMacy()
+
+          this.shouldShowMoreSection = true
         } catch (error) {
           console.error(error)
         }
+
         this.isLoadingMacy = false
       }
     },
@@ -327,6 +391,10 @@ export default {
       })
     },
   },
+}
+
+function inProdEnv() {
+  return /www\.readr\.tw/i.test(window.location.hostname)
 }
 </script>
 

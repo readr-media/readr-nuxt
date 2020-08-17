@@ -5,20 +5,20 @@
       <ul>
         <li v-for="post in posts" :key="post.id">
           <article>
-            <a href="#" target="_blank" rel="noopener noreferrer">
+            <a :href="$getHref(post)" target="_blank" rel="noopener noreferrer">
               <picture>
-                <img :src="post.heroImage" alt="" />
+                <img :src="$getImage(post)" alt="" />
               </picture>
               <div class="text-wrapper">
                 <h1>{{ post.title }}</h1>
-                <div class="date">{{ post.publishedAt }}</div>
+                <div class="date">
+                  {{ $getFormattedDate(post.publishedAt) }}
+                </div>
               </div>
             </a>
           </article>
         </li>
       </ul>
-
-      <!-- <UiLoadMore class="more-list__load-more" /> -->
     </div>
   </div>
 </template>
@@ -41,14 +41,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .more-list {
-//   &__load-more {
-//     margin-top: 20px;
-//     @include media-breakpoint-up(md) {
-//       margin-top: 26px;
-//     }
-//   }
-// }
 h3 {
   color: #000928;
   letter-spacing: 2.8px;
