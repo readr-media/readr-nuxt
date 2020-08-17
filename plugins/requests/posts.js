@@ -1,5 +1,6 @@
 import { camelizeKeys, decamelizeKeys } from 'humps'
 import { stringify as qsStringify } from 'qs'
+import { get as axiosGet } from 'axios'
 
 import { apiAxios } from './utils.js'
 
@@ -20,8 +21,17 @@ async function fetchPost(postId) {
 }
 
 async function fetchPostsByTag(tagId) {
-  const { data } = await apiAxios.get(`/tags/pnr/${tagId}`)
-  return camelizeKeys(data)
+  const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
+
+  try {
+    const { data } = await axiosGet(
+      `${baseUrl}/api/tags/pnr/${tagId}?max_result=3&sort=-published_at`
+    )
+
+    return camelizeKeys(data).items
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 function buildParams(params = {}) {
