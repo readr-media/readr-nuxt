@@ -162,7 +162,7 @@ export default {
       macyInstance: undefined,
       unwatchIsViewportWidthUpMd: undefined,
 
-      shouldShowMoreSection: false,
+      shouldShowMoreSection: !this.isViewportWidthUpMd,
     }
   },
   computed: {
