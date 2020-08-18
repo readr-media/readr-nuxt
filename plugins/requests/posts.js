@@ -1,36 +1,79 @@
 import { camelizeKeys, decamelizeKeys } from 'humps'
 import { stringify as qsStringify } from 'qs'
-import { get as axiosGet } from 'axios'
+import { create as createAxios, get as axiosGet } from 'axios'
 
-import { apiAxios } from './utils.js'
+import { REQUEST_TIMEOUT } from '~/configs/config.js'
 
 export { fetchPosts, fetchPostsByTag, fetchPost }
 
+const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
+
+const publicApi = createAxios({
+  baseURL: `${baseUrl}/api/public`,
+  timeout: REQUEST_TIMEOUT,
+})
+
 async function fetchPosts(params = {}) {
+  const requestUrl = `/posts${buildParams(params)}`
+
   try {
-    const { data } = await apiAxios.get(`/posts${buildParams(params)}`)
+    const { data } = await publicApi.get(requestUrl)
+
     return camelizeKeys(data)
-  } catch (error) {
-    console.error(error)
+  } catch ({ response = {}, message }) {
+    console.error(`
+      ApiError:
+        url: ${requestUrl}
+        message: ${message}
+        data: ${response.data ?? ''}
+    `)
+
+    return {}
   }
 }
 
 async function fetchPost(postId) {
-  const { data } = await apiAxios.get(`/post/${postId}`)
-  return camelizeKeys(data)
+  const requestUrl = `/post/${postId}`
+
+  try {
+    const { data } = await publicApi.get(requestUrl)
+
+    return camelizeKeys(data)
+  } catch ({ response = {}, message }) {
+    console.error(`
+      ApiError:
+        url: ${requestUrl}
+        message: ${message}
+        data: ${response.data ?? ''}
+    `)
+
+    const statusCode = response.status || 404
+    this.error({ statusCode, message })
+  }
 }
 
 async function fetchPostsByTag(tagId) {
-  const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
+  const requestUrl = `${baseUrl}/cms/deprecated/tags/pnr/${tagId}`
 
   try {
-    const { data } = await axiosGet(
-      `${baseUrl}/api/tags/pnr/${tagId}?max_result=3&sort=-published_at`
-    )
+    const { data } = await axiosGet(requestUrl, {
+      params: {
+        max_result: 3,
+        sort: '-published_at',
+      },
+      timeout: REQUEST_TIMEOUT,
+    })
 
     return camelizeKeys(data).items
-  } catch (error) {
-    console.error(error)
+  } catch ({ response = {}, message }) {
+    console.error(`
+      ApiError:
+        url: ${requestUrl}
+        message: ${message}
+        data: ${response.data ?? ''}
+    `)
+
+    return []
   }
 }
 

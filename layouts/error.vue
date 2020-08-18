@@ -57,7 +57,6 @@ export default {
     const { $fetchPosts } = useContext()
     async function loadLatestPosts() {
       const response = await $fetchPosts({
-        publishStatus: '{"$in":[2]}',
         type: '{"$in":[1,4]}',
         maxResult: 4,
         page: 1,
