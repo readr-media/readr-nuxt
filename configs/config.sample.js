@@ -1,8 +1,8 @@
 Object.assign(module.exports, {
-  API_PROTOCOL: '',
-  API_HOST: '',
-  API_PORT: '',
-  API_TIMEOUT: 10000,
-
   CMS_ENDPOINT: '',
+  CMS_ENDPOINT_DEPRECATED: '',
+
+  REQUEST_TIMEOUT: 5000,
+
+  ADOBE_FONTS_KIT_ID: '',
 })
