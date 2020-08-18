@@ -240,9 +240,7 @@ export default {
   methods: {
     async fetchLatestPosts() {
       const response = await this.$fetchPosts({
-        publishStatus: '{"$in":[2]}',
         type: '{"$in":[1,4]}',
-        // type: '{"$in":[4]}',
         maxResult: 5,
         page: 1,
         sort: '-published_at',
