@@ -140,7 +140,15 @@ Object.assign(module.exports, {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/dayjs', '@nuxtjs/apollo', '@nuxtjs/svg'],
+  modules: ['@nuxtjs/dayjs', '@nuxtjs/apollo', '@nuxtjs/svg', 'nuxt-ssr-cache'],
+
+  cache: {
+    pages: ['/'],
+    store: {
+      type: 'memory',
+      ttl: 60 * 5,
+    },
+  },
 
   components: ['~/components', { path: '~/components/ui/', prefix: 'ui' }],
 
