@@ -1,9 +1,9 @@
-export { rAFWithDebounce }
+export { rafWithDebounce }
 
-function rAFWithDebounce(func) {
+function rafWithDebounce(func) {
   let isTicking = false
 
-  return (function instantlySetRAFWithDebounce() {
+  return (function immediatelySetRafWithDebounce() {
     if (isTicking) {
       return
     }

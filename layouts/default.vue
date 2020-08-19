@@ -14,7 +14,7 @@
 import { onBeforeMount, onBeforeUnmount } from 'nuxt-composition-api'
 
 import { setViewport } from '~/composition/store/viewport.js'
-import { rAFWithDebounce } from '~/utils/index.js'
+import { rafWithDebounce } from '~/utils/index.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
@@ -48,7 +48,7 @@ function useUpdateViewport() {
   })
 
   function updateViewport() {
-    rAFWithDebounce(() => {
+    rafWithDebounce(() => {
       const { clientWidth, clientHeight } = document.documentElement
       setViewport(clientWidth, clientHeight)
     })

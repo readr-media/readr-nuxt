@@ -1,4 +1,4 @@
-export { rAFWithDebounce } from './animation.js'
+export { rafWithDebounce } from './animation.js'
 export { inProdEnv }
 
 function inProdEnv(hostname) {
