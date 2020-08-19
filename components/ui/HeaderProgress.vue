@@ -17,7 +17,7 @@ import { ref, watch, onMounted, onBeforeUnmount } from 'nuxt-composition-api'
 
 import { setUserFinishedReading } from '~/composition/store/user.js'
 import { viewportHeight } from '~/composition/store/viewport.js'
-import { rAFWithDebounce } from '~/utils/index.js'
+import { rafWithDebounce } from '~/utils/index.js'
 
 export default {
   name: 'HeaderProgress',
@@ -62,7 +62,7 @@ function useProgress(elemId) {
   })
 
   function calculateProgressPercent() {
-    rAFWithDebounce(() => {
+    rafWithDebounce(() => {
       const { bottom } = elem.getBoundingClientRect()
       const { pageYOffset } = window
       const elemBottomDistance = bottom + pageYOffset
