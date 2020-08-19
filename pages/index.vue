@@ -97,6 +97,7 @@ import { quotes } from '~/apollo/queries/quotes.gql'
 import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
+import { inProdEnv } from '~/utils/index.js'
 
 const DATABASES_PAGE_SIZE = 3
 
@@ -389,10 +390,6 @@ export default {
       })
     },
   },
-}
-
-function inProdEnv() {
-  return /www\.readr\.tw/i.test(window.location.hostname)
 }
 </script>
 
