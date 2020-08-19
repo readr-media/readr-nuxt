@@ -19,7 +19,7 @@ async function fetchPosts(params = {}) {
   try {
     const { data } = await publicApi.get(requestUrl)
 
-    return camelizeKeys(data)
+    return camelizeKeys(data).items
   } catch ({ response = {}, message }) {
     console.error(`
       ApiError:
@@ -28,7 +28,7 @@ async function fetchPosts(params = {}) {
         data: ${response.data ?? ''}
     `)
 
-    return {}
+    return []
   }
 }
 
