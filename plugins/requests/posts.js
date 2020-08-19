@@ -53,7 +53,7 @@ async function fetchPost(postId) {
 }
 
 async function fetchPostsByTag(tagId) {
-  const requestUrl = `${baseUrl}/cms/deprecated/tags/pnr/${tagId}`
+  const requestUrl = `${baseUrl}/api/cms/deprecated/tags/pnr/${tagId}`
 
   try {
     const { data } = await axiosGet(requestUrl, {

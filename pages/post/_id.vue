@@ -164,7 +164,7 @@ export default {
     }
 
     function sendFeedbackOfRecordWordToGoogleSheet(feedback) {
-      axiosPost('/google-sheets/append', {
+      axiosPost('/api/google-sheets/append', {
         spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
         range: '閱讀字數回饋!A2:D',
         valueInputOption: 'RAW',
@@ -195,7 +195,7 @@ export default {
       goToPostFeedbackStep('opinion')
     }
     function sendRatingToGoogleSheet() {
-      axiosPost('/google-sheets/append', {
+      axiosPost('/api/google-sheets/append', {
         spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
         range: '評分!A2:D',
         valueInputOption: 'RAW',
@@ -217,7 +217,7 @@ export default {
     }
     function sendOpinionToGoogleSheet() {
       const { nickname, email, content } = postFeedback.opinion
-      axiosPost('/google-sheets/append', {
+      axiosPost('/api/google-sheets/append', {
         spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
         range: '回饋!A2:F',
         valueInputOption: 'RAW',

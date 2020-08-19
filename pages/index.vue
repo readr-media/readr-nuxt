@@ -255,7 +255,7 @@ export default {
     },
     async fetchCountOfCollaboratorWall() {
       try {
-        const response = await axiosGet('/google-sheets', {
+        const response = await axiosGet('/api/google-sheets', {
           params: {
             spreadsheetId: '1vEuoCAAXR8NMoh6qiOnj6kNdLv0lc-CaInLnWUuvySo',
             range: '名稱列表!F1',
@@ -280,7 +280,7 @@ export default {
       const theBeginningRowNum =
         theEndRowNum - NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH + 1
       try {
-        const response = await axiosGet('/google-sheets', {
+        const response = await axiosGet('/api/google-sheets', {
           params: {
             spreadsheetId: '1vEuoCAAXR8NMoh6qiOnj6kNdLv0lc-CaInLnWUuvySo',
             range: `名稱列表!B${theBeginningRowNum}:B${theEndRowNum}`,
