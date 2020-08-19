@@ -100,8 +100,8 @@ Object.assign(module.exports, {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: `${BASE_URL}/cms`,
-        browserHttpEndpoint: '/cms',
+        httpEndpoint: `${BASE_URL}/api/cms`,
+        browserHttpEndpoint: '/api/cms',
       },
     },
   },
@@ -121,8 +121,8 @@ Object.assign(module.exports, {
   serverMiddleware: [
     '~/server/middle/header.js',
     { path: '/api/public', handler: '~/api/public.js' },
-    { path: '/cms', handler: '~/api/cms.js' },
-    { path: '/google-sheets', handler: '~/api/google-sheets.js' },
+    { path: '/api/cms', handler: '~/api/cms.js' },
+    { path: '/api/google-sheets', handler: '~/api/google-sheets.js' },
   ],
   /*
    ** Nuxt.js dev-modules
