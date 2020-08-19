@@ -121,27 +121,12 @@ export default {
 
     useFetch(async () => {
       await fetchPost()
-      await fetchLatestPosts()
     })
     const { $fetchPost, route, $fetchPosts } = useContext()
     const postId = route.value.params.id
     async function fetchPost() {
       const response = await $fetchPost(postId)
       post.value = response?.items?.[0] ?? {}
-    }
-    async function fetchLatestPosts() {
-      const response = await $fetchPosts({
-        type: '{"$in":[1,4]}',
-        maxResult: 3,
-        page: 1,
-        sort: '-published_at',
-        showAuthor: false,
-        showUpdater: false,
-        showTag: false,
-        showComment: false,
-        showProject: false,
-      })
-      latestPosts.value = response?.items ?? []
     }
 
     const wordCount = 100
@@ -155,10 +140,34 @@ export default {
       () => wordReadingPerSecond.value !== undefined
     )
 
-    const shouldOpenRecordWord = ref(false)
     onMounted(() => {
+      loadLatestPosts()
+
       setShouldOpenRecordWord()
     })
+
+    async function loadLatestPosts() {
+      const data = await fetchLatestPosts()
+      setLatestPosts(data)
+    }
+    function fetchLatestPosts() {
+      return $fetchPosts({
+        type: '{"$in":[1,4]}',
+        maxResult: 3,
+        page: 1,
+        sort: '-published_at',
+        showAuthor: false,
+        showUpdater: false,
+        showTag: false,
+        showComment: false,
+        showProject: false,
+      })
+    }
+    function setLatestPosts(data) {
+      latestPosts.value = data
+    }
+
+    const shouldOpenRecordWord = ref(false)
     function setShouldOpenRecordWord() {
       shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
     }
