@@ -242,7 +242,7 @@ export default {
   },
   methods: {
     async fetchLatestPosts() {
-      const response = await this.$fetchPosts({
+      this.latestPosts = await this.$fetchPosts({
         type: '{"$in":[1,4]}',
         maxResult: 5,
         page: 1,
@@ -253,7 +253,6 @@ export default {
         showComment: false,
         showProject: false,
       })
-      this.latestPosts = response?.items ?? []
     },
     async fetchCountOfCollaboratorWall() {
       try {
