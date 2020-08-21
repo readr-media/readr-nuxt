@@ -14,7 +14,7 @@
       </UiCarousel>
     </section>
 
-    <section class="container container--latest">
+    <section ref="latest" class="container container--latest">
       <UiSectionHeading
         title="最新文章"
         fill="#ebf02c"
@@ -41,7 +41,7 @@
       <UiButtonDonate class="home__donate-btn" />
     </section>
 
-    <section class="horizontal-container">
+    <section ref="collaboration" class="horizontal-container">
       <div class="container container--quote">
         <UiSectionHeading
           title="協作專區"
@@ -237,6 +237,8 @@ export default {
 
     this.countOfCollaboratorWall =
       (await this.fetchCountOfCollaboratorWall()) || 0
+
+    this.scrollTo(this.$route.hash)
   },
   methods: {
     async fetchLatestPosts() {
@@ -388,6 +390,20 @@ export default {
           meta: this.databases.meta,
         }),
       })
+    },
+
+    scrollTo(hash) {
+      if (hash) {
+        const scrollIntoView = require('scroll-into-view')
+        const [, name] = hash.split('#')
+        const ele = this.$refs[name]
+
+        scrollIntoView(ele, {
+          time: 300,
+          align: { top: 0 },
+          ease: (t) => t * t * t,
+        })
+      }
     },
   },
 }
