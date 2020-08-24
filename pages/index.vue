@@ -2,6 +2,14 @@
   <div>
     <UiHeader />
 
+    <section class="marquee-container">
+      <UiMarquee class="home__marquee" />
+      <nuxt-link to="/landing">
+        <span>了解更多</span>
+        <SvgArrowMore />
+      </nuxt-link>
+    </section>
+
     <section>
       <UiCarousel
         v-if="shouldOpenEditorChoices"
@@ -99,6 +107,8 @@ import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
 import { inProdEnv } from '~/utils/index.js'
 
+import SvgArrowMore from '~/assets/arrow-more.svg?inline'
+
 const DATABASES_PAGE_SIZE = 3
 
 const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
@@ -116,6 +126,9 @@ if (process.browser) {
 
 export default {
   name: 'Home',
+  components: {
+    SvgArrowMore,
+  },
   apollo: {
     allEditorChoices: {
       query: allEditorChoices,
@@ -453,6 +466,15 @@ export default {
       padding-bottom: 60px;
     }
   }
+
+  &__marquee {
+    flex: 1 1 auto;
+    @include media-breakpoint-up(lg) {
+      ::v-deep p {
+        animation-name: none;
+      }
+    }
+  }
 }
 
 .container {
@@ -486,6 +508,47 @@ export default {
     max-width: 1070px;
     @include media-breakpoint-up(md) {
       margin-bottom: 20px;
+    }
+  }
+}
+
+.marquee-container {
+  display: flex;
+  align-items: center;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  padding-right: 23px;
+  box-shadow: 0 0 2px rgba(#000, 0.2);
+  @include media-breakpoint-up(md) {
+    padding-left: 26px;
+    padding-right: 29px;
+  }
+
+  a {
+    flex: 0 0 auto;
+    user-select: none;
+    @include media-breakpoint-up(lg) {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  span {
+    display: none;
+    @include media-breakpoint-up(lg) {
+      display: inline;
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 1.5;
+      letter-spacing: 2.5px;
+    }
+  }
+
+  svg {
+    padding-left: 19px;
+    box-sizing: content-box;
+    @include media-breakpoint-up(lg) {
+      padding-left: 16px;
     }
   }
 }
