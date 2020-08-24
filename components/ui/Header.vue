@@ -1,7 +1,7 @@
 <template>
   <header>
     <UiReadrLogoOfHeader />
-    <a href="/donate" target="_blank">贊助我們</a>
+    <a href="/donate" target="_blank" @click="$emit('sendGa')">贊助我們</a>
   </header>
 </template>
 

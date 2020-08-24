@@ -49,6 +49,8 @@ export default {
       if (props.loadNames) {
         props.loadNames()
       }
+
+      emit('sendGa', shouldOpenNameList.value)
     }
 
     const today = new Date()

@@ -1,7 +1,7 @@
 <template>
   <div class="horizontal-list">
     <article v-for="item in items" :key="item.id">
-      <UiHorizontalListItem :item="item" />
+      <UiHorizontalListItem :item="item" @sendGa="$emit('sendGa')" />
     </article>
   </div>
 </template>
