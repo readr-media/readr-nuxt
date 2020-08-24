@@ -2,7 +2,7 @@
   <ul class="post-list">
     <li v-for="post in posts" :key="post.id">
       <article>
-        <a :href="$getHref(post)" target="_blank">
+        <a :href="$getHref(post)" target="_blank" @click="$emit('sendGa')">
           <picture>
             <img :src="$getImage(post)" alt="" />
           </picture>

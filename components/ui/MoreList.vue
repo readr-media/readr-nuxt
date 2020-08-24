@@ -5,7 +5,12 @@
       <ul>
         <li v-for="post in posts" :key="post.id">
           <article>
-            <a :href="$getHref(post)" target="_blank" rel="noopener noreferrer">
+            <a
+              :href="$getHref(post)"
+              target="_blank"
+              rel="noopener noreferrer"
+              @click="$emit('sendGa')"
+            >
               <picture>
                 <img :src="$getImage(post)" alt="" />
               </picture>

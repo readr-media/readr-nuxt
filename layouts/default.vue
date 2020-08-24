@@ -2,7 +2,7 @@
   <div class="default">
     <nuxt />
 
-    <UiFooter class="default__footer" />
+    <UiFooter id="default-footer" class="default__footer" />
 
     <ClientOnly>
       <TheGdpr v-if="shouldOpenGdpr" @cancel="closeGdpr" />

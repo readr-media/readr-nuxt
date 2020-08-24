@@ -136,6 +136,17 @@ Object.assign(module.exports, {
     '@nuxtjs/style-resources',
 
     'nuxt-composition-api',
+    // Doc: https://github.com/nuxt-community/analytics-module
+    [
+      '@nuxtjs/google-analytics',
+      {
+        id() {
+          return /^www\.readr\.tw/i.test(document.domain)
+            ? 'UA-83609754-1'
+            : 'UA-83609754-2'
+        },
+      },
+    ],
   ],
   /*
    ** Nuxt.js modules

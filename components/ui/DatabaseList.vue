@@ -17,6 +17,7 @@
             :href="item.link"
             target="_blank"
             rel="noopener noreferrer"
+            @click="$emit('sendGa:database')"
           >
             <h1>{{ item.title }}</h1>
           </a>
@@ -31,6 +32,7 @@
               :href="gallery.link"
               target="_blank"
               rel="noopener noreferrer"
+              @click="$emit('sendGa:portfolio')"
             >
               <picture>
                 <img :src="getImage(gallery)" alt="" />
@@ -54,6 +56,7 @@
       v-if="shouldLoadMore"
       :loadMore="loadMore"
       class="database-list__load-more"
+      @click.native="$emit('sendGa:loadMore')"
     />
   </div>
 </template>
