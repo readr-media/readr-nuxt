@@ -1,7 +1,7 @@
 <template>
   <header :class="{ hidden: doesScrollDown }">
     <div class="logo-wrapper">
-      <UiReadrLogoOfHeader />
+      <UiReadrLogoOfHeader @sendGaEvt="$emit('sendGaEvt:logo')" />
       <div class="progress-percent">
         閱讀進度<span>{{ percent }}%</span>
       </div>
@@ -33,7 +33,7 @@ export default {
 
     function handleWatchHasFinishedReading(hasFinished) {
       commitSetUserFinishedReading(hasFinished)
-      emit('sendGaEvt')
+      emit('sendGaEvt:progress')
     }
 
     function commitSetUserFinishedReading(hasFinished) {

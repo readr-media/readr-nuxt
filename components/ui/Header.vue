@@ -1,7 +1,9 @@
 <template>
   <header>
-    <UiReadrLogoOfHeader />
-    <a href="/donate" target="_blank" @click="$emit('sendGaEvt')">贊助我們</a>
+    <UiReadrLogoOfHeader @sendGaEvt="$emit('sendGaEvt:logo')" />
+    <a href="/donate" target="_blank" @click="$emit('sendGaEvt:donate')"
+      >贊助我們</a
+    >
   </header>
 </template>
 

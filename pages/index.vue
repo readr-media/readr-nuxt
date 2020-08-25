@@ -1,6 +1,9 @@
 <template>
   <div>
-    <UiHeader @sendGaEvt="$sendGaEvtForHomeClick('donate-header')" />
+    <UiHeader
+      @sendGaEvt:logo="$sendGaEvtForHeaderClick('logo')"
+      @sendGaEvt:donate="$sendGaEvtForHomeClick('donate-header')"
+    />
 
     <section class="marquee-container">
       <UiMarquee class="home__marquee" />
