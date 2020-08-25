@@ -33,7 +33,7 @@ export default {
 
     function handleWatchHasFinishedReading(hasFinished) {
       commitSetUserFinishedReading(hasFinished)
-      emit('sendGa')
+      emit('sendGaEvt')
     }
 
     function commitSetUserFinishedReading(hasFinished) {

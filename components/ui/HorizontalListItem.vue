@@ -1,5 +1,5 @@
 <template>
-  <a :href="href" target="_blank" @click="$emit('sendGa')">
+  <a :href="href" target="_blank" @click="$emit('sendGaEvt')">
     <div class="hero-block">
       <UiPicture :images="item.heroImage" />
       <div v-if="canCollaborate" class="require-time">

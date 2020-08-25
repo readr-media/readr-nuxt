@@ -1,6 +1,6 @@
 <template>
   <div class="post-page">
-    <UiHeaderProgress @sendGa="$sendGaEvtArticleScroll('end')" />
+    <UiHeaderProgress @sendGaEvt="$sendGaEvtForArticleScroll('end')" />
 
     <article id="post">
       <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
@@ -57,7 +57,7 @@
             :text="starRatingBtnText"
             class="post-feedback__btn"
             @click.native="handleClickRatingBtn"
-            @sendGa="$sendGaEvtArticleClick('rate')"
+            @sendGaEvt="$sendGaEvtForArticleClick('rate')"
           />
         </div>
 
@@ -88,7 +88,7 @@
       </h2>
       <UiPostList
         :posts="latestPosts"
-        @sendGa="$sendGaEvtArticleClick('related articles')"
+        @sendGaEvt="$sendGaEvtForArticleClick('related articles')"
       />
     </section>
   </div>
@@ -130,7 +130,7 @@ export default {
       $fetchPost,
       route,
       $fetchPosts,
-      $sendGaEvtArticleClick,
+      $sendGaEvtForArticleClick,
     } = useContext()
     const postId = route.value.params.id
     async function fetchPost() {
@@ -183,7 +183,7 @@ export default {
 
     function handleCancelRecordWord() {
       deactivateRecordWord()
-      $sendGaEvtArticleClick('words count close')
+      $sendGaEvtForArticleClick('words count close')
     }
 
     function sendFeedbackOfRecordWordToGoogleSheet(feedback) {

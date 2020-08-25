@@ -5,7 +5,7 @@
     </div>
 
     <article>
-      <a :href="activePost.link" target="_blank" @click="$emit('sendGa')">
+      <a :href="activePost.link" target="_blank" @click="$emit('sendGaEvt')">
         <div class="title-wrapper">
           <h1
             v-for="(post, idx) in posts"
