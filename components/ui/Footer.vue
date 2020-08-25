@@ -25,6 +25,12 @@
         >聯絡我們</a
       >
       <a
+        href="/privacy-rule"
+        target="_blank"
+        @click="$emit('sendGaEvt:privacy')"
+        >隱私政策</a
+      >
+      <a
         href="https://forms.gle/C6B5MGYXLzXrmfSe6"
         target="_blank"
         rel="noopener noreferrer"
@@ -81,14 +87,22 @@ footer {
 .us-links {
   display: flex;
   justify-content: center;
+  padding-left: 20px;
+  padding-right: 20px;
   line-height: 1.7;
   margin-bottom: 8px;
   @include media-breakpoint-up(lg) {
     order: 1;
+    padding-left: 0;
+    padding-right: 0;
     margin-bottom: 0;
   }
+
   a + a {
-    margin-left: 42px;
+    margin-left: 16px;
+    @include media-breakpoint-up(sm) {
+      margin-left: 42px;
+    }
     @include media-breakpoint-up(lg) {
       margin-left: 66px;
     }
