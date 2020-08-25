@@ -2,7 +2,7 @@
   <div>
     <header>
       <nuxt-link to="/" @click.native="$sendGaEvtForLandingClick('logo')">
-        <SvgReadrLogoGreen />
+        <SvgReadrLogoYellow />
       </nuxt-link>
     </header>
 
@@ -71,13 +71,13 @@
 import { ref, computed, useContext } from 'nuxt-composition-api'
 import { post as axiosPost } from 'axios'
 
-import SvgReadrLogoGreen from '~/assets/readr-logo-green.svg?inline'
+import SvgReadrLogoYellow from '~/assets/readr-logo-yellow.svg?inline'
 
 export default {
   name: 'Landing',
   layout: 'empty',
   components: {
-    SvgReadrLogoGreen,
+    SvgReadrLogoYellow,
   },
   setup() {
     const shouldOpenEmailInput = ref(true)
@@ -183,7 +183,7 @@ header {
 
 h1 {
   letter-spacing: 0.15em;
-  color: #81f237;
+  color: #ebf02c;
   text-shadow: 0 0 2px rgba(#000, 0.25);
   font-weight: 900;
   font-size: 36px;
@@ -223,7 +223,7 @@ p {
 
   a {
     width: 100%;
-    background-color: #81f237;
+    background-color: #ebf02c;
     border: 1px solid #000;
     border-radius: 2px;
     padding-top: 10px;
@@ -232,11 +232,11 @@ p {
     transition: background-color 0.3s;
 
     &:hover {
-      background-color: #beff94;
+      background-color: #fcff94;
     }
 
     &:active {
-      background-color: #6cc533;
+      background-color: #c9cd2c;
     }
 
     + a {
@@ -296,7 +296,7 @@ p {
     }
 
     &:hover {
-      color: #81f237;
+      color: #ebf02c;
     }
   }
 }
@@ -321,7 +321,7 @@ input {
   }
 
   &:focus + button {
-    color: #81f237;
+    color: #ebf02c;
   }
 }
 
