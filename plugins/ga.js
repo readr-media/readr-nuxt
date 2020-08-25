@@ -9,6 +9,7 @@ const sendGaEvtForArticleScroll = rPartial(sendGaEvt, ['Article', 'scroll'])
 const sendGaEvtForLandingClick = rPartial(sendGaEvt, ['Landing', 'click'])
 const sendGaEvtForHeaderClick = rPartial(sendGaEvt, ['header', 'click'])
 const sendGaEvtForFooterClick = rPartial(sendGaEvt, ['footer', 'click'])
+const sendGaEvtForUsersVisit = rPartial(sendGaEvt, ['users', 'visit'])
 
 Object.assign(module.exports, {
   sendGaEvtForHomeClick,
@@ -18,6 +19,7 @@ Object.assign(module.exports, {
   sendGaEvtForLandingClick,
   sendGaEvtForHeaderClick,
   sendGaEvtForFooterClick,
+  sendGaEvtForUsersVisit,
 
   listenScrollDepthForGaEvt,
 })
