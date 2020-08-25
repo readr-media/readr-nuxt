@@ -1,6 +1,6 @@
 <template>
   <div class="error-page">
-    <UiHeader />
+    <UiHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
 
     <div class="container">
       <section class="error-info" :class="{ 'not-404': !is404 }">

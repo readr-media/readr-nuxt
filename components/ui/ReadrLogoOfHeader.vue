@@ -16,3 +16,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+a {
+  display: block;
+}
+</style>
