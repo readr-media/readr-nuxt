@@ -7,6 +7,7 @@
       class="default__footer"
       @sendGaEvt:about="$sendGaEvtForFooterClick('aboutus')"
       @sendGaEvt:contact="$sendGaEvtForFooterClick('contact')"
+      @sendGaEvt:privacy="$sendGaEvtForFooterClick('privacy')"
     />
 
     <ClientOnly>
