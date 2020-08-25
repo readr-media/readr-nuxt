@@ -53,10 +53,16 @@ export default {
     useFetch(async () => {
       await loadLatestPosts()
     })
+
     const latestPosts = ref([])
     const { $fetchPosts } = useContext()
     async function loadLatestPosts() {
-      const response = await $fetchPosts({
+      const data = await fetchLatestPosts()
+      setLatestPosts(data)
+    }
+
+    function fetchLatestPosts() {
+      return $fetchPosts({
         type: '{"$in":[1,4]}',
         maxResult: 4,
         page: 1,
@@ -67,7 +73,9 @@ export default {
         showComment: false,
         showProject: false,
       })
-      latestPosts.value = response?.items ?? []
+    }
+    function setLatestPosts(data) {
+      latestPosts.value = data
     }
 
     return {
