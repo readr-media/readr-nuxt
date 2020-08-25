@@ -2,7 +2,12 @@
   <div class="default">
     <nuxt />
 
-    <UiFooter id="default-footer" class="default__footer" />
+    <UiFooter
+      id="default-footer"
+      class="default__footer"
+      @sendGaEvt:about="$sendGaEvtForFooterClick('aboutus')"
+      @sendGaEvt:contact="$sendGaEvtForFooterClick('contact')"
+    />
 
     <ClientOnly>
       <TheGdpr v-if="shouldOpenGdpr" @cancel="closeGdpr" />

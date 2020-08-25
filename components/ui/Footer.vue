@@ -17,10 +17,13 @@
         href="https://www.readr.tw/about"
         target="_blank"
         rel="noopener noreferrer"
+        @click="$emit('sendGaEvt:about')"
       >
         關於我們
       </a>
-      <a href="mailto:readr@readr.tw">聯絡我們</a>
+      <a href="mailto:readr@readr.tw" @click="$emit('sendGaEvt:contact')"
+        >聯絡我們</a
+      >
       <a
         href="https://forms.gle/C6B5MGYXLzXrmfSe6"
         target="_blank"

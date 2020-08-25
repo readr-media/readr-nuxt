@@ -1,6 +1,9 @@
 <template>
   <div class="post-page">
-    <UiHeaderProgress @sendGaEvt="$sendGaEvtForArticleScroll('end')" />
+    <UiHeaderProgress
+      @sendGaEvt:logo="$sendGaEvtForHeaderClick('logo')"
+      @sendGaEvt:progress="$sendGaEvtForArticleScroll('end')"
+    />
 
     <article id="post">
       <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
