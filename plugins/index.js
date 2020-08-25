@@ -6,6 +6,8 @@ import { getFormattedDate } from './date.js'
 import {
   sendGaEvtHomeClick,
   sendGaEvtHomeScroll,
+  sendGaEvtArticleClick,
+  sendGaEvtArticleScroll,
   listenGaEvtScrollDepth,
 } from './ga.js'
 
@@ -18,5 +20,7 @@ function injectAllMethods(ctx, inject) {
 
   inject('sendGaEvtHomeClick', rBind(sendGaEvtHomeClick, ctx))
   inject('sendGaEvtHomeScroll', rBind(sendGaEvtHomeScroll, ctx))
+  inject('sendGaEvtArticleClick', rBind(sendGaEvtArticleClick, ctx))
+  inject('sendGaEvtArticleScroll', rBind(sendGaEvtArticleScroll, ctx))
   inject('listenGaEvtScrollDepth', rBind(listenGaEvtScrollDepth, ctx))
 }

@@ -4,10 +4,14 @@ const { rafWithDebounce } = require('~/utils/index.js')
 
 const sendGaEvtHomeClick = rPartial(sendGaEvt, ['Home', 'click'])
 const sendGaEvtHomeScroll = rPartial(sendGaEvt, ['Home', 'scroll'])
+const sendGaEvtArticleClick = rPartial(sendGaEvt, ['Article', 'click'])
+const sendGaEvtArticleScroll = rPartial(sendGaEvt, ['Article', 'scroll'])
 
 Object.assign(module.exports, {
   sendGaEvtHomeClick,
   sendGaEvtHomeScroll,
+  sendGaEvtArticleClick,
+  sendGaEvtArticleScroll,
 
   listenGaEvtScrollDepth,
 })

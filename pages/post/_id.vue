@@ -1,6 +1,6 @@
 <template>
   <div class="post-page">
-    <UiHeaderProgress />
+    <UiHeaderProgress @sendGa="$sendGaEvtArticleScroll('end')" />
 
     <article id="post">
       <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
@@ -18,7 +18,7 @@
         v-if="shouldOpenRecordWord"
         class="post-page__record-box container"
         :class="{ hidden: !hasWordPerSecond }"
-        @cancel="deactivateRecordWord"
+        @cancel="handleCancelRecordWord"
       >
         <template #record>
           <div class="record-word">
@@ -57,6 +57,7 @@
             :text="starRatingBtnText"
             class="post-feedback__btn"
             @click.native="handleClickRatingBtn"
+            @sendGa="$sendGaEvtArticleClick('rate')"
           />
         </div>
 
@@ -85,7 +86,10 @@
       <h2>
         <div>最新報導</div>
       </h2>
-      <UiPostList :posts="latestPosts" />
+      <UiPostList
+        :posts="latestPosts"
+        @sendGa="$sendGaEvtArticleClick('related articles')"
+      />
     </section>
   </div>
 </template>
@@ -122,7 +126,12 @@ export default {
     useFetch(async () => {
       await fetchPost()
     })
-    const { $fetchPost, route, $fetchPosts } = useContext()
+    const {
+      $fetchPost,
+      route,
+      $fetchPosts,
+      $sendGaEvtArticleClick,
+    } = useContext()
     const postId = route.value.params.id
     async function fetchPost() {
       const response = await $fetchPost(postId)
@@ -170,6 +179,11 @@ export default {
     const shouldOpenRecordWord = ref(false)
     function setShouldOpenRecordWord() {
       shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
+    }
+
+    function handleCancelRecordWord() {
+      deactivateRecordWord()
+      $sendGaEvtArticleClick('words count close')
     }
 
     function sendFeedbackOfRecordWordToGoogleSheet(feedback) {
@@ -253,7 +267,7 @@ export default {
       sendFeedbackOfRecordWordToGoogleSheet,
 
       shouldOpenRecordWord,
-      deactivateRecordWord,
+      handleCancelRecordWord,
 
       hasRating,
       starRatingBtnText,
