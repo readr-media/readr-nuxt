@@ -50,7 +50,7 @@ export default {
         props.loadNames()
       }
 
-      emit('sendGa', shouldOpenNameList.value)
+      emit('sendGaEvt', shouldOpenNameList.value)
     }
 
     const today = new Date()

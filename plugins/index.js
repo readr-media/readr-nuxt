@@ -4,11 +4,11 @@ import { getHref } from './link.js'
 import { getImage } from './image.js'
 import { getFormattedDate } from './date.js'
 import {
-  sendGaEvtHomeClick,
-  sendGaEvtHomeScroll,
-  sendGaEvtArticleClick,
-  sendGaEvtArticleScroll,
-  listenGaEvtScrollDepth,
+  sendGaEvtForHomeClick,
+  sendGaEvtForHomeScroll,
+  sendGaEvtForArticleClick,
+  sendGaEvtForArticleScroll,
+  listenScrollDepthForGaEvt,
 } from './ga.js'
 
 export default injectAllMethods
@@ -18,9 +18,9 @@ function injectAllMethods(ctx, inject) {
   inject('getImage', getImage)
   inject('getFormattedDate', getFormattedDate.bind(ctx))
 
-  inject('sendGaEvtHomeClick', rBind(sendGaEvtHomeClick, ctx))
-  inject('sendGaEvtHomeScroll', rBind(sendGaEvtHomeScroll, ctx))
-  inject('sendGaEvtArticleClick', rBind(sendGaEvtArticleClick, ctx))
-  inject('sendGaEvtArticleScroll', rBind(sendGaEvtArticleScroll, ctx))
-  inject('listenGaEvtScrollDepth', rBind(listenGaEvtScrollDepth, ctx))
+  inject('sendGaEvtForHomeClick', rBind(sendGaEvtForHomeClick, ctx))
+  inject('sendGaEvtForHomeScroll', rBind(sendGaEvtForHomeScroll, ctx))
+  inject('sendGaEvtForArticleClick', rBind(sendGaEvtForArticleClick, ctx))
+  inject('sendGaEvtForArticleScroll', rBind(sendGaEvtForArticleScroll, ctx))
+  inject('listenScrollDepthForGaEvt', rBind(listenScrollDepthForGaEvt, ctx))
 }

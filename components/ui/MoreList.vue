@@ -9,7 +9,7 @@
               :href="$getHref(post)"
               target="_blank"
               rel="noopener noreferrer"
-              @click="$emit('sendGa')"
+              @click="$emit('sendGaEvt')"
             >
               <picture>
                 <img :src="$getImage(post)" alt="" />

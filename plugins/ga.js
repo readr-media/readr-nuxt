@@ -2,31 +2,31 @@ const { partial: rPartial } = require('ramda')
 
 const { rafWithDebounce } = require('~/utils/index.js')
 
-const sendGaEvtHomeClick = rPartial(sendGaEvt, ['Home', 'click'])
-const sendGaEvtHomeScroll = rPartial(sendGaEvt, ['Home', 'scroll'])
-const sendGaEvtArticleClick = rPartial(sendGaEvt, ['Article', 'click'])
-const sendGaEvtArticleScroll = rPartial(sendGaEvt, ['Article', 'scroll'])
+const sendGaEvtForHomeClick = rPartial(sendGaEvt, ['Home', 'click'])
+const sendGaEvtForHomeScroll = rPartial(sendGaEvt, ['Home', 'scroll'])
+const sendGaEvtForArticleClick = rPartial(sendGaEvt, ['Article', 'click'])
+const sendGaEvtForArticleScroll = rPartial(sendGaEvt, ['Article', 'scroll'])
 
 Object.assign(module.exports, {
-  sendGaEvtHomeClick,
-  sendGaEvtHomeScroll,
-  sendGaEvtArticleClick,
-  sendGaEvtArticleScroll,
+  sendGaEvtForHomeClick,
+  sendGaEvtForHomeScroll,
+  sendGaEvtForArticleClick,
+  sendGaEvtForArticleScroll,
 
-  listenGaEvtScrollDepth,
+  listenScrollDepthForGaEvt,
 })
 
 function sendGaEvt(category, action, label, value = 0) {
   this.$ga.event(category, action, label, value)
 }
 
-function listenGaEvtScrollDepth(triggers = [], sendGaEvtMethod) {
+function listenScrollDepthForGaEvt(triggers = [], sendGaEvtMethod) {
   const totalScrollDepth = triggers.length
   let currentScrollDepth = 0
 
-  window.addEventListener('scroll', sendGaEvtScrollDepth)
+  window.addEventListener('scroll', sendGaEvtOfScrollDepth)
 
-  function sendGaEvtScrollDepth() {
+  function sendGaEvtOfScrollDepth() {
     rafWithDebounce(() => {
       const currentTrigger = triggers[currentScrollDepth]
       const { elem, evtFields } = currentTrigger
@@ -39,7 +39,7 @@ function listenGaEvtScrollDepth(triggers = [], sendGaEvtMethod) {
         currentScrollDepth += 1
 
         if (currentScrollDepth >= totalScrollDepth) {
-          window.removeEventListener('scroll', sendGaEvtScrollDepth)
+          window.removeEventListener('scroll', sendGaEvtOfScrollDepth)
         }
       }
     })

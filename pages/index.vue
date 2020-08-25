@@ -1,10 +1,13 @@
 <template>
   <div>
-    <UiHeader @sendGa="$sendGaEvtHomeClick('donate-header')" />
+    <UiHeader @sendGaEvt="$sendGaEvtForHomeClick('donate-header')" />
 
     <section class="marquee-container">
       <UiMarquee class="home__marquee" />
-      <nuxt-link to="/landing" @click.native="$sendGaEvtHomeClick('landing')">
+      <nuxt-link
+        to="/landing"
+        @click.native="$sendGaEvtForHomeClick('landing')"
+      >
         <span>了解更多</span>
         <SvgArrowMore />
       </nuxt-link>
@@ -15,7 +18,7 @@
         v-if="shouldOpenEditorChoices"
         :posts="allEditorChoices"
         class="home__carousel"
-        @sendGa="$sendGaEvtHomeClick('editor choices')"
+        @sendGaEvt="$sendGaEvtForHomeClick('editor choices')"
       >
         <template #heading>
           <UiSectionHeading title="編輯精選" />
@@ -33,7 +36,7 @@
         v-if="shouldOpenLatestList"
         :postMain="latestPostMain"
         :postsSub="latestPostsSub"
-        @sendGa="$sendGaEvtHomeClick('latest articles')"
+        @sendGaEvt="$sendGaEvtForHomeClick('latest articles')"
       />
     </section>
 
@@ -46,14 +49,14 @@
         :loadMore="loadMoreDatabases"
         :shouldLoadMore="shouldLoadMoreDatabases"
         class="home__database-list"
-        @sendGa:database="$sendGaEvtHomeClick('open database github')"
-        @sendGa:portfolio="$sendGaEvtHomeClick('open database portfolio')"
-        @sendGa:loadMore="$sendGaEvtHomeClick('open database load more')"
+        @sendGaEvt:database="$sendGaEvtForHomeClick('open database github')"
+        @sendGaEvt:portfolio="$sendGaEvtForHomeClick('open database portfolio')"
+        @sendGaEvt:loadMore="$sendGaEvtForHomeClick('open database load more')"
       />
 
       <UiButtonDonate
         class="home__donate-btn"
-        @sendGa="$sendGaEvtHomeClick('donate-opendata')"
+        @sendGaEvt="$sendGaEvtForHomeClick('donate-opendata')"
       />
     </section>
 
@@ -73,13 +76,13 @@
           :count="countOfCollaboratorWall"
           :names="namesOfCollaboratorWall"
           :loadNames="loadCollaboratorNames"
-          @sendGa="sendGaCollaboratorWall"
+          @sendGaEvt="sendGaEvtForCollaboratorWall"
         />
       </div>
       <UiHorizontalList
         class="home__horizontal-list"
         :items="allCollaborations"
-        @sendGa="$sendGaEvtHomeClick('collaboration')"
+        @sendGaEvt="$sendGaEvtForHomeClick('collaboration')"
       />
     </section>
 
@@ -98,7 +101,7 @@
             :topic="morePosts.tag"
             :posts="morePosts.posts"
             class="home__more-list"
-            @sendGa="sendGaMoreList(morePosts.tag)"
+            @sendGaEvt="sendGaEvtForMoreList(morePosts.tag)"
           />
         </div>
       </div>
@@ -265,7 +268,7 @@ export default {
 
     this.scrollTo(this.$route.hash)
 
-    this.addListenerForGaEvtScrollDepth()
+    this.addListenerToScrollDepthForGaEvt()
   },
   methods: {
     async fetchLatestPosts() {
@@ -432,13 +435,13 @@ export default {
       }
     },
 
-    sendGaCollaboratorWall(doesUnfold) {
-      this.$sendGaEvtHomeClick(`credit-${doesUnfold ? 'open' : 'close'}`)
+    sendGaEvtForCollaboratorWall(doesUnfold) {
+      this.$sendGaEvtForHomeClick(`credit-${doesUnfold ? 'open' : 'close'}`)
     },
-    sendGaMoreList(topic) {
-      this.$sendGaEvtHomeClick(`category ${topic}`)
+    sendGaEvtForMoreList(topic) {
+      this.$sendGaEvtForHomeClick(`category ${topic}`)
     },
-    addListenerForGaEvtScrollDepth() {
+    addListenerToScrollDepthForGaEvt() {
       const { latest, database, collaboration, more } = this.$refs
       const triggers = [
         { elem: latest, evtFields: ['scroll 到最新文章', 1] },
@@ -451,7 +454,7 @@ export default {
         },
       ]
 
-      this.$listenGaEvtScrollDepth(triggers, this.$sendGaEvtHomeScroll)
+      this.$listenScrollDepthForGaEvt(triggers, this.$sendGaEvtForHomeScroll)
     },
   },
 }

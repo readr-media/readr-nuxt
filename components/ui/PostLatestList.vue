@@ -1,7 +1,7 @@
 <template>
   <div class="latest-list">
     <article class="latest-list__main">
-      <a :href="$getHref(postMain)" target="_blank" @click="$emit('sendGa')">
+      <a :href="$getHref(postMain)" target="_blank" @click="$emit('sendGaEvt')">
         <picture>
           <img :src="$getImage(postMain)" alt="" />
         </picture>
@@ -13,7 +13,7 @@
     <UiPostList
       :posts="postsSub"
       class="latest-list__sub"
-      @sendGa="$emit('sendGa')"
+      @sendGaEvt="$emit('sendGaEvt')"
     />
   </div>
 </template>
