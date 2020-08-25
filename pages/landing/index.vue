@@ -1,7 +1,7 @@
 <template>
   <div>
     <header>
-      <nuxt-link to="/">
+      <nuxt-link to="/" @click.native="$sendGaEvtForLandingClick('logo')">
         <SvgReadrLogoGreen />
       </nuxt-link>
     </header>
@@ -22,13 +22,23 @@
             </p>
 
             <div class="actions">
-              <nuxt-link to="/#collaboration">
+              <nuxt-link
+                to="/#collaboration"
+                @click.native="$sendGaEvtForLandingClick('collaboration')"
+              >
                 <button type="button">參與協作</button>
               </nuxt-link>
-              <nuxt-link to="/#latest">
+              <nuxt-link
+                to="/#latest"
+                @click.native="$sendGaEvtForLandingClick('latest articles')"
+              >
                 <button type="button">閱讀文章</button>
               </nuxt-link>
-              <a href="/donate" target="_blank">
+              <a
+                href="/donate"
+                target="_blank"
+                @click="$sendGaEvtForLandingClick('donate')"
+              >
                 <button type="button">贊助我們</button>
               </a>
             </div>
@@ -72,7 +82,7 @@ export default {
   setup() {
     const shouldOpenEmailInput = ref(true)
 
-    const { route, $dayjs } = useContext()
+    const { route, $dayjs, $sendGaEvtForLandingClick } = useContext()
     const email = ref('')
     const hasEmail = computed(() => email.value !== '')
 
@@ -83,6 +93,7 @@ export default {
 
       sendEmailToGoogleSheet()
       closeEmailInput()
+      $sendGaEvtForLandingClick('subscribe')
     }
 
     function sendEmailToGoogleSheet() {
