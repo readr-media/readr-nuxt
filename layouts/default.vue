@@ -16,7 +16,12 @@
 </template>
 
 <script>
-import { onBeforeMount, onBeforeUnmount } from 'nuxt-composition-api'
+import {
+  onBeforeMount,
+  onMounted,
+  onBeforeUnmount,
+  useContext,
+} from 'nuxt-composition-api'
 
 import { setViewport } from '~/composition/store/viewport.js'
 import { rafWithDebounce } from '~/utils/index.js'
@@ -24,14 +29,20 @@ import { rafWithDebounce } from '~/utils/index.js'
 if (process.browser) {
   // eslint-disable-next-line no-var
   var {
-    state: { shouldOpenGdpr },
+    state: { isReadr2User, shouldOpenGdpr },
     closeGdpr,
   } = require('~/composition/store/local-storage.js')
 }
 
 export default {
   setup() {
+    const { $sendGaEvtForUsersVisit } = useContext()
+
     useUpdateViewport()
+
+    onMounted(() => {
+      $sendGaEvtForUsersVisit(`readr ${isReadr2User.value ? '2.0' : '3.0'}`)
+    })
 
     return {
       shouldOpenGdpr,

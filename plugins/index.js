@@ -11,6 +11,7 @@ import {
   sendGaEvtForLandingClick,
   sendGaEvtForHeaderClick,
   sendGaEvtForFooterClick,
+  sendGaEvtForUsersVisit,
   listenScrollDepthForGaEvt,
 } from './ga.js'
 
@@ -28,5 +29,6 @@ function injectAllMethods(ctx, inject) {
   inject('sendGaEvtForLandingClick', rBind(sendGaEvtForLandingClick, ctx))
   inject('sendGaEvtForHeaderClick', rBind(sendGaEvtForHeaderClick, ctx))
   inject('sendGaEvtForFooterClick', rBind(sendGaEvtForFooterClick, ctx))
+  inject('sendGaEvtForUsersVisit', rBind(sendGaEvtForUsersVisit, ctx))
   inject('listenScrollDepthForGaEvt', rBind(listenScrollDepthForGaEvt, ctx))
 }
