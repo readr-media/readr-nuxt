@@ -21,15 +21,20 @@ import { rafWithDebounce } from '~/utils/index.js'
 
 export default {
   name: 'HeaderProgress',
-  setup() {
+  setup(props, { emit }) {
     const { percent, hasFinishedReading } = useProgress('post')
 
     const stopWatchingHasFinishedReading = watch(
       hasFinishedReading,
-      commitSetUserFinishedReading
+      handleWatchHasFinishedReading
     )
 
     const doesScrollDown = useScrollDirection()
+
+    function handleWatchHasFinishedReading(hasFinished) {
+      commitSetUserFinishedReading(hasFinished)
+      emit('sendGa')
+    }
 
     function commitSetUserFinishedReading(hasFinished) {
       if (hasFinished === true) {
