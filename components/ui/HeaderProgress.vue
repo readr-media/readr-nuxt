@@ -1,5 +1,5 @@
 <template>
-  <header :class="{ hidden: doesScrollDown }">
+  <header>
     <div class="logo-wrapper">
       <UiReadrLogoOfHeader @sendGaEvt="$emit('sendGaEvt:logo')" />
       <div class="progress-percent">
@@ -29,8 +29,6 @@ export default {
       handleWatchHasFinishedReading
     )
 
-    const doesScrollDown = useScrollDirection()
-
     function handleWatchHasFinishedReading(hasFinished) {
       commitSetUserFinishedReading(hasFinished)
       emit('sendGaEvt:progress')
@@ -45,7 +43,6 @@ export default {
 
     return {
       percent,
-      doesScrollDown,
     }
   },
 }
@@ -91,29 +88,6 @@ function useProgress(elemId) {
     hasFinishedReading,
   }
 }
-
-function useScrollDirection() {
-  const doesScrollDown = ref(false)
-  let beforeScrollHeight = 0
-
-  onMounted(() => {
-    window.addEventListener('scroll', detectScrollDirection)
-  })
-
-  onBeforeUnmount(() => {
-    window.removeEventListener('scroll', detectScrollDirection)
-  })
-
-  function detectScrollDirection() {
-    const { pageYOffset: currentScrollHeight } = window
-    const diffScrollHeight = currentScrollHeight - beforeScrollHeight
-    doesScrollDown.value = diffScrollHeight >= 0
-
-    beforeScrollHeight = currentScrollHeight
-  }
-
-  return doesScrollDown
-}
 </script>
 
 <style lang="scss" scoped>
@@ -126,9 +100,7 @@ header {
   box-shadow: 0 0 2px rgba(#000, 0.15);
   transition: transform 0.3s;
   z-index: 499;
-  &.hidden {
-    transform: translateY(-62.63px);
-  }
+
   ::v-deep svg {
     width: 48px;
   }
