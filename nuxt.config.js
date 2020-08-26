@@ -119,6 +119,7 @@ Object.assign(module.exports, {
   plugins: [
     '~/plugins/vue-plugins.client.js',
     '~/plugins/index.js',
+    '~/plugins/index.client.js',
     '~/plugins/requests/index.js',
   ],
 
