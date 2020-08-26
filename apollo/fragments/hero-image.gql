@@ -1,7 +1,0 @@
-fragment urls on Image {
-  urlTinySized
-  urlMobileSized
-  urlTabletSized
-  urlDesktopSized
-  urlOriginal
-}
