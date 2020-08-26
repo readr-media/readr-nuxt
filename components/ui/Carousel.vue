@@ -16,26 +16,24 @@
           </h1>
           <SvgDialogBox class="dialog-box" />
         </div>
-        <picture>
+        <div class="img-wrapper">
           <img
             v-for="(post, idx) in posts"
             :key="post.id"
+            v-lazy="heroImage(post)"
             :class="{ active: shouldActive(idx) }"
-            :src="heroImage(post)"
             alt=""
           />
-        </picture>
+        </div>
       </a>
     </article>
 
     <div
       v-for="(post, idx) in posts"
       :key="post.id"
+      v-lazy:backgroundImage="heroImage(post)"
       :class="{ active: shouldActive(idx) }"
       class="bg bg--img"
-      :style="{
-        backgroundImage: `url(${heroImage(post)})`,
-      }"
     />
     <div class="bg bg--color" />
 
@@ -236,7 +234,8 @@ h1 {
     left: -36px;
   }
 }
-picture {
+
+.img-wrapper {
   position: relative;
   padding-top: 50%;
   @include media-breakpoint-up(md) {
@@ -245,6 +244,7 @@ picture {
     order: 1;
   }
 }
+
 img {
   position: absolute;
   top: 0;

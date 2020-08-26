@@ -34,9 +34,7 @@
               rel="noopener noreferrer"
               @click="$emit('sendGaEvt:portfolio')"
             >
-              <picture>
-                <img :src="getImage(gallery)" alt="" />
-              </picture>
+              <img v-lazy="getImage(gallery)" alt="" />
             </a>
 
             <a

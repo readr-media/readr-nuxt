@@ -116,7 +116,11 @@ Object.assign(module.exports, {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/index.js', '~/plugins/requests/index.js'],
+  plugins: [
+    '~/plugins/vue-plugins.client.js',
+    '~/plugins/index.js',
+    '~/plugins/requests/index.js',
+  ],
 
   serverMiddleware: [
     '~/server/middle/header.js',

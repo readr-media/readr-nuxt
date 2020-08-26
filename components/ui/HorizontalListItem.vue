@@ -1,7 +1,16 @@
 <template>
   <a :href="href" target="_blank" @click="$emit('sendGaEvt')">
     <div class="hero-block">
-      <UiPicture :images="item.heroImage" />
+      <div class="img-wrapper">
+        <img
+          v-lazy="{
+            src: item.heroImage.urlMobileSized,
+            error: require('~/assets/default/collaboration.svg'),
+          }"
+          alt=""
+        />
+      </div>
+
       <div v-if="canCollaborate" class="require-time">
         只要 {{ item.requireTime }} 分鐘
       </div>
@@ -83,12 +92,8 @@ export default {
 a {
   display: block;
   letter-spacing: 2.5px;
-  &:hover {
-    ::v-deep {
-      img {
-        transform: scale(1.1);
-      }
-    }
+  &:hover img {
+    transform: scale(1.1);
   }
   &:active button {
     border-width: 2px;
@@ -97,26 +102,27 @@ a {
 
 .hero-block {
   position: relative;
-  ::v-deep {
-    picture {
-      padding-top: 100%;
-      position: relative;
-      overflow: hidden;
-      @include media-breakpoint-up(md) {
-        padding-top: 50%;
-      }
-    }
-    img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s;
-    }
+}
+
+.img-wrapper {
+  padding-top: 100%;
+  position: relative;
+  overflow: hidden;
+  @include media-breakpoint-up(md) {
+    padding-top: 50%;
   }
 }
+
+img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
 .require-time {
   position: absolute;
   top: 8px;

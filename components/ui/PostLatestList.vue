@@ -2,9 +2,9 @@
   <div class="latest-list">
     <article class="latest-list__main">
       <a :href="$getHref(postMain)" target="_blank" @click="$emit('sendGaEvt')">
-        <picture>
-          <img :src="$getImage(postMain)" alt="" />
-        </picture>
+        <div class="img-wrapper">
+          <img v-lazy="$getImage(postMain)" alt="" />
+        </div>
         <h1>{{ postMain.title }}</h1>
         <span class="date">{{ $getFormattedDate(postMain.publishedAt) }}</span>
       </a>
@@ -57,10 +57,12 @@ export default {
 a {
   display: block;
 }
-picture {
+
+.img-wrapper {
   padding-top: 50%;
   position: relative;
 }
+
 img {
   position: absolute;
   top: 0;
