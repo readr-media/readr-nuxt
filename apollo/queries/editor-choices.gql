@@ -1,12 +1,10 @@
-#import '~/apollo/fragments/hero-image.gql'
-
 query allEditorChoices {
   allEditorChoices(sortBy: [sortOrder_ASC, publishTime_DESC], first: 5, where: {state: published}) {
     id
     title
     link
     heroImage {
-      ...urls
+      urlTabletSized
     }
   }
 }
