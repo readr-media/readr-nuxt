@@ -16,7 +16,7 @@
       </div>
     </article>
 
-    <ClientOnly>
+    <!-- <ClientOnly>
       <UiRecordBox
         v-if="shouldOpenRecordWord"
         class="post-page__record-box container"
@@ -42,7 +42,7 @@
           />
         </template>
       </UiRecordBox>
-    </ClientOnly>
+    </ClientOnly> -->
 
     <ClientOnly>
       <section class="post-feedback container">
@@ -102,21 +102,21 @@ import {
   ref,
   reactive,
   computed,
-  watch,
+  // watch,
   useFetch,
   useContext,
   onMounted,
 } from 'nuxt-composition-api'
 import { post as axiosPost } from 'axios'
 
-import { state as userState } from '~/composition/store/user.js'
+// import { state as userState } from '~/composition/store/user.js'
 import { SITE_TITLE } from '~/constants/metadata.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
   var {
-    state: { userUuid, shouldActivateRecordWord },
-    deactivateRecordWord,
+    state: { userUuid /*, shouldActivateRecordWord */ },
+    // deactivateRecordWord,
   } = require('~/composition/store/local-storage.js')
 }
 
@@ -133,7 +133,7 @@ export default {
       $fetchPost,
       route,
       $fetchPosts,
-      $sendGaEvtForArticleClick,
+      // $sendGaEvtForArticleClick,
     } = useContext()
     const postId = route.value.params.id
     async function fetchPost() {
@@ -141,21 +141,21 @@ export default {
       post.value = response?.items?.[0] ?? {}
     }
 
-    const wordCount = 100
-    const userReadingTime = useUserReadingTime(userState.hasUserFinishedReading)
-    const wordReadingPerSecond = computed(() => {
-      if (userReadingTime.value !== undefined) {
-        return (userReadingTime.value / 1000 / wordCount).toFixed(2)
-      }
-    })
-    const hasWordPerSecond = computed(
-      () => wordReadingPerSecond.value !== undefined
-    )
+    // const wordCount = 100
+    // const userReadingTime = useUserReadingTime(userState.hasUserFinishedReading)
+    // const wordReadingPerSecond = computed(() => {
+    //   if (userReadingTime.value !== undefined) {
+    //     return (userReadingTime.value / 1000 / wordCount).toFixed(2)
+    //   }
+    // })
+    // const hasWordPerSecond = computed(
+    //   () => wordReadingPerSecond.value !== undefined
+    // )
 
     onMounted(() => {
       loadLatestPosts()
 
-      setShouldOpenRecordWord()
+      // setShouldOpenRecordWord()
     })
 
     async function loadLatestPosts() {
@@ -179,26 +179,26 @@ export default {
       latestPosts.value = data
     }
 
-    const shouldOpenRecordWord = ref(false)
-    function setShouldOpenRecordWord() {
-      shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
-    }
+    // const shouldOpenRecordWord = ref(false)
+    // function setShouldOpenRecordWord() {
+    //   shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
+    // }
 
-    function handleCancelRecordWord() {
-      deactivateRecordWord()
-      $sendGaEvtForArticleClick('words count close')
-    }
+    // function handleCancelRecordWord() {
+    //   deactivateRecordWord()
+    //   $sendGaEvtForArticleClick('words count close')
+    // }
 
-    function sendFeedbackOfRecordWordToGoogleSheet(feedback) {
-      axiosPost('/api/google-sheets/append', {
-        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-        range: '閱讀字數回饋!A2:D',
-        valueInputOption: 'RAW',
-        resource: {
-          values: [[Date.now(), userUuid.value, postId, feedback]],
-        },
-      })
-    }
+    // function sendFeedbackOfRecordWordToGoogleSheet(feedback) {
+    //   axiosPost('/api/google-sheets/append', {
+    //     spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
+    //     range: '閱讀字數回饋!A2:D',
+    //     valueInputOption: 'RAW',
+    //     resource: {
+    //       values: [[Date.now(), userUuid.value, postId, feedback]],
+    //     },
+    //   })
+    // }
 
     const postFeedback = reactive({
       rating: 0,
@@ -264,13 +264,13 @@ export default {
       post,
       latestPosts,
 
-      wordCount,
-      wordReadingPerSecond,
-      hasWordPerSecond,
-      sendFeedbackOfRecordWordToGoogleSheet,
+      // wordCount,
+      // wordReadingPerSecond,
+      // hasWordPerSecond,
+      // sendFeedbackOfRecordWordToGoogleSheet,
 
-      shouldOpenRecordWord,
-      handleCancelRecordWord,
+      // shouldOpenRecordWord,
+      // handleCancelRecordWord,
 
       hasRating,
       starRatingBtnText,
@@ -334,35 +334,35 @@ export default {
   },
 }
 
-function useUserReadingTime(hasUserFinishedReading) {
-  let userStartReadingTime
-  const userFinishedReadingTime = ref(undefined)
+// function useUserReadingTime(hasUserFinishedReading) {
+//   let userStartReadingTime
+//   const userFinishedReadingTime = ref(undefined)
 
-  onMounted(setUserStartReadingTime)
+//   onMounted(setUserStartReadingTime)
 
-  const stopWatchingHasUserFinishedReading = watch(
-    hasUserFinishedReading,
-    setUserFinishedReadingTime
-  )
+//   const stopWatchingHasUserFinishedReading = watch(
+//     hasUserFinishedReading,
+//     setUserFinishedReadingTime
+//   )
 
-  const userReadingTime = computed(() => {
-    if (userFinishedReadingTime.value !== undefined) {
-      return userFinishedReadingTime.value - userStartReadingTime
-    }
-  })
+//   const userReadingTime = computed(() => {
+//     if (userFinishedReadingTime.value !== undefined) {
+//       return userFinishedReadingTime.value - userStartReadingTime
+//     }
+//   })
 
-  function setUserStartReadingTime() {
-    userStartReadingTime = Date.now()
-  }
-  function setUserFinishedReadingTime(hasFinished) {
-    if (hasFinished === true) {
-      userFinishedReadingTime.value = Date.now()
-      stopWatchingHasUserFinishedReading()
-    }
-  }
+//   function setUserStartReadingTime() {
+//     userStartReadingTime = Date.now()
+//   }
+//   function setUserFinishedReadingTime(hasFinished) {
+//     if (hasFinished === true) {
+//       userFinishedReadingTime.value = Date.now()
+//       stopWatchingHasUserFinishedReading()
+//     }
+//   }
 
-  return userReadingTime
-}
+//   return userReadingTime
+// }
 </script>
 
 <style lang="scss" scoped>
