@@ -3,9 +3,9 @@
     <li v-for="post in posts" :key="post.id">
       <article>
         <a :href="$getHref(post)" target="_blank" @click="$emit('sendGaEvt')">
-          <picture>
-            <img :src="$getImage(post)" alt="" />
-          </picture>
+          <div class="img-wrapper">
+            <img v-lazy="$getImage(post)" alt="" />
+          </div>
           <div class="text-wrapper">
             <h1>{{ post.title }}</h1>
             <div class="date">
@@ -59,15 +59,6 @@ export default {
     justify-content: space-between;
     align-items: flex-start;
   }
-  picture {
-    position: relative;
-    width: calc((100% - 14px) * 0.36);
-    padding-top: calc((100% - 14px) * 0.18);
-    @include media-breakpoint-up(md) {
-      width: calc((100% - 24px) * 0.32);
-      padding-top: calc((100% - 24px) * 0.16);
-    }
-  }
   img {
     position: absolute;
     top: 0;
@@ -91,6 +82,16 @@ export default {
       font-size: 15px;
       margin-top: 20px;
     }
+  }
+}
+
+.img-wrapper {
+  position: relative;
+  width: calc((100% - 14px) * 0.36);
+  padding-top: calc((100% - 14px) * 0.18);
+  @include media-breakpoint-up(md) {
+    width: calc((100% - 24px) * 0.32);
+    padding-top: calc((100% - 24px) * 0.16);
   }
 }
 </style>

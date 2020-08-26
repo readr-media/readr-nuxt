@@ -7,9 +7,9 @@
       target="_blank"
     >
       <article>
-        <picture>
-          <img :src="$getImage(post)" alt="" />
-        </picture>
+        <div class="img-wrapper">
+          <img v-lazy="$getImage(post)" alt="" />
+        </div>
         <h1>{{ post.title }}</h1>
       </article>
     </a>
@@ -52,7 +52,7 @@ a {
   }
 }
 
-picture {
+.img-wrapper {
   padding-top: 50%;
   position: relative;
   overflow: hidden;

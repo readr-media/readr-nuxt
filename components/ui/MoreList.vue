@@ -11,9 +11,9 @@
               rel="noopener noreferrer"
               @click="$emit('sendGaEvt')"
             >
-              <picture>
-                <img :src="$getImage(post)" alt="" />
-              </picture>
+              <div class="img-wrapper">
+                <img v-lazy="$getImage(post)" alt="" />
+              </div>
               <div class="text-wrapper">
                 <h1>{{ post.title }}</h1>
                 <div class="date">
@@ -75,7 +75,8 @@ a {
   justify-content: space-between;
   align-items: flex-start;
 }
-picture {
+
+.img-wrapper {
   position: relative;
   width: calc((100% - 16px) * 0.49);
   // 0.33 = 0.49 * 0.67
@@ -88,6 +89,7 @@ picture {
     padding-top: calc((100% - 16px) * 0.29);
   }
 }
+
 img {
   position: absolute;
   top: 0;

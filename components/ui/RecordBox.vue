@@ -1,9 +1,7 @@
 <template>
   <div class="record-box">
     <div v-if="shouldOpenRecord" class="record">
-      <picture>
-        <img src="~/assets/owl.jpg" alt="" />
-      </picture>
+      <img v-lazy="require('~/assets/owl.jpg')" alt="" />
       <slot name="record" />
       <SvgCrossIcon class="cross-icon" @click="handleCancelClick" />
     </div>
@@ -63,9 +61,7 @@ export default {
   cursor: pointer;
   user-select: none;
 }
-picture {
-  margin-bottom: 14px;
-}
+
 img {
   width: 60px;
   height: 60px;
@@ -73,5 +69,6 @@ img {
   border-radius: 50%;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 14px;
 }
 </style>
