@@ -20,7 +20,7 @@
           <img
             v-for="(post, idx) in posts"
             :key="post.id"
-            v-lazy="heroImage(post)"
+            :src="heroImage(post)"
             :class="{ active: shouldActive(idx) }"
             alt=""
           />
@@ -31,7 +31,7 @@
     <div
       v-for="(post, idx) in posts"
       :key="post.id"
-      v-lazy:backgroundImage="heroImage(post)"
+      :style="{ backgroundImage: `url(${heroImage(post)})` }"
       :class="{ active: shouldActive(idx) }"
       class="bg bg--img"
     />
