@@ -4,5 +4,7 @@ Object.assign(module.exports, {
 
   REQUEST_TIMEOUT: 5000,
 
+  ENV: '',
+
   ADOBE_FONTS_KIT_ID: '',
 })

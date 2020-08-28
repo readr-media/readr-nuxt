@@ -1,4 +1,4 @@
-const { ADOBE_FONTS_KIT_ID } = require('./configs/config.js')
+const { ENV, ADOBE_FONTS_KIT_ID } = require('./configs/config.js')
 
 const SITE_TITLE = 'READr 讀+'
 const SITE_DESCRIPTION =
@@ -30,6 +30,11 @@ const metaTwitter = [
 ]
 
 const BASE_URL = 'http://localhost:3000'
+
+const inProdEnv = ENV === 'production'
+const inDevEnv = process.env === 'development'
+
+const gaTrackingId = inProdEnv ? 'UA-83609754-1' : 'UA-83609754-2'
 
 Object.assign(module.exports, {
   mode: 'universal',
@@ -142,14 +147,13 @@ Object.assign(module.exports, {
 
     'nuxt-composition-api',
     // Doc: https://github.com/nuxt-community/analytics-module
+    ['@nuxtjs/google-analytics', { id: gaTrackingId }],
+    // Doc: https://github.com/daliborgogic/nuxt-vitals
     [
-      '@nuxtjs/google-analytics',
+      'nuxt-vitals',
       {
-        id() {
-          return /^www\.readr\.tw/i.test(document.domain)
-            ? 'UA-83609754-1'
-            : 'UA-83609754-2'
-        },
+        trackingID: gaTrackingId,
+        disabled: inDevEnv,
       },
     ],
   ],

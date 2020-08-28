@@ -59,6 +59,7 @@
     "husky": "^4.0.0",
     "lint-staged": "^10.0.0",
     "nodemon": "^2.0.4",
+    "nuxt-vitals": "https://github.com/yeefun/nuxt-vitals/tarball/c59311f1c131cb8eeaa7c4f92f004a71bda604d2",
     "prettier": "^2.0.5",
     "sass": "^1.26.8",
     "sass-loader": "^9.0.2",
