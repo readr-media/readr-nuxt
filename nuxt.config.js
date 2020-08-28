@@ -1,4 +1,3 @@
-const { ADOBE_FONTS_KIT_ID } = require('./configs/config.js')
 const { SITE_TITLE, SITE_URL } = require('./constants/metadata.js')
 const { inProdEnv } = require('./utils/index.js')
 
@@ -87,7 +86,7 @@ Object.assign(module.exports, {
         innerHTML: `
           (function(d) {
             var config = {
-              kitId: '${ADOBE_FONTS_KIT_ID}',
+              kitId: 'icf3not',
               scriptTimeout: 3000,
               async: true
             },
