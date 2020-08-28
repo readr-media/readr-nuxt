@@ -1,15 +1,10 @@
-import Koa from 'koa'
-import Router from 'koa-router'
-import { create as createAxios } from 'axios'
+const Koa = require('koa')
+const Router = require('koa-router')
+const { create: createAxios } = require('axios')
 
-import { CMS_ENDPOINT_DEPRECATED } from '../configs/config.js'
+const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config.js')
 
 const app = new Koa()
-
-export default {
-  handler: app.callback(),
-}
-
 const router = new Router()
 
 app.use(router.routes())
@@ -67,3 +62,7 @@ function checkPostsQueryFields(ctx, next) {
 function hasAllValidQueryFields(notAllowedFields = [], query = {}) {
   return !Object.keys(query).some((field) => notAllowedFields.includes(field))
 }
+
+Object.assign(module.exports, {
+  handler: app.callback(),
+})

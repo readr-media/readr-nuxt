@@ -1,10 +1,8 @@
-import { camelizeKeys, decamelizeKeys } from 'humps'
-import { stringify as qsStringify } from 'qs'
-import { create as createAxios, get as axiosGet } from 'axios'
+const { camelizeKeys, decamelizeKeys } = require('humps')
+const { stringify: qsStringify } = require('qs')
+const { create: createAxios, get: axiosGet } = require('axios')
 
-import { REQUEST_TIMEOUT } from '~/configs/config.js'
-
-export { fetchPosts, fetchPostsByTag, fetchPost }
+const { REQUEST_TIMEOUT } = require('../../configs/config.js')
 
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
 
@@ -84,3 +82,9 @@ function buildParams(params = {}) {
 
   return `?${qsStringify(decamelizeKeys(params))}`
 }
+
+Object.assign(module.exports, {
+  fetchPosts,
+  fetchPostsByTag,
+  fetchPost,
+})

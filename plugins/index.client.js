@@ -1,6 +1,6 @@
-import { bind as rBind } from 'ramda'
+const { bind: rBind } = require('ramda')
 
-import {
+const {
   sendGaEvtForHomeClick,
   sendGaEvtForHomeScroll,
   sendGaEvtForArticleClick,
@@ -10,9 +10,9 @@ import {
   sendGaEvtForFooterClick,
   sendGaEvtForUsersVisit,
   listenScrollDepthForGaEvt,
-} from './ga.client.js'
+} = require('./ga.client.js')
 
-export default injectAllMethods
+module.exports = injectAllMethods
 
 function injectAllMethods(ctx, inject) {
   inject('sendGaEvtForHomeClick', rBind(sendGaEvtForHomeClick, ctx))

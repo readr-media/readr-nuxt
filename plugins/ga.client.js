@@ -1,6 +1,6 @@
 const { partial: rPartial } = require('ramda')
 
-const { rafWithDebounce } = require('~/utils/index.js')
+const { rafWithDebounce } = require('../utils/index.js')
 
 const sendGaEvtForHomeClick = rPartial(sendGaEvt, ['Home', 'click'])
 const sendGaEvtForHomeScroll = rPartial(sendGaEvt, ['Home', 'scroll'])
@@ -10,19 +10,6 @@ const sendGaEvtForLandingClick = rPartial(sendGaEvt, ['Landing', 'click'])
 const sendGaEvtForHeaderClick = rPartial(sendGaEvt, ['header', 'click'])
 const sendGaEvtForFooterClick = rPartial(sendGaEvt, ['footer', 'click'])
 const sendGaEvtForUsersVisit = rPartial(sendGaEvt, ['users', 'visit'])
-
-Object.assign(module.exports, {
-  sendGaEvtForHomeClick,
-  sendGaEvtForHomeScroll,
-  sendGaEvtForArticleClick,
-  sendGaEvtForArticleScroll,
-  sendGaEvtForLandingClick,
-  sendGaEvtForHeaderClick,
-  sendGaEvtForFooterClick,
-  sendGaEvtForUsersVisit,
-
-  listenScrollDepthForGaEvt,
-})
 
 function sendGaEvt(category, action, label, value = 0) {
   this.$ga.event(category, action, label, value)
@@ -53,3 +40,16 @@ function listenScrollDepthForGaEvt(triggers = [], sendGaEvtMethod) {
     })
   }
 }
+
+Object.assign(module.exports, {
+  sendGaEvtForHomeClick,
+  sendGaEvtForHomeScroll,
+  sendGaEvtForArticleClick,
+  sendGaEvtForArticleScroll,
+  sendGaEvtForLandingClick,
+  sendGaEvtForHeaderClick,
+  sendGaEvtForFooterClick,
+  sendGaEvtForUsersVisit,
+
+  listenScrollDepthForGaEvt,
+})

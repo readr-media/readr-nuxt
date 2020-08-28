@@ -1,16 +1,14 @@
-import Koa from 'koa'
-import bodyParser from 'koa-bodyparser'
-import Router from 'koa-router'
-import { post as axiosPost, get as axiosGet } from 'axios'
+const Koa = require('koa')
+const bodyParser = require('koa-bodyparser')
+const Router = require('koa-router')
+const { post: axiosPost, get: axiosGet } = require('axios')
 
-import { CMS_ENDPOINT, CMS_ENDPOINT_DEPRECATED } from '../configs/config.js'
+const {
+  CMS_ENDPOINT,
+  CMS_ENDPOINT_DEPRECATED,
+} = require('../configs/config.js')
 
 const app = new Koa()
-
-export default {
-  handler: app.callback(),
-}
-
 const router = new Router()
 
 app.use(bodyParser()).use(router.routes())
@@ -70,3 +68,7 @@ function isAllowedApiPath(apiPath) {
     apiPath.startsWith(allowedApiPath)
   )
 }
+
+Object.assign(module.exports, {
+  handler: app.callback(),
+})

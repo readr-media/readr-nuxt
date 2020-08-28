@@ -1,6 +1,6 @@
-import { fetchPosts, fetchPost, fetchPostsByTag } from './posts.js'
+const { fetchPosts, fetchPost, fetchPostsByTag } = require('./posts.js')
 
-export default injectRequestMethods
+module.exports = injectRequestMethods
 
 function injectRequestMethods(ctx, inject) {
   inject('fetchPosts', fetchPosts)

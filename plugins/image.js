@@ -1,6 +1,4 @@
-import defaultImgPost from '~/assets/default/post.svg'
-
-export { getImage }
+const defaultImgPost = require('../assets/default/post.svg')
 
 function getImage({ heroImage, ogImage, image } = {}, needDefaultImage = true) {
   return (
@@ -10,3 +8,7 @@ function getImage({ heroImage, ogImage, image } = {}, needDefaultImage = true) {
     (needDefaultImage ? defaultImgPost : undefined)
   )
 }
+
+Object.assign(module.exports, {
+  getImage,
+})

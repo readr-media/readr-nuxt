@@ -1,7 +1,7 @@
-import SvgFbIcon from '~/assets/fb-icon.svg?raw'
-import SvgTwitterIcon from '~/assets/twitter-icon.svg?raw'
-import SvgIgIcon from '~/assets/ig-icon.svg?raw'
-import SvgGithubIcon from '~/assets/github-icon.svg?raw'
+const SvgFbIcon = require('../assets/fb-icon.svg?raw')
+const SvgTwitterIcon = require('../assets/twitter-icon.svg?raw')
+const SvgIgIcon = require('../assets/ig-icon.svg?raw')
+const SvgGithubIcon = require('../assets/github-icon.svg?raw')
 
 const FACEBOOK_LINK = {
   href: 'https://www.facebook.com/readr.tw',
@@ -20,9 +20,13 @@ const GITHUB_LINK = {
   svgIcon: SvgGithubIcon,
 }
 
-export const SOCIAL_MEDIA_LINKS = {
+const SOCIAL_MEDIA_LINKS = {
   FACEBOOK_LINK,
   TWITTER_LINK,
   INSTAGRAM_LINK,
   GITHUB_LINK,
 }
+
+Object.assign(module.exports, {
+  SOCIAL_MEDIA_LINKS,
+})

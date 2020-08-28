@@ -3,14 +3,14 @@
  * https://developers.google.com/sheets/api/quickstart/nodejs
  */
 
-import { google } from 'googleapis'
+const { google } = require('googleapis')
 
-import CREDENTIALS from '../../configs/google-sheets/credentials.json'
-import TOKEN from '../../configs/google-sheets/token.json'
+const CREDENTIALS = require('../../configs/google-sheets/credentials.json')
+const TOKEN = require('../../configs/google-sheets/token.json')
 
 const auth = authorize(CREDENTIALS)
 
-export default auth
+module.exports = auth
 
 function authorize(credentials) {
   const {

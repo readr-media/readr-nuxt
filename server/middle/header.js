@@ -1,6 +1,6 @@
-import { inProdEnv } from '../../utils/index.js'
+const { inProdEnv } = require('../../utils/index.js')
 
-export default setHeader
+module.exports = setHeader
 
 function setHeader(req, res, next) {
   if (inProdEnv) {

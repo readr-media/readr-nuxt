@@ -1,8 +1,8 @@
-import { getHref } from './link.js'
-import { getImage } from './image.js'
-import { getFormattedDate } from './date.js'
+const { getHref } = require('./link.js')
+const { getImage } = require('./image.js')
+const { getFormattedDate } = require('./date.js')
 
-export default injectAllMethods
+module.exports = injectAllMethods
 
 function injectAllMethods(ctx, inject) {
   inject('getHref', getHref)

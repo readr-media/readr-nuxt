@@ -1,4 +1,4 @@
-import { reactive, computed } from 'nuxt-composition-api'
+const { reactive, computed } = require('nuxt-composition-api')
 
 const state = reactive({
   viewport: {
@@ -15,4 +15,8 @@ function setViewport(width, height) {
   state.viewport.height = height
 }
 
-export { viewportWidth, viewportHeight, setViewport }
+Object.assign(module.exports, {
+  viewportWidth,
+  viewportHeight,
+  setViewport,
+})

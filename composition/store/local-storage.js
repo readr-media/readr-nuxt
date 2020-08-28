@@ -1,7 +1,7 @@
-import { reactive, watchEffect, toRefs } from 'nuxt-composition-api'
-import { v4 as createUuid } from 'uuid'
+const { reactive, watchEffect, toRefs } = require('nuxt-composition-api')
+const { v4: createUuid } = require('uuid')
 
-import { getCookieValue } from '~/utils/index.js'
+const { getCookieValue } = require('../../utils/index.js')
 
 const readr2UserUuId = getCookieValue('readrid')
 const isReadr2User = readr2UserUuId !== undefined
@@ -16,9 +16,6 @@ const state = reactive({
   shouldOpenGdpr: true,
   ...savedState,
 })
-const stateAsRef = toRefs(state)
-
-export { stateAsRef as state, deactivateRecordWord, closeGdpr }
 
 watchEffect(() => {
   window.localStorage.setItem('readr3', JSON.stringify(state))
@@ -31,3 +28,11 @@ function deactivateRecordWord() {
 function closeGdpr() {
   state.shouldOpenGdpr = false
 }
+
+const stateAsRef = toRefs(state)
+
+Object.assign(module.exports, {
+  state: stateAsRef,
+  deactivateRecordWord,
+  closeGdpr,
+})

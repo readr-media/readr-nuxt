@@ -3,19 +3,14 @@
  * https://developers.google.com/sheets/api/reference/rest
  */
 
-import Koa from 'koa'
-import bodyParser from 'koa-bodyparser'
-import Router from 'koa-router'
-import { google } from 'googleapis'
+const Koa = require('koa')
+const bodyParser = require('koa-bodyparser')
+const Router = require('koa-router')
+const { google } = require('googleapis')
 
-import auth from './middle/auth.js'
+const auth = require('./middle/auth.js')
 
 const app = new Koa()
-
-export default {
-  handler: app.callback(),
-}
-
 const router = new Router()
 
 app.use(bodyParser()).use(router.routes())
@@ -87,3 +82,7 @@ function createErrorBodyOfGoogleSheets({ method, message, spreadsheetId }) {
     spreadsheet id: ${spreadsheetId}
   `
 }
+
+Object.assign(module.exports, {
+  handler: app.callback(),
+})

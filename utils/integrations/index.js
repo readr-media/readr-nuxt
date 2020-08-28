@@ -1,1 +1,3 @@
-export { default as onDemand } from './on-demand.js'
+Object.assign(module.exports, {
+  onDemand: require('./on-demand.js'),
+})

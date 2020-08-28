@@ -1,6 +1,6 @@
-import Vue from 'vue'
-import VueLazyload from 'vue-lazyload'
-import imgLoading from '~/assets/loading.gif'
+const Vue = require('vue').default
+const VueLazyload = require('vue-lazyload').default
+const imgLoading = require('~/assets/loading.gif')
 
 Vue.use(VueLazyload, {
   loading: imgLoading,

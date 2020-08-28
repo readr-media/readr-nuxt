@@ -1,5 +1,3 @@
-export { getHref }
-
 function getHref({ type, id, slug } = {}) {
   switch (type) {
     case 1:
@@ -10,3 +8,7 @@ function getHref({ type, id, slug } = {}) {
       return undefined
   }
 }
+
+Object.assign(module.exports, {
+  getHref,
+})
