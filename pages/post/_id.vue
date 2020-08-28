@@ -110,7 +110,7 @@ import {
 import { post as axiosPost } from 'axios'
 
 // import { state as userState } from '~/composition/store/user.js'
-import { SITE_TITLE } from '~/constants/metadata.js'
+import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
@@ -285,7 +285,6 @@ export default {
     }
   },
   head() {
-    const SITE_URL = 'https://www.readr.tw'
     const {
       ogTitle,
       title,
@@ -298,7 +297,7 @@ export default {
     } = this.post
 
     const metaTitle = `${ogTitle || title} - ${SITE_TITLE}`
-    const ogImg = ogImage || heroImage || 'https://www.readr.tw/og.jpg'
+    const ogImg = ogImage || heroImage || '/og.jpg'
     const ogUrl = `${SITE_URL}${this.$route.path}`
     const ogTags = tags.map((tag) => ({
       property: 'article:tag',

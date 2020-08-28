@@ -1,10 +1,9 @@
 const { ADOBE_FONTS_KIT_ID } = require('./configs/config.js')
+const { SITE_TITLE, SITE_URL } = require('./constants/metadata.js')
 const { inProdEnv } = require('./utils/index.js')
 
-const SITE_TITLE = 'READr 讀+'
 const SITE_DESCRIPTION =
   'READr 是一個新聞媒體，致力於透過內容實驗，增加使用者的媒體識讀能力。團隊組成為工程師、設計師、記者、產品經理，多元專業背景的成員共同完成新聞的產製，並在專案中加上讀者參與的元素，讓以往封閉的新聞編輯室有開放的可能。'
-const SITE_URL = 'https://www.readr.tw'
 
 const metaOg = [
   { hid: 'og:title', property: 'og:title', content: SITE_TITLE },
