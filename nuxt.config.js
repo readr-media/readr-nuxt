@@ -1,4 +1,5 @@
-const { ENV, ADOBE_FONTS_KIT_ID } = require('./configs/config.js')
+const { ADOBE_FONTS_KIT_ID } = require('./configs/config.js')
+const { inProdEnv } = require('./utils/index.js')
 
 const SITE_TITLE = 'READr 讀+'
 const SITE_DESCRIPTION =
@@ -31,7 +32,6 @@ const metaTwitter = [
 
 const BASE_URL = 'http://localhost:3000'
 
-const inProdEnv = ENV === 'production'
 const inDevEnv = process.env === 'development'
 
 const gaTrackingId = inProdEnv ? 'UA-83609754-1' : 'UA-83609754-2'

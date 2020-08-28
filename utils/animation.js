@@ -1,4 +1,6 @@
-export { rafWithDebounce }
+Object.assign(module.exports, {
+  rafWithDebounce,
+})
 
 function rafWithDebounce(func) {
   let isTicking = false

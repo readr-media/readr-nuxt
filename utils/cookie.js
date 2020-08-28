@@ -1,4 +1,6 @@
-export { getCookieValue }
+Object.assign(module.exports, {
+  getCookieValue,
+})
 
 function getCookieValue(name) {
   const decodedCookies = decodeURIComponent(document.cookie)

@@ -1,7 +1,10 @@
-export { rafWithDebounce } from './animation.js'
-export { getCookieValue } from './cookie.js'
-export { inProdEnv }
+const { ENV } = require('../configs/config.js')
 
-function inProdEnv(hostname) {
-  return /^www\.readr\.tw/i.test(hostname)
-}
+const inProdEnv = ENV === 'production'
+
+Object.assign(module.exports, {
+  inProdEnv,
+
+  ...require('./animation.js'),
+  ...require('./cookie.js'),
+})
