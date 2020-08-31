@@ -36,7 +36,6 @@ const gaTrackingId = inProdEnv ? 'UA-83609754-1' : 'UA-83609754-2'
 
 Object.assign(module.exports, {
   mode: 'universal',
-  modern: 'server',
 
   env: {
     BASE_URL,
