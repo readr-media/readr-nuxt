@@ -273,6 +273,9 @@ img {
     background-repeat: no-repeat;
     opacity: 0;
     transition: none;
+    // fix transition flickering for Safari
+    transform: translate3d(0, 0, 0);
+
     &.active {
       opacity: 0.2;
       transition: opacity 2.1s;
