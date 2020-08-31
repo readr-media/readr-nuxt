@@ -91,4 +91,5 @@ sw.*
 
 # Config
 config.js
-configs/google-sheets/
+credentials.json
+token.json
