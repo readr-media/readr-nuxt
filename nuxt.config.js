@@ -1,5 +1,4 @@
 const { SITE_TITLE, SITE_URL } = require('./constants/metadata.js')
-const { inProdEnv } = require('./utils/index.js')
 
 const SITE_DESCRIPTION =
   'READr 是一個新聞媒體，致力於透過內容實驗，增加使用者的媒體識讀能力。團隊組成為工程師、設計師、記者、產品經理，多元專業背景的成員共同完成新聞的產製，並在專案中加上讀者參與的元素，讓以往封閉的新聞編輯室有開放的可能。'
@@ -31,8 +30,6 @@ const metaTwitter = [
 const BASE_URL = 'http://localhost:3000'
 
 const inDevEnv = process.env === 'development'
-
-const gaTrackingId = inProdEnv ? 'UA-83609754-1' : 'UA-83609754-2'
 
 Object.assign(module.exports, {
   mode: 'universal',
@@ -144,12 +141,21 @@ Object.assign(module.exports, {
 
     'nuxt-composition-api',
     // Doc: https://github.com/nuxt-community/analytics-module
-    ['@nuxtjs/google-analytics', { id: gaTrackingId }],
+    [
+      '@nuxtjs/google-analytics',
+      {
+        id() {
+          return /^www\.readr\.tw/i.test(document.domain)
+            ? 'UA-83609754-1'
+            : 'UA-83609754-2'
+        },
+      },
+    ],
     // Doc: https://github.com/daliborgogic/nuxt-vitals
     [
       'nuxt-vitals',
       {
-        trackingID: gaTrackingId,
+        trackingID: 'UA-83609754-1',
         disabled: inDevEnv,
       },
     ],

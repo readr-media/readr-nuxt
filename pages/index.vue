@@ -130,12 +130,12 @@ const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
 
 if (process.browser) {
   /* eslint-disable no-var */
-  var TAG_ID_CURRENT_EVENTS = inProdEnv ? 1184 : 103
-  var TAG_ID_EDUCATION = inProdEnv ? 1185 : 104
-  var TAG_ID_POLITICS = inProdEnv ? 1186 : 14
-  var TAG_ID_HUMAN_RIGHTS = inProdEnv ? 1187 : 105
-  var TAG_ID_ENVIRONMENT = inProdEnv ? 1188 : 106
-  var TAG_ID_NEWS = inProdEnv ? 1189 : 107
+  var TAG_ID_CURRENT_EVENTS = inProdEnv(document.domain) ? 1184 : 103
+  var TAG_ID_EDUCATION = inProdEnv(document.domain) ? 1185 : 104
+  var TAG_ID_POLITICS = inProdEnv(document.domain) ? 1186 : 14
+  var TAG_ID_HUMAN_RIGHTS = inProdEnv(document.domain) ? 1187 : 105
+  var TAG_ID_ENVIRONMENT = inProdEnv(document.domain) ? 1188 : 106
+  var TAG_ID_NEWS = inProdEnv(document.domain) ? 1189 : 107
   /* eslint-enable no-var */
 }
 
