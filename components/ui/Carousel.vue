@@ -305,8 +305,10 @@ img {
       fill: #000928;
     }
   }
-  & svg {
+  svg {
     position: absolute;
+    width: 36px;
+    height: 36px;
     // 20px + ((100vw - 20px * 2) / 2 / 2) - 18px
     bottom: calc(25vw - 8px);
     @include media-breakpoint-up(md) {
@@ -318,13 +320,13 @@ img {
   }
   &--prev {
     left: 0;
-    & svg {
+    svg {
       right: 0;
     }
   }
   &--next {
     right: 0;
-    & svg {
+    svg {
       left: 0;
     }
   }
