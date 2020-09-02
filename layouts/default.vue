@@ -120,6 +120,7 @@ function useUpdateViewport() {
   width: 100%;
   bottom: 0;
   right: 0;
+  z-index: 549;
   padding-left: 10px;
   padding-right: 10px;
   @include media-breakpoint-up(sm) {
