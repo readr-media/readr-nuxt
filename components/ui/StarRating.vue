@@ -85,7 +85,6 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: -1;
   transform: scale(3);
   opacity: 0;
   &.pulse {
