@@ -23,5 +23,5 @@ function injectAllMethods(ctx, inject) {
   inject('sendGaEvtForHeaderClick', bind(sendGaEvtForHeaderClick, ctx))
   inject('sendGaEvtForFooterClick', bind(sendGaEvtForFooterClick, ctx))
   inject('sendGaEvtForUsersVisit', bind(sendGaEvtForUsersVisit, ctx))
-  inject('listenScrollDepthForGaEvt', bind(listenScrollDepthForGaEvt, ctx))
+  inject('listenScrollDepthForGaEvt', listenScrollDepthForGaEvt)
 }
