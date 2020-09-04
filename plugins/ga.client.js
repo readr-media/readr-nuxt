@@ -1,15 +1,15 @@
-const { partial: rPartial } = require('ramda')
+const partial = require('ramda/src/partial')
 
 const { rafWithDebounce } = require('../utils/index.js')
 
-const sendGaEvtForHomeClick = rPartial(sendGaEvt, ['Home', 'click'])
-const sendGaEvtForHomeScroll = rPartial(sendGaEvt, ['Home', 'scroll'])
-const sendGaEvtForArticleClick = rPartial(sendGaEvt, ['Article', 'click'])
-const sendGaEvtForArticleScroll = rPartial(sendGaEvt, ['Article', 'scroll'])
-const sendGaEvtForLandingClick = rPartial(sendGaEvt, ['Landing', 'click'])
-const sendGaEvtForHeaderClick = rPartial(sendGaEvt, ['header', 'click'])
-const sendGaEvtForFooterClick = rPartial(sendGaEvt, ['footer', 'click'])
-const sendGaEvtForUsersVisit = rPartial(sendGaEvt, ['users', 'visit'])
+const sendGaEvtForHomeClick = partial(sendGaEvt, ['Home', 'click'])
+const sendGaEvtForHomeScroll = partial(sendGaEvt, ['Home', 'scroll'])
+const sendGaEvtForArticleClick = partial(sendGaEvt, ['Article', 'click'])
+const sendGaEvtForArticleScroll = partial(sendGaEvt, ['Article', 'scroll'])
+const sendGaEvtForLandingClick = partial(sendGaEvt, ['Landing', 'click'])
+const sendGaEvtForHeaderClick = partial(sendGaEvt, ['header', 'click'])
+const sendGaEvtForFooterClick = partial(sendGaEvt, ['footer', 'click'])
+const sendGaEvtForUsersVisit = partial(sendGaEvt, ['users', 'visit'])
 
 function sendGaEvt(category, action, label, value = 0) {
   this.$ga.event(category, action, label, value)

@@ -1,4 +1,4 @@
-const { bind: rBind } = require('ramda')
+const bind = require('ramda/src/bind')
 
 const {
   sendGaEvtForHomeClick,
@@ -15,13 +15,13 @@ const {
 module.exports = injectAllMethods
 
 function injectAllMethods(ctx, inject) {
-  inject('sendGaEvtForHomeClick', rBind(sendGaEvtForHomeClick, ctx))
-  inject('sendGaEvtForHomeScroll', rBind(sendGaEvtForHomeScroll, ctx))
-  inject('sendGaEvtForArticleClick', rBind(sendGaEvtForArticleClick, ctx))
-  inject('sendGaEvtForArticleScroll', rBind(sendGaEvtForArticleScroll, ctx))
-  inject('sendGaEvtForLandingClick', rBind(sendGaEvtForLandingClick, ctx))
-  inject('sendGaEvtForHeaderClick', rBind(sendGaEvtForHeaderClick, ctx))
-  inject('sendGaEvtForFooterClick', rBind(sendGaEvtForFooterClick, ctx))
-  inject('sendGaEvtForUsersVisit', rBind(sendGaEvtForUsersVisit, ctx))
-  inject('listenScrollDepthForGaEvt', rBind(listenScrollDepthForGaEvt, ctx))
+  inject('sendGaEvtForHomeClick', bind(sendGaEvtForHomeClick, ctx))
+  inject('sendGaEvtForHomeScroll', bind(sendGaEvtForHomeScroll, ctx))
+  inject('sendGaEvtForArticleClick', bind(sendGaEvtForArticleClick, ctx))
+  inject('sendGaEvtForArticleScroll', bind(sendGaEvtForArticleScroll, ctx))
+  inject('sendGaEvtForLandingClick', bind(sendGaEvtForLandingClick, ctx))
+  inject('sendGaEvtForHeaderClick', bind(sendGaEvtForHeaderClick, ctx))
+  inject('sendGaEvtForFooterClick', bind(sendGaEvtForFooterClick, ctx))
+  inject('sendGaEvtForUsersVisit', bind(sendGaEvtForUsersVisit, ctx))
+  inject('listenScrollDepthForGaEvt', bind(listenScrollDepthForGaEvt, ctx))
 }
