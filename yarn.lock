@@ -9651,9 +9651,9 @@ nuxt-ssr-cache@^1.5.2:
     cache-manager-memcached-store "^2.1.0"
     cache-manager-redis "^0.6.0"
 
-"nuxt-vitals@https://github.com/yeefun/nuxt-vitals/tarball/c59311f1c131cb8eeaa7c4f92f004a71bda604d2":
+"nuxt-vitals@https://github.com/yeefun/nuxt-vitals/tarball/475c9c3acb541dc9d921cbefcd0fd68300c2d2c3":
   version "1.1.0"
-  resolved "https://github.com/yeefun/nuxt-vitals/tarball/c59311f1c131cb8eeaa7c4f92f004a71bda604d2#8b8185b6871c076963ac744d504219c2654ddb5c"
+  resolved "https://github.com/yeefun/nuxt-vitals/tarball/475c9c3acb541dc9d921cbefcd0fd68300c2d2c3#393ec118de973c8d0795abd621e3d929a3a9f450"
   dependencies:
     web-vitals "^0.2.1"
 
