@@ -167,8 +167,10 @@ Object.assign(module.exports, {
 
   cache: {
     pages: ['/'],
+    key: (route) => `readr-nuxt${route}`,
     store: {
       type: 'memory',
+      max: 100,
       ttl: 60 * 5,
     },
   },
