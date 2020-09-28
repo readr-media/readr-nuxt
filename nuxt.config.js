@@ -29,7 +29,7 @@ const metaTwitter = [
 
 const BASE_URL = 'http://localhost:3000'
 
-const inDevEnv = process.env === 'development'
+const inDevEnv = process.env.NODE_ENV === 'development'
 
 Object.assign(module.exports, {
   mode: 'universal',
@@ -165,7 +165,7 @@ Object.assign(module.exports, {
    */
   modules: ['@nuxtjs/dayjs', '@nuxtjs/apollo', '@nuxtjs/svg', 'nuxt-ssr-cache'],
 
-  cache: {
+  cache: !inDevEnv && {
     pages: ['/'],
     key: (route) => `readr-nuxt${route}`,
     store: {
