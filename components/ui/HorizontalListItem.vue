@@ -4,7 +4,7 @@
       <div class="img-wrapper">
         <img
           v-lazy="{
-            src: item.heroImage.urlMobileSized,
+            src: heroImg,
             error: require('~/assets/default/collaboration.svg'),
           }"
           alt=""
@@ -51,6 +51,9 @@ export default {
   computed: {
     href() {
       return this.item.achvLink || this.item.collabLink
+    },
+    heroImg() {
+      return this.item.heroImage?.urlMobileSized
     },
     progress() {
       return `${this.item.progress || 0}%`
