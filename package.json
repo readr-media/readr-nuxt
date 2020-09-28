@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.1-rc.1",
+    "@nuxtjs/composition-api": "^0.12.5",
     "@nuxtjs/dayjs": "^1.1.9",
     "@readr-media/old-news-project-slugs": "^1.0.0",
     "axios": "^0.19.2",
@@ -37,7 +38,6 @@
     "koa-helmet": "^5.2.0",
     "koa-router": "^9.1.0",
     "nuxt": "^2.14.0",
-    "nuxt-composition-api": "^0.11.0",
     "nuxt-ssr-cache": "^1.5.2",
     "qs": "^6.9.4",
     "ramda": "^0.27.1",

@@ -1,4 +1,4 @@
-const { reactive, toRefs } = require('nuxt-composition-api')
+const { reactive, toRefs } = require('@nuxtjs/composition-api')
 
 const state = reactive({
   hasUserFinishedReading: false,

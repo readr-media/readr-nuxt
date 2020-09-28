@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { ref, computed, useFetch, useContext } from 'nuxt-composition-api'
+import { ref, computed, useFetch, useContext } from '@nuxtjs/composition-api'
 
 import { SITE_TITLE } from '~/constants/metadata.js'
 

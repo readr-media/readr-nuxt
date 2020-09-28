@@ -1,4 +1,4 @@
-const { reactive, computed } = require('nuxt-composition-api')
+const { reactive, computed } = require('@nuxtjs/composition-api')
 
 const state = reactive({
   viewport: {

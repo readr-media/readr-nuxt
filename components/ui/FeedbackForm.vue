@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { reactive, watch } from 'nuxt-composition-api'
+import { reactive, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'FeedbackForm',

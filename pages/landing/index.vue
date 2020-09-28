@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { ref, computed, useContext } from 'nuxt-composition-api'
+import { ref, computed, useContext } from '@nuxtjs/composition-api'
 import { post as axiosPost } from 'axios'
 
 import SvgReadrLogoYellow from '~/assets/readr-logo-yellow.svg?inline'

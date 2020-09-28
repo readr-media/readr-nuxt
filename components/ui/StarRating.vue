@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { ref, reactive } from 'nuxt-composition-api'
+import { ref, reactive } from '@nuxtjs/composition-api'
 
 import SvgStarIcon from '~/assets/star-icon.svg?inline'
 

@@ -1,4 +1,4 @@
-const { reactive, watchEffect, toRefs } = require('nuxt-composition-api')
+const { reactive, watchEffect, toRefs } = require('@nuxtjs/composition-api')
 const { v4: createUuid } = require('uuid')
 
 const { getCookieValue } = require('../../utils/index.js')

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'nuxt-composition-api'
+import { ref, computed } from '@nuxtjs/composition-api'
 
 import SvgCheckIcon from '~/assets/check-icon.svg?inline'
 

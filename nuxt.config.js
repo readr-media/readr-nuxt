@@ -139,7 +139,7 @@ Object.assign(module.exports, {
     // Doc: https://github.com/nuxt-community/style-resources-module
     '@nuxtjs/style-resources',
 
-    'nuxt-composition-api',
+    '@nuxtjs/composition-api',
     // Doc: https://github.com/nuxt-community/analytics-module
     [
       '@nuxtjs/google-analytics',

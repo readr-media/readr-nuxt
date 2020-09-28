@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { ref } from 'nuxt-composition-api'
+import { ref } from '@nuxtjs/composition-api'
 
 import SvgUnfoldIcon from '~/assets/unfold-icon.svg?inline'
 

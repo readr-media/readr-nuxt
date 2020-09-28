@@ -31,7 +31,7 @@ import {
   onMounted,
   onBeforeUnmount,
   useContext,
-} from 'nuxt-composition-api'
+} from '@nuxtjs/composition-api'
 
 import { setViewport } from '~/composition/store/viewport.js'
 import { rafWithDebounce } from '~/utils/index.js'

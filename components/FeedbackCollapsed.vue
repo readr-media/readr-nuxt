@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { ref, reactive, computed, useContext } from 'nuxt-composition-api'
+import { ref, reactive, computed, useContext } from '@nuxtjs/composition-api'
 import { post as axiosPost } from 'axios'
 
 import SvgCrossIcon from '~/assets/cross-icon.svg?inline'

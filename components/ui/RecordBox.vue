@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { ref } from 'nuxt-composition-api'
+import { ref } from '@nuxtjs/composition-api'
 
 import SvgCrossIcon from '~/assets/cross-icon.svg?inline'
 

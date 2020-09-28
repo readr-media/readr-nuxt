@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { ref, watch, onMounted, onBeforeUnmount } from 'nuxt-composition-api'
+import { ref, watch, onMounted, onBeforeUnmount } from '@nuxtjs/composition-api'
 
 import { setUserFinishedReading } from '~/composition/store/user.js'
 import { viewportHeight } from '~/composition/store/viewport.js'

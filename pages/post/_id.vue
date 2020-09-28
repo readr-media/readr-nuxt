@@ -106,7 +106,7 @@ import {
   useFetch,
   useContext,
   onMounted,
-} from 'nuxt-composition-api'
+} from '@nuxtjs/composition-api'
 import { post as axiosPost } from 'axios'
 
 // import { state as userState } from '~/composition/store/user.js'
