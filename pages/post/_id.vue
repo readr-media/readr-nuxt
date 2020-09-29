@@ -6,13 +6,14 @@
     />
 
     <article id="post">
-      <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
+      <div class="date">{{ $getFormattedDate(post.publishTime) }}</div>
       <h1>{{ post.title }}</h1>
       <div class="container container--post">
         <picture class="hero-img">
-          <img :src="$getImage(post)" alt="" />
+          <img :src="heroImgSrc" :alt="$imgAlt(post)" />
         </picture>
-        <div class="content" v-html="post.content" />
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <div class="content" v-html="post.content_html" />
       </div>
     </article>
 
@@ -103,11 +104,12 @@ import {
   reactive,
   computed,
   // watch,
-  useFetch,
   useContext,
   onMounted,
 } from '@nuxtjs/composition-api'
 import { post as axiosPost } from 'axios'
+
+import { Post as post } from '~/apollo/queries/post.gql'
 
 // import { state as userState } from '~/composition/store/user.js'
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
@@ -123,23 +125,14 @@ if (process.browser) {
 export default {
   name: 'Post',
   setup() {
-    const post = ref({})
     const latestPosts = ref([])
 
-    useFetch(async () => {
-      await fetchPost()
-    })
     const {
-      $fetchPost,
       route,
       $fetchPosts,
       // $sendGaEvtForArticleClick,
     } = useContext()
     const postId = route.value.params.id
-    async function fetchPost() {
-      const response = await $fetchPost(postId)
-      post.value = response?.items?.[0] ?? {}
-    }
 
     // const wordCount = 100
     // const userReadingTime = useUserReadingTime(userState.hasUserFinishedReading)
@@ -261,7 +254,6 @@ export default {
     }
 
     return {
-      post,
       latestPosts,
 
       // wordCount,
@@ -284,24 +276,54 @@ export default {
       postFeedbackStep,
     }
   },
+
+  apollo: {
+    post: {
+      query: post,
+      variables() {
+        return { id: this.$route.params.id }
+      },
+      update({ post }) {
+        if (post.content_html[0] === '"') {
+          // 去除字串引號 ""
+          post.content_html = post.content_html.slice(1, -1)
+        }
+
+        return post
+      },
+    },
+  },
+  computed: {
+    heroImgSrc() {
+      const { heroImage, ogImage } = this.post
+
+      return (
+        heroImage?.urlTabletSized ||
+        ogImage?.urlTabletSized ||
+        require('~/assets/default/post.svg')
+      )
+    },
+  },
+
   head() {
     const {
-      ogTitle,
       title,
+      ogTitle,
       ogDescription,
       ogImage,
       heroImage,
-      publishedAt,
+      publishTime,
       updatedAt,
       tags = [],
     } = this.post
 
     const metaTitle = `${ogTitle || title} - ${SITE_TITLE}`
-    const ogImg = ogImage || heroImage || '/og.jpg'
+    const ogImg =
+      ogImage?.urlTabletSized || heroImage?.urlTabletSized || '/og.jpg'
     const ogUrl = `${SITE_URL}${this.$route.path}`
     const ogTags = tags.map((tag) => ({
       property: 'article:tag',
-      content: tag.text,
+      content: tag.name,
     }))
 
     const metaOg = [
@@ -318,7 +340,7 @@ export default {
         property: 'article:publisher',
         content: 'https://www.facebook.com/readr.tw',
       },
-      { property: 'article:published_time', content: publishedAt },
+      { property: 'article:published_time', content: publishTime },
       { property: 'article:modified_time', content: updatedAt },
       ...ogTags,
     ]

@@ -30,26 +30,6 @@ async function fetchPosts(params = {}) {
   }
 }
 
-async function fetchPost(postId) {
-  const requestUrl = `/post/${postId}`
-
-  try {
-    const { data } = await publicApi.get(requestUrl)
-
-    return camelizeKeys(data)
-  } catch ({ response = {}, message }) {
-    console.error(`
-      ApiError:
-        url: ${requestUrl}
-        message: ${message}
-        data: ${response.data ?? ''}
-    `)
-
-    const statusCode = response.status || 404
-    this.error({ statusCode, message })
-  }
-}
-
 async function fetchPostsByTag(tagId) {
   const requestUrl = `${baseUrl}/api/cms/deprecated/tags/pnr/${tagId}`
 
@@ -86,5 +66,4 @@ function buildParams(params = {}) {
 Object.assign(module.exports, {
   fetchPosts,
   fetchPostsByTag,
-  fetchPost,
 })

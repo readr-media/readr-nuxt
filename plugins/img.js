@@ -9,7 +9,7 @@ function getImage({ heroImage, ogImage, image } = {}, needDefaultImage = true) {
   )
 }
 
-function imgAlt({ heroImage, ogImage, heroCaption }) {
+function imgAlt({ heroCaption, heroImage, ogImage }) {
   return heroCaption ?? heroImage?.title ?? ogImage?.title
 }
 

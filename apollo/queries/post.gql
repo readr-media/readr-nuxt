@@ -1,0 +1,22 @@
+query Post($id: ID!) {
+  post: Post(where: { id: $id }) {
+    publishTime
+    title
+    heroImage {
+      title
+      urlTabletSized
+    }
+    heroCaption
+    content_html
+    ogTitle
+    ogDescription
+    ogImage {
+      title
+      urlTabletSized
+    }
+    updatedAt
+    tags {
+      name
+    }
+  }
+}
