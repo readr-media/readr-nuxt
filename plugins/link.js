@@ -13,6 +13,20 @@ function getHref({ type, id, slug } = {}) {
   }
 }
 
+function getHrefKs({ style, id, slug }) {
+  switch (style) {
+    case 'news':
+      return `/post/${id}`
+    case 'report':
+      return oldNewsProjectSlugs.includes(slug)
+        ? `/project/${slug}`
+        : `/project/3/${slug}`
+    default:
+      return undefined
+  }
+}
+
 Object.assign(module.exports, {
   getHref,
+  getHrefKs,
 })

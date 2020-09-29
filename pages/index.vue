@@ -113,6 +113,7 @@
 import { get as axiosGet } from 'axios'
 
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
+import { latestPosts } from '~/apollo/queries/posts.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
 import { databases } from '~/apollo/queries/data.gql'
 import { quotes } from '~/apollo/queries/quotes.gql'
@@ -148,6 +149,9 @@ export default {
     allEditorChoices: {
       query: allEditorChoices,
     },
+    latestPosts: {
+      query: latestPosts,
+    },
     allCollaborations: {
       query: allCollaborations,
     },
@@ -159,12 +163,10 @@ export default {
       query: quotes,
     },
   },
-  async fetch() {
-    await this.fetchLatestPosts()
-  },
   data() {
     return {
       allEditorChoices: [],
+      latestPosts: [],
       allCollaborations: [],
 
       databases: {
@@ -173,7 +175,6 @@ export default {
       },
       databasesPage: 0,
 
-      latestPosts: [],
       collaboratorWall: {
         count: 0,
         names: '',
@@ -204,6 +205,7 @@ export default {
     shouldOpenEditorChoices() {
       return this.allEditorChoices && this.allEditorChoices.length > 0
     },
+
     shouldOpenLatestList() {
       return this.latestPosts.length > 0
     },
@@ -271,19 +273,6 @@ export default {
     this.addListenerToScrollDepthForGaEvt()
   },
   methods: {
-    async fetchLatestPosts() {
-      this.latestPosts = await this.$fetchPosts({
-        type: '{"$in":[1,4]}',
-        maxResult: 5,
-        page: 1,
-        sort: '-published_at',
-        showAuthor: false,
-        showUpdater: false,
-        showTag: false,
-        showComment: false,
-        showProject: false,
-      })
-    },
     async fetchCountOfCollaboratorWall() {
       try {
         const response = await axiosGet('/api/google-sheets', {

@@ -9,6 +9,11 @@ function getImage({ heroImage, ogImage, image } = {}, needDefaultImage = true) {
   )
 }
 
+function imgAlt({ heroImage, ogImage, heroCaption }) {
+  return heroCaption ?? heroImage?.title ?? ogImage?.title
+}
+
 Object.assign(module.exports, {
   getImage,
+  imgAlt,
 })
