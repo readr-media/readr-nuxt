@@ -3,12 +3,18 @@
     <a
       v-for="post in posts"
       :key="post.id"
-      :href="$getHref(post)"
+      :href="$getHrefKs(post)"
       target="_blank"
     >
       <article>
         <div class="img-wrapper">
-          <img v-lazy="$getImage(post)" alt="" />
+          <img
+            v-lazy="{
+              src: imgSrc(post),
+              error: require('~/assets/default/post.svg'),
+            }"
+            :alt="$imgAlt(post)"
+          />
         </div>
         <h1>{{ post.title }}</h1>
       </article>
@@ -19,6 +25,15 @@
 <script>
 export default {
   name: 'PostListJoined',
+  setup() {
+    function imgSrc({ heroImage, ogImage }) {
+      return heroImage?.urlMobileSized || ogImage?.urlMobileSized
+    }
+
+    return {
+      imgSrc,
+    }
+  },
   props: {
     posts: {
       type: Array,

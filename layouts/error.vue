@@ -17,17 +17,21 @@
         />
       </section>
 
-      <LazyUiPostListJoined
-        v-if="is404"
-        :posts="latestPosts"
-        class="error-page__post-list-joined"
-      />
+      <ClientOnly>
+        <LazyUiPostListJoined
+          v-if="is404"
+          :posts="latestPosts"
+          class="error-page__post-list-joined"
+        />
+      </ClientOnly>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, computed, useFetch, useContext } from '@nuxtjs/composition-api'
+import { computed } from '@nuxtjs/composition-api'
+
+import { latestPosts } from '~/apollo/queries/posts.gql'
 
 import { SITE_TITLE } from '~/constants/metadata.js'
 
@@ -50,42 +54,22 @@ export default {
       is404.value ? '抱歉，找不到這個網址' : '系統忙碌中，請稍後再試'
     )
 
-    useFetch(async () => {
-      await loadLatestPosts()
-    })
-
-    const latestPosts = ref([])
-    const { $fetchPosts } = useContext()
-    async function loadLatestPosts() {
-      const data = await fetchLatestPosts()
-      setLatestPosts(data)
-    }
-
-    function fetchLatestPosts() {
-      return $fetchPosts({
-        type: '{"$in":[1,4]}',
-        maxResult: 4,
-        page: 1,
-        sort: '-published_at',
-        showAuthor: false,
-        showUpdater: false,
-        showTag: false,
-        showComment: false,
-        showProject: false,
-      })
-    }
-    function setLatestPosts(data) {
-      latestPosts.value = data
-    }
-
     return {
       is404,
       errorMessage,
 
-      latestPosts,
-
       backToHome,
     }
+  },
+
+  apollo: {
+    latestPosts: {
+      query: latestPosts,
+      variables() {
+        return { first: 4 }
+      },
+      prefetch: false,
+    },
   },
 
   head() {
