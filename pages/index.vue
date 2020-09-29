@@ -151,6 +151,9 @@ export default {
     },
     latestPosts: {
       query: latestPosts,
+      variables() {
+        return { first: 5 }
+      },
     },
     allCollaborations: {
       query: allCollaborations,

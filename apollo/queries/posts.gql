@@ -1,6 +1,6 @@
-query latestPosts {
+query latestPosts($first: Int! = 3) {
   latestPosts: allPosts(
-    first: 5,
+    first: $first,
     where: { state: published, style_in: [news, report] },
     sortBy: [publishTime_DESC]
   ) {

@@ -86,15 +86,17 @@
       </section>
     </ClientOnly>
 
-    <section class="latest-posts container">
-      <h2>
-        <div>最新報導</div>
-      </h2>
-      <UiPostList
-        :posts="latestPosts"
-        @sendGaEvt="$sendGaEvtForArticleClick('related articles')"
-      />
-    </section>
+    <ClientOnly>
+      <section class="latest-posts container">
+        <h2>
+          <div>最新報導</div>
+        </h2>
+        <UiPostList
+          :posts="latestPosts"
+          @sendGaEvt="$sendGaEvtForArticleClick('related articles')"
+        />
+      </section>
+    </ClientOnly>
   </div>
 </template>
 
@@ -110,6 +112,7 @@ import {
 import { post as axiosPost } from 'axios'
 
 import { Post as post } from '~/apollo/queries/post.gql'
+import { latestPosts } from '~/apollo/queries/posts.gql'
 
 // import { state as userState } from '~/composition/store/user.js'
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
@@ -125,11 +128,8 @@ if (process.browser) {
 export default {
   name: 'Post',
   setup() {
-    const latestPosts = ref([])
-
     const {
       route,
-      $fetchPosts,
       // $sendGaEvtForArticleClick,
     } = useContext()
     const postId = route.value.params.id
@@ -146,31 +146,8 @@ export default {
     // )
 
     onMounted(() => {
-      loadLatestPosts()
-
       // setShouldOpenRecordWord()
     })
-
-    async function loadLatestPosts() {
-      const data = await fetchLatestPosts()
-      setLatestPosts(data)
-    }
-    function fetchLatestPosts() {
-      return $fetchPosts({
-        type: '{"$in":[1,4]}',
-        maxResult: 3,
-        page: 1,
-        sort: '-published_at',
-        showAuthor: false,
-        showUpdater: false,
-        showTag: false,
-        showComment: false,
-        showProject: false,
-      })
-    }
-    function setLatestPosts(data) {
-      latestPosts.value = data
-    }
 
     // const shouldOpenRecordWord = ref(false)
     // function setShouldOpenRecordWord() {
@@ -254,8 +231,6 @@ export default {
     }
 
     return {
-      latestPosts,
-
       // wordCount,
       // wordReadingPerSecond,
       // hasWordPerSecond,
@@ -291,6 +266,10 @@ export default {
 
         return post
       },
+    },
+    latestPosts: {
+      query: latestPosts,
+      prefetch: false,
     },
   },
   computed: {
