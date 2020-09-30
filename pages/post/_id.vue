@@ -17,16 +17,16 @@
       </div>
     </article>
 
-    <!-- <ClientOnly>
+    <ClientOnly>
       <UiRecordBox
         v-if="shouldOpenRecordWord"
         class="post-page__record-box container"
-        :class="{ hidden: !hasWordPerSecond }"
+        :class="{ hidden: !hasWordReadingPerSecond }"
         @cancel="handleCancelRecordWord"
       >
         <template #record>
           <div class="record-word">
-            你閱讀了 <span>{{ wordCount }}</span> 字，平均每字
+            你閱讀了 <span>{{ post.wordCount }}</span> 字，平均每字
             <span>{{ wordReadingPerSecond }}</span> 秒鐘
           </div>
         </template>
@@ -43,9 +43,7 @@
           />
         </template>
       </UiRecordBox>
-    </ClientOnly> -->
 
-    <ClientOnly>
       <section class="post-feedback container">
         <div v-if="postFeedbackStep === 'rating'" class="post-feedback__step">
           <div class="post-feedback__title">這篇報導如何？</div>
@@ -84,9 +82,7 @@
 
         <UiFeedbackThanks v-else />
       </section>
-    </ClientOnly>
 
-    <ClientOnly>
       <section class="latest-posts container">
         <h2>
           <div>最新報導</div>
@@ -105,70 +101,50 @@ import {
   ref,
   reactive,
   computed,
-  // watch,
+  watch,
   useContext,
-  onMounted,
 } from '@nuxtjs/composition-api'
+// import { useQuery, useResult } from '@vue/apollo-composable'
 import { post as axiosPost } from 'axios'
 
 import { Post as post } from '~/apollo/queries/post.gql'
 import { latestPosts } from '~/apollo/queries/posts.gql'
 
-// import { state as userState } from '~/composition/store/user.js'
+import { state as userState } from '~/composition/store/user.js'
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
   var {
-    state: { userUuid /*, shouldActivateRecordWord */ },
-    // deactivateRecordWord,
+    state: { userUuid, shouldActivateRecordWord },
+    deactivateRecordWord,
   } = require('~/composition/store/local-storage.js')
 }
+
+let userStartReadingTime
+let stopWatchingHasUserFinishedReading
 
 export default {
   name: 'Post',
   setup() {
-    const {
-      route,
-      // $sendGaEvtForArticleClick,
-    } = useContext()
+    const { route, $sendGaEvtForArticleClick } = useContext()
     const postId = route.value.params.id
 
-    // const wordCount = 100
-    // const userReadingTime = useUserReadingTime(userState.hasUserFinishedReading)
-    // const wordReadingPerSecond = computed(() => {
-    //   if (userReadingTime.value !== undefined) {
-    //     return (userReadingTime.value / 1000 / wordCount).toFixed(2)
-    //   }
-    // })
-    // const hasWordPerSecond = computed(
-    //   () => wordReadingPerSecond.value !== undefined
-    // )
+    function handleCancelRecordWord() {
+      deactivateRecordWord()
+      $sendGaEvtForArticleClick('words count close')
+    }
 
-    onMounted(() => {
-      // setShouldOpenRecordWord()
-    })
-
-    // const shouldOpenRecordWord = ref(false)
-    // function setShouldOpenRecordWord() {
-    //   shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
-    // }
-
-    // function handleCancelRecordWord() {
-    //   deactivateRecordWord()
-    //   $sendGaEvtForArticleClick('words count close')
-    // }
-
-    // function sendFeedbackOfRecordWordToGoogleSheet(feedback) {
-    //   axiosPost('/api/google-sheets/append', {
-    //     spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-    //     range: '閱讀字數回饋!A2:D',
-    //     valueInputOption: 'RAW',
-    //     resource: {
-    //       values: [[Date.now(), userUuid.value, postId, feedback]],
-    //     },
-    //   })
-    // }
+    function sendFeedbackOfRecordWordToGoogleSheet(feedback) {
+      axiosPost('/api/google-sheets/append', {
+        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
+        range: '閱讀字數回饋!A2:D',
+        valueInputOption: 'RAW',
+        resource: {
+          values: [[Date.now(), userUuid.value, postId, feedback]],
+        },
+      })
+    }
 
     const postFeedback = reactive({
       rating: 0,
@@ -231,13 +207,8 @@ export default {
     }
 
     return {
-      // wordCount,
-      // wordReadingPerSecond,
-      // hasWordPerSecond,
-      // sendFeedbackOfRecordWordToGoogleSheet,
-
-      // shouldOpenRecordWord,
-      // handleCancelRecordWord,
+      handleCancelRecordWord,
+      sendFeedbackOfRecordWordToGoogleSheet,
 
       hasRating,
       starRatingBtnText,
@@ -272,6 +243,14 @@ export default {
       prefetch: false,
     },
   },
+
+  data() {
+    return {
+      userFinishedReadingTime: undefined,
+      shouldOpenRecordWord: false,
+    }
+  },
+
   computed: {
     heroImgSrc() {
       const { heroImage, ogImage } = this.post
@@ -281,6 +260,45 @@ export default {
         ogImage?.urlTabletSized ||
         require('~/assets/default/post.svg')
       )
+    },
+
+    userReadingTime() {
+      if (this.userFinishedReadingTime !== undefined) {
+        return this.userFinishedReadingTime - userStartReadingTime
+      }
+
+      return undefined
+    },
+    wordReadingPerSecond() {
+      if (this.userReadingTime !== undefined) {
+        return (this.userReadingTime / 1000 / this.post.wordCount).toFixed(2)
+      }
+
+      return undefined
+    },
+    hasWordReadingPerSecond() {
+      return this.wordReadingPerSecond !== undefined
+    },
+  },
+
+  mounted() {
+    userStartReadingTime = Date.now()
+
+    stopWatchingHasUserFinishedReading = watch(
+      userState.hasUserFinishedReading,
+      this.setUserFinishedReadingTime
+    )
+
+    this.shouldOpenRecordWord =
+      (this.post.wordCount ?? false) && shouldActivateRecordWord.value
+  },
+
+  methods: {
+    setUserFinishedReadingTime(hasFinished) {
+      if (hasFinished === true) {
+        this.userFinishedReadingTime = Date.now()
+        stopWatchingHasUserFinishedReading()
+      }
     },
   },
 
@@ -333,36 +351,6 @@ export default {
     }
   },
 }
-
-// function useUserReadingTime(hasUserFinishedReading) {
-//   let userStartReadingTime
-//   const userFinishedReadingTime = ref(undefined)
-
-//   onMounted(setUserStartReadingTime)
-
-//   const stopWatchingHasUserFinishedReading = watch(
-//     hasUserFinishedReading,
-//     setUserFinishedReadingTime
-//   )
-
-//   const userReadingTime = computed(() => {
-//     if (userFinishedReadingTime.value !== undefined) {
-//       return userFinishedReadingTime.value - userStartReadingTime
-//     }
-//   })
-
-//   function setUserStartReadingTime() {
-//     userStartReadingTime = Date.now()
-//   }
-//   function setUserFinishedReadingTime(hasFinished) {
-//     if (hasFinished === true) {
-//       userFinishedReadingTime.value = Date.now()
-//       stopWatchingHasUserFinishedReading()
-//     }
-//   }
-
-//   return userReadingTime
-// }
 </script>
 
 <style lang="scss" scoped>
@@ -370,18 +358,18 @@ export default {
   padding-top: 68.63px;
   overflow: hidden;
 
-  // &__record-box {
-  //   margin-bottom: 20px;
-  //   transition: opacity 0.3s, transform 0.3s;
-  //   @include media-breakpoint-up(md) {
-  //     margin-bottom: 30px;
-  //   }
+  &__record-box {
+    margin-bottom: 20px;
+    transition: opacity 0.3s, transform 0.3s;
+    @include media-breakpoint-up(md) {
+      margin-bottom: 30px;
+    }
 
-  //   &.hidden {
-  //     opacity: 0;
-  //     transform: translateY(20px);
-  //   }
-  // }
+    &.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
 }
 
 article {
@@ -652,29 +640,29 @@ h1 {
   }
 }
 
-// .record-word {
-//   font-size: 15px;
-//   text-align: center;
-//   line-height: 2;
-//   letter-spacing: 0.6px;
-//   @include media-breakpoint-up(md) {
-//     font-size: 18px;
-//     line-height: 1.8;
-//     letter-spacing: 2.5px;
-//     font-weight: 500;
-//   }
+.record-word {
+  font-size: 15px;
+  text-align: center;
+  line-height: 2;
+  letter-spacing: 0.6px;
+  @include media-breakpoint-up(md) {
+    font-size: 18px;
+    line-height: 1.8;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+  }
 
-//   span {
-//     font-weight: 900;
-//     font-size: 24px;
-//     line-height: 1.5;
-//     color: #04295e;
-//     @include media-breakpoint-up(md) {
-//       font-size: 26px;
-//       line-height: 1.8;
-//     }
-//   }
-// }
+  span {
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 1.5;
+    color: #04295e;
+    @include media-breakpoint-up(md) {
+      font-size: 26px;
+      line-height: 1.8;
+    }
+  }
+}
 
 .post-feedback {
   background-color: rgba(#f5ebff, 0.2);
