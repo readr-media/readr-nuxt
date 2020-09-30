@@ -31,7 +31,7 @@
 <script>
 import { computed } from '@nuxtjs/composition-api'
 
-import { latestPosts } from '~/apollo/queries/posts.gql'
+import { latestPostsInError as latestPosts } from '~/apollo/queries/posts.gql'
 
 import { SITE_TITLE } from '~/constants/metadata.js'
 
@@ -65,9 +65,6 @@ export default {
   apollo: {
     latestPosts: {
       query: latestPosts,
-      variables() {
-        return { first: 4 }
-      },
       prefetch: false,
     },
   },

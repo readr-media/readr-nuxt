@@ -4,20 +4,38 @@ query latestPosts($first: Int! = 3) {
     where: { state: published, style_in: [news, report] },
     sortBy: [publishTime_DESC]
   ) {
-    id
-    title
+    ...latestPostsFields
     publishTime
-    style
     heroImage {
-      title
-      urlMobileSized
       urlTabletSized
     }
     ogImage {
-      title
-      urlMobileSized
       urlTabletSized
     }
-    heroCaption
   }
+}
+
+query latestPostsInError {
+  latestPosts: allPosts(
+    first: 4,
+    where: { state: published, style_in: [news, report] },
+    sortBy: [publishTime_DESC]
+  ) {
+    ...latestPostsFields
+  }
+}
+
+fragment latestPostsFields on Post {
+  id
+  title
+  style
+  heroImage {
+    title
+    urlMobileSized
+  }
+  ogImage {
+    title
+    urlMobileSized
+  }
+  heroCaption
 }
