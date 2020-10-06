@@ -30,6 +30,7 @@ query categoryPosts($first: Int! = 3, $skip: Int, $categorySlug: String!, $shoul
     first: $first,
     skip: $skip,
     where: {
+      state: published,
       categories_some: { slug: $categorySlug }
     },
     sortBy: [publishTime_DESC]
@@ -50,7 +51,10 @@ query categoryPosts($first: Int! = 3, $skip: Int, $categorySlug: String!, $shoul
   }
 
   meta: _allPostsMeta(
-    where: { categories_some: { slug: $categorySlug }}
+    where: {
+      state: published,
+      categories_some: { slug: $categorySlug }
+    }
   ) @include(if: $shouldQueryMeta) {
     count
   }
