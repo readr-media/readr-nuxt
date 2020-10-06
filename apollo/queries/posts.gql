@@ -25,6 +25,37 @@ query latestPostsInError {
   }
 }
 
+query categoryPosts($first: Int! = 3, $skip: Int, $categorySlug: String!, $shouldQueryMeta: Boolean! = true) {
+  posts: allPosts(
+    first: $first,
+    skip: $skip,
+    where: {
+      categories_some: { slug: $categorySlug }
+    },
+    sortBy: [publishTime_DESC]
+  ) {
+    id
+    title
+    publishTime
+    style
+    heroImage {
+      title
+      urlMobileSized
+    }
+    ogImage {
+      title
+      urlMobileSized
+    }
+    heroCaption
+  }
+
+  meta: _allPostsMeta(
+    where: { categories_some: { slug: $categorySlug }}
+  ) @include(if: $shouldQueryMeta) {
+    count
+  }
+}
+
 fragment latestPostsFields on Post {
   id
   title

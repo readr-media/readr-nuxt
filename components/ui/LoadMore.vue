@@ -1,5 +1,5 @@
 <template>
-  <div class="load-more" @click="loadMore">
+  <div class="load-more" @click="$emit('loadMore')">
     <button type="button">看更多</button>
     <SvgMoreIcon />
   </div>
@@ -13,21 +13,18 @@ export default {
   components: {
     SvgMoreIcon,
   },
-  props: {
-    loadMore: {
-      type: Function,
-      required: true,
-    },
-  },
 }
 </script>
 
 <style lang="scss" scoped>
 .load-more {
-  text-align: center;
   user-select: none;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 button {
   color: #000928;
   letter-spacing: 2.5px;
@@ -38,9 +35,5 @@ button {
   line-height: 1.5;
   font-weight: 700;
   margin-bottom: 8px;
-}
-svg {
-  margin-left: auto;
-  margin-right: auto;
 }
 </style>

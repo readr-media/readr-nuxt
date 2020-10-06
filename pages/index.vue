@@ -46,9 +46,9 @@
       </div>
       <UiDatabaseList
         :list="databases.all"
-        :loadMore="loadMoreDatabases"
         :shouldLoadMore="shouldLoadMoreDatabases"
         class="home__database-list"
+        @loadMore="loadMoreDatabases"
         @sendGaEvt:database="$sendGaEvtForHomeClick('open database github')"
         @sendGaEvt:portfolio="$sendGaEvtForHomeClick('open database portfolio')"
         @sendGaEvt:loadMore="$sendGaEvtForHomeClick('open database load more')"
@@ -87,21 +87,28 @@
     </section>
 
     <section
-      v-if="hasAnyMorePosts"
-      v-show="shouldShowMoreSection"
-      ref="more"
-      class="more-section yellow-bg"
+      v-if="hasAnyCategoryPosts"
+      v-show="shouldShowCategorySection"
+      ref="category"
+      class="category-section yellow-bg"
     >
       <div class="container">
         <UiSectionHeading title="更多專題" class="home__section-heading" />
-        <div id="more-list-container">
-          <UiMoreList
-            v-for="morePosts in displayedAllMorePosts"
-            :key="morePosts.tag"
-            :topic="morePosts.tag"
-            :posts="morePosts.posts"
-            class="home__more-list"
-            @sendGaEvt="sendGaEvtForMoreList(morePosts.tag)"
+        <div id="category-list-container">
+          <UiCategoryList
+            v-for="categoryPosts in displayedCategoriesPosts"
+            :key="categoryPosts.name"
+            :category="categoryPosts.name"
+            :posts="categoryPosts.posts"
+            :shouldLoadMore="shouldLoadMoreCategoryPosts(categoryPosts.slug)"
+            class="home__category-list"
+            @loadMore="loadMoreCategoryPosts(categoryPosts.slug)"
+            @sendGaEvt:post="
+              $sendGaEvtForHomeClick(`category ${categoryPosts.name}`)
+            "
+            @sendGaEvt:loadMore="
+              $sendGaEvtForHomeClick(`category ${categoryPosts.name} load more`)
+            "
           />
         </div>
       </div>
@@ -113,7 +120,7 @@
 import { get as axiosGet } from 'axios'
 
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
-import { latestPosts } from '~/apollo/queries/posts.gql'
+import { latestPosts, categoryPosts } from '~/apollo/queries/posts.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
 import { databases } from '~/apollo/queries/data.gql'
 import { quotes } from '~/apollo/queries/quotes.gql'
@@ -121,24 +128,40 @@ import { quotes } from '~/apollo/queries/quotes.gql'
 import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/utils/integrations/index.js'
-import { inProdEnv } from '~/utils/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'
 
-const DATABASES_PAGE_SIZE = 3
+const PAGE_SIZE_DATABASES = 3
+const PAGE_SIZE_CATEGORY_POSTS = 3
 
 const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
 
-if (process.browser) {
-  /* eslint-disable no-var */
-  var TAG_ID_CURRENT_EVENTS = inProdEnv(document.domain) ? 1184 : 103
-  var TAG_ID_EDUCATION = inProdEnv(document.domain) ? 1185 : 104
-  var TAG_ID_POLITICS = inProdEnv(document.domain) ? 1186 : 14
-  var TAG_ID_HUMAN_RIGHTS = inProdEnv(document.domain) ? 1187 : 105
-  var TAG_ID_ENVIRONMENT = inProdEnv(document.domain) ? 1188 : 106
-  var TAG_ID_NEWS = inProdEnv(document.domain) ? 1189 : 107
-  /* eslint-enable no-var */
-}
+const categories = [
+  { slug: 'breakingnews', name: '時事' },
+  { slug: 'education', name: '教育' },
+  { slug: 'politics', name: '政治' },
+  { slug: 'humanrights', name: '人權' },
+  { slug: 'environment', name: '環境' },
+  { slug: 'omt', name: '新鮮事' },
+]
+const categoryPostsQueries = {}
+
+categories.forEach(function createCategoryPostsQueries({ slug }) {
+  setProp(categoryPostsQueries, `categoryPosts${capitalize(slug)}`, {
+    query: categoryPosts,
+    variables: () => ({ categorySlug: slug }),
+    prefetch: false,
+    manual: true,
+    result({ data, loading }) {
+      if (!loading) {
+        const posts = this.categoryPostsOf(slug)
+
+        setProp(posts, 'posts', data.posts)
+        setProp(posts, 'meta', data.meta)
+      }
+    },
+  })
+})
 
 export default {
   name: 'Home',
@@ -165,6 +188,7 @@ export default {
     quotes: {
       query: quotes,
     },
+    ...categoryPostsQueries,
   },
   data() {
     return {
@@ -183,19 +207,18 @@ export default {
         names: '',
       },
       quotes: [],
-      allMorePosts: [
-        { tag: '時事', posts: [] },
-        { tag: '教育', posts: [] },
-        { tag: '政治', posts: [] },
-        { tag: '人權', posts: [] },
-        { tag: '環境', posts: [] },
-        { tag: '新鮮事', posts: [] },
-      ],
+
+      categoriesPosts: categories.map((category) => ({
+        ...category,
+        posts: [],
+        meta: {},
+      })),
+
       isLoadingMacy: false,
       macyInstance: undefined,
       unwatchIsViewportWidthUpMd: undefined,
 
-      shouldShowMoreSection: !this.isViewportWidthUpMd,
+      shouldShowCategorySection: !this.isViewportWidthUpMd,
     }
   },
   computed: {
@@ -220,10 +243,10 @@ export default {
     },
 
     prevNumOfDatabases() {
-      return DATABASES_PAGE_SIZE * this.databasesPage
+      return PAGE_SIZE_DATABASES * this.databasesPage
     },
     currentNumOfDatabases() {
-      return this.prevNumOfDatabases + DATABASES_PAGE_SIZE
+      return this.prevNumOfDatabases + PAGE_SIZE_DATABASES
     },
     shouldLoadMoreDatabases() {
       return (
@@ -252,18 +275,35 @@ export default {
       },
     },
 
-    hasAnyMorePosts() {
-      return this.allMorePosts.some(this.hasPosts)
+    hasAnyCategoryPosts() {
+      return this.categoriesPosts.some(this.hasPosts)
     },
-    displayedAllMorePosts() {
-      return this.allMorePosts.filter(this.hasPosts)
+    displayedCategoriesPosts() {
+      return this.categoriesPosts.filter(this.hasPosts)
+    },
+    areCategoriesPostsLoading() {
+      const {
+        categoryPostsBreakingnews,
+        categoryPostsEducation,
+        categoryPostsPolitics,
+        categoryPostsHumanrights,
+        categoryPostsEnvironment,
+        categoryPostsOmt,
+      } = this.$apollo.queries
+
+      return (
+        categoryPostsBreakingnews.loading ||
+        categoryPostsEducation.loading ||
+        categoryPostsPolitics.loading ||
+        categoryPostsHumanrights.loading ||
+        categoryPostsEnvironment.loading ||
+        categoryPostsOmt.loading
+      )
     },
   },
   async mounted() {
-    await this.loadAllMorePosts()
-
     this.unwatchIsViewportWidthUpMd = this.$watch(
-      'isViewportWidthUpMd',
+      () => [this.isViewportWidthUpMd, this.areCategoriesPostsLoading].join(),
       this.handleMacy,
       { immediate: true }
     )
@@ -317,54 +357,21 @@ export default {
       }
     },
 
-    async loadAllMorePosts() {
-      const data = await this.fetchAllMorePosts()
-      this.setAllMorePosts(data)
-    },
-    fetchAllMorePosts() {
-      return Promise.allSettled([
-        this.$fetchPostsByTag(TAG_ID_CURRENT_EVENTS),
-        this.$fetchPostsByTag(TAG_ID_EDUCATION),
-        this.$fetchPostsByTag(TAG_ID_POLITICS),
-        this.$fetchPostsByTag(TAG_ID_HUMAN_RIGHTS),
-        this.$fetchPostsByTag(TAG_ID_ENVIRONMENT),
-        this.$fetchPostsByTag(TAG_ID_NEWS),
-      ])
-        .then(function settled(allPosts) {
-          return allPosts.filter(isFulfilled).map(extractValue)
-
-          function isFulfilled(postsByTag) {
-            return postsByTag.status === 'fulfilled'
-          }
-
-          function extractValue(postsByTag) {
-            return postsByTag.value
-          }
-        })
-        .catch(function handleError(error) {
-          console.error(error)
-
-          return []
-        })
-    },
-    setAllMorePosts(allPosts) {
-      allPosts.forEach(
-        function insertPosts(postsByTag, idx) {
-          this.allMorePosts[idx].posts = postsByTag
-        }.bind(this)
-      )
-    },
     hasPosts(item) {
       return item.posts.length > 0
     },
 
-    async handleMacy(isViewportWidthUpMd) {
+    async handleMacy() {
       if (this.macyInstance) {
         this.unwatchIsViewportWidthUpMd()
         return
       }
 
-      if (isViewportWidthUpMd && this.hasAnyMorePosts && !this.isLoadingMacy) {
+      if (
+        this.isViewportWidthUpMd &&
+        !this.areCategoriesPostsLoading &&
+        !this.isLoadingMacy
+      ) {
         const loadMacy = onDemand('https://cdn.jsdelivr.net/npm/macy@2')
         this.isLoadingMacy = true
 
@@ -372,7 +379,7 @@ export default {
           await loadMacy()
           this.initMacy()
 
-          this.shouldShowMoreSection = true
+          this.shouldShowCategorySection = true
         } catch (error) {
           console.error(error)
         }
@@ -382,7 +389,7 @@ export default {
     },
     initMacy() {
       this.macyInstance = window.Macy({
-        container: '#more-list-container',
+        container: '#category-list-container',
         mobileFirst: true,
         trueOrder: true,
         columns: 1,
@@ -402,7 +409,7 @@ export default {
       this.databasesPage += 1
       this.$apollo.queries.databases.fetchMore({
         variables: {
-          first: DATABASES_PAGE_SIZE,
+          first: PAGE_SIZE_DATABASES,
           skip: this.prevNumOfDatabases,
           hasMeta: true,
         },
@@ -411,6 +418,46 @@ export default {
           meta: this.databases.meta,
         }),
       })
+    },
+
+    loadMoreCategoryPosts(slug) {
+      const name = `categoryPosts${capitalize(slug)}`
+
+      if (this.$apollo.queries[name].loading) {
+        return
+      }
+
+      const { posts } = this.categoryPostsOf(slug)
+
+      this.$apollo.queries[name].fetchMore({
+        variables: {
+          first: PAGE_SIZE_CATEGORY_POSTS,
+          skip: posts.length,
+          shouldQueryMeta: false,
+        },
+        updateQuery: (_, { fetchMoreResult }) => {
+          posts.push(...fetchMoreResult.posts)
+
+          this.relayout()
+        },
+      })
+    },
+    shouldLoadMoreCategoryPosts(slug) {
+      const { posts, meta } = this.categoryPostsOf(slug)
+
+      return meta.count > PAGE_SIZE_CATEGORY_POSTS && posts.length < 9
+    },
+    categoryPostsOf(categorySlug) {
+      return this.categoriesPosts.find(function doesSlugMatch(postsByCategory) {
+        return postsByCategory.slug === categorySlug
+      })
+    },
+    relayout() {
+      if (this.macyInstance) {
+        this.macyInstance.runOnImageLoad(() => {
+          this.macyInstance.recalculate()
+        })
+      }
     },
 
     scrollTo(hash) {
@@ -430,16 +477,13 @@ export default {
     sendGaEvtForCollaboratorWall(doesUnfold) {
       this.$sendGaEvtForHomeClick(`credit-${doesUnfold ? 'open' : 'close'}`)
     },
-    sendGaEvtForMoreList(topic) {
-      this.$sendGaEvtForHomeClick(`category ${topic}`)
-    },
     addListenerToScrollDepthForGaEvt() {
-      const { latest, database, collaboration, more } = this.$refs
+      const { latest, database, collaboration, category } = this.$refs
       const triggers = [
         { elem: latest, evtFields: ['scroll 到最新文章', 1] },
         { elem: database, evtFields: ['scroll 到開放資料庫', 2] },
         { elem: collaboration, evtFields: ['scroll 到協作專區', 3] },
-        { elem: more, evtFields: ['scroll 到更多專題', 4] },
+        { elem: category, evtFields: ['scroll 到更多專題', 4] },
         {
           elem: document.getElementById('default-footer'),
           evtFields: ['scroll 到 footer ', 5],
@@ -449,6 +493,14 @@ export default {
       this.$listenScrollDepthForGaEvt(triggers, this.$sendGaEvtForHomeScroll)
     },
   },
+}
+
+function setProp(obj, name, val) {
+  obj[name] = val
+}
+
+function capitalize(str) {
+  return str[0].toUpperCase() + str.slice(1)
 }
 </script>
 
@@ -491,7 +543,7 @@ export default {
       padding-left: calc(50% - 548px);
     }
   }
-  &__more-list {
+  &__category-list {
     padding-bottom: 30px;
     @include media-breakpoint-up(md) {
       padding-bottom: 60px;
@@ -620,7 +672,7 @@ export default {
   }
 }
 
-.more-section {
+.category-section {
   padding-top: 20px;
   @include media-breakpoint-up(md) {
     padding-top: 30px;

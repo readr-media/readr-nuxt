@@ -32,7 +32,6 @@
     "cross-env": "^7.0.2",
     "googleapis": "^57.0.0",
     "graphql-tag": "^2.10.4",
-    "humps": "^2.0.1",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-helmet": "^5.2.0",

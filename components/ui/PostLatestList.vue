@@ -1,11 +1,7 @@
 <template>
   <div class="latest-list">
     <article class="latest-list__main">
-      <a
-        :href="$getHrefKs(postMain)"
-        target="_blank"
-        @click="$emit('sendGaEvt')"
-      >
+      <a :href="$href(postMain)" target="_blank" @click="$emit('sendGaEvt')">
         <div class="img-wrapper">
           <img
             v-lazy="{

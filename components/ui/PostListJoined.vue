@@ -1,11 +1,6 @@
 <template>
   <div class="post-list-joined">
-    <a
-      v-for="post in posts"
-      :key="post.id"
-      :href="$getHrefKs(post)"
-      target="_blank"
-    >
+    <a v-for="post in posts" :key="post.id" :href="$href(post)" target="_blank">
       <article>
         <div class="img-wrapper">
           <img
