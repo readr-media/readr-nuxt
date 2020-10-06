@@ -2334,6 +2334,13 @@
   resolved "https://registry.yarnpkg.com/@readr-media/old-news-project-slugs/-/old-news-project-slugs-1.0.0.tgz#6aade87a8712fcb0d73ed4a9f25e71d5d58c4fac"
   integrity sha512-4XMKjuCrO1vS+yDmIiFGVzGCi0P+cHSWyNcDu4mYE2GIufGWWvLYCKxSDy+UUAeD/ioUzCH62CNoY+hwYyvKkw==
 
+"@readr-media/web-components@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@readr-media/web-components/-/web-components-0.1.0.tgz#fbac218748c32037a1a39fefa659a23d306dc8f5"
+  integrity sha512-W3/kTklKVlLn0Yq73B4PO2kqj7zpdIIifBvHMJRd5rYg2FlIQefQfJCYMzLwv4dGUz7q/MNbnWWo+ymrox49Gg==
+  dependencies:
+    "@stencil/core" "^1.17.3"
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -2345,6 +2352,13 @@
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
+
+"@stencil/core@^1.17.3":
+  version "1.17.3"
+  resolved "https://registry.yarnpkg.com/@stencil/core/-/core-1.17.3.tgz#db19f4c707b749beef5cf113916c5252ad5c99de"
+  integrity sha512-q5joOYUPHTNa/5hEThMT/QEJ/suN8bpcYbV/LrSNsgsgHN+RJ05jCpU8VAShdUPT6WzoyF2iGgYc/EI2xeqFzw==
+  dependencies:
+    typescript "3.9.7"
 
 "@stylelint/postcss-css-in-js@^0.37.1":
   version "0.37.2"
@@ -12986,6 +13000,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typescript@3.9.7:
+  version "3.9.7"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.7.tgz#98d600a5ebdc38f40cb277522f12dc800e9e25fa"
+  integrity sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
 
 ua-parser-js@^0.7.21:
   version "0.7.21"

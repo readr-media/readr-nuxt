@@ -28,6 +28,7 @@
     "@nuxtjs/composition-api": "^0.12.5",
     "@nuxtjs/dayjs": "^1.1.9",
     "@readr-media/old-news-project-slugs": "^1.0.0",
+    "@readr-media/web-components": "^0.1.0",
     "axios": "^0.19.2",
     "cross-env": "^7.0.2",
     "googleapis": "^57.0.0",
