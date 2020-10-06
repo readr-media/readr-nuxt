@@ -45,7 +45,7 @@
         <h2>開放資料庫</h2>
       </div>
       <UiDatabaseList
-        :list="databases.all"
+        :list="databases.items"
         :shouldLoadMore="shouldLoadMoreDatabases"
         class="home__database-list"
         @loadMore="loadMoreDatabases"
@@ -197,7 +197,7 @@ export default {
       allCollaborations: [],
 
       databases: {
-        all: [],
+        items: [],
         meta: {},
       },
       databasesPage: 0,
@@ -242,15 +242,13 @@ export default {
       return this.latestPosts.slice(1)
     },
 
-    prevNumOfDatabases() {
-      return PAGE_SIZE_DATABASES * this.databasesPage
-    },
-    currentNumOfDatabases() {
-      return this.prevNumOfDatabases + PAGE_SIZE_DATABASES
+    totalDatabases() {
+      return this.databases.items.length
     },
     shouldLoadMoreDatabases() {
       return (
-        (this.databases.meta.count > 3 && this.currentNumOfDatabases < 9) ||
+        (this.databases.meta.count > PAGE_SIZE_DATABASES &&
+          this.totalDatabases < 9) ||
         this.isDatabasesLoading
       )
     },
@@ -410,11 +408,11 @@ export default {
       this.$apollo.queries.databases.fetchMore({
         variables: {
           first: PAGE_SIZE_DATABASES,
-          skip: this.prevNumOfDatabases,
-          hasMeta: true,
+          skip: this.totalDatabases,
+          shouldQueryMeta: false,
         },
         updateQuery: (prevResult, { fetchMoreResult }) => ({
-          all: [...prevResult.all, ...fetchMoreResult.all],
+          items: [...prevResult.items, ...fetchMoreResult.items],
           meta: this.databases.meta,
         }),
       })
