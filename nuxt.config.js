@@ -119,7 +119,7 @@ Object.assign(module.exports, {
     '~/plugins/vue-plugins.client.js',
     '~/plugins/index.js',
     '~/plugins/index.client.js',
-    '~/plugins/web-component.js',
+    '~/plugins/web-component.client.js',
   ],
 
   serverMiddleware: [
