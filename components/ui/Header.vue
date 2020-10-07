@@ -1,7 +1,5 @@
 <template>
-  <header>
-    <UiReadrLogoOfHeader @sendGaEvt="$emit('sendGaEvt')" />
-  </header>
+  <readr-header @readrLogoLinkClick="$emit('sendGaEvt')" />
 </template>
 
 <script>
