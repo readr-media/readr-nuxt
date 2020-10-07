@@ -1,5 +1,5 @@
 // How to integrate stencil web component in Vue:  https://stenciljs.com/docs/vue
-// @readr-media/web-component: https://github.com/readr-media/readr-coverages/tree/master/web-components
+// @readr-media/web-components: https://github.com/readr-media/readr-coverages/tree/master/web-components
 
 import Vue from 'vue'
 import {
