@@ -1,3 +1,5 @@
+// https://stenciljs.com/docs/vue
+
 import Vue from 'vue'
 import {
   applyPolyfills,
