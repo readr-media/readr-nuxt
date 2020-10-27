@@ -2329,10 +2329,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@readr-media/old-news-project-slugs@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@readr-media/old-news-project-slugs/-/old-news-project-slugs-1.0.0.tgz#6aade87a8712fcb0d73ed4a9f25e71d5d58c4fac"
-  integrity sha512-4XMKjuCrO1vS+yDmIiFGVzGCi0P+cHSWyNcDu4mYE2GIufGWWvLYCKxSDy+UUAeD/ioUzCH62CNoY+hwYyvKkw==
+"@readr-media/old-news-project-slugs@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@readr-media/old-news-project-slugs/-/old-news-project-slugs-1.1.1.tgz#e3fc56166c213b10d217c6c9d75e9c0e65ac35fc"
+  integrity sha512-bdfYgoTFsmbpPlyQay6EQGIHwombFB1+w6gq9/gEeyy+9fA9u6W2ah+gX2XQ9SnMIFvLfbWauPiI4xb4C5I64A==
 
 "@readr-media/web-components@^0.2.0":
   version "0.2.0"
