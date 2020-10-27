@@ -13,7 +13,7 @@
           <img :src="heroImgSrc" :alt="$imgAlt(post)" />
         </picture>
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="content" v-html="post.content_html" />
+        <div class="content" v-html="post.contentHtml" />
       </div>
     </article>
 
@@ -230,9 +230,9 @@ export default {
         return { id: this.$route.params.id }
       },
       update({ post }) {
-        if (post.content_html[0] === '"') {
+        if (post.contentHtml[0] === '"') {
           // 去除字串引號 ""
-          post.content_html = post.content_html.slice(1, -1)
+          post.contentHtml = post.contentHtml.slice(1, -1)
         }
 
         return post

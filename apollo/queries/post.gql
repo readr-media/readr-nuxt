@@ -7,7 +7,7 @@ query Post($id: ID!) {
       urlTabletSized
     }
     heroCaption
-    content_html
+    contentHtml
     ogTitle
     ogDescription
     ogImage {
