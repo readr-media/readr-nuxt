@@ -1,0 +1,17 @@
+html {
+  font-family: source-han-sans-traditional, sans-serif;
+}
+
+picture {
+  display: block;
+}
+
+a {
+  cursor: pointer;
+}
+
+button {
+  &:focus {
+    outline: none;
+  }
+}

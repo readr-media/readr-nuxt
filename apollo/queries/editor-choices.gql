@@ -1,0 +1,10 @@
+query allEditorChoices {
+  allEditorChoices(sortBy: [sortOrder_ASC, publishTime_DESC], first: 5, where: {state: published}) {
+    id
+    title
+    link
+    heroImage {
+      urlTabletSized
+    }
+  }
+}
