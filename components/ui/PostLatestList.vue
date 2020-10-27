@@ -1,18 +1,12 @@
 <template>
   <div class="latest-list">
     <article class="latest-list__main">
-      <a :href="$href(postMain)" target="_blank" @click="$emit('sendGaEvt')">
+      <a :href="$getHref(postMain)" target="_blank" @click="$emit('sendGaEvt')">
         <div class="img-wrapper">
-          <img
-            v-lazy="{
-              src: imgSrc(postMain),
-              error: require('~/assets/default/post.svg'),
-            }"
-            :alt="$imgAlt(postMain)"
-          />
+          <img v-lazy="$getImage(postMain)" alt="" />
         </div>
         <h1>{{ postMain.title }}</h1>
-        <span class="date">{{ $getFormattedDate(postMain.publishTime) }}</span>
+        <span class="date">{{ $getFormattedDate(postMain.publishedAt) }}</span>
       </a>
     </article>
 
@@ -27,15 +21,6 @@
 <script>
 export default {
   name: 'PostLatestList',
-  setup() {
-    function imgSrc({ heroImage, ogImage }) {
-      return heroImage?.urlTabletSized || ogImage?.urlTabletSized
-    }
-
-    return {
-      imgSrc,
-    }
-  },
   props: {
     postMain: {
       type: Object,

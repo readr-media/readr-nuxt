@@ -1,59 +1,38 @@
 <template>
-  <div class="category-list">
-    <h3 v-if="category">{{ category }}</h3>
+  <div class="more-list">
+    <h3 v-if="topic">{{ topic }}</h3>
     <div class="list-wrapper">
       <ul>
         <li v-for="post in posts" :key="post.id">
           <article>
             <a
-              :href="$href(post)"
+              :href="$getHref(post)"
               target="_blank"
-              @click="$emit('sendGaEvt:post')"
+              rel="noopener noreferrer"
+              @click="$emit('sendGaEvt')"
             >
               <div class="img-wrapper">
-                <img
-                  v-lazy="{
-                    src: imgSrc(post),
-                    error: require('~/assets/default/post.svg'),
-                  }"
-                  :alt="$imgAlt(post)"
-                />
+                <img v-lazy="$getImage(post)" alt="" />
               </div>
               <div class="text-wrapper">
                 <h1>{{ post.title }}</h1>
                 <div class="date">
-                  {{ $getFormattedDate(post.publishTime) }}
+                  {{ $getFormattedDate(post.publishedAt) }}
                 </div>
               </div>
             </a>
           </article>
         </li>
       </ul>
-
-      <UiLoadMore
-        v-if="shouldLoadMore"
-        class="category-list__load-more"
-        @loadMore="$emit('loadMore')"
-        @click.native="$emit('sendGaEvt:loadMore')"
-      />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'CategoryList',
-  setup() {
-    function imgSrc({ heroImage, ogImage }) {
-      return heroImage?.urlMobileSized || ogImage?.urlMobileSized
-    }
-
-    return {
-      imgSrc,
-    }
-  },
+  name: 'MoreList',
   props: {
-    category: {
+    topic: {
       type: String,
       default: '',
     },
@@ -62,26 +41,11 @@ export default {
       required: true,
       default: () => [],
     },
-    shouldLoadMore: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.category-list {
-  &__load-more {
-    margin-top: 15px;
-    @include media-breakpoint-up(md) {
-      margin-top: 25px;
-      margin-bottom: -7px;
-    }
-  }
-}
-
 h3 {
   color: #000928;
   letter-spacing: 2.8px;
@@ -98,9 +62,9 @@ h3 {
 .list-wrapper {
   background-color: #fff;
   border-radius: 2px;
-  padding: 15px;
+  padding: 16px 15px 18px 15px;
   @include media-breakpoint-up(md) {
-    padding: 25px;
+    padding: 26px 25px 29px 25px;
   }
 }
 li + li {

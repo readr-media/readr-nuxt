@@ -2,20 +2,14 @@
   <ul class="post-list">
     <li v-for="post in posts" :key="post.id">
       <article>
-        <a :href="$href(post)" target="_blank" @click="$emit('sendGaEvt')">
+        <a :href="$getHref(post)" target="_blank" @click="$emit('sendGaEvt')">
           <div class="img-wrapper">
-            <img
-              v-lazy="{
-                src: imgSrc(post),
-                error: require('~/assets/default/post.svg'),
-              }"
-              :alt="$imgAlt(post)"
-            />
+            <img v-lazy="$getImage(post)" alt="" />
           </div>
           <div class="text-wrapper">
             <h1>{{ post.title }}</h1>
             <div class="date">
-              {{ $getFormattedDate(post.publishTime) }}
+              {{ $getFormattedDate(post.publishedAt) }}
             </div>
           </div>
         </a>
@@ -27,15 +21,6 @@
 <script>
 export default {
   name: 'PostList',
-  setup() {
-    function imgSrc({ heroImage, ogImage }) {
-      return heroImage?.urlMobileSized || ogImage?.urlMobileSized
-    }
-
-    return {
-      imgSrc,
-    }
-  },
   props: {
     posts: {
       type: Array,

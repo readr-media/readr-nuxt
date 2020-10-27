@@ -52,8 +52,8 @@
 
     <UiLoadMore
       v-if="shouldLoadMore"
+      :loadMore="loadMore"
       class="database-list__load-more"
-      @loadMore="$emit('loadMore')"
       @click.native="$emit('sendGaEvt:loadMore')"
     />
   </div>
@@ -69,6 +69,10 @@ export default {
       type: Array,
       required: true,
       default: () => [],
+    },
+    loadMore: {
+      type: Function,
+      required: true,
     },
     shouldLoadMore: {
       type: Boolean,

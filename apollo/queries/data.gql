@@ -1,5 +1,5 @@
-query databases($first: Int! = 3, $skip: Int, $shouldQueryMeta: Boolean! = true) {
-  items: allDatas(
+query databases($first: Int! = 3, $skip: Int, $hasMeta: Boolean! = false) {
+  all: allDatas(
     sortBy: [publishTime_DESC],
     first: $first,
     skip: $skip,
@@ -24,7 +24,7 @@ query databases($first: Int! = 3, $skip: Int, $shouldQueryMeta: Boolean! = true)
     }
   }
 
-  meta: _allDatasMeta @include(if: $shouldQueryMeta) {
+  meta: _allDatasMeta @skip(if: $hasMeta) {
     count
   }
 }

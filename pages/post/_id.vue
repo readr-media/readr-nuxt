@@ -6,27 +6,26 @@
     />
 
     <article id="post">
-      <div class="date">{{ $getFormattedDate(post.publishTime) }}</div>
+      <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
       <h1>{{ post.title }}</h1>
       <div class="container container--post">
         <picture class="hero-img">
-          <img :src="heroImgSrc" :alt="$imgAlt(post)" />
+          <img :src="$getImage(post)" alt="" />
         </picture>
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="content" v-html="post.contentHtml" />
+        <div class="content" v-html="post.content" />
       </div>
     </article>
 
-    <ClientOnly>
+    <!-- <ClientOnly>
       <UiRecordBox
         v-if="shouldOpenRecordWord"
         class="post-page__record-box container"
-        :class="{ hidden: !hasWordReadingPerSecond }"
+        :class="{ hidden: !hasWordPerSecond }"
         @cancel="handleCancelRecordWord"
       >
         <template #record>
           <div class="record-word">
-            你閱讀了 <span>{{ post.wordCount }}</span> 字，平均每字
+            你閱讀了 <span>{{ wordCount }}</span> 字，平均每字
             <span>{{ wordReadingPerSecond }}</span> 秒鐘
           </div>
         </template>
@@ -43,7 +42,9 @@
           />
         </template>
       </UiRecordBox>
+    </ClientOnly> -->
 
+    <ClientOnly>
       <section class="post-feedback container">
         <div v-if="postFeedbackStep === 'rating'" class="post-feedback__step">
           <div class="post-feedback__title">這篇報導如何？</div>
@@ -82,17 +83,17 @@
 
         <UiFeedbackThanks v-else />
       </section>
-
-      <section class="latest-posts container">
-        <h2>
-          <div>最新報導</div>
-        </h2>
-        <UiPostList
-          :posts="latestPosts"
-          @sendGaEvt="$sendGaEvtForArticleClick('related articles')"
-        />
-      </section>
     </ClientOnly>
+
+    <section class="latest-posts container">
+      <h2>
+        <div>最新報導</div>
+      </h2>
+      <UiPostList
+        :posts="latestPosts"
+        @sendGaEvt="$sendGaEvtForArticleClick('related articles')"
+      />
+    </section>
   </div>
 </template>
 
@@ -101,50 +102,103 @@ import {
   ref,
   reactive,
   computed,
-  watch,
+  // watch,
+  useFetch,
   useContext,
+  onMounted,
 } from '@nuxtjs/composition-api'
-// import { useQuery, useResult } from '@vue/apollo-composable'
 import { post as axiosPost } from 'axios'
 
-import { Post as post } from '~/apollo/queries/post.gql'
-import { latestPosts } from '~/apollo/queries/posts.gql'
-
-import { state as userState } from '~/composition/store/user.js'
+// import { state as userState } from '~/composition/store/user.js'
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
   var {
-    state: { userUuid, shouldActivateRecordWord },
-    deactivateRecordWord,
+    state: { userUuid /*, shouldActivateRecordWord */ },
+    // deactivateRecordWord,
   } = require('~/composition/store/local-storage.js')
 }
-
-let userStartReadingTime
-let stopWatchingHasUserFinishedReading
 
 export default {
   name: 'Post',
   setup() {
-    const { route, $sendGaEvtForArticleClick } = useContext()
-    const postId = route.value.params.id
+    const post = ref({})
+    const latestPosts = ref([])
 
-    function handleCancelRecordWord() {
-      deactivateRecordWord()
-      $sendGaEvtForArticleClick('words count close')
+    useFetch(async () => {
+      await fetchPost()
+    })
+    const {
+      $fetchPost,
+      route,
+      $fetchPosts,
+      // $sendGaEvtForArticleClick,
+    } = useContext()
+    const postId = route.value.params.id
+    async function fetchPost() {
+      const response = await $fetchPost(postId)
+      post.value = response?.items?.[0] ?? {}
     }
 
-    function sendFeedbackOfRecordWordToGoogleSheet(feedback) {
-      axiosPost('/api/google-sheets/append', {
-        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-        range: '閱讀字數回饋!A2:D',
-        valueInputOption: 'RAW',
-        resource: {
-          values: [[Date.now(), userUuid.value, postId, feedback]],
-        },
+    // const wordCount = 100
+    // const userReadingTime = useUserReadingTime(userState.hasUserFinishedReading)
+    // const wordReadingPerSecond = computed(() => {
+    //   if (userReadingTime.value !== undefined) {
+    //     return (userReadingTime.value / 1000 / wordCount).toFixed(2)
+    //   }
+    // })
+    // const hasWordPerSecond = computed(
+    //   () => wordReadingPerSecond.value !== undefined
+    // )
+
+    onMounted(() => {
+      loadLatestPosts()
+
+      // setShouldOpenRecordWord()
+    })
+
+    async function loadLatestPosts() {
+      const data = await fetchLatestPosts()
+      setLatestPosts(data)
+    }
+    function fetchLatestPosts() {
+      return $fetchPosts({
+        type: '{"$in":[1,4]}',
+        maxResult: 3,
+        page: 1,
+        sort: '-published_at',
+        showAuthor: false,
+        showUpdater: false,
+        showTag: false,
+        showComment: false,
+        showProject: false,
       })
     }
+    function setLatestPosts(data) {
+      latestPosts.value = data
+    }
+
+    // const shouldOpenRecordWord = ref(false)
+    // function setShouldOpenRecordWord() {
+    //   shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
+    // }
+
+    // function handleCancelRecordWord() {
+    //   deactivateRecordWord()
+    //   $sendGaEvtForArticleClick('words count close')
+    // }
+
+    // function sendFeedbackOfRecordWordToGoogleSheet(feedback) {
+    //   axiosPost('/api/google-sheets/append', {
+    //     spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
+    //     range: '閱讀字數回饋!A2:D',
+    //     valueInputOption: 'RAW',
+    //     resource: {
+    //       values: [[Date.now(), userUuid.value, postId, feedback]],
+    //     },
+    //   })
+    // }
 
     const postFeedback = reactive({
       rating: 0,
@@ -207,8 +261,16 @@ export default {
     }
 
     return {
-      handleCancelRecordWord,
-      sendFeedbackOfRecordWordToGoogleSheet,
+      post,
+      latestPosts,
+
+      // wordCount,
+      // wordReadingPerSecond,
+      // hasWordPerSecond,
+      // sendFeedbackOfRecordWordToGoogleSheet,
+
+      // shouldOpenRecordWord,
+      // handleCancelRecordWord,
 
       hasRating,
       starRatingBtnText,
@@ -222,105 +284,24 @@ export default {
       postFeedbackStep,
     }
   },
-
-  apollo: {
-    post: {
-      query: post,
-      variables() {
-        return { id: this.$route.params.id }
-      },
-      update({ post }) {
-        if (post.contentHtml[0] === '"') {
-          // 去除字串引號 ""
-          post.contentHtml = post.contentHtml.slice(1, -1)
-        }
-
-        return post
-      },
-    },
-    latestPosts: {
-      query: latestPosts,
-      prefetch: false,
-    },
-  },
-
-  data() {
-    return {
-      userFinishedReadingTime: undefined,
-      shouldOpenRecordWord: false,
-    }
-  },
-
-  computed: {
-    heroImgSrc() {
-      const { heroImage, ogImage } = this.post
-
-      return (
-        heroImage?.urlTabletSized ||
-        ogImage?.urlTabletSized ||
-        require('~/assets/default/post.svg')
-      )
-    },
-
-    userReadingTime() {
-      if (this.userFinishedReadingTime !== undefined) {
-        return this.userFinishedReadingTime - userStartReadingTime
-      }
-
-      return undefined
-    },
-    wordReadingPerSecond() {
-      if (this.userReadingTime !== undefined) {
-        return (this.userReadingTime / 1000 / this.post.wordCount).toFixed(2)
-      }
-
-      return undefined
-    },
-    hasWordReadingPerSecond() {
-      return this.wordReadingPerSecond !== undefined
-    },
-  },
-
-  mounted() {
-    userStartReadingTime = Date.now()
-
-    stopWatchingHasUserFinishedReading = watch(
-      userState.hasUserFinishedReading,
-      this.setUserFinishedReadingTime
-    )
-
-    this.shouldOpenRecordWord =
-      (this.post.wordCount ?? false) && shouldActivateRecordWord.value
-  },
-
-  methods: {
-    setUserFinishedReadingTime(hasFinished) {
-      if (hasFinished === true) {
-        this.userFinishedReadingTime = Date.now()
-        stopWatchingHasUserFinishedReading()
-      }
-    },
-  },
-
   head() {
     const {
-      title,
       ogTitle,
+      title,
       ogDescription,
       ogImage,
       heroImage,
-      publishTime,
+      publishedAt,
       updatedAt,
       tags = [],
     } = this.post
 
     const metaTitle = `${ogTitle || title} - ${SITE_TITLE}`
-    const ogImg =
-      ogImage?.urlTabletSized || heroImage?.urlTabletSized || '/og.jpg'
+    const ogImg = ogImage || heroImage || '/og.jpg'
     const ogUrl = `${SITE_URL}${this.$route.path}`
     const ogTags = tags.map((tag) => ({
       property: 'article:tag',
-      content: tag.name,
+      content: tag.text,
     }))
 
     const metaOg = [
@@ -337,7 +318,7 @@ export default {
         property: 'article:publisher',
         content: 'https://www.facebook.com/readr.tw',
       },
-      { property: 'article:published_time', content: publishTime },
+      { property: 'article:published_time', content: publishedAt },
       { property: 'article:modified_time', content: updatedAt },
       ...ogTags,
     ]
@@ -351,6 +332,36 @@ export default {
     }
   },
 }
+
+// function useUserReadingTime(hasUserFinishedReading) {
+//   let userStartReadingTime
+//   const userFinishedReadingTime = ref(undefined)
+
+//   onMounted(setUserStartReadingTime)
+
+//   const stopWatchingHasUserFinishedReading = watch(
+//     hasUserFinishedReading,
+//     setUserFinishedReadingTime
+//   )
+
+//   const userReadingTime = computed(() => {
+//     if (userFinishedReadingTime.value !== undefined) {
+//       return userFinishedReadingTime.value - userStartReadingTime
+//     }
+//   })
+
+//   function setUserStartReadingTime() {
+//     userStartReadingTime = Date.now()
+//   }
+//   function setUserFinishedReadingTime(hasFinished) {
+//     if (hasFinished === true) {
+//       userFinishedReadingTime.value = Date.now()
+//       stopWatchingHasUserFinishedReading()
+//     }
+//   }
+
+//   return userReadingTime
+// }
 </script>
 
 <style lang="scss" scoped>
@@ -358,18 +369,18 @@ export default {
   padding-top: 68.63px;
   overflow: hidden;
 
-  &__record-box {
-    margin-bottom: 20px;
-    transition: opacity 0.3s, transform 0.3s;
-    @include media-breakpoint-up(md) {
-      margin-bottom: 30px;
-    }
+  // &__record-box {
+  //   margin-bottom: 20px;
+  //   transition: opacity 0.3s, transform 0.3s;
+  //   @include media-breakpoint-up(md) {
+  //     margin-bottom: 30px;
+  //   }
 
-    &.hidden {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-  }
+  //   &.hidden {
+  //     opacity: 0;
+  //     transform: translateY(20px);
+  //   }
+  // }
 }
 
 article {
@@ -640,29 +651,29 @@ h1 {
   }
 }
 
-.record-word {
-  font-size: 15px;
-  text-align: center;
-  line-height: 2;
-  letter-spacing: 0.6px;
-  @include media-breakpoint-up(md) {
-    font-size: 18px;
-    line-height: 1.8;
-    letter-spacing: 2.5px;
-    font-weight: 500;
-  }
+// .record-word {
+//   font-size: 15px;
+//   text-align: center;
+//   line-height: 2;
+//   letter-spacing: 0.6px;
+//   @include media-breakpoint-up(md) {
+//     font-size: 18px;
+//     line-height: 1.8;
+//     letter-spacing: 2.5px;
+//     font-weight: 500;
+//   }
 
-  span {
-    font-weight: 900;
-    font-size: 24px;
-    line-height: 1.5;
-    color: #04295e;
-    @include media-breakpoint-up(md) {
-      font-size: 26px;
-      line-height: 1.8;
-    }
-  }
-}
+//   span {
+//     font-weight: 900;
+//     font-size: 24px;
+//     line-height: 1.5;
+//     color: #04295e;
+//     @include media-breakpoint-up(md) {
+//       font-size: 26px;
+//       line-height: 1.8;
+//     }
+//   }
+// }
 
 .post-feedback {
   background-color: rgba(#f5ebff, 0.2);

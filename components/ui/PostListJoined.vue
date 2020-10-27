@@ -1,15 +1,14 @@
 <template>
   <div class="post-list-joined">
-    <a v-for="post in posts" :key="post.id" :href="$href(post)" target="_blank">
+    <a
+      v-for="post in posts"
+      :key="post.id"
+      :href="$getHref(post)"
+      target="_blank"
+    >
       <article>
         <div class="img-wrapper">
-          <img
-            v-lazy="{
-              src: imgSrc(post),
-              error: require('~/assets/default/post.svg'),
-            }"
-            :alt="$imgAlt(post)"
-          />
+          <img v-lazy="$getImage(post)" alt="" />
         </div>
         <h1>{{ post.title }}</h1>
       </article>
@@ -20,15 +19,6 @@
 <script>
 export default {
   name: 'PostListJoined',
-  setup() {
-    function imgSrc({ heroImage, ogImage }) {
-      return heroImage?.urlMobileSized || ogImage?.urlMobileSized
-    }
-
-    return {
-      imgSrc,
-    }
-  },
   props: {
     posts: {
       type: Array,

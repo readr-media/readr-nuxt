@@ -3,11 +3,11 @@ const {
   MIRROR_MEDIA_OLD_PROJECT_SLUGS,
 } = require('@readr-media/old-news-project-slugs')
 
-function href({ style, id, slug }) {
-  switch (style) {
-    case 'news':
+function getHref({ type, id, slug } = {}) {
+  switch (type) {
+    case 1:
       return `/post/${id}`
-    case 'report':
+    case 4:
       if (READR_MEDIA_OLD_PROJECT_SLUGS.includes(slug)) {
         return `/project/${slug}`
       } else if (MIRROR_MEDIA_OLD_PROJECT_SLUGS.includes(slug)) {
@@ -21,5 +21,5 @@ function href({ style, id, slug }) {
 }
 
 Object.assign(module.exports, {
-  href,
+  getHref,
 })
