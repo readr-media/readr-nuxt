@@ -19,6 +19,7 @@ async function fetchPosts(params = {}) {
 
     return camelizeKeys(data).items
   } catch ({ response = {}, message }) {
+    // eslint-disable-next-line no-console
     console.error(`
       ApiError:
         url: ${requestUrl}
@@ -38,6 +39,7 @@ async function fetchPost(postId) {
 
     return camelizeKeys(data)
   } catch ({ response = {}, message }) {
+    // eslint-disable-next-line no-console
     console.error(`
       ApiError:
         url: ${requestUrl}
@@ -64,6 +66,7 @@ async function fetchPostsByTag(tagId) {
 
     return camelizeKeys(data).items
   } catch ({ response = {}, message }) {
+    // eslint-disable-next-line no-console
     console.error(`
       ApiError:
         url: ${requestUrl}

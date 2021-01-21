@@ -1,6 +1,7 @@
 <template>
   <footer>
     <div class="media-links">
+      <!-- eslint-disable vue/no-v-html -->
       <a
         v-for="medium in socialMediaLinks"
         :key="medium.href"
@@ -8,8 +9,8 @@
         target="_blank"
         rel="noopener noreferrer"
         v-html="medium.svgIcon"
-      >
-      </a>
+      ></a>
+      <!-- eslint-enable vue/no-v-html -->
     </div>
 
     <div class="us-links">

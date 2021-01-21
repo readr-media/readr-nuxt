@@ -12,6 +12,7 @@
         <picture class="hero-img">
           <img :src="$getImage(post)" alt="" />
         </picture>
+        <!-- eslint-disable-next-line vue/no-v-html -->
         <div class="content" v-html="post.content" />
       </div>
     </article>

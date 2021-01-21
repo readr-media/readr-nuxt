@@ -295,6 +295,7 @@ export default {
 
         return Number(response.data.values[0][0])
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error)
       }
     },
@@ -321,6 +322,7 @@ export default {
 
         return response.data.values[0].join(' ')
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error)
       }
     },
@@ -350,6 +352,7 @@ export default {
           }
         })
         .catch(function handleError(error) {
+          // eslint-disable-next-line no-console
           console.error(error)
 
           return []
@@ -382,6 +385,7 @@ export default {
 
           this.shouldShowMoreSection = true
         } catch (error) {
+          // eslint-disable-next-line no-console
           console.error(error)
         }
 
