@@ -12,7 +12,7 @@
             :key="post.id"
             :class="{ active: shouldActive(idx) }"
           >
-            {{ post.title }}
+            {{ post.name }}
           </h1>
           <SvgDialogBox class="dialog-box" />
         </div>

@@ -7,7 +7,7 @@
         class="quote"
         :class="{ appeared: shouldAppear(idx) }"
       >
-        <p>{{ quote.title }}</p>
+        <p>{{ quote.name }}</p>
 
         <div class="byline">{{ byline(quote) }}</div>
       </div>
