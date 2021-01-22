@@ -133,7 +133,7 @@ export default {
     const {
       $fetchPost,
       route,
-      $fetchPosts,
+      $fetchLatestPosts,
       // $sendGaEvtForArticleClick,
     } = useContext()
     const postId = route.value.params.id
@@ -160,21 +160,10 @@ export default {
     })
 
     async function loadLatestPosts() {
-      const data = await fetchLatestPosts()
-      setLatestPosts(data)
-    }
-    function fetchLatestPosts() {
-      return $fetchPosts({
-        type: '{"$in":[1,4]}',
+      const data = await $fetchLatestPosts({
         maxResult: 3,
-        page: 1,
-        sort: '-published_at',
-        showAuthor: false,
-        showUpdater: false,
-        showTag: false,
-        showComment: false,
-        showProject: false,
       })
+      setLatestPosts(data)
     }
     function setLatestPosts(data) {
       latestPosts.value = data

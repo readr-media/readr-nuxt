@@ -17,7 +17,7 @@ async function fetchPosts(params = {}) {
   try {
     const { data } = await publicApi.get(requestUrl)
 
-    return camelizeKeys(data).items
+    return camelizeKeys(data).items || []
   } catch ({ response = {}, message }) {
     // eslint-disable-next-line no-console
     console.error(`
@@ -29,6 +29,21 @@ async function fetchPosts(params = {}) {
 
     return []
   }
+}
+
+async function fetchLatestPosts(params = {}) {
+  return await fetchPosts({
+    type: '{"$in":[1,4]}',
+    maxResult: 5,
+    page: 1,
+    sort: '-published_at',
+    showAuthor: false,
+    showUpdater: false,
+    showTag: false,
+    showComment: false,
+    showProject: false,
+    ...params,
+  })
 }
 
 async function fetchPost(postId) {
@@ -87,7 +102,7 @@ function buildParams(params = {}) {
 }
 
 Object.assign(module.exports, {
-  fetchPosts,
+  fetchLatestPosts,
   fetchPostsByTag,
   fetchPost,
 })

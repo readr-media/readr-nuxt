@@ -160,7 +160,7 @@ export default {
     },
   },
   async fetch() {
-    await this.fetchLatestPosts()
+    this.latestPosts = await this.$fetchLatestPosts()
   },
   data() {
     return {
@@ -271,19 +271,6 @@ export default {
     this.addListenerToScrollDepthForGaEvt()
   },
   methods: {
-    async fetchLatestPosts() {
-      this.latestPosts = await this.$fetchPosts({
-        type: '{"$in":[1,4]}',
-        maxResult: 5,
-        page: 1,
-        sort: '-published_at',
-        showAuthor: false,
-        showUpdater: false,
-        showTag: false,
-        showComment: false,
-        showProject: false,
-      })
-    },
     async fetchCountOfCollaboratorWall() {
       try {
         const response = await axiosGet('/api/google-sheets', {

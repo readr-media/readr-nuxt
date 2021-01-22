@@ -1,9 +1,9 @@
-const { fetchPosts, fetchPost, fetchPostsByTag } = require('./posts.js')
+const { fetchLatestPosts, fetchPost, fetchPostsByTag } = require('./posts.js')
 
 module.exports = injectRequestMethods
 
 function injectRequestMethods(ctx, inject) {
-  inject('fetchPosts', fetchPosts)
+  inject('fetchLatestPosts', fetchLatestPosts)
   inject('fetchPost', fetchPost.bind(ctx))
   inject('fetchPostsByTag', fetchPostsByTag)
 }
