@@ -93,7 +93,11 @@
       class="more-section yellow-bg"
     >
       <div class="container">
-        <UiSectionHeading title="更多專題" class="home__section-heading" />
+        <UiSectionHeading
+          title="更多專題"
+          linkHref="/category/"
+          class="home__section-heading"
+        />
         <div id="more-list-container">
           <UiMoreList
             v-for="morePosts in displayedAllMorePosts"

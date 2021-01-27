@@ -1,6 +1,9 @@
 <template>
   <div class="section-heading" :style="{ color }">
-    <h2>{{ title }}</h2>
+    <h2 v-if="!linkHref">{{ title }}</h2>
+    <nuxt-link v-else :to="linkHref">
+      <h2>{{ title }}</h2>
+    </nuxt-link>
 
     <svg
       fill="none"
@@ -36,6 +39,10 @@ export default {
     fill: {
       type: String,
       default: '#fff',
+    },
+    linkHref: {
+      type: String,
+      default: undefined,
     },
   },
 }
