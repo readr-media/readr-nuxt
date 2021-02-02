@@ -2,15 +2,6 @@
   <div class="default">
     <nuxt />
 
-    <ClientOnly v-if="shouldOpenFeedbackRedesign">
-      <div class="feedback-wrapper">
-        <FeedbackCollapsed
-          class="default__feedback-collapsed"
-          @close="closeFeedbackRedesign"
-        />
-      </div>
-    </ClientOnly>
-
     <UiFooter
       id="default-footer"
       class="default__footer"
@@ -39,9 +30,8 @@ import { rafWithDebounce } from '~/utils/index.js'
 if (process.browser) {
   // eslint-disable-next-line no-var
   var {
-    state: { isReadr2User, shouldOpenGdpr, shouldOpenFeedbackRedesign },
+    state: { isReadr2User, shouldOpenGdpr },
     closeGdpr,
-    closeFeedbackRedesign,
   } = require('~/composition/store/local-storage.js')
 }
 
@@ -58,9 +48,6 @@ export default {
     return {
       shouldOpenGdpr,
       closeGdpr,
-
-      shouldOpenFeedbackRedesign,
-      closeFeedbackRedesign,
     }
   },
 }
@@ -88,17 +75,6 @@ function useUpdateViewport() {
 
 <style lang="scss">
 .default {
-  &__feedback-collapsed {
-    box-shadow: 0 0 2px rgba(#000, 0.15);
-    max-width: 320px;
-    margin-left: auto;
-    margin-right: auto;
-    @include media-breakpoint-up(sm) {
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-
   &__footer {
     max-width: 1096px;
     margin-left: auto;
@@ -112,22 +88,6 @@ function useUpdateViewport() {
       padding-left: 0;
       padding-right: 0;
     }
-  }
-}
-
-.feedback-wrapper {
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-  right: 0;
-  z-index: 549;
-  padding-left: 10px;
-  padding-right: 10px;
-  @include media-breakpoint-up(sm) {
-    right: 34px;
-    padding-left: 0;
-    padding-right: 0;
-    max-width: 320px;
   }
 }
 </style>

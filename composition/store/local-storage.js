@@ -14,7 +14,6 @@ const state = reactive({
   isReadr2User,
   shouldActivateRecordWord: true,
 
-  shouldOpenFeedbackRedesign: true,
   shouldOpenGdpr: true,
 
   ...savedState,
@@ -28,10 +27,6 @@ function deactivateRecordWord() {
   state.shouldActivateRecordWord = false
 }
 
-function closeFeedbackRedesign() {
-  state.shouldOpenFeedbackRedesign = false
-}
-
 function closeGdpr() {
   state.shouldOpenGdpr = false
 }
@@ -42,6 +37,5 @@ Object.assign(module.exports, {
   state: stateAsRef,
   deactivateRecordWord,
 
-  closeFeedbackRedesign,
   closeGdpr,
 })
