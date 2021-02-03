@@ -17,8 +17,9 @@ async function fetchPosts(params = {}) {
   try {
     const { data } = await publicApi.get(requestUrl)
 
-    return camelizeKeys(data).items
+    return camelizeKeys(data).items || []
   } catch ({ response = {}, message }) {
+    // eslint-disable-next-line no-console
     console.error(`
       ApiError:
         url: ${requestUrl}
@@ -30,6 +31,21 @@ async function fetchPosts(params = {}) {
   }
 }
 
+async function fetchLatestPosts(params = {}) {
+  return await fetchPosts({
+    type: '{"$in":[1,4]}',
+    maxResult: 5,
+    page: 1,
+    sort: '-published_at',
+    showAuthor: false,
+    showUpdater: false,
+    showTag: false,
+    showComment: false,
+    showProject: false,
+    ...params,
+  })
+}
+
 async function fetchPost(postId) {
   const requestUrl = `/post/${postId}`
 
@@ -38,6 +54,7 @@ async function fetchPost(postId) {
 
     return camelizeKeys(data)
   } catch ({ response = {}, message }) {
+    // eslint-disable-next-line no-console
     console.error(`
       ApiError:
         url: ${requestUrl}
@@ -64,6 +81,7 @@ async function fetchPostsByTag(tagId) {
 
     return camelizeKeys(data).items
   } catch ({ response = {}, message }) {
+    // eslint-disable-next-line no-console
     console.error(`
       ApiError:
         url: ${requestUrl}
@@ -84,7 +102,7 @@ function buildParams(params = {}) {
 }
 
 Object.assign(module.exports, {
-  fetchPosts,
+  fetchLatestPosts,
   fetchPostsByTag,
   fetchPost,
 })

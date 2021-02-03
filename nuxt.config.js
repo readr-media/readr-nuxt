@@ -32,8 +32,6 @@ const BASE_URL = 'http://localhost:3000'
 const inDevEnv = process.env.NODE_ENV === 'development'
 
 Object.assign(module.exports, {
-  mode: 'universal',
-
   env: {
     BASE_URL,
   },

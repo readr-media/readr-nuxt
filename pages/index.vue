@@ -93,7 +93,11 @@
       class="more-section yellow-bg"
     >
       <div class="container">
-        <UiSectionHeading title="更多專題" class="home__section-heading" />
+        <UiSectionHeading
+          title="更多專題"
+          linkHref="/category/"
+          class="home__section-heading"
+        />
         <div id="more-list-container">
           <UiMoreList
             v-for="morePosts in displayedAllMorePosts"
@@ -160,7 +164,7 @@ export default {
     },
   },
   async fetch() {
-    await this.fetchLatestPosts()
+    this.latestPosts = await this.$fetchLatestPosts()
   },
   data() {
     return {
@@ -271,19 +275,6 @@ export default {
     this.addListenerToScrollDepthForGaEvt()
   },
   methods: {
-    async fetchLatestPosts() {
-      this.latestPosts = await this.$fetchPosts({
-        type: '{"$in":[1,4]}',
-        maxResult: 5,
-        page: 1,
-        sort: '-published_at',
-        showAuthor: false,
-        showUpdater: false,
-        showTag: false,
-        showComment: false,
-        showProject: false,
-      })
-    },
     async fetchCountOfCollaboratorWall() {
       try {
         const response = await axiosGet('/api/google-sheets', {
@@ -295,6 +286,7 @@ export default {
 
         return Number(response.data.values[0][0])
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error)
       }
     },
@@ -321,6 +313,7 @@ export default {
 
         return response.data.values[0].join(' ')
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error)
       }
     },
@@ -350,6 +343,7 @@ export default {
           }
         })
         .catch(function handleError(error) {
+          // eslint-disable-next-line no-console
           console.error(error)
 
           return []
@@ -382,6 +376,7 @@ export default {
 
           this.shouldShowMoreSection = true
         } catch (error) {
+          // eslint-disable-next-line no-console
           console.error(error)
         }
 

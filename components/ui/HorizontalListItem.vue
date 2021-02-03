@@ -20,7 +20,7 @@
     </div>
 
     <div class="content-block">
-      <h1>{{ item.title }}</h1>
+      <h1>{{ item.name }}</h1>
       <p class="description">{{ item.description }}</p>
       <div class="progress">
         <div class="progress__bar">

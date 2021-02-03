@@ -55,25 +55,14 @@ export default {
     })
 
     const latestPosts = ref([])
-    const { $fetchPosts } = useContext()
+    const { $fetchLatestPosts } = useContext()
     async function loadLatestPosts() {
-      const data = await fetchLatestPosts()
+      const data = await $fetchLatestPosts({
+        maxResult: 4,
+      })
       setLatestPosts(data)
     }
 
-    function fetchLatestPosts() {
-      return $fetchPosts({
-        type: '{"$in":[1,4]}',
-        maxResult: 4,
-        page: 1,
-        sort: '-published_at',
-        showAuthor: false,
-        showUpdater: false,
-        showTag: false,
-        showComment: false,
-        showProject: false,
-      })
-    }
     function setLatestPosts(data) {
       latestPosts.value = data
     }
