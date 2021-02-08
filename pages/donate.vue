@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { SITE_NAME } from 'src/constants'
+import { SITE_TITLE } from '~/constants/metadata'
 import Container from '~/components/donate/Container.vue'
 
 export default {
@@ -14,15 +14,13 @@ export default {
   components: {
     Container,
   },
-  metaInfo: {
-    title: '贊助 READr',
-    meta: [
-      {
-        vmid: 'og:title',
-        property: 'og:title',
-        content: `贊助 READr - ${SITE_NAME}`,
-      },
-    ],
+  head() {
+    const metaTitle = `贊助 READr - ${SITE_TITLE}`
+
+    return {
+      title: metaTitle,
+      meta: [{ hid: 'og:title', property: 'og:title', content: metaTitle }],
+    }
   },
 }
 </script>
