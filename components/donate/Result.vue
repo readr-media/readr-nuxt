@@ -43,7 +43,7 @@
         </button>
         <button
           class="buttons__button button button--white"
-          @click="SET_SHOW_SIDEBAR(false)"
+          @click="backToHome"
         >
           取消
         </button>
@@ -53,8 +53,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
-
 export default {
   name: 'DonateResult',
   props: {
@@ -73,9 +71,9 @@ export default {
     },
   },
   methods: {
-    ...mapMutations({
-      SET_SHOW_SIDEBAR: 'UIAppHeader/SET_SHOW_SIDEBAR',
-    }),
+    backToHome() {
+      this.$router.replace('/')
+    },
   },
 }
 </script>
