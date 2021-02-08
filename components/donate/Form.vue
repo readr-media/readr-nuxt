@@ -36,26 +36,6 @@
             :class="[
               'coins__coin',
               'coin',
-              { 'coin--selected': donateAmountSelected === 30 },
-            ]"
-            @click="toggleDomateAmount(30)"
-          >
-            30 元
-          </button>
-          <button
-            :class="[
-              'coins__coin',
-              'coin',
-              { 'coin--selected': donateAmountSelected === 60 },
-            ]"
-            @click="toggleDomateAmount(60)"
-          >
-            60 元
-          </button>
-          <button
-            :class="[
-              'coins__coin',
-              'coin',
               { 'coin--selected': donateAmountSelected === 150 },
             ]"
             @click="toggleDomateAmount(150)"
@@ -71,6 +51,26 @@
             @click="toggleDomateAmount(200)"
           >
             200 元
+          </button>
+          <button
+            :class="[
+              'coins__coin',
+              'coin',
+              { 'coin--selected': donateAmountSelected === 500 },
+            ]"
+            @click="toggleDomateAmount(500)"
+          >
+            500 元
+          </button>
+          <button
+            :class="[
+              'coins__coin',
+              'coin',
+              { 'coin--selected': donateAmountSelected === 1000 },
+            ]"
+            @click="toggleDomateAmount(1000)"
+          >
+            1000 元
           </button>
           <button
             :class="[
