@@ -20,6 +20,13 @@ export default {
     return {
       title: metaTitle,
       meta: [{ hid: 'og:title', property: 'og:title', content: metaTitle }],
+      script: [
+        {
+          hid: 'tappay',
+          src: 'https://js.tappaysdk.com/tpdirect/v3',
+          defer: true,
+        },
+      ],
     }
   },
 }
