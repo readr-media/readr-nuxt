@@ -940,12 +940,12 @@ export default {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
 }
 
-.type__radio >>> .wrapper__label {
+.type__radio ::v-deep.wrapper__label {
   margin: 0 auto;
   font-size: 1rem;
 }
 
-.type__radio >>> .wrapper__checkmark {
+.type__radio ::v-deep.wrapper__checkmark {
   display: none;
 }
 </style>
