@@ -244,8 +244,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 import RadioItem from 'src/components/RadioItem/RadioItem.vue'
 
 const donate = (
@@ -397,16 +395,6 @@ export default {
       const category = this.carrierTypeSelected === 'carrierBusiness' ? 2 : 1
       return { carrierType, carrierNum, category }
     },
-
-    ...mapState({
-      seriesData: (state) => state?.DataPost?.post ?? {},
-      singleSeries: (state) => state.DataSeries.singleSeries,
-    }),
-    seriesId() {
-      return this.$route.name === 'series'
-        ? this.singleSeries?.id
-        : this.seriesData?.projectId
-    },
   },
   mounted() {
     !this.isTappayInitialized && this.initialTappay()
@@ -497,7 +485,7 @@ export default {
         member_name: this.contactInputs?.contactName ?? '',
         member_mail: this.contactInputs?.contactEmail ?? '',
         member_phone: this.contactInputs?.contactPhone ?? '',
-        object_id: this.seriesId,
+        object_id: '',
         reason: location && location.pathname,
       })
     },
