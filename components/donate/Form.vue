@@ -244,7 +244,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
 import { mapState } from 'vuex'
 
 import RadioItem from 'src/components/RadioItem/RadioItem.vue'
@@ -536,7 +535,7 @@ export default {
                   donateAmount: this.donateAmount,
                   carrierTypeSelected: this.carrierTypeSelected,
                   carrierInputs: this.carrierInputs[this.carrierTypeSelected],
-                  date: dayjs(now).format('YYYY/MM/DD HH:mm:ss'),
+                  date: this.$dayjs(now).format('YYYY/MM/DD HH:mm:ss'),
                 })
                 this.isDepositing = false
                 this.$emit('showResultSuccess')
