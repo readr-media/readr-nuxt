@@ -245,6 +245,7 @@
 
 <script>
 import RadioItem from 'src/components/RadioItem/RadioItem.vue'
+import { TAPPAY as configTappay } from '~/configs/config'
 
 const donate = (
   store,
@@ -386,7 +387,7 @@ export default {
     //   return get(this.$store, 'state.isTappayLoaded', false)
     // },
     configTappay() {
-      return this.$store?.state?.setting?.TAPPAY
+      return configTappay
     },
 
     carrierInfo() {
