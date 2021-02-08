@@ -1,7 +1,7 @@
 <template>
   <div class="donate">
     <header class="donate__header header">
-      <img v-lazy="'/public/2.0/decorations/donate.png'" />
+      <img src="~/assets/donate.png" />
       <div class="header__titles">
         <p><span>贊助 READr</span><br /><span>支持更多優質內容</span></p>
       </div>
