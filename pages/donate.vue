@@ -1,5 +1,6 @@
 <template>
   <div>
+    <UiHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
     <Container />
   </div>
 </template>
