@@ -248,8 +248,6 @@ import { mapState } from 'vuex'
 
 import RadioItem from 'src/components/RadioItem/RadioItem.vue'
 
-const debug = require('debug')('CLIENT:SidebarDonateForm')
-
 const donate = (
   store,
   {
@@ -513,7 +511,7 @@ export default {
         this.isDepositing = true
         window.TPDirect.card.getPrime((result) => {
           if (result.status !== 0) {
-            debug('get prime error ' + result.msg)
+            console.log('get prime error ' + result.msg)
             this.isDepositing = false
             this.$emit('showResultFail')
             return
@@ -526,7 +524,7 @@ export default {
 
           const now = new Date()
 
-          debug('get prime successfully: ' + result.card.prime)
+          console.log('get prime successfully: ' + result.card.prime)
           submitStrategy[this.donateType] &&
             submitStrategy[this.donateType](result, now)
               .then(() => {
@@ -582,37 +580,37 @@ export default {
       })
       window.TPDirect.card.onUpdate((update) => {
         if (update.canGetPrime) {
-          debug('no wrong data.')
+          console.log('no wrong data.')
           this.isCardInfoValid = true
         } else {
           this.isCardInfoValid = false
         }
         if (update.hasError) {
-          debug('invalid data found.')
+          console.log('invalid data found.')
         }
 
         if (update.status.number === 2) {
-          debug('invalid card number')
+          console.log('invalid card number')
         } else if (update.status.number === 0) {
-          debug('card number: passed.')
+          console.log('card number: passed.')
         } else {
-          debug('wating to fill card number.')
+          console.log('wating to fill card number.')
         }
 
         if (update.status.expiry === 2) {
-          debug('incalid expiry')
+          console.log('incalid expiry')
         } else if (update.status.expiry === 0) {
-          debug('expiry: passed')
+          console.log('expiry: passed')
         } else {
-          debug('watiing to fill card expiry')
+          console.log('watiing to fill card expiry')
         }
 
         if (update.status.cvc === 2) {
-          debug('incalid cvc')
+          console.log('incalid cvc')
         } else if (update.status.cvc === 0) {
-          debug('cvc: passed')
+          console.log('cvc: passed')
         } else {
-          debug('watiing to fill card cvc')
+          console.log('watiing to fill card cvc')
         }
       })
       this.isTappayInitialized = true
