@@ -308,7 +308,7 @@ export default {
 
       carrierTypeSelected: '',
       carrierInputs: {
-        carrierEmail: this.$store?.state?.DataUser?.profile?.mail ?? '',
+        carrierEmail: '',
         carrierPhone: '',
         carrierNatural: '',
         carrierBusiness: {
@@ -318,8 +318,8 @@ export default {
         },
       },
       contactInputs: {
-        contactName: this.$store?.state?.DataUser?.profile?.nickname ?? '',
-        contactEmail: this.$store?.state?.DataUser?.profile?.mail ?? '',
+        contactName: '',
+        contactEmail: '',
         contactPhone: '',
       },
 
@@ -462,10 +462,6 @@ export default {
         },
       }
 
-      const memberId = this.$store?.state?.DataUser?.profile?.id
-      if (memberId) {
-        requestBody.memberId = memberId
-      }
       if (invoiceCarrierType === '2') {
         // Email 載具
         requestBody.invoiceInfos.buyerEmail = this.carrierInputs?.carrierEmail
