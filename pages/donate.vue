@@ -1,31 +1,17 @@
 <template>
-  <section class="app-donate">
-    <DonateForm
-      v-if="!showResult"
-      @submitForm="onFormSubmit"
-      @showResultSuccess="onShowResultSuccess"
-      @showResultFail="onShowResultFail"
-    />
-    <DonateResult
-      v-else
-      :isResultSuccess="isResultSuccess"
-      :formData="formData"
-      @backToForm="showResult = false"
-      @closeSidebar="$emit('closeSidebar')"
-    />
-  </section>
+  <div>
+    <Container />
+  </div>
 </template>
 
 <script>
 import { SITE_NAME } from 'src/constants'
-import DonateForm from 'src/components/donate/DonateForm.vue'
-import DonateResult from 'src/components/donate/DonateResult.vue'
+import Container from '~/components/donate/Container.vue'
 
 export default {
   name: 'AppDonate',
   components: {
-    DonateForm,
-    DonateResult,
+    Container,
   },
   metaInfo: {
     title: '贊助 READr',
@@ -37,36 +23,5 @@ export default {
       },
     ],
   },
-  data() {
-    return {
-      showResult: false,
-      isResultSuccess: false,
-      formData: {
-        donateAmount: 0,
-        carrierTypeSelected: '',
-        carrierInputs: '',
-        date: '',
-      },
-    }
-  },
-  methods: {
-    onFormSubmit(formData) {
-      this.$set(this, 'formData', formData)
-    },
-    onShowResultSuccess() {
-      this.showResult = true
-      this.isResultSuccess = true
-    },
-    onShowResultFail() {
-      this.showResult = true
-      this.isResultSuccess = false
-    },
-  },
 }
 </script>
-
-<style lang="scss" scoped>
-.app-donate {
-  padding: 0;
-}
-</style>
