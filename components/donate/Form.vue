@@ -244,7 +244,6 @@
 </template>
 
 <script>
-import { get } from 'lodash'
 import dayjs from 'dayjs'
 import { mapState } from 'vuex'
 
@@ -312,11 +311,7 @@ export default {
 
       carrierTypeSelected: '',
       carrierInputs: {
-        carrierEmail: get(
-          this.$store.state,
-          ['DataUser', 'profile', 'mail'],
-          ''
-        ),
+        carrierEmail: this.$store?.state?.DataUser?.profile?.mail ?? '',
         carrierPhone: '',
         carrierNatural: '',
         carrierBusiness: {
@@ -326,16 +321,8 @@ export default {
         },
       },
       contactInputs: {
-        contactName: get(
-          this.$store.state,
-          ['DataUser', 'profile', 'nickname'],
-          ''
-        ),
-        contactEmail: get(
-          this.$store.state,
-          ['DataUser', 'profile', 'mail'],
-          ''
-        ),
+        contactName: this.$store?.state?.DataUser?.profile?.nickname ?? '',
+        contactEmail: this.$store?.state?.DataUser?.profile?.mail ?? '',
         contactPhone: '',
       },
 
@@ -404,24 +391,24 @@ export default {
     //   return get(this.$store, 'state.isTappayLoaded', false)
     // },
     configTappay() {
-      return get(this.$store, 'state.setting.TAPPAY')
+      return this.$store?.state?.setting?.TAPPAY
     },
 
     carrierInfo() {
       const carrierType = CARRIER_TYPE_NUM[this.carrierTypeSelected]
-      const carrierNum = get(this.carrierInputs, this.carrierTypeSelected, '')
+      const carrierNum = this.carrierInputs?.[this.carrierTypeSelected] ?? ''
       const category = this.carrierTypeSelected === 'carrierBusiness' ? 2 : 1
       return { carrierType, carrierNum, category }
     },
 
     ...mapState({
-      seriesData: (state) => get(state.DataPost, 'post', {}),
+      seriesData: (state) => state?.DataPost?.post ?? {},
       singleSeries: (state) => state.DataSeries.singleSeries,
     }),
     seriesId() {
       return this.$route.name === 'series'
-        ? get(this.singleSeries, 'id', null)
-        : get(this.seriesData, 'projectId', null)
+        ? this.singleSeries?.id
+        : this.seriesData?.projectId
     },
   },
   mounted() {
@@ -452,10 +439,10 @@ export default {
         2: 'B2B',
         default: 'B2C',
       }
-      const email = get(this.contactInputs, 'contactEmail', '')
-      const contactName = get(this.contactInputs, 'contactName', '')
-      const invoiceCategory = get(this.carrierInfo, 'category')
-      const invoiceCarrierType = get(this.carrierInfo, 'carrierType')
+      const email = this.contactInputs?.contactEmail ?? ''
+      const contactName = this.contactInputs?.contactName ?? ''
+      const invoiceCategory = this.carrierInfo?.category ?? ''
+      const invoiceCarrierType = this.carrierInfo?.carrierType
       const requestBody = {
         amount: this.donateAmount,
         email,
@@ -463,7 +450,7 @@ export default {
         paymentInfos: {
           prime: primeResult.card.prime,
           cardholder: {
-            phoneNumber: get(this.contactInputs, 'contactPhone', ''),
+            phoneNumber: this.contactInputs?.contactPhone ?? '',
             name: contactName,
             email,
           },
@@ -478,36 +465,24 @@ export default {
         },
       }
 
-      const memberId = get(this.$store, 'state.DataUser.profile.id')
+      const memberId = this.$store?.state?.DataUser?.profile?.id
       if (memberId) {
         requestBody.memberId = memberId
       }
       if (invoiceCarrierType === '2') {
         // Email 載具
-        requestBody.invoiceInfos.buyerEmail = get(
-          this.carrierInputs,
-          'carrierEmail'
-        )
+        requestBody.invoiceInfos.buyerEmail = this.carrierInputs?.carrierEmail
       }
       if (this.carrierTypeSelected === 'carrierBusiness') {
-        requestBody.invoiceInfos.buyerUbn = get(
-          this.carrierInputs,
-          'carrierBusiness.taxNumber'
-        )
+        requestBody.invoiceInfos.buyerUbn = this.carrierInputs?.carrierBusiness?.taxNumber
         requestBody.invoiceInfos.buyerName =
-          get(this.carrierInputs, 'carrierBusiness.title') || contactName
-        requestBody.invoiceInfos.buyerAddress = get(
-          this.carrierInputs,
-          'carrierBusiness.address'
-        )
+          this.carrierInputs?.carrierBusiness?.title || contactName
+        requestBody.invoiceInfos.buyerAddress = this.carrierInputs?.carrierBusiness?.address
       }
 
       if (this.carrierTypeSelected !== 'carrierBusiness') {
         requestBody.invoiceInfos.carrierType = invoiceCarrierType
-        requestBody.invoiceInfos.carrierNum = get(
-          this.carrierInfo,
-          'carrierNum'
-        )
+        requestBody.invoiceInfos.carrierNum = this.carrierInfo?.carrierNum
       }
 
       return subscribe(this.$store, requestBody)
@@ -516,22 +491,19 @@ export default {
     processOnce(primeResult, now) {
       return donate(this.$store, {
         invoiceItem: {
-          businessTitle: get(this.carrierInputs, ['carrierBusiness', 'title']),
-          businessTaxNo: get(this.carrierInputs, [
-            'carrierBusiness',
-            'taxNumber',
-          ]),
-          businessAddress: get(this.carrierInputs, 'carrierBusiness.address'),
-          carrierType: get(this.carrierInfo, 'carrierType'),
-          carrierNum: get(this.carrierInfo, 'carrierNum'),
-          category: get(this.carrierInfo, 'category'),
+          businessTitle: this.carrierInputs?.carrierBusiness?.title,
+          businessTaxNo: this.carrierInputs?.carrierBusiness?.taxNumber,
+          businessAddress: this.carrierInputs?.carrierBusiness?.address,
+          carrierType: this.carrierInfo?.carrierType,
+          carrierNum: this.carrierInfo?.carrierNum,
+          category: this.carrierInfo?.category,
           lastFourNum: primeResult.card.lastfour,
         },
         points: this.donateAmount,
         token: primeResult.card.prime,
-        member_name: get(this.contactInputs, 'contactName', ''),
-        member_mail: get(this.contactInputs, 'contactEmail', ''),
-        member_phone: get(this.contactInputs, 'contactPhone', ''),
+        member_name: this.contactInputs?.contactName ?? '',
+        member_mail: this.contactInputs?.contactEmail ?? '',
+        member_phone: this.contactInputs?.contactPhone ?? '',
         object_id: this.seriesId,
         reason: location && location.pathname,
       })
@@ -580,9 +552,9 @@ export default {
 
     initialTappay() {
       window.TPDirect.setupSDK(
-        get(this.configTappay, 'APP_ID', ''),
-        get(this.configTappay, 'SECRET', ''),
-        get(this.configTappay, 'ENV', 'sandbox')
+        this.configTappay?.APP_ID ?? '',
+        this.configTappay?.SECRET ?? '',
+        this.configTappay?.ENV ?? 'sandbox'
       )
       window.TPDirect.card.setup({
         fields: {
