@@ -19,7 +19,7 @@
             rel="noopener noreferrer"
             @click="$emit('sendGaEvt:database')"
           >
-            <h1>{{ item.name }}</h1>
+            <h1>{{ item.title }}</h1>
           </a>
           <div class="gallery">
             <span v-if="firstGallery(item)"
