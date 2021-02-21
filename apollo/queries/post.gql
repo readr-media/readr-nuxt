@@ -1,0 +1,5 @@
+query post($id: ID!) {
+  post: Post(where: { id: $id }) {
+    contentApiData
+  }
+}

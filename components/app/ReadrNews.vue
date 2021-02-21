@@ -6,14 +6,14 @@
     />
 
     <article id="post">
-      <div class="date">{{ $getFormattedDate(post.publishedAt) }}</div>
-      <h1>{{ post.title }}</h1>
+      <div class="date">{{ $getFormattedDate(news.publishedAt) }}</div>
+      <h1>{{ news.title }}</h1>
       <div class="container container--post">
         <picture class="hero-img">
-          <img :src="$getImage(post)" alt="" />
+          <img :src="$getImage(news)" alt="" />
         </picture>
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="content" v-html="post.content" />
+        <div class="content" v-html="news.content" />
       </div>
     </article>
 
@@ -104,7 +104,6 @@ import {
   reactive,
   computed,
   // watch,
-  useFetch,
   useContext,
   onMounted,
 } from '@nuxtjs/composition-api'
@@ -124,24 +123,23 @@ if (process.browser) {
 export default {
   name: 'ReadrNews',
 
+  props: {
+    news: {
+      type: Object,
+      require: true,
+      default: () => ({}),
+    },
+  },
+
   setup() {
-    const post = ref({})
     const latestPosts = ref([])
 
-    useFetch(async () => {
-      await fetchPost()
-    })
     const {
-      $fetchPost,
       route,
       $fetchLatestPosts,
       // $sendGaEvtForArticleClick,
     } = useContext()
     const postId = route.value.params.id
-    async function fetchPost() {
-      const response = await $fetchPost(postId)
-      post.value = response?.items?.[0] ?? {}
-    }
 
     // const wordCount = 100
     // const userReadingTime = useUserReadingTime(userState.hasUserFinishedReading)
@@ -252,7 +250,6 @@ export default {
     }
 
     return {
-      post,
       latestPosts,
 
       // wordCount,
@@ -286,7 +283,7 @@ export default {
       publishedAt,
       updatedAt,
       tags = [],
-    } = this.post
+    } = this.news
 
     const metaTitle = `${ogTitle || title} - ${SITE_TITLE}`
     const ogImg = ogImage || heroImage || '/og.jpg'
