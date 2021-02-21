@@ -173,8 +173,6 @@ Object.assign(module.exports, {
     },
   },
 
-  components: ['~/components', { path: '~/components/ui/', prefix: 'ui' }],
-
   telemetry: {
     enabled: true,
     consent: true,

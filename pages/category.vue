@@ -1,14 +1,14 @@
 <template>
   <div class="category">
-    <UiHeader
+    <RdHeader
       class="category__header"
       @sendGaEvt="$sendGaEvtForHeaderClick('logo')"
     />
 
-    <UiSectionHeading title="最新文章" fill="#ebf02c" />
+    <RdSectionHeading title="最新文章" fill="#ebf02c" />
 
     <ul class="post-list">
-      <UiPostListItem
+      <RdListItemCategory
         v-for="post in latestPosts"
         :key="post.id"
         :post="post"
@@ -42,14 +42,18 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import UiPostListItem from '~/components/category/ui/PostListItem.vue'
+import RdHeader from '~/components/shared/Header/RdHeader.vue'
+import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
+import RdListItemCategory from '~/components/shared/List/RdListItemCategory.vue'
 
 export default {
   name: 'Category',
 
   components: {
-    UiPostListItem,
     InfiniteLoading,
+    RdHeader,
+    RdSectionHeading,
+    RdListItemCategory,
   },
 
   async fetch() {

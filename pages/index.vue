@@ -1,9 +1,9 @@
 <template>
   <div>
-    <UiHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
+    <RdHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
 
     <section class="marquee-container">
-      <UiMarquee class="home__marquee" />
+      <RdMarquee class="home__marquee" />
       <nuxt-link
         to="/landing"
         @click.native="$sendGaEvtForHomeClick('landing')"
@@ -14,25 +14,25 @@
     </section>
 
     <section>
-      <UiCarousel
+      <RdCarousel
         v-if="shouldOpenEditorChoices"
         :posts="allEditorChoices"
         class="home__carousel"
         @sendGaEvt="$sendGaEvtForHomeClick('editor choices')"
       >
         <template #heading>
-          <UiSectionHeading title="編輯精選" />
+          <RdSectionHeading title="編輯精選" />
         </template>
-      </UiCarousel>
+      </RdCarousel>
     </section>
 
     <section ref="latest" class="container container--latest">
-      <UiSectionHeading
+      <RdSectionHeading
         title="最新文章"
         fill="#ebf02c"
         class="home__section-heading"
       />
-      <UiPostLatestList
+      <RdListLatest
         v-if="shouldOpenLatestList"
         :postMain="latestPostMain"
         :postsSub="latestPostsSub"
@@ -44,7 +44,7 @@
       <div class="database-heading">
         <h2>開放資料庫</h2>
       </div>
-      <UiDatabaseList
+      <RdDatabaseList
         :list="databases.all"
         :loadMore="loadMoreDatabases"
         :shouldLoadMore="shouldLoadMoreDatabases"
@@ -54,24 +54,24 @@
         @sendGaEvt:loadMore="$sendGaEvtForHomeClick('open database load more')"
       />
 
-      <UiButtonDonate
+      <RdButtonDonate
         class="home__donate-btn"
         @sendGaEvt="$sendGaEvtForHomeClick('donate-opendata')"
       />
     </section>
 
-    <section ref="collaboration" class="horizontal-container">
+    <section ref="collaboration" class="collaboration-container">
       <div class="container container--quote">
-        <UiSectionHeading
+        <RdSectionHeading
           title="協作專區"
           color="#f5ebff"
           fill="#04295e"
           class="home__section-heading"
         />
-        <UiQuoteSlide :quotes="quotes" />
+        <RdQuoteSlide :quotes="quotes" />
       </div>
       <div class="container container--wall">
-        <UiCollaboratorWall
+        <RdCollaboratorWall
           v-if="countOfCollaboratorWall"
           :count="countOfCollaboratorWall"
           :names="namesOfCollaboratorWall"
@@ -79,8 +79,8 @@
           @sendGaEvt="sendGaEvtForCollaboratorWall"
         />
       </div>
-      <UiHorizontalList
-        class="home__horizontal-list"
+      <RdCollaborativeList
+        class="home__collaborative-list"
         :items="allCollaborations"
         @sendGaEvt="$sendGaEvtForHomeClick('collaboration')"
       />
@@ -93,18 +93,18 @@
       class="more-section yellow-bg"
     >
       <div class="container">
-        <UiSectionHeading
+        <RdSectionHeading
           title="更多專題"
           linkHref="/category/"
           class="home__section-heading"
         />
         <div id="more-list-container">
-          <UiMoreList
+          <RdListMore
             v-for="morePosts in displayedAllMorePosts"
             :key="morePosts.tag"
             :topic="morePosts.tag"
             :posts="morePosts.posts"
-            class="home__more-list"
+            class="home__list-more"
             @sendGaEvt="sendGaEvtForMoreList(morePosts.tag)"
           />
         </div>
@@ -115,6 +115,18 @@
 
 <script>
 import { get as axiosGet } from 'axios'
+
+import RdHeader from '~/components/shared/Header/RdHeader.vue'
+import RdMarquee from '~/components/shared/RdMarquee.vue'
+import RdCarousel from '~/components/app/RdCarousel.vue'
+import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
+import RdListLatest from '~/components/shared/List/RdListLatest.vue'
+import RdDatabaseList from '~/components/app/RdDatabaseList.vue'
+import RdQuoteSlide from '~/components/app/RdQuoteSlide.vue'
+import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
+import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
+import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
+import RdListMore from '~/components/shared/List/RdListMore.vue'
 
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
@@ -146,6 +158,18 @@ if (process.browser) {
 export default {
   name: 'Home',
   components: {
+    RdHeader,
+    RdMarquee,
+    RdCarousel,
+    RdSectionHeading,
+    RdListLatest,
+    RdDatabaseList,
+    RdQuoteSlide,
+    RdCollaboratorWall,
+    RdCollaborativeList,
+    RdButtonDonate,
+    RdListMore,
+
     SvgArrowMore,
   },
   apollo: {
@@ -483,7 +507,7 @@ export default {
       margin-right: auto;
     }
   }
-  &__horizontal-list {
+  &__collaborative-list {
     padding-left: 20px;
     @media (min-width: 1096px) {
       // (100vw - 1096px) / 2 + 20px
@@ -494,7 +518,7 @@ export default {
       padding-left: calc(50% - 548px);
     }
   }
-  &__more-list {
+  &__list-more {
     padding-bottom: 30px;
     @include media-breakpoint-up(md) {
       padding-bottom: 60px;
@@ -590,7 +614,7 @@ export default {
 .home__carousel,
 .container--latest,
 .container--database,
-.horizontal-container {
+.collaboration-container {
   margin-bottom: 40px;
   @include media-breakpoint-up(md) {
     margin-bottom: 60px;

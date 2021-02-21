@@ -1,6 +1,6 @@
 <template>
   <div class="error-page">
-    <UiHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
+    <RdHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
 
     <div class="container">
       <section class="error-info" :class="{ 'not-404': !is404 }">
@@ -9,7 +9,7 @@
           <Svg500 v-else class="code" />
           <div class="message">{{ errorMessage }}</div>
         </div>
-        <UiButtonPrimary
+        <RdButtonPrimary
           class="home-btn"
           text="回首頁"
           subtype="feedback"
@@ -17,10 +17,10 @@
         />
       </section>
 
-      <LazyUiPostListJoined
+      <RdListJoined
         v-if="is404"
         :posts="latestPosts"
-        class="error-page__post-list-joined"
+        class="error-page__list-joined"
       />
     </div>
   </div>
@@ -29,11 +29,18 @@
 <script>
 import { ref, computed, useFetch, useContext } from '@nuxtjs/composition-api'
 
+import RdHeader from '~/components/shared/Header/RdHeader.vue'
+import RdButtonPrimary from '~/components/shared/Button/RdButtonPrimary.vue'
+
 import { SITE_TITLE } from '~/constants/metadata.js'
 
 export default {
   name: 'Error',
   components: {
+    RdHeader,
+    RdButtonPrimary,
+    RdListJoined: () => import('~/components/shared/List/RdListJoined.vue'),
+
     Svg404: () => import('~/assets/error/404.svg?inline'),
     Svg500: () => import('~/assets/error/500.svg?inline'),
   },
@@ -94,7 +101,7 @@ function backToHome() {
 
 <style lang="scss" scoped>
 .error-page {
-  &__post-list-joined {
+  &__list-joined {
     padding-left: 20px;
     margin-top: 40px;
     // 840 = 200 * 4 + 20 * 2

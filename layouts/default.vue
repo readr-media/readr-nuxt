@@ -2,7 +2,7 @@
   <div class="default">
     <nuxt />
 
-    <UiFooter
+    <RdFooter
       id="default-footer"
       class="default__footer"
       @sendGaEvt:about="$sendGaEvtForFooterClick('aboutus')"
@@ -11,7 +11,7 @@
     />
 
     <ClientOnly>
-      <TheGdpr v-if="shouldOpenGdpr" @cancel="closeGdpr" />
+      <RdGdpr v-if="shouldOpenGdpr" @cancel="closeGdpr" />
     </ClientOnly>
   </div>
 </template>
@@ -23,6 +23,9 @@ import {
   onBeforeUnmount,
   useContext,
 } from '@nuxtjs/composition-api'
+
+import RdFooter from '~/components/shared/RdFooter.vue'
+import RdGdpr from '~/components/shared/RdGdpr.vue'
 
 import { setViewport } from '~/composition/store/viewport.js'
 import { rafWithDebounce } from '~/utils/index.js'
@@ -36,6 +39,11 @@ if (process.browser) {
 }
 
 export default {
+  components: {
+    RdFooter,
+    RdGdpr,
+  },
+
   setup() {
     const { $sendGaEvtForUsersVisit } = useContext()
 

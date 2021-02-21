@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ReadrNews v-if="shouldMountNews" :news="post" />
-    <ReadrReport v-else :report="post" />
+    <RdNews v-if="shouldMountNews" :news="post" />
+    <RdReport v-else :report="post" />
   </div>
 </template>
 
@@ -14,8 +14,8 @@ export default {
   name: 'Post',
 
   components: {
-    ReadrNews: () => import('~/components/app/ReadrNews.vue'),
-    ReadrReport: () => import('~/components/app/ReadrReport.vue'),
+    RdNews: () => import('~/components/app/RdNews.vue'),
+    RdReport: () => import('~/components/app/RdReport.vue'),
   },
 
   async fetch() {

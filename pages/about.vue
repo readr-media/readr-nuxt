@@ -1,20 +1,20 @@
 <template>
   <div class="about">
-    <UiHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
+    <RdHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
 
-    <Intro />
-    <CoreValues />
-    <TeamMembers class="about__team-members" />
-    <Timeline class="about__timeline" />
+    <RdAboutIntro />
+    <RdAboutCoreValues />
+    <RdAboutTeamMembers class="about__team-members" />
+    <RdAboutTimeline class="about__timeline" />
   </div>
 </template>
 
 <script>
-import UiHeader from '~/components/ui/Header.vue'
-import Intro from '~/components/about/Intro.vue'
-import CoreValues from '~/components/about/CoreValues.vue'
-import TeamMembers from '~/components/about/TeamMembers.vue'
-import Timeline from '~/components/about/Timeline.vue'
+import RdHeader from '~/components/shared/Header/RdHeader.vue'
+import RdAboutIntro from '~/components/shared/About/RdAboutIntro.vue'
+import RdAboutCoreValues from '~/components/shared/About/RdAboutCoreValues.vue'
+import RdAboutTeamMembers from '~/components/shared/About/RdAboutTeamMembers.vue'
+import RdAboutTimeline from '~/components/shared/About/RdAboutTimeline.vue'
 
 import { SITE_TITLE } from '~/constants/metadata.js'
 
@@ -22,11 +22,11 @@ export default {
   name: 'About',
 
   components: {
-    UiHeader,
-    Intro,
-    CoreValues,
-    TeamMembers,
-    Timeline,
+    RdHeader,
+    RdAboutIntro,
+    RdAboutCoreValues,
+    RdAboutTeamMembers,
+    RdAboutTimeline,
   },
 
   head() {

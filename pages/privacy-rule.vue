@@ -1,6 +1,6 @@
 <template>
   <div class="privacy-rule">
-    <UiHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
+    <RdHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
 
     <div class="container">
       <img src="~/assets/privacy-rule.svg" alt="隱私政策" />
@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import UiHeader from '~/components/ui/Header.vue'
+import RdHeader from '~/components/shared/Header/RdHeader.vue'
 
 import { SITE_TITLE } from '~/constants/metadata.js'
 
@@ -132,7 +132,7 @@ export default {
   name: 'PrivacyRule',
 
   components: {
-    UiHeader,
+    RdHeader,
   },
 
   head() {
