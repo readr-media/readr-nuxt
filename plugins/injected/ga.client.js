@@ -1,6 +1,6 @@
 const partial = require('ramda/src/partial')
 
-const { rafWithDebounce } = require('../utils/index.js')
+const { rafWithDebounce } = require('~/utils/index.js')
 
 const sendGaEvtForHomeClick = partial(sendGaEvt, ['Home', 'click'])
 const sendGaEvtForHomeScroll = partial(sendGaEvt, ['Home', 'scroll'])

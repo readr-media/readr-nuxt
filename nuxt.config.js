@@ -114,10 +114,10 @@ Object.assign(module.exports, {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    '~/plugins/vue-plugins.client.js',
-    '~/plugins/index.js',
-    '~/plugins/index.client.js',
-    '~/plugins/requests/index.js',
+    '~/plugins/vue-plugins/lazyload.client.js',
+    '~/plugins/injected/index.js',
+    '~/plugins/injected/index.client.js',
+    '~/plugins/injected/requests/index.js',
   ],
 
   serverMiddleware: [

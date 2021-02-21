@@ -2,7 +2,7 @@ const { camelizeKeys, decamelizeKeys } = require('humps')
 const { stringify: qsStringify } = require('qs')
 const { create: createAxios, get: axiosGet } = require('axios')
 
-const { REQUEST_TIMEOUT } = require('../../configs/config.js')
+const { REQUEST_TIMEOUT } = require('~/configs/config.js')
 
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
 

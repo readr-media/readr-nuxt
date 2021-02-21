@@ -1,4 +1,4 @@
-const defaultImgPost = require('../assets/default/post.svg')
+const defaultImgPost = require('~/assets/default/post.svg')
 
 function getImage({ heroImage, ogImage, image } = {}, needDefaultImage = true) {
   return (
