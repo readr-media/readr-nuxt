@@ -3,7 +3,6 @@ const router = express.Router()
 const superagent = require('superagent')
 const isEmail = require('validator/lib/isEmail')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
-const { handlerError } = require('../../comm')
 const { genInvoice } = require('../invoice')
 const {
   POINT_OBJECT_TYPE,
@@ -116,8 +115,7 @@ router.post(
           })
           next()
         } else {
-          const errWrapper = handlerError(e, r)
-          res.status(errWrapper.status).json(errWrapper.text)
+          res.status(500).send('donate error')
           console.error(
             `Error occurred when depositing for member ${payload.member_name}/${payload.member_mail}`
           )
