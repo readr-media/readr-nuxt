@@ -448,7 +448,7 @@ export default {
         member_name: this.contactInputs?.contactName ?? '',
         member_mail: this.contactInputs?.contactEmail ?? '',
         member_phone: this.contactInputs?.contactPhone ?? '',
-        object_id: '',
+        object_id: null,
         reason: location && location.pathname,
       })
     },
