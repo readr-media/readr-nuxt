@@ -247,8 +247,6 @@
 import RadioItem from './RadioItem.vue'
 import { TAPPAY as configTappay } from '~/configs/config'
 
-const subscribe = (store, params = {}) => store.dispatch('SUBSCRIBE', params)
-
 const CARRIER_TYPE_NUM = {
   carrierEmail: '2',
   carrierPhone: '0',
@@ -431,7 +429,7 @@ export default {
         requestBody.invoiceInfos.carrierNum = this.carrierInfo?.carrierNum
       }
 
-      return subscribe(this.$store, requestBody)
+      return this.$postSubscribe(requestBody)
     },
 
     processOnce(primeResult, now) {
