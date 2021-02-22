@@ -30,6 +30,7 @@
     "@readr-media/old-news-project-slugs": "^1.1.1",
     "axios": "^0.19.2",
     "cross-env": "^7.0.2",
+    "express": "^4.17.1",
     "googleapis": "^57.0.0",
     "graphql-tag": "^2.10.4",
     "humps": "^2.0.1",
