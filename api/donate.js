@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser')
 const express = require('express')
 const router = express.Router()
 const superagent = require('superagent')
@@ -46,6 +47,8 @@ const validateDonator = (req, res, next) => {
     console.error(e)
   }
 }
+
+router.use(bodyParser.json())
 
 // For CORS non-simple requests
 router.options('/*', corsMiddle, (res) => {
