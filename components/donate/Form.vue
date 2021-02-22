@@ -443,7 +443,7 @@ export default {
           category: this.carrierInfo?.category,
           lastFourNum: primeResult.card.lastfour,
         },
-        points: this.donateAmount,
+        currency: this.donateAmount,
         token: primeResult.card.prime,
         member_name: this.contactInputs?.contactName ?? '',
         member_mail: this.contactInputs?.contactEmail ?? '',
