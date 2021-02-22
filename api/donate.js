@@ -9,7 +9,7 @@ const {
   POINT_OBJECT_TYPE,
   CMS_ENDPOINT_DEPRECATED,
 } = require('../configs/config')
-const corsMiddle = require('../corsMiddle')
+const corsMiddle = require('./middle/corsMiddleExpress')
 
 const apiHost = CMS_ENDPOINT_DEPRECATED
 
