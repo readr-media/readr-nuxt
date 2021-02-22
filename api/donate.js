@@ -1,4 +1,3 @@
-const debug = require('debug')('READR-API:api:points:donate')
 const express = require('express')
 const router = express.Router()
 const superagent = require('superagent')
@@ -17,7 +16,7 @@ const apiHost = CMS_ENDPOINT_DEPRECATED
 const validateObjectType = (req, res, next) => {
   try {
     const objectType = req?.body?.['object_type']
-    debug('objectType: ', objectType)
+    console.log('objectType: ', objectType)
     if (objectType === POINT_OBJECT_TYPE.DONATE) {
       next()
     } else {
@@ -34,9 +33,9 @@ const validateDonator = (req, res, next) => {
     const memberName = payload?.['member_name'] ?? ''
     const memberMail = payload?.['member_mail'] ?? ''
     const memberPhone = payload?.['member_phone'] ?? ''
-    debug('memberName: ', memberName)
-    debug('memberMail: ', memberMail)
-    debug('memberPhone: ', memberPhone)
+    console.log('memberName: ', memberName)
+    console.log('memberMail: ', memberMail)
+    console.log('memberPhone: ', memberPhone)
     const valid =
       memberName && isEmail(memberMail) && isMobilePhone(memberPhone)
     if (valid) {
@@ -65,8 +64,8 @@ router.post(
   validateObjectType,
   validateDonator,
   (req, res, next) => {
-    debug('Got a point reward call!!')
-    debug('req.url', req.url)
+    console.log('Got a point reward call!!')
+    console.log('req.url', req.url)
 
     const url = `${apiHost}/points`
 
@@ -75,11 +74,11 @@ router.post(
 
     const payload = req.body
 
-    debug('invoiceItem:')
-    debug(invoiceItem)
+    console.log('invoiceItem:')
+    console.log(invoiceItem)
 
-    debug('payload', invoiceItem.lastFourNum)
-    debug(payload)
+    console.log('payload', invoiceItem.lastFourNum)
+    console.log(payload)
 
     superagent
       .post(url)
