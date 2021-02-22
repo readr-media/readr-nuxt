@@ -30,7 +30,11 @@ function createPost(requestUrl) {
 async function postDonate(params = {}) {
   return await createPost(`${baseUrl}/api/donate`)(params)
 }
+async function postSubscribe(params = {}) {
+  return await createPost(`${baseUrl}/api/subscriptions`)(params)
+}
 
 Object.assign(module.exports, {
   postDonate,
+  postSubscribe,
 })

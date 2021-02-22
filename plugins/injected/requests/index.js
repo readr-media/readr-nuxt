@@ -1,5 +1,5 @@
 const { fetchLatestPosts, fetchPost, fetchPostsByTag } = require('./posts.js')
-const { postDonate } = require('./donate.js')
+const { postDonate, postSubscribe } = require('./donate.js')
 
 module.exports = injectRequestMethods
 
@@ -9,4 +9,5 @@ function injectRequestMethods(ctx, inject) {
   inject('fetchPostsByTag', fetchPostsByTag)
 
   inject('postDonate', postDonate)
+  inject('postSubscribe', postSubscribe())
 }
