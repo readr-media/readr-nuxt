@@ -450,6 +450,7 @@ export default {
         member_phone: this.contactInputs?.contactPhone ?? '',
         object_id: null,
         reason: location && location.pathname,
+        object_type: 5,
       })
     },
 
