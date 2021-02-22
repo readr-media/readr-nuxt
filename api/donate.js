@@ -1,6 +1,6 @@
 const bodyParser = require('body-parser')
 const express = require('express')
-const router = express.Router()
+const router = express()
 const superagent = require('superagent')
 const isEmail = require('validator/lib/isEmail')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
