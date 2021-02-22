@@ -2,7 +2,6 @@ const debug = require('debug')('READR-API:api:points:donate')
 const express = require('express')
 const router = express.Router()
 const superagent = require('superagent')
-const { get } = require('lodash')
 const isEmail = require('validator/lib/isEmail')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
 const { handlerError } = require('../../comm')
@@ -17,7 +16,7 @@ const apiHost = CMS_ENDPOINT_DEPRECATED
 
 const validateObjectType = (req, res, next) => {
   try {
-    const objectType = get(req, 'body.object_type')
+    const objectType = req?.body?.['object_type']
     debug('objectType: ', objectType)
     if (objectType === POINT_OBJECT_TYPE.DONATE) {
       next()
@@ -31,10 +30,10 @@ const validateObjectType = (req, res, next) => {
 
 const validateDonator = (req, res, next) => {
   try {
-    const payload = get(req, 'body', {})
-    const memberName = get(payload, 'member_name', '')
-    const memberMail = get(payload, 'member_mail', '')
-    const memberPhone = get(payload, 'member_phone', '')
+    const payload = req?.body ?? {}
+    const memberName = payload?.['member_name'] ?? ''
+    const memberMail = payload?.['member_mail'] ?? ''
+    const memberPhone = payload?.['member_phone'] ?? ''
     debug('memberName: ', memberName)
     debug('memberMail: ', memberMail)
     debug('memberPhone: ', memberPhone)
@@ -89,12 +88,12 @@ router.post(
       .end((e, r) => {
         if (!e && r) {
           const resData = JSON.parse(r.text)
-          const transactionId = get(resData, 'id')
+          const transactionId = resData?.id
           res.json(resData)
 
           /** go next to gen invoice if object_type === POINT_OBJECT_TYPE.DONATE */
           if (
-            get(req, 'body.object_type') !== POINT_OBJECT_TYPE.DONATE ||
+            req?.body?.['object_type'] !== POINT_OBJECT_TYPE.DONATE ||
             !transactionId
           ) {
             return
