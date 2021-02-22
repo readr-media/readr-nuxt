@@ -247,42 +247,6 @@
 import RadioItem from './RadioItem.vue'
 import { TAPPAY as configTappay } from '~/configs/config'
 
-const donate = (
-  store,
-  {
-    points,
-    token,
-    invoiceItem,
-
-    // eslint-disable-next-line camelcase
-    member_phone,
-
-    // eslint-disable-next-line camelcase
-    member_name,
-
-    // eslint-disable-next-line camelcase
-    member_mail,
-
-    // eslint-disable-next-line camelcase
-    object_id,
-
-    reason,
-  } = {}
-) =>
-  store.dispatch('DONATE', {
-    params: {
-      object_type: 5,
-      object_id,
-      reason,
-      currency: points,
-      token,
-      member_name,
-      member_phone,
-      member_mail,
-      invoiceItem,
-    },
-  })
-
 const subscribe = (store, params = {}) => store.dispatch('SUBSCRIBE', params)
 
 const CARRIER_TYPE_NUM = {
@@ -471,7 +435,7 @@ export default {
     },
 
     processOnce(primeResult, now) {
-      return donate(this.$store, {
+      return this.$postDonate({
         invoiceItem: {
           businessTitle: this.carrierInputs?.carrierBusiness?.title,
           businessTaxNo: this.carrierInputs?.carrierBusiness?.taxNumber,
