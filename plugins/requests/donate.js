@@ -10,20 +10,25 @@ const publicApi = createAxios({
   timeout: REQUEST_TIMEOUT,
 })
 
-async function postDonate(params = {}) {
-  const requestUrl = `${baseUrl}/api/donate`
-  try {
-    const { data } = await publicApi.post(requestUrl, params)
-    return camelizeKeys(data).items
-  } catch ({ response = {}, message }) {
-    // eslint-disable-next-line no-console
-    console.error(`
+function createPost(requestUrl) {
+  return async function (params = {}) {
+    try {
+      const { data } = await publicApi.post(requestUrl, params)
+      return camelizeKeys(data).items
+    } catch ({ response = {}, message }) {
+      // eslint-disable-next-line no-console
+      console.error(`
       ApiError:
         url: ${requestUrl}
         message: ${message}
         data: ${response.data ?? ''}
     `)
+    }
   }
+}
+
+async function postDonate(params = {}) {
+  return await createPost(`${baseUrl}/api/donate`)(params)
 }
 
 Object.assign(module.exports, {
