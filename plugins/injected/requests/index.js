@@ -9,5 +9,5 @@ function injectRequestMethods(ctx, inject) {
   inject('fetchPostsByTag', fetchPostsByTag)
 
   inject('postDonate', postDonate)
-  inject('postSubscribe', postSubscribe())
+  inject('postSubscribe', postSubscribe)
 }
