@@ -4,7 +4,7 @@ const router = express()
 const superagent = require('superagent')
 const isEmail = require('validator/lib/isEmail')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
-const { genInvoice } = require('../invoice')
+// const { genInvoice } = require('../invoice')
 const {
   POINT_OBJECT_TYPE,
   CMS_ENDPOINT_DEPRECATED,
@@ -125,8 +125,8 @@ router.post(
           console.error(e)
         }
       })
-  },
-  genInvoice
+  }
+  // genInvoice
 )
 
 module.exports = router
