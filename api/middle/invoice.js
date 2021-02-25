@@ -5,7 +5,7 @@ const moment = require('moment')
 const rawurlencode = require('locutus/php/url/rawurlencode')
 const superagent = require('superagent')
 const truncate = require('html-truncate')
-const { EZPAY } = require('../../config')
+const { EZPAY } = require('../../configs/config')
 const { handlerError } = require('../../comm')
 
 const CARRIER_TYPE = { PHONE: '0', NATURAL: '1', EXPAY: '2' }
