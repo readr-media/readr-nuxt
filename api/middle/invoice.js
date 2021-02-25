@@ -5,7 +5,7 @@ const moment = require('moment')
 const rawurlencode = require('locutus/php/url/rawurlencode')
 const superagent = require('superagent')
 const truncate = require('html-truncate')
-const { API_TIMEOUT, EZPAY } = require('../../config')
+const { EZPAY } = require('../../config')
 const { handlerError } = require('../../comm')
 
 const CARRIER_TYPE = { PHONE: '0', NATURAL: '1', EXPAY: '2' }
@@ -231,7 +231,7 @@ const createInvoice = (data) =>
         MerchantID_: get(EZPAY, 'ID', ''),
         PostData_: ciphertext,
       })
-      .timeout(API_TIMEOUT)
+      .timeout(11000)
       .end((error, response) => {
         if (!error && response) {
           const result = JSON.parse(response.text)
