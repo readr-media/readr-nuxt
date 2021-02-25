@@ -6,7 +6,6 @@ const rawurlencode = require('locutus/php/url/rawurlencode')
 const superagent = require('superagent')
 const truncate = require('html-truncate')
 const { EZPAY } = require('../../configs/config')
-const { handlerError } = require('../../comm')
 
 const CARRIER_TYPE = { PHONE: '0', NATURAL: '1', EXPAY: '2' }
 
@@ -267,14 +266,13 @@ const genInvoice = (req) => {
       console.log('[Invoice] response: ', response)
     })
     .catch((error) => {
-      const errWrapper = handlerError(error)
       console.error(
         `Error occurred when gen inv for member-transaction:`,
         get(req, 'user.email', ''),
         '-',
         get(data, 'transaction_id', '')
       )
-      console.error(errWrapper.text)
+      console.error(error.message)
     })
 }
 
