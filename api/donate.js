@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser')
 const express = require('express')
 const router = express()
-const superagent = require('superagent')
+const { post: axiosPost } = require('axios')
 const isEmail = require('validator/lib/isEmail')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
 // const { genInvoice } = require('../invoice')
@@ -65,7 +65,7 @@ router.post(
   corsMiddle,
   validateObjectType,
   validateDonator,
-  (req, res, next) => {
+  async (req, res, next) => {
     console.log('Got a point reward call!!')
     console.log('req.url', req.url)
 
@@ -82,49 +82,43 @@ router.post(
     console.log('payload', invoiceItem.lastFourNum)
     console.log(payload)
 
-    superagent
-      .post(url)
-      .send(payload)
-      // .timeout(API_TIMEOUT)
-      .end((e, r) => {
-        if (!e && r) {
-          const resData = JSON.parse(r.text)
-          const transactionId = resData?.id
-          res.json(resData)
+    try {
+      const { data: resData } = await axiosPost(url, payload)
+      const transactionId = resData?.id
+      res.json(resData)
 
-          /** go next to gen invoice if object_type === POINT_OBJECT_TYPE.DONATE */
-          if (
-            req?.body?.['object_type'] !== POINT_OBJECT_TYPE.DONATE ||
-            !transactionId
-          ) {
-            return
-          }
+      /** go next to gen invoice if object_type === POINT_OBJECT_TYPE.DONATE */
+      if (
+        req?.body?.['object_type'] !== POINT_OBJECT_TYPE.DONATE ||
+        !transactionId
+      ) {
+        return
+      }
 
-          invoiceItem.amtSales = Math.abs(payload.currency || 0)
-          invoiceItem.good_name = `Readr Donate: $${invoiceItem.amtSales}(NTD).`
+      invoiceItem.amtSales = Math.abs(payload.currency || 0)
+      invoiceItem.good_name = `Readr Donate: $${invoiceItem.amtSales}(NTD).`
 
-          /** Reset req.body and construct invoice date. */
-          req.body = Object.assign({}, invoiceItem, {
-            items: [
-              {
-                name: invoiceItem.good_name,
-                price: invoiceItem.amtSales,
-                count: 1,
-              },
-            ],
-            member_name: payload.member_name,
-            member_mail: payload.member_mail,
-            transaction_id: transactionId,
-          })
-          next()
-        } else {
-          res.status(500).send('donate error')
-          console.error(
-            `Error occurred when depositing for member ${payload.member_name}/${payload.member_mail}`
-          )
-          console.error(e)
-        }
+      /** Reset req.body and construct invoice date. */
+      req.body = Object.assign({}, invoiceItem, {
+        items: [
+          {
+            name: invoiceItem.good_name,
+            price: invoiceItem.amtSales,
+            count: 1,
+          },
+        ],
+        member_name: payload.member_name,
+        member_mail: payload.member_mail,
+        transaction_id: transactionId,
       })
+      next()
+    } catch (e) {
+      res.status(500).send('donate error')
+      console.error(
+        `Error occurred when depositing for member ${payload.member_name}/${payload.member_mail}`
+      )
+      console.error(e)
+    }
   }
   // genInvoice
 )
