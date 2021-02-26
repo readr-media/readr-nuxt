@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 
 const CryptoJS = require('crypto-js')
-const debug = require('debug')('READR-API:middle:invoice')
 const moment = require('moment')
 const rawurlencode = require('locutus/php/url/rawurlencode')
 const superagent = require('superagent')
@@ -183,7 +182,7 @@ const createInvoice = (data) =>
       }
     }
     payload.Comment = truncate(message, 68)
-    debug('payload: ', payload)
+    console.log('payload: ', payload)
 
     const KEY = EZPAY?.KEY ?? ''
     const IV = EZPAY?.IV ?? ''
@@ -201,7 +200,7 @@ const createInvoice = (data) =>
       }
     )
     const ciphertext = encrypted.toString(CryptoJS.format.Hex)
-    debug('ciphertext: ', ciphertext)
+    console.log('ciphertext: ', ciphertext)
 
     const bytes = CryptoJS.AES.decrypt(
       { ciphertext: CryptoJS.enc.Hex.parse(ciphertext) },
@@ -213,7 +212,7 @@ const createInvoice = (data) =>
       }
     )
     const decryptedData = bytes.toString(CryptoJS.enc.Utf8)
-    debug('decryptedData: ', decryptedData)
+    console.log('decryptedData: ', decryptedData)
 
     superagent
       .post(EZPAY?.HOST ?? '')
@@ -252,8 +251,8 @@ const genInvoice = (req) => {
 
   createInvoice(data)
     .then((response) => {
-      debug('GENED INVOICE SUCCESSFULLY.')
-      debug('response', response)
+      console.log('GENED INVOICE SUCCESSFULLY.')
+      console.log('response', response)
       console.log('[Invoice] GENED INVOICE SUCCESSFULLY.')
       console.log('[Invoice] response: ', response)
     })
