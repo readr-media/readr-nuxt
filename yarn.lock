@@ -6530,6 +6530,11 @@ es6-error@^4.1.1:
   resolved "https://registry.yarnpkg.com/es6-error/-/es6-error-4.1.1.tgz#9e3af407459deed47e9a91f9b885a84eb05c561d"
   integrity sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg==
 
+es6-promise@^4.2.5:
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.8.tgz#4eb21594c972bc40553d276e510539143db53e0a"
+  integrity sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==
+
 escalade@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
@@ -9501,6 +9506,13 @@ locate-path@^5.0.0:
   integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
   dependencies:
     p-locate "^4.1.0"
+
+locutus@^2.0.10:
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/locutus/-/locutus-2.0.14.tgz#53d259ac7200b0621ed4e5604b6c49993415a455"
+  integrity sha512-0H1o1iHNEp3kJ5rW57bT/CAP5g6Qm0Zd817Wcx2+rOMTYyIJoc482Ja1v9dB6IUjwvWKcBNdYi7x2lRXtlJ3bA==
+  dependencies:
+    es6-promise "^4.2.5"
 
 lodash._reinterpolate@^3.0.0:
   version "3.0.0"
