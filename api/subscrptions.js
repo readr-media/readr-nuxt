@@ -13,7 +13,6 @@ const isEmail = require('validator/lib/isEmail')
 
 const { decamelizeKeys } = require('humps')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
-const { get } = require('lodash')
 const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config')
 const corsMiddle = require('../corsMiddle')
 
@@ -28,15 +27,12 @@ const ITEM_COUNT = 1
 
 const validate = (req, res, next) => {
   const body = req.body
-  const cardholderPhoneNumber = get(
-    body,
-    'paymentInfos.cardholder.phoneNumber',
-    ''
-  )
-  const cardholderName = get(body, 'paymentInfos.cardholder.name')
-  const cardholderEmail = get(body, 'paymentInfos.cardholder.email', '')
-  const prime = get(body, 'paymentInfos.prime')
-  const invoiceInfos = get(body, 'invoiceInfos')
+  const cardholderPhoneNumber =
+    body?.paymentInfos?.cardholder?.phoneNumber ?? ''
+  const cardholderName = body?.paymentInfos?.cardholder?.name
+  const cardholderEmail = body?.paymentInfos?.cardholder?.email ?? ''
+  const prime = body?.paymentInfos?.prime
+  const invoiceInfos = body?.invoiceInfos
   const validated =
     isMobilePhone(cardholderPhoneNumber) &&
     cardholderName &&
