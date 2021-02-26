@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser')
+// use express rather than koa because of donate is migrate from readr-web-api legacy
 const express = require('express')
 const router = express()
 const { post: axiosPost } = require('axios')
