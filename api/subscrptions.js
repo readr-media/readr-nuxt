@@ -5,8 +5,9 @@
   3. ezPay API（發票）: https://inv.ezpay.com.tw/dw_files/info_api/ezPay_EZP_INVI_1_1_9.pdf
 */
 
+// use express rather than koa because of donate is migrate from readr-web-api legacy
 const express = require('express')
-const router = express.Router()
+const router = express()
 const superagent = require('superagent')
 
 const isEmail = require('validator/lib/isEmail')
