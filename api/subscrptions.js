@@ -16,7 +16,6 @@ const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
 const { get } = require('lodash')
 const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config')
 const corsMiddle = require('../corsMiddle')
-const { handlerError } = require('../../comm')
 
 const apiHost = CMS_ENDPOINT_DEPRECATED
 
@@ -103,8 +102,7 @@ router.post('/', validate, setCommonValue, (req, res, next) => {
           bodyDecamelized,
           error
         )
-        const errorWrapper = handlerError(error, response)
-        return res.status(errorWrapper.status).json(errorWrapper.text)
+        return res.status(500).json(response?.text || error?.message)
       }
     })
 })
