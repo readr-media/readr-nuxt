@@ -9,7 +9,7 @@
 const express = require('express')
 const router = express()
 const bodyParser = require('body-parser')
-const superagent = require('superagent')
+const { post: axiosPost } = require('axios')
 
 const isEmail = require('validator/lib/isEmail')
 
@@ -83,28 +83,19 @@ router.options('/*', corsMiddle, (res) => {
   res.send(200)
 })
 
-router.post('/', validate, setCommonValue, (req, res, next) => {
+router.post('/', validate, setCommonValue, async (req, res, next) => {
   const url = `${apiHost}/subscriptions`
   const bodyDecamelized = decamelizeKeys(req.body)
-  superagent
-    .post(url)
-    .send(bodyDecamelized)
-    .end((error, response) => {
-      if (!error && response) {
-        res.send('Subscribe READr successfully.')
-        console.info(
-          `Subscriptions successfully. Paid by ${req.body.paymentInfos.cardholder.email} credit card: *-*-*-${req.body.invoiceInfos.lastFourNum}.`
-        )
-      } else {
-        console.error(
-          '[Error] POST/subscriptions',
-          'req.body:',
-          bodyDecamelized,
-          error
-        )
-        return res.status(500).json(response?.text || error?.message)
-      }
-    })
+  try {
+    await axiosPost(url, bodyDecamelized)
+    res.send('Subscribe READr successfully.')
+    console.info(
+      `Subscriptions successfully. Paid by ${req.body.paymentInfos.cardholder.email} credit card: *-*-*-${req.body.invoiceInfos.lastFourNum}.`
+    )
+  } catch (e) {
+    console.error('[Error] POST/subscriptions', 'req.body:', bodyDecamelized, e)
+    return res.status(500).json(e?.message)
+  }
 })
 
 module.exports = router
