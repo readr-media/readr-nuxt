@@ -2,7 +2,7 @@
 
 const CryptoJS = require('crypto-js')
 const rawurlencode = require('locutus/php/url/rawurlencode')
-const superagent = require('superagent')
+const { post: axiosPost } = require('axios')
 const truncate = require('html-truncate')
 const { EZPAY } = require('../../configs/config')
 
@@ -213,29 +213,23 @@ const createInvoice = (data) =>
     const decryptedData = bytes.toString(CryptoJS.enc.Utf8)
     console.log('decryptedData: ', decryptedData)
 
-    superagent
-      .post(EZPAY?.HOST ?? '')
-      .type('form')
-      .send({
-        MerchantID_: EZPAY?.ID ?? '',
-        PostData_: ciphertext,
-      })
-      .timeout(11000)
-      .end((error, response) => {
-        if (!error && response) {
-          const result = JSON.parse(response.text)
-          if (result?.Status === 'SUCCESS') {
-            resolve(result)
-          } else {
-            // eslint-disable-next-line prefer-promise-reject-errors
-            reject({
-              status: 400,
-              message: result?.Message,
-            })
-          }
+    axiosPost(EZPAY?.HOST ?? '', {
+      MerchantID_: EZPAY?.ID ?? '',
+      PostData_: ciphertext,
+    })
+      .then(({ data: result }) => {
+        if (result?.Status === 'SUCCESS') {
+          resolve(result)
         } else {
-          reject(error)
+          // eslint-disable-next-line prefer-promise-reject-errors
+          reject({
+            status: 400,
+            message: result?.Message,
+          })
         }
+      })
+      .catch((error) => {
+        reject(error)
       })
   })
 
