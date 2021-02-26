@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 
 const CryptoJS = require('crypto-js')
-const moment = require('moment')
 const rawurlencode = require('locutus/php/url/rawurlencode')
 const superagent = require('superagent')
 const truncate = require('html-truncate')
@@ -33,9 +32,9 @@ const createInvoice = (data) =>
     }.`
 
     if (payload.Status === '3') {
-      payload.CreateStatusTime = moment(
+      payload.CreateStatusTime = new Date(
         Date.now() + EZPAY?.SCHEDULE ?? 60 * 1000
-      ).format('YYYY-MM-DD')
+      ).toISOString()
     }
 
     switch (payload.TaxType) {
