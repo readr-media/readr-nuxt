@@ -23,6 +23,7 @@ function createPost(requestUrl) {
         message: ${message}
         data: ${response.data ?? ''}
     `)
+      throw new Error(message)
     }
   }
 }
