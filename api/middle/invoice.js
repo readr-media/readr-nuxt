@@ -1,4 +1,6 @@
-const { get, map } = require('lodash')
+/* eslint-disable camelcase */
+
+const { map } = require('lodash')
 const CryptoJS = require('crypto-js')
 const debug = require('debug')('READR-API:middle:invoice')
 const moment = require('moment')
@@ -13,100 +15,89 @@ const createInvoice = (data) =>
   new Promise((resolve, reject) => {
     const payload = {
       RespondType: 'JSON',
-      Version: get(EZPAY, 'VERSION', '1.4'),
+      Version: EZPAY?.VERSION ?? '1.4',
       TimeStamp: Math.round(Date.now() / 1000),
-      MerchantOrderNo: get(
-        data,
-        'transaction_id',
-        `${Math.round(Date.now() / 1000)}`
-      ),
-      Status: get(EZPAY, 'TYPE', '0'),
-      Category: get(data, 'category') === 1 ? 'B2C' : 'B2B',
-      CarrierType: get(data, 'carrierType'),
-      BuyerName: get(data, 'member_name'),
-      BuyerEmail: get(data, 'member_mail', '-'),
-      PrintFlag: get(data, 'printFlag', 'N'),
-      TaxType: get(EZPAY, 'TAX_TYPE', '1'),
-      ItemName: map(get(data, 'items', []), (item) =>
-        get(item, 'name', '')
-      ).join('|'),
-      ItemCount: map(get(data, 'items', []), (item) =>
-        get(item, 'count', '')
-      ).join('|'),
-      ItemUnit: get(data, 'item_unit') || get(EZPAY, 'UNIT', 'Unit'),
+      MerchantOrderNo:
+        data?.transaction_id ?? `${Math.round(Date.now() / 1000)}`,
+      Status: EZPAY?.TYPE ?? '0',
+      Category: data?.category === 1 ? 'B2C' : 'B2B',
+      CarrierType: data?.carrierType,
+      BuyerName: data?.member_name,
+      BuyerEmail: data?.member_mail ?? '-',
+      PrintFlag: data?.printFlag ?? 'N',
+      TaxType: EZPAY?.TAX_TYPE ?? '1',
+      ItemName: map(data?.items ?? [], (item) => item?.name ?? '').join('|'),
+      ItemCount: map(data?.items ?? [], (item) => item?.count ?? '').join('|'),
+      ItemUnit: data?.item_unit || (EZPAY?.UNIT ?? 'Unit'),
     }
-    let message = `Paid by credit card: ****-****-****-${get(
-      data,
-      'lastFourNum',
-      ''
-    )}.`
+    let message = `Paid by credit card: ****-****-****-${
+      data?.lastFourNum ?? ''
+    }.`
 
     if (payload.Status === '3') {
       payload.CreateStatusTime = moment(
-        Date.now() + get(EZPAY, 'SCHEDULE', 60 * 1000)
+        Date.now() + EZPAY?.SCHEDULE ?? 60 * 1000
       ).format('YYYY-MM-DD')
     }
 
     switch (payload.TaxType) {
       case '2':
-        payload.CustomsClearance = get(EZPAY, 'CUSTOMS_CLEARANCE', '1')
+        payload.CustomsClearance = EZPAY?.CUSTOMS_CLEARANCE ?? '1'
         payload.TaxRate = 0
         payload.TaxAmt = 0
-        payload.Amt = get(data, 'amtSales', 0)
-        payload.TotalAmt = get(data, 'amtSales', 0)
+        payload.Amt = data?.amtSales ?? 0
+        payload.TotalAmt = data?.amtSales ?? 0
         break
       case '3':
         payload.TaxRate = 0
         payload.TaxAmt = 0
-        payload.Amt = get(data, 'amtSales', 0)
-        payload.TotalAmt = get(data, 'amtSales', 0)
+        payload.Amt = data?.amtSales ?? 0
+        payload.TotalAmt = data?.amtSales ?? 0
         break
       default:
-        payload.TaxRate = get(EZPAY, 'TAX_RATE', 5)
+        payload.TaxRate = EZPAY?.TAX_RATE ?? 5
         payload.TaxAmt = Math.round(
-          get(data, 'amtSales', 0) * (get(EZPAY, 'TAX_RATE', 5) / 100)
+          data?.amtSales ?? 0 * (EZPAY?.TAX_RATE ?? 5 / 100)
         )
         if (payload.TaxType === '9') {
           payload.Amt =
-            get(data, 'amtSales', 0) +
-            get(data, 'amtZero', 0) +
-            get(data, 'amtFree', 0) -
-            payload.TaxAmt
+            data?.amtSales ??
+            0 + data?.amtZero ??
+            0 + data?.amtFree ??
+            0 - payload.TaxAmt
           payload.TotalAmt =
-            get(data, 'amtSales', 0) +
-            get(data, 'amtZero', 0) +
-            get(data, 'amtFree', 0)
-          payload.ItemTaxType = map(get(data, 'items', []), (item) =>
-            get(item, 'taxType', 1)
+            data?.amtSales ?? 0 + data?.amtZero ?? 0 + data?.amtFree ?? 0
+          payload.ItemTaxType = map(
+            data?.items ?? [],
+            (item) => item?.taxType ?? 1
           ).join('|')
         } else {
-          payload.Amt = get(data, 'amtSales', 0) - payload.TaxAmt
-          payload.TotalAmt = get(data, 'amtSales', 0)
+          payload.Amt = data?.amtSales ?? 0 - payload.TaxAmt
+          payload.TotalAmt = data?.amtSales ?? 0
         }
     }
 
     if (payload.Category === 'B2B') {
       if (
-        !get(data, 'businessTitle') ||
-        !get(data, 'businessAddress') ||
-        !get(data, 'businessTaxNo')
+        !data?.businessTitle ||
+        !data?.businessAddress ||
+        !data?.businessTaxNo
       ) {
         /** Got incomplete buyer info, so we're not gonna gen invoice immediatelly and make Status = 0. */
         payload.Status = '0'
       }
       payload.PrintFlag = 'Y'
-      payload.BuyerName = get(data, 'businessTitle', '-')
-      payload.BuyerUBN = get(data, 'businessTaxNo', '-')
-      payload.BuyerAddress = get(data, 'businessAddress', '-')
+      payload.BuyerName = data?.businessTitle ?? '-'
+      payload.BuyerUBN = data?.businessTaxNo ?? '-'
+      payload.BuyerAddress = data?.businessAddress ?? '-'
       delete payload.CarrierType
 
-      payload.ItemPrice = map(get(data, 'items', []), (item) =>
-        Math.round(get(item, 'price', 0) / (1 + payload.TaxRate / 100))
+      payload.ItemPrice = map(data?.items ?? [], (item) =>
+        Math.round(item?.price ?? 0 / (1 + payload.TaxRate / 100))
       ).join('|')
-      payload.ItemAmt = map(get(data, 'items', []), (item) =>
+      payload.ItemAmt = map(data?.items ?? [], (item) =>
         Math.round(
-          (get(item, 'price', 0) / (1 + payload.TaxRate / 100)) *
-            get(item, 'count', 0)
+          (item?.price ?? 0 / (1 + payload.TaxRate / 100)) * item?.count ?? 0
         )
       ).join('|')
       if (payload.TaxType === '9') {
@@ -117,21 +108,22 @@ const createInvoice = (data) =>
          */
       }
     } else if (payload.Category === 'B2C') {
-      payload.ItemPrice = map(get(data, 'items', []), (item) =>
-        get(item, 'price', 0)
+      payload.ItemPrice = map(
+        data?.items ?? [],
+        (item) => item?.price ?? 0
       ).join('|')
       payload.ItemAmt = payload.ItemPrice
-      if (get(data, 'loveCode')) {
+      if (data?.loveCode) {
         const expLovecode = /^[0-9]{3,7}$/
-        if (expLovecode.test(get(data, 'loveCode', ''))) {
-          payload.LoveCode = get(data, 'loveCode')
+        if (expLovecode.test(data?.loveCode ?? '')) {
+          payload.LoveCode = data?.loveCode
           /** payload.CarrierType should be null */
         } else {
           /**
            *
            *  throw new Error('Incorrect love-code format.')
            *  payload.CarrierType = CARRIER_TYPE.EXPAY
-           *  payload.CarrierNum = get(data, 'member_mail', '-')
+           *  payload.CarrierNum = _.get(data, 'member_mail', '-')
            *
            */
 
@@ -153,11 +145,11 @@ const createInvoice = (data) =>
               payload.CarrierType === CARRIER_TYPE.PHONE
                 ? /^\/[A-Z0-9.+-]{7}$/
                 : /^[A-Z]{2}[0-9]{14}$/
-            if (!expCarrierNum.test(get(data, 'carrierNum'))) {
+            if (!expCarrierNum.test(data?.carrierNum)) {
               /**
                *
                *  payload.CarrierType = CARRIER_TYPE.EXPAY
-               *  payload.CarrierNum = get(data, 'member_mail', '-')
+               *  payload.CarrierNum = _.get(data, 'member_mail', '-')
                *  throw new Error('Incorrect carrier number.')
                *
                */
@@ -165,22 +157,22 @@ const createInvoice = (data) =>
               delete payload.CarrierType
               payload.PrintFlag = 'Y'
 
-              message += ` Incorrect carrier num: ${get(data, 'carrierNum')}.`
+              message += ` Incorrect carrier num: ${data?.carrierNum}.`
             } else {
-              payload.CarrierNum = get(data, 'carrierNum').trim()
+              payload.CarrierNum = data?.carrierNum.trim()
             }
             break
           }
           case '2':
-            payload.CarrierNum = get(
-              data,
-              'carrierNum',
-              get(data, 'member_mail', '-')
+            payload.CarrierNum = (
+              data?.carrierNum ??
+              data?.member_mail ??
+              '-'
             ).trim()
-            payload.BuyerEmail = get(
-              data,
-              'carrierNum',
-              get(data, 'member_mail', '-')
+            payload.BuyerEmail = (
+              data?.carrierNum ??
+              data?.member_mail ??
+              '-'
             ).trim()
             break
           default:
@@ -192,8 +184,8 @@ const createInvoice = (data) =>
     payload.Comment = truncate(message, 68)
     debug('payload: ', payload)
 
-    const KEY = get(EZPAY, 'KEY', '')
-    const IV = get(EZPAY, 'IV', '')
+    const KEY = EZPAY?.KEY ?? ''
+    const IV = EZPAY?.IV ?? ''
 
     const payloadString = map(
       payload,
@@ -224,23 +216,23 @@ const createInvoice = (data) =>
     debug('decryptedData: ', decryptedData)
 
     superagent
-      .post(get(EZPAY, 'HOST', ''))
+      .post(EZPAY?.HOST ?? '')
       .type('form')
       .send({
-        MerchantID_: get(EZPAY, 'ID', ''),
+        MerchantID_: EZPAY?.ID ?? '',
         PostData_: ciphertext,
       })
       .timeout(11000)
       .end((error, response) => {
         if (!error && response) {
           const result = JSON.parse(response.text)
-          if (get(result, 'Status') === 'SUCCESS') {
+          if (result?.Status === 'SUCCESS') {
             resolve(result)
           } else {
             // eslint-disable-next-line prefer-promise-reject-errors
             reject({
               status: 400,
-              message: get(result, 'Message'),
+              message: result?.Message,
             })
           }
         } else {
@@ -250,10 +242,10 @@ const createInvoice = (data) =>
   })
 
 const genInvoice = (req) => {
-  const data = get(req, 'body', {})
+  const data = req?.body ?? {}
   data.member_name =
-    data.member_name || get(req, 'user.nickname', get(req, 'user.email', '-'))
-  data.member_mail = data.member_mail || get(req, 'user.email', '-')
+    data.member_name || (req?.user?.nickname ?? req?.user?.email ?? '-')
+  data.member_mail = data.member_mail || (req?.user?.email ?? '-')
 
   console.log('[Invoice] Prepare to generate invoice')
   console.log('[Invoice] req.body is: ', data)
@@ -268,9 +260,9 @@ const genInvoice = (req) => {
     .catch((error) => {
       console.error(
         `Error occurred when gen inv for member-transaction:`,
-        get(req, 'user.email', ''),
+        req?.user?.email ?? '',
         '-',
-        get(data, 'transaction_id', '')
+        data?.transaction_id ?? ''
       )
       console.error(error.message)
     })
