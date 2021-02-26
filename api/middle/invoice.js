@@ -54,7 +54,7 @@ const createInvoice = (data) =>
       default:
         payload.TaxRate = EZPAY?.TAX_RATE ?? 5
         payload.TaxAmt = Math.round(
-          data?.amtSales ?? 0 * (EZPAY?.TAX_RATE ?? 5 / 100)
+          (data?.amtSales ?? 0) * ((EZPAY?.TAX_RATE ?? 5) / 100)
         )
         if (payload.TaxType === '9') {
           payload.Amt =
@@ -68,7 +68,7 @@ const createInvoice = (data) =>
             .map((item) => item?.taxType ?? 1)
             .join('|')
         } else {
-          payload.Amt = data?.amtSales ?? 0 - payload.TaxAmt
+          payload.Amt = (data?.amtSales ?? 0) - payload.TaxAmt
           payload.TotalAmt = data?.amtSales ?? 0
         }
     }
