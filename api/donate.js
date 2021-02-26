@@ -5,11 +5,11 @@ const router = express()
 const { post: axiosPost } = require('axios')
 const isEmail = require('validator/lib/isEmail')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
-// const { genInvoice } = require('./middle/invoice')
 const {
   POINT_OBJECT_TYPE,
   CMS_ENDPOINT_DEPRECATED,
 } = require('../configs/config')
+const { genInvoice } = require('./middle/invoice')
 const corsMiddle = require('./middle/corsMiddleExpress')
 
 const apiHost = CMS_ENDPOINT_DEPRECATED
@@ -120,8 +120,8 @@ router.post(
       )
       console.error(e)
     }
-  }
-  // genInvoice
+  },
+  genInvoice
 )
 
 module.exports = router
