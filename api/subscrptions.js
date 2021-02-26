@@ -14,11 +14,11 @@ const isEmail = require('validator/lib/isEmail')
 const { decamelizeKeys } = require('humps')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
 const { get } = require('lodash')
-const { API_PROTOCOL, API_HOST, API_PORT } = require('../../config')
+const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config')
 const corsMiddle = require('../corsMiddle')
 const { handlerError } = require('../../comm')
 
-const apiHost = API_PROTOCOL + '://' + API_HOST + ':' + API_PORT
+const apiHost = CMS_ENDPOINT_DEPRECATED
 
 const PAYMENT_SERVICE = 'tappay'
 const INVOICE_SERVICE = 'ezpay'
