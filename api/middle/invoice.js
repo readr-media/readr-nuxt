@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 
-const { map } = require('lodash')
 const CryptoJS = require('crypto-js')
 const debug = require('debug')('READR-API:middle:invoice')
 const moment = require('moment')
@@ -26,8 +25,8 @@ const createInvoice = (data) =>
       BuyerEmail: data?.member_mail ?? '-',
       PrintFlag: data?.printFlag ?? 'N',
       TaxType: EZPAY?.TAX_TYPE ?? '1',
-      ItemName: map(data?.items ?? [], (item) => item?.name ?? '').join('|'),
-      ItemCount: map(data?.items ?? [], (item) => item?.count ?? '').join('|'),
+      ItemName: (data?.items ?? []).map((item) => item?.name ?? '').join('|'),
+      ItemCount: (data?.items ?? []).map((item) => item?.count ?? '').join('|'),
       ItemUnit: data?.item_unit || (EZPAY?.UNIT ?? 'Unit'),
     }
     let message = `Paid by credit card: ****-****-****-${
@@ -67,10 +66,9 @@ const createInvoice = (data) =>
             0 - payload.TaxAmt
           payload.TotalAmt =
             data?.amtSales ?? 0 + data?.amtZero ?? 0 + data?.amtFree ?? 0
-          payload.ItemTaxType = map(
-            data?.items ?? [],
-            (item) => item?.taxType ?? 1
-          ).join('|')
+          payload.ItemTaxType = (data?.items ?? [])
+            .map((item) => item?.taxType ?? 1)
+            .join('|')
         } else {
           payload.Amt = data?.amtSales ?? 0 - payload.TaxAmt
           payload.TotalAmt = data?.amtSales ?? 0
@@ -92,14 +90,18 @@ const createInvoice = (data) =>
       payload.BuyerAddress = data?.businessAddress ?? '-'
       delete payload.CarrierType
 
-      payload.ItemPrice = map(data?.items ?? [], (item) =>
-        Math.round(item?.price ?? 0 / (1 + payload.TaxRate / 100))
-      ).join('|')
-      payload.ItemAmt = map(data?.items ?? [], (item) =>
-        Math.round(
-          (item?.price ?? 0 / (1 + payload.TaxRate / 100)) * item?.count ?? 0
+      payload.ItemPrice = (data?.items ?? [])
+        .map((item) =>
+          Math.round(item?.price ?? 0 / (1 + payload.TaxRate / 100))
         )
-      ).join('|')
+        .join('|')
+      payload.ItemAmt = (data?.items ?? [])
+        .map((item) =>
+          Math.round(
+            (item?.price ?? 0 / (1 + payload.TaxRate / 100)) * item?.count ?? 0
+          )
+        )
+        .join('|')
       if (payload.TaxType === '9') {
         payload.TaxType = '1'
         console.error('Not offering this taxtype yet.')
@@ -108,10 +110,9 @@ const createInvoice = (data) =>
          */
       }
     } else if (payload.Category === 'B2C') {
-      payload.ItemPrice = map(
-        data?.items ?? [],
-        (item) => item?.price ?? 0
-      ).join('|')
+      payload.ItemPrice = (data?.items ?? [])
+        .map((item) => item?.price ?? 0)
+        .join('|')
       payload.ItemAmt = payload.ItemPrice
       if (data?.loveCode) {
         const expLovecode = /^[0-9]{3,7}$/
@@ -187,10 +188,9 @@ const createInvoice = (data) =>
     const KEY = EZPAY?.KEY ?? ''
     const IV = EZPAY?.IV ?? ''
 
-    const payloadString = map(
-      payload,
-      (item, key) => `${key}=${rawurlencode(item)}`
-    ).join('&')
+    const payloadString = Object.entries(payload)
+      .map(([key, item]) => `${key}=${rawurlencode(item)}`)
+      .join('&')
     const encrypted = CryptoJS.AES.encrypt(
       payloadString,
       CryptoJS.enc.Utf8.parse(KEY),
