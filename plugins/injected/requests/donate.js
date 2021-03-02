@@ -1,7 +1,7 @@
 const { camelizeKeys } = require('humps')
 const { create: createAxios } = require('axios')
 
-const { REQUEST_TIMEOUT } = require('../../configs/config.js')
+const { REQUEST_TIMEOUT } = require('../../../configs/config.js')
 
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
 
