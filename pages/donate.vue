@@ -1,17 +1,19 @@
 <template>
   <div>
-    <UiHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
+    <RdHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
     <Container />
   </div>
 </template>
 
 <script>
+import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import { SITE_TITLE } from '~/constants/metadata'
 import Container from '~/components/donate/Container.vue'
 
 export default {
   name: 'AppDonate',
   components: {
+    RdHeader,
     Container,
   },
   head() {
