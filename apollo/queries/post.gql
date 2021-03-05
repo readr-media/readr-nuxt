@@ -1,5 +1,6 @@
 query post($id: ID!) {
   post: Post(where: { id: $id }) {
+    slug
     contentApiData
   }
 }

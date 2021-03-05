@@ -8,14 +8,14 @@
 <script>
 import { post } from '~/apollo/queries/post.gql'
 
-const KEYSTONE_POST_IDS = [2747]
+const KEYSTONE_POST_IDS = [2749]
 
 export default {
   name: 'Post',
 
   components: {
     RdNews: () => import('~/components/app/RdNews.vue'),
-    RdReport: () => import('~/components/app/RdReport.vue'),
+    RdReport: () => import('~/components/app/Report/RdReport.vue'),
   },
 
   async fetch() {

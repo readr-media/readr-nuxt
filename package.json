@@ -28,11 +28,14 @@
     "@nuxtjs/composition-api": "^0.18.1",
     "@nuxtjs/dayjs": "^1.1.9",
     "@readr-media/old-news-project-slugs": "^1.1.1",
+    "@readr-media/web-components": "^2.1.0",
+    "archieml": "^0.4.2",
     "axios": "^0.19.2",
     "cross-env": "^7.0.2",
     "googleapis": "^57.0.0",
     "graphql-tag": "^2.10.4",
     "humps": "^2.0.1",
+    "ityped": "^1.0.3",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-helmet": "^5.2.0",
@@ -44,6 +47,7 @@
     "scroll-into-view": "^1.15.0",
     "uuid": "^8.3.0",
     "vue-infinite-loading": "^2.4.5",
+    "vue-lazy-renderer": "^1.2.1",
     "vue-lazyload": "^1.3.3"
   },
   "devDependencies": {
