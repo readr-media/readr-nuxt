@@ -15,6 +15,7 @@
 
 <script>
 export default {
+  name: 'RdDonateRadioItem',
   props: {
     value: {
       type: String,

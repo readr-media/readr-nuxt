@@ -54,7 +54,7 @@
 
 <script>
 export default {
-  name: 'DonateResult',
+  name: 'RdDonateResult',
   props: {
     isResultSuccess: {
       type: Boolean,

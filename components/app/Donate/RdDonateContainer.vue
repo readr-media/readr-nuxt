@@ -21,6 +21,7 @@ import RdDonateResult from './RdDonateResult.vue'
 import RdDonateForm from './RdDonateForm.vue'
 
 export default {
+  name: 'RdDonateContainer',
   components: {
     RdDonateForm,
     RdDonateResult,

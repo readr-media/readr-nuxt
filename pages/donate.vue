@@ -11,7 +11,7 @@ import { SITE_TITLE } from '~/constants/metadata'
 import RdDonateContainer from '~/components/app/Donate/RdDonateContainer.vue'
 
 export default {
-  name: 'AppDonate',
+  name: 'Donate',
   components: {
     RdHeader,
     RdDonateContainer,

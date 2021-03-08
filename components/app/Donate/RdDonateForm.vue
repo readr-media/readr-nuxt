@@ -255,7 +255,7 @@ const CARRIER_TYPE_NUM = {
 }
 
 export default {
-  name: 'DonateForm',
+  name: 'RdDonateForm',
   components: {
     RdDonateRadioItem,
   },
