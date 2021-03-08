@@ -6,7 +6,7 @@
       @showResultSuccess="onShowResultSuccess"
       @showResultFail="onShowResultFail"
     />
-    <DonateResult
+    <RdDonateResult
       v-else
       :isResultSuccess="isResultSuccess"
       :formData="formData"
@@ -17,13 +17,13 @@
 </template>
 
 <script>
-import DonateResult from '../../donate/Result.vue'
+import RdDonateResult from './RdDonateResult.vue'
 import RdDonateForm from './RdDonateForm.vue'
 
 export default {
   components: {
     RdDonateForm,
-    DonateResult,
+    RdDonateResult,
   },
   data() {
     return {
