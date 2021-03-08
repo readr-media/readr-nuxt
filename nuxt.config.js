@@ -126,6 +126,8 @@ Object.assign(module.exports, {
     { path: '/api/public', handler: '~/api/public.js' },
     { path: '/api/cms', handler: '~/api/cms.js' },
     { path: '/api/google-sheets', handler: '~/api/google-sheets.js' },
+    { path: '/api/donate', handler: '~/api/donate.js' },
+    { path: '/api/subscriptions', handler: '~/api/subscriptions.js' },
   ],
   /*
    ** Nuxt.js dev-modules
