@@ -3,15 +3,15 @@
     <RdMainTitle :text="cmsData.title" class="profile-story__main-title" />
 
     <section
-      v-for="(story, idx) in cmsData.stories"
+      v-for="(story, storyIdx) in cmsData.stories"
       :key="story.name"
       class="story"
     >
-      <div class="header" @click="toggleBody(idx)">
+      <div class="header" @click="toggleBody(storyIdx)">
         <img
           :src="
             require(`~/assets/report/how-to-choose-a-kindergarten/profile${
-              idx + 1
+              storyIdx + 1
             }.png`)
           "
           alt=""
@@ -24,22 +24,33 @@
           <p>{{ story.description }}</p>
         </div>
 
-        <SvgArror :class="{ open: shouldOpenBodies[idx] }" />
+        <SvgArror :class="{ open: shouldOpenBodies[storyIdx] }" />
       </div>
 
-      <div v-if="shouldOpenBodies[idx]" class="body">
+      <div v-if="shouldOpenBodies[storyIdx]" class="body">
         <h3 class="htcak-h2">{{ story.title }}</h3>
 
         <div class="cares">
           <h4 class="htcak-small">獨家挑選心法</h4>
           <div class="wrapper">
-            <div v-for="care in story.cares" :key="care" class="care">
+            <div
+              v-for="(care, idx) in story.cares.slice(0, 3)"
+              :key="care"
+              class="care"
+            >
               <img
-                src="~/assets/report/how-to-choose-a-kindergarten/checkbox.png"
+                :src="
+                  require(`~/assets/report/how-to-choose-a-kindergarten/num${
+                    idx + 1
+                  }.png`)
+                "
                 alt=""
               />
               <span class="htcak-h3">{{ care }}</span>
             </div>
+          </div>
+          <div class="care-less">
+            {{ `> ${story.cares.slice(3).join(' > ')}` }}
           </div>
         </div>
 
@@ -217,6 +228,7 @@ svg {
 }
 
 .wrapper {
+  margin-bottom: 8px;
   @include media-breakpoint-up(md) {
     display: flex;
     align-items: center;
@@ -230,14 +242,20 @@ svg {
   + .care {
     margin: 4px 0 0 0;
     @include media-breakpoint-up(md) {
-      margin: 0 0 0 24px;
+      margin: 0 0 0 20px;
     }
   }
 
   img {
     width: 24px;
-    margin-right: 12px;
+    margin-right: 8px;
   }
+}
+
+.care-less {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
 }
 
 h3 {
