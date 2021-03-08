@@ -1,20 +1,20 @@
 <template>
   <div>
     <RdHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
-    <Container />
+    <RdDonateContainer />
   </div>
 </template>
 
 <script>
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import { SITE_TITLE } from '~/constants/metadata'
-import Container from '~/components/donate/Container.vue'
+import RdDonateContainer from '~/components/app/Donate/RdDonateContainer.vue'
 
 export default {
   name: 'AppDonate',
   components: {
     RdHeader,
-    Container,
+    RdDonateContainer,
   },
   head() {
     const metaTitle = `贊助 READr - ${SITE_TITLE}`

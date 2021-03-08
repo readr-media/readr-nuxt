@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import DonateForm from './Form.vue'
-import DonateResult from './Result.vue'
+import DonateForm from '../../donate/Form.vue'
+import DonateResult from '../../donate/Result.vue'
 
 export default {
   components: {
