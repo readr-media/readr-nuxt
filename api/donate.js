@@ -10,7 +10,7 @@ const {
   CMS_ENDPOINT_DEPRECATED,
 } = require('../configs/config')
 const { genInvoice } = require('./middle/invoice')
-const corsMiddle = require('./middle/corsMiddleExpress')
+const corsMiddle = require('./middle/cors-middle-express')
 
 const apiHost = CMS_ENDPOINT_DEPRECATED
 
