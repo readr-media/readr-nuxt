@@ -7,7 +7,7 @@
       </div>
     </header>
     <div class="donate__block type">
-      <RadioItem
+      <RdDonateRadioItem
         :value="'subscription'"
         :valueSelected="donateType"
         :class="{ active: donateType === 'subscription' }"
@@ -15,8 +15,8 @@
         @change="changeDonateType"
       >
         每月定額
-      </RadioItem>
-      <RadioItem
+      </RdDonateRadioItem>
+      <RdDonateRadioItem
         :value="'once'"
         :valueSelected="donateType"
         :class="{ active: donateType === 'once' }"
@@ -24,7 +24,7 @@
         @change="changeDonateType"
       >
         單筆贊助
-      </RadioItem>
+      </RdDonateRadioItem>
     </div>
     <div class="donate__block donate__donate-amount donate-amount">
       <h2 class="bold">
@@ -142,13 +142,13 @@
         電子發票
       </h2>
       <div class="carriers__carrier carrier">
-        <RadioItem
+        <RdDonateRadioItem
           :value="'carrierEmail'"
           :valueSelected="carrierTypeSelected"
           @change="changeCarrierType"
         >
           Email 載具
-        </RadioItem>
+        </RdDonateRadioItem>
         <div
           v-show="carrierTypeSelected === 'carrierEmail'"
           class="carrier__inputs"
@@ -161,13 +161,13 @@
         </div>
       </div>
       <div class="carriers__carrier carrier">
-        <RadioItem
+        <RdDonateRadioItem
           :value="'carrierPhone'"
           :valueSelected="carrierTypeSelected"
           @change="changeCarrierType"
         >
           手機條碼載具
-        </RadioItem>
+        </RdDonateRadioItem>
         <div
           v-show="carrierTypeSelected === 'carrierPhone'"
           class="carrier__inputs"
@@ -180,13 +180,13 @@
         </div>
       </div>
       <div class="carriers__carrier carrier">
-        <RadioItem
+        <RdDonateRadioItem
           :value="'carrierNatural'"
           :valueSelected="carrierTypeSelected"
           @change="changeCarrierType"
         >
           自然人憑證條碼
-        </RadioItem>
+        </RdDonateRadioItem>
         <div
           v-show="carrierTypeSelected === 'carrierNatural'"
           class="carrier__inputs"
@@ -199,13 +199,13 @@
         </div>
       </div>
       <div class="carriers__carrier carrier">
-        <RadioItem
+        <RdDonateRadioItem
           :value="'carrierBusiness'"
           :valueSelected="carrierTypeSelected"
           @change="changeCarrierType"
         >
           三聯式發票
-        </RadioItem>
+        </RdDonateRadioItem>
         <div
           v-show="carrierTypeSelected === 'carrierBusiness'"
           class="carrier__inputs"
@@ -244,7 +244,7 @@
 </template>
 
 <script>
-import RadioItem from '../../shared/Donate/RdDonateRadioItem.vue'
+import RdDonateRadioItem from '../../shared/Donate/RdDonateRadioItem.vue'
 import { TAPPAY as configTappay } from '~/configs/config'
 
 const CARRIER_TYPE_NUM = {
@@ -257,7 +257,7 @@ const CARRIER_TYPE_NUM = {
 export default {
   name: 'DonateForm',
   components: {
-    RadioItem,
+    RdDonateRadioItem,
   },
   data() {
     return {
