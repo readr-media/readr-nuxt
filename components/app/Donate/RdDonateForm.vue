@@ -244,7 +244,7 @@
 </template>
 
 <script>
-import RadioItem from './RadioItem.vue'
+import RadioItem from '../../donate/RadioItem.vue'
 import { TAPPAY as configTappay } from '~/configs/config'
 
 const CARRIER_TYPE_NUM = {

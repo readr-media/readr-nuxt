@@ -1,6 +1,6 @@
 <template>
   <section class="app-donate">
-    <DonateForm
+    <RdDonateForm
       v-if="!showResult"
       @submitForm="onFormSubmit"
       @showResultSuccess="onShowResultSuccess"
@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import DonateForm from '../../donate/Form.vue'
 import DonateResult from '../../donate/Result.vue'
+import RdDonateForm from './RdDonateForm.vue'
 
 export default {
   components: {
-    DonateForm,
+    RdDonateForm,
     DonateResult,
   },
   data() {
