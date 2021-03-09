@@ -2,7 +2,7 @@
   <div class="htcak">
     <div ref="header" class="header" :class="{ hidden: shouldHideHeader }">
       <div class="wrapper" :class="{ yellow: !shouldOpenGame }">
-        <readr-header />
+        <RdReportHeader />
       </div>
       <RdNavbar
         :navItems="navItems"
@@ -56,6 +56,7 @@ import RdCover from './components/RdCover.vue'
 import RdMultipleChoice from './components/RdMultipleChoice.vue'
 import RdChoiceResult from './components/RdChoiceResult.vue'
 import RdProfileStory from './components/RdProfileStory.vue'
+import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
@@ -72,6 +73,7 @@ export default {
     RdMultipleChoice,
     RdChoiceResult,
     RdProfileStory,
+    RdReportHeader,
   },
 
   directives: {
