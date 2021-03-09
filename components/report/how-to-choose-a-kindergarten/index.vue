@@ -44,6 +44,7 @@
         :id="NAV_ITEMS_IDS[1]"
         v-intersect="intersectionObserver"
         :cmsData="contentApiData.profile"
+        @sendGaEvt="sendGaEvt"
       />
 
       <div id="report-article" v-intersect="intersectionObserver" />

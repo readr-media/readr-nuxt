@@ -84,17 +84,24 @@ export default {
 
   data() {
     return {
-      shouldOpenBodies: [false],
+      shouldOpenBodies: [],
+      wereGaEvtsSent: [],
     }
   },
 
   beforeMount() {
-    this.shouldOpenBodies = Array(this.cmsData.stories.length).fill(false)
+    const { length } = this.cmsData.stories
+    this.shouldOpenBodies = Array(length).fill(false)
+    this.wereGaEvtsSent = Array(length).fill(false)
   },
 
   methods: {
     toggleBody(idx) {
       this.$set(this.shouldOpenBodies, idx, !this.shouldOpenBodies[idx])
+      if (!this.wereGaEvtsSent[idx]) {
+        this.$emit('sendGaEvt', { action: 'click', label: `家長${idx + 1}` })
+        this.$set(this.wereGaEvtsSent, idx, true)
+      }
     },
     content(story) {
       return story.content.replace(/\n/g, '<br />')
