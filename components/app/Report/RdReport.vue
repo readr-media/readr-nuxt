@@ -27,6 +27,8 @@ import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
+import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
+
 export default {
   name: 'RdReport',
 
@@ -86,6 +88,59 @@ export default {
     contentApiData() {
       return this.cmsData.contentApiData
     },
+  },
+
+  head() {
+    const {
+      title,
+      heroImage,
+      ogTitle,
+      ogDescription,
+      ogImage,
+      tags = [],
+      publishTime,
+      updatedAt,
+    } = this.cmsData
+
+    const metaTitle = `${ogTitle || title} - ${SITE_TITLE}`
+    const ogImg =
+      ogImage?.urlOriginal || heroImage?.urlOriginal || `${SITE_URL}/og.jpg`
+    const ogTags = tags.map(function buildOgTag(tag) {
+      return {
+        property: 'article:tag',
+        content: tag.name,
+      }
+    })
+    const metaOg = [
+      { hid: 'og:title', property: 'og:title', content: metaTitle },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: ogDescription,
+      },
+      { hid: 'og:image', property: 'og:image', content: ogImg },
+      {
+        hid: 'og:url',
+        property: 'og:url',
+        content: `${SITE_URL}${this.$route.path}`,
+      },
+      { hid: 'og:type', property: 'og:type', content: 'article' },
+      {
+        property: 'article:publisher',
+        content: 'https://www.facebook.com/readr.tw',
+      },
+      { property: 'article:published_time', content: publishTime },
+      { property: 'article:modified_time', content: updatedAt },
+      ...ogTags,
+    ]
+
+    return {
+      title: metaTitle,
+      meta: [
+        { hid: 'description', name: 'description', content: ogDescription },
+        ...metaOg,
+      ],
+    }
   },
 }
 </script>

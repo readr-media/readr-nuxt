@@ -1,6 +1,20 @@
 query post($id: ID!) {
   post: Post(where: { id: $id }) {
     slug
+    title: name
+    heroImage {
+      urlOriginal
+    }
     contentApiData
+    ogTitle
+    ogDescription
+    ogImage {
+      urlOriginal
+    }
+    tags {
+      name
+    }
+    publishTime
+    updatedAt
   }
 }
