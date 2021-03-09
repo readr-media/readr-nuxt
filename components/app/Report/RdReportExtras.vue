@@ -2,8 +2,14 @@
 import RdTitle from '~/components/shared/RdTitle.vue'
 import RdUnorderedList from '~/components/shared/RdUnorderedList.vue'
 
+import intersect from '~/components/helpers/directives/intersect.js'
+
 export default {
   name: 'RdReportExtras',
+
+  directives: {
+    intersect,
+  },
 
   props: {
     sections: {
@@ -13,11 +19,29 @@ export default {
     },
   },
 
+  data() {
+    return {
+      scrollDepthObserver: undefined,
+    }
+  },
+
+  mounted() {
+    this.setupScrollDepthObserver()
+  },
+
+  beforeDestroy() {
+    this.cleanupObservers()
+  },
+
   methods: {
     buildSection(section) {
       return (
         <section>
-          <RdTitle class="report-extras__title" text={section.title} />
+          <RdTitle
+            vIntersect={this.scrollDepthObserver}
+            class="report-extras__title"
+            text={section.title}
+          />
           {section.contents.map(this.buildContent)}
         </section>
       )
@@ -35,6 +59,25 @@ export default {
         default:
           return <p domPropsInnerHTML={content.value}></p>
       }
+    },
+
+    setupScrollDepthObserver() {
+      this.scrollDepthObserver = new IntersectionObserver((entries) => {
+        entries.forEach(({ isIntersecting, target }) => {
+          if (isIntersecting) {
+            const title = target.textContent
+            this.$emit('sendGaEvent', {
+              action: 'scroll',
+              label: `scroll to ${title}`,
+            })
+            this.scrollDepthObserver.unobserve(target)
+          }
+        })
+      })
+    },
+    cleanupObservers() {
+      this.scrollDepthObserver.disconnect()
+      this.scrollDepthObserver = undefined
     },
   },
 

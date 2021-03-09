@@ -11,6 +11,7 @@
     <RdReportExtras
       v-if="shouldMountExtras"
       :sections="contentApiData.extras"
+      @sendGaEvent="sendGaEvent"
     />
     <RdReportCredit
       v-if="shouldMountCredit"
