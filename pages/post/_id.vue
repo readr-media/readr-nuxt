@@ -8,7 +8,7 @@
 <script>
 import { post } from '~/apollo/queries/post.gql'
 
-const KEYSTONE_POST_IDS = [2749]
+const KEYSTONE_POST_IDS = [2749, 2834]
 
 export default {
   name: 'Post',
