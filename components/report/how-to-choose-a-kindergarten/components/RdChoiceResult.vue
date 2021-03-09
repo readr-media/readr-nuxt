@@ -14,7 +14,7 @@
 
       <div
         :id="`summary${idx}`"
-        v-intersect="intersectionObserver"
+        v-intersect="summariesObserver"
         class="summary"
       >
         <p>
@@ -33,7 +33,7 @@
     </div>
 
     <RdButton
-      v-intersect="gaEventObserver"
+      v-intersect="buttonObserver"
       text="看專題報導"
       class="choice-result__btn"
       @click.native="handleSeeProfileStory"
@@ -50,6 +50,8 @@ import RdButton from './RdButton.vue'
 import RdButtonUnderline from './RdButtonUnderline.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
+
+import { cleanupIntersectionObserver } from '~/components/helpers/index.js'
 
 export default {
   name: 'RdChoiceResult',
@@ -74,20 +76,21 @@ export default {
 
   data() {
     return {
-      intersectionObserver: undefined,
-      gaEventObserver: undefined,
+      summariesObserver: undefined,
+      buttonObserver: undefined,
     }
   },
 
   mounted() {
-    this.intersectionObserver = new IntersectionObserver(this.handleIntersect)
-    this.gaEventObserver = new IntersectionObserver(
+    this.summariesObserver = new IntersectionObserver(this.handleIntersect)
+    this.buttonObserver = new IntersectionObserver(
       this.handleIntersectToSendGaEvent
     )
   },
 
   beforeDestroy() {
-    this.cleanupObservers()
+    cleanupIntersectionObserver(this, 'summariesObserver')
+    cleanupIntersectionObserver(this, 'buttonObserver')
   },
 
   methods: {
@@ -95,7 +98,7 @@ export default {
       entries.forEach(({ isIntersecting, target }) => {
         if (isIntersecting) {
           this.typeTopicAndPercents(target.id.slice(-1))
-          this.intersectionObserver.unobserve(target)
+          this.summariesObserver.unobserve(target)
         }
       })
     },
@@ -135,16 +138,9 @@ export default {
       entries.forEach(({ isIntersecting, target }) => {
         if (isIntersecting) {
           this.emitSendGaEvent('scroll to 遊戲結果「專題報導」', 'scroll')
-          this.gaEventObserver.unobserve(target)
+          this.buttonObserver.unobserve(target)
         }
       })
-    },
-    cleanupObservers() {
-      this.intersectionObserver.disconnect()
-      this.intersectionObserver = undefined
-
-      this.gaEventObserver.disconnect()
-      this.gaEventObserver = undefined
     },
   },
 }

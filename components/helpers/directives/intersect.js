@@ -1,3 +1,5 @@
+import { isIntersectionObserver } from '../index.js'
+
 const intersect = {
   inserted(el, { value }) {
     if (isIntersectionObserver(value)) {
@@ -24,10 +26,6 @@ const intersect = {
       value = undefined
     }
   },
-}
-
-function isIntersectionObserver(value) {
-  return value instanceof IntersectionObserver
 }
 
 export default intersect

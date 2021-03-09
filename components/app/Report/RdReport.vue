@@ -45,6 +45,7 @@ import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
+import { cleanupIntersectionObserver } from '~/components/helpers/index.js'
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 
 export default {
@@ -132,7 +133,7 @@ export default {
   },
 
   beforeDestroy() {
-    this.cleanupObserver('creditObserver')
+    cleanupIntersectionObserver(this, 'creditObserver')
   },
 
   methods: {
@@ -142,17 +143,13 @@ export default {
           return
         }
 
-        entries.forEach(({ isIntersecting }) => {
+        entries.forEach(({ isIntersecting, target }) => {
           if (isIntersecting) {
             this.sendGaScrollEvent({ label: 'scroll to credit' })
-            this.cleanupObserver('creditObserver')
+            this.creditObserver.unobserve(target)
           }
         })
       })
-    },
-    cleanupObserver(name) {
-      this[name].disconnect()
-      this[name] = undefined
     },
 
     sendGaEvent({ action, label, value }) {

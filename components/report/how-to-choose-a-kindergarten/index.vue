@@ -32,7 +32,7 @@
         <RdChoiceResult
           v-if="shouldOpenGameResult"
           :id="NAV_ITEMS_IDS[0]"
-          v-intersect="intersectionObserver"
+          v-intersect="indexesObserver"
           :results="gameResults"
           @seeProfileStory="handleSeeProfileStory"
           @replayGame="replayGame"
@@ -42,12 +42,12 @@
 
       <RdProfileStory
         :id="NAV_ITEMS_IDS[1]"
-        v-intersect="intersectionObserver"
+        v-intersect="indexesObserver"
         :cmsData="contentApiData.profile"
         @sendGaEvent="sendGaEvent"
       />
 
-      <div id="report-article" v-intersect="intersectionObserver" />
+      <div id="report-article" v-intersect="indexesObserver" />
     </div>
   </div>
 </template>
@@ -65,6 +65,8 @@ import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
+
+import { cleanupIntersectionObserver } from '~/components/helpers/index.js'
 
 const NAV_ITEMS_IDS = ['game', 'profile-story', 'report-article']
 const HEADER_HEIGHT_MD = 141
@@ -120,7 +122,7 @@ export default {
       activeNavItemId: NAV_ITEMS_IDS[0],
       isAutoScrolling: false,
 
-      intersectionObserver: undefined,
+      indexesObserver: undefined,
     }
   },
 
@@ -142,14 +144,14 @@ export default {
   },
 
   mounted() {
-    this.intersectionObserver = new IntersectionObserver(this.handleIntersect, {
+    this.indexesObserver = new IntersectionObserver(this.handleIntersect, {
       threshold: 1,
       rootMargin: `-${HEADER_HEIGHT_MD + 8}px 0px 0px 0px`,
     })
   },
 
   beforeDestroy() {
-    this.cleanupObserver()
+    cleanupIntersectionObserver(this, 'indexesObserver')
   },
 
   methods: {
@@ -333,10 +335,6 @@ export default {
           this.activateNavItem(target.id)
         }
       })
-    },
-    cleanupObserver() {
-      this.intersectionObserver.disconnect()
-      this.intersectionObserver = undefined
     },
 
     sendGaEvent({ action, label, value }) {

@@ -4,6 +4,8 @@ import RdUnorderedList from '~/components/shared/RdUnorderedList.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
+import { cleanupIntersectionObserver } from '~/components/helpers/index.js'
+
 export default {
   name: 'RdReportExtras',
 
@@ -30,7 +32,7 @@ export default {
   },
 
   beforeDestroy() {
-    this.cleanupObservers()
+    cleanupIntersectionObserver(this, 'scrollDepthObserver')
   },
 
   methods: {
@@ -74,10 +76,6 @@ export default {
           }
         })
       })
-    },
-    cleanupObservers() {
-      this.scrollDepthObserver.disconnect()
-      this.scrollDepthObserver = undefined
     },
   },
 
