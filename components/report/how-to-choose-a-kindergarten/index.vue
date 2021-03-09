@@ -128,6 +128,8 @@ export default {
   beforeMount() {
     this.unmountArticle()
     this.unmountExtras()
+    this.unmountDonateButton()
+    this.unmountLatestCoverages()
   },
 
   mounted() {
@@ -148,6 +150,11 @@ export default {
       'hideArticle',
       'unmountExtras',
       'showExtras',
+      'unmountDonateButton',
+      'showDonateButton',
+      'unmountLatestCoverages',
+      'hideLatestCoverages',
+      'showLatestCoverages',
     ]),
 
     handleSubmitChoices(choicesByCategory) {
@@ -199,6 +206,8 @@ export default {
       this.scrollTo(NAV_ITEMS_IDS[0])
       this.hideArticle()
       this.unmountExtras()
+      this.unmountDonateButton()
+      this.hideLatestCoverages()
     },
     handleSeeProfileStory() {
       this.scrollTo(NAV_ITEMS_IDS[1])
@@ -208,6 +217,8 @@ export default {
       this.jumpToTop()
       this.showArticle()
       this.showExtras()
+      this.showDonateButton()
+      this.showLatestCoverages()
     },
     openGame() {
       this.shouldOpenGame = true
@@ -375,6 +386,34 @@ body {
 
 .report-extras {
   background-color: var(--secondary-color) !important;
+}
+
+a.sc-readr-donate-button {
+  &::before {
+    background-color: #2b2b2b;
+  }
+
+  div.sc-readr-donate-button {
+    background-color: var(--primary-color);
+    color: #161616;
+    border-color: #fffcf5;
+
+    &:hover {
+      background-color: #161616;
+      color: var(--primary-color);
+    }
+
+    &:active {
+      color: #fffcf5;
+    }
+  }
+}
+
+readr-latest-coverages {
+  h2.sc-readr-latest-coverages {
+    background-color: var(--primary-color);
+    color: #161616;
+  }
 }
 </style>
 

@@ -16,12 +16,23 @@
       :authors="contentApiData.credit"
       :publishedAt="contentApiData.publishedAt"
     />
+    <div v-if="shouldMountDonateButton" class="donate-button">
+      <readr-donate-button />
+    </div>
+    <LazyRenderer
+      v-if="shouldMountLatestCoverages"
+      v-show="shouldShowArticle"
+      class="latest-coverages"
+    >
+      <readr-latest-coverages />
+    </LazyRenderer>
   </div>
 </template>
 
 <script>
 import archieml from 'archieml'
 import { mapState } from 'vuex'
+import LazyRenderer from 'vue-lazy-renderer'
 
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
@@ -33,6 +44,7 @@ export default {
   name: 'RdReport',
 
   components: {
+    LazyRenderer,
     RdReportArticle,
     RdReportExtras,
     RdReportCredit,
@@ -52,6 +64,9 @@ export default {
       'shouldShowArticle',
       'shouldMountExtras',
       'shouldMountCredit',
+      'shouldMountDonateButton',
+      'shouldMountLatestCoverages',
+      'shouldShowLatestCoverages',
     ]),
 
     featureComponent() {
@@ -144,3 +159,35 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.donate-button {
+  padding: 24px 24px 28px 20px;
+  @include media-breakpoint-up(md) {
+    padding: 48px 24px 52px 20px;
+  }
+  @include media-breakpoint-up(xl) {
+    padding: 60px 24px 64px 20px;
+  }
+}
+
+readr-donate-button {
+  max-width: 476px;
+  margin: 0 auto;
+}
+
+.latest-coverages {
+  padding: 24px 8px;
+  @include media-breakpoint-up(md) {
+    padding: 48px 8px;
+  }
+  @include media-breakpoint-up(xl) {
+    padding: 60px 8px;
+  }
+}
+
+readr-latest-coverages {
+  margin: 0 auto;
+  max-width: 600px;
+}
+</style>

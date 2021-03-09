@@ -4,6 +4,9 @@ function state() {
     shouldShowArticle: true,
     shouldMountExtras: true,
     shouldMountCredit: true,
+    shouldMountDonateButton: true,
+    shouldMountLatestCoverages: true,
+    shouldShowLatestCoverages: true,
   }
 }
 
@@ -24,6 +27,22 @@ const mutations = {
   },
   showExtras(state) {
     state.shouldMountExtras = true
+  },
+  unmountDonateButton(state) {
+    state.shouldMountDonateButton = false
+  },
+  showDonateButton(state) {
+    state.shouldMountDonateButton = true
+  },
+  unmountLatestCoverages(state) {
+    state.shouldMountLatestCoverages = false
+  },
+  hideLatestCoverages(state) {
+    state.shouldShowLatestCoverages = false
+  },
+  showLatestCoverages(state) {
+    state.shouldMountLatestCoverages = true
+    state.shouldShowLatestCoverages = true
   },
 }
 
