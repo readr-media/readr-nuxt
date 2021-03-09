@@ -4,7 +4,10 @@ import RdUnorderedList from '~/components/shared/RdUnorderedList.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
-import { cleanupIntersectionObserver } from '~/components/helpers/index.js'
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/components/helpers/index.js'
 
 export default {
   name: 'RdReportExtras',
@@ -64,7 +67,7 @@ export default {
     },
 
     setupScrollDepthObserver() {
-      this.scrollDepthObserver = new IntersectionObserver((entries) => {
+      setupIntersectionObserver(this, 'scrollDepthObserver', (entries) => {
         entries.forEach(({ isIntersecting, target }) => {
           if (isIntersecting) {
             const title = target.textContent

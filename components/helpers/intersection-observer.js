@@ -1,3 +1,18 @@
+const isInBrowser = typeof window === 'object'
+const doesSupportIntersectionObserver =
+  isInBrowser &&
+  'IntersectionObserver' in window &&
+  'IntersectionObserverEntry' in window &&
+  'intersectionRatio' in window.IntersectionObserverEntry.prototype
+
+async function setupIntersectionObserver(obj, prop, handleIntersect, options) {
+  if (!doesSupportIntersectionObserver) {
+    await import('intersection-observer')
+  }
+
+  obj[prop] = new IntersectionObserver(handleIntersect, options)
+}
+
 function cleanupIntersectionObserver(obj, prop) {
   if (!isIntersectionObserver(obj[prop])) {
     // eslint-disable-next-line no-console
@@ -13,4 +28,26 @@ function isIntersectionObserver(value) {
   return value instanceof IntersectionObserver
 }
 
-export { cleanupIntersectionObserver, isIntersectionObserver }
+if (doesSupportIntersectionObserver) {
+  /**
+   * Minimal polyfill for Edge 15's lack of `isIntersecting`
+   * See: https://github.com/w3c/IntersectionObserver/issues/211
+   */
+  if (!('isIntersecting' in window.IntersectionObserverEntry.prototype)) {
+    Object.defineProperty(
+      window.IntersectionObserverEntry.prototype,
+      'isIntersecting',
+      {
+        get() {
+          return this.intersectionRatio > 0
+        },
+      }
+    )
+  }
+}
+
+export {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+  isIntersectionObserver,
+}

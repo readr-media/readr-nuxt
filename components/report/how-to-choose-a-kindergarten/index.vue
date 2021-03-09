@@ -66,7 +66,10 @@ import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import intersect from '~/components/helpers/directives/intersect.js'
 import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
 
-import { cleanupIntersectionObserver } from '~/components/helpers/index.js'
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/components/helpers/index.js'
 
 const NAV_ITEMS_IDS = ['game', 'profile-story', 'report-article']
 const HEADER_HEIGHT_MD = 141
@@ -144,10 +147,7 @@ export default {
   },
 
   mounted() {
-    this.indexesObserver = new IntersectionObserver(this.handleIntersect, {
-      threshold: 1,
-      rootMargin: `-${HEADER_HEIGHT_MD + 8}px 0px 0px 0px`,
-    })
+    this.setupIndexesObserver()
   },
 
   beforeDestroy() {
@@ -320,22 +320,32 @@ export default {
       window.scrollTo(0, 0)
     },
 
-    handleIntersect(entries) {
-      if (this.isAutoScrolling) {
-        return
-      }
-
-      entries.forEach(({ isIntersecting, target }) => {
-        if (isIntersecting) {
-          if (!this.isScrollingDown) {
-            this.activateNavItem(
-              NAV_ITEMS_IDS[NAV_ITEMS_IDS.indexOf(target.id) - 1]
-            )
+    setupIndexesObserver() {
+      setupIntersectionObserver(
+        this,
+        'indexesObserver',
+        (entries) => {
+          if (this.isAutoScrolling) {
+            return
           }
-        } else if (this.isScrollingDown) {
-          this.activateNavItem(target.id)
+
+          entries.forEach(({ isIntersecting, target }) => {
+            if (isIntersecting) {
+              if (!this.isScrollingDown) {
+                this.activateNavItem(
+                  NAV_ITEMS_IDS[NAV_ITEMS_IDS.indexOf(target.id) - 1]
+                )
+              }
+            } else if (this.isScrollingDown) {
+              this.activateNavItem(target.id)
+            }
+          })
+        },
+        {
+          threshold: 1,
+          rootMargin: `-${HEADER_HEIGHT_MD + 8}px 0px 0px 0px`,
         }
-      })
+      )
     },
 
     sendGaEvent({ action, label, value }) {

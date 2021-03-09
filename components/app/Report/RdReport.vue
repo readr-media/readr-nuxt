@@ -46,7 +46,10 @@ import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
-import { cleanupIntersectionObserver } from '~/components/helpers/index.js'
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/components/helpers/index.js'
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 
 export default {
@@ -140,7 +143,7 @@ export default {
 
   methods: {
     setupCreditObserver() {
-      this.creditObserver = new IntersectionObserver((entries) => {
+      setupIntersectionObserver(this, 'creditObserver', (entries) => {
         if (!this.shouldObserveCredit) {
           return
         }

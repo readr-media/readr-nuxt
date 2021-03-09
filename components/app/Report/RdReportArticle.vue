@@ -6,7 +6,10 @@ import RdInfogram from '~/components/shared/RdInfogram.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
-import { cleanupIntersectionObserver } from '~/components/helpers/index.js'
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/components/helpers/index.js'
 import styleVariables from '~/scss/_variables.scss'
 
 export default {
@@ -103,7 +106,7 @@ export default {
     },
 
     setupScrollDepthObserver() {
-      this.scrollDepthObserver = new IntersectionObserver((entries) => {
+      setupIntersectionObserver(this, 'scrollDepthObserver', (entries) => {
         entries.forEach(({ isIntersecting, target }) => {
           if (isIntersecting) {
             const title = target.textContent

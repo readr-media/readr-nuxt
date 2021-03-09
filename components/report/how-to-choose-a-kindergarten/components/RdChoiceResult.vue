@@ -51,7 +51,10 @@ import RdButtonUnderline from './RdButtonUnderline.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
-import { cleanupIntersectionObserver } from '~/components/helpers/index.js'
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/components/helpers/index.js'
 
 export default {
   name: 'RdChoiceResult',
@@ -82,10 +85,8 @@ export default {
   },
 
   mounted() {
-    this.summariesObserver = new IntersectionObserver(this.handleIntersect)
-    this.buttonObserver = new IntersectionObserver(
-      this.handleIntersectToSendGaEvent
-    )
+    this.setupSummariesObserver()
+    this.setupButtonObserver()
   },
 
   beforeDestroy() {
@@ -94,12 +95,14 @@ export default {
   },
 
   methods: {
-    handleIntersect(entries) {
-      entries.forEach(({ isIntersecting, target }) => {
-        if (isIntersecting) {
-          this.typeTopicAndPercents(target.id.slice(-1))
-          this.summariesObserver.unobserve(target)
-        }
+    setupSummariesObserver() {
+      setupIntersectionObserver(this, 'summariesObserver', (entries) => {
+        entries.forEach(({ isIntersecting, target }) => {
+          if (isIntersecting) {
+            this.typeTopicAndPercents(target.id.slice(-1))
+            this.summariesObserver.unobserve(target)
+          }
+        })
       })
     },
     typeTopicAndPercents(idx) {
@@ -134,12 +137,14 @@ export default {
     emitSendGaEvent(label, action = 'click') {
       this.$emit('sendGaEvent', { label, action })
     },
-    handleIntersectToSendGaEvent(entries) {
-      entries.forEach(({ isIntersecting, target }) => {
-        if (isIntersecting) {
-          this.emitSendGaEvent('scroll to 遊戲結果「專題報導」', 'scroll')
-          this.buttonObserver.unobserve(target)
-        }
+    setupButtonObserver() {
+      setupIntersectionObserver(this, 'buttonObserver', (entries) => {
+        entries.forEach(({ isIntersecting, target }) => {
+          if (isIntersecting) {
+            this.emitSendGaEvent('scroll to 遊戲結果「專題報導」', 'scroll')
+            this.buttonObserver.unobserve(target)
+          }
+        })
       })
     },
   },
