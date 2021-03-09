@@ -10,6 +10,7 @@
     />
     <RdReportExtras
       v-if="shouldMountExtras"
+      v-show="shouldShowExtras"
       :sections="contentApiData.extras"
       @sendGaEvent="sendGaEvent"
     />
@@ -82,6 +83,7 @@ export default {
       'shouldShowArticle',
 
       'shouldMountExtras',
+      'shouldShowExtras',
 
       'shouldMountCredit',
       'shouldObserveCredit',

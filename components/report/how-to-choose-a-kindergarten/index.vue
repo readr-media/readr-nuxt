@@ -161,6 +161,7 @@ export default {
       'showArticle',
 
       'unmountExtras',
+      'hideExtras',
       'showExtras',
 
       'unmountDonateButton',
@@ -234,7 +235,7 @@ export default {
       this.jumpToTop()
       this.scrollTo(NAV_ITEMS_IDS[0])
       this.hideArticle()
-      this.unmountExtras()
+      this.hideExtras()
       this.unmountDonateButton()
       this.hideLatestCoverages()
       this.unobserveCredit()

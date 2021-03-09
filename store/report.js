@@ -4,6 +4,7 @@ function state() {
     shouldShowArticle: true,
 
     shouldMountExtras: true,
+    shouldShowExtras: true,
 
     shouldMountCredit: true,
     shouldObserveCredit: true,
@@ -30,8 +31,12 @@ const mutations = {
   unmountExtras(state) {
     state.shouldMountExtras = false
   },
+  hideExtras(state) {
+    state.shouldShowExtras = false
+  },
   showExtras(state) {
     state.shouldMountExtras = true
+    state.shouldShowExtras = true
   },
 
   unobserveCredit(state) {
