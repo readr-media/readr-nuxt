@@ -1,8 +1,8 @@
 <template>
   <div class="news">
     <RdHeaderProgress
-      @sendGaEvt:logo="$sendGaEvtForHeaderClick('logo')"
-      @sendGaEvt:progress="$sendGaEvtForArticleScroll('end')"
+      @sendGaEvent:logo="$sendGaEventForHeaderClick('logo')"
+      @sendGaEvent:progress="$sendGaEventForArticleScroll('end')"
     />
 
     <article id="post">
@@ -61,7 +61,7 @@
             :text="starRatingBtnText"
             class="post-feedback__btn"
             @click.native="handleClickRatingBtn"
-            @sendGaEvt="$sendGaEvtForArticleClick('rate')"
+            @sendGaEvent="$sendGaEventForArticleClick('rate')"
           />
         </div>
 
@@ -92,7 +92,7 @@
       </h2>
       <RdList
         :posts="latestPosts"
-        @sendGaEvt="$sendGaEvtForArticleClick('related articles')"
+        @sendGaEvent="$sendGaEventForArticleClick('related articles')"
       />
     </section>
   </div>
@@ -157,7 +157,7 @@ export default {
     const {
       route,
       $fetchLatestPosts,
-      // $sendGaEvtForArticleClick,
+      // $sendGaEventForArticleClick,
     } = useContext()
     const postId = route.value.params.id
 
@@ -195,7 +195,7 @@ export default {
 
     // function handleCancelRecordWord() {
     //   deactivateRecordWord()
-    //   $sendGaEvtForArticleClick('words count close')
+    //   $sendGaEventForArticleClick('words count close')
     // }
 
     // function sendFeedbackOfRecordWordToGoogleSheet(feedback) {

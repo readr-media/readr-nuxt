@@ -2,7 +2,7 @@
   <ul class="list">
     <li v-for="post in posts" :key="post.id">
       <article>
-        <a :href="$getHref(post)" target="_blank" @click="$emit('sendGaEvt')">
+        <a :href="$getHref(post)" target="_blank" @click="$emit('sendGaEvent')">
           <div class="img-wrapper">
             <img v-lazy="$getImage(post)" alt="" />
           </div>

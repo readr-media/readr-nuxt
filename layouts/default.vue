@@ -5,9 +5,9 @@
     <RdFooter
       id="default-footer"
       class="default__footer"
-      @sendGaEvt:about="$sendGaEvtForFooterClick('aboutus')"
-      @sendGaEvt:contact="$sendGaEvtForFooterClick('contact')"
-      @sendGaEvt:privacy="$sendGaEvtForFooterClick('privacy')"
+      @sendGaEvent:about="$sendGaEventForFooterClick('aboutus')"
+      @sendGaEvent:contact="$sendGaEventForFooterClick('contact')"
+      @sendGaEvent:privacy="$sendGaEventForFooterClick('privacy')"
     />
 
     <ClientOnly>
@@ -45,12 +45,12 @@ export default {
   },
 
   setup() {
-    const { $sendGaEvtForUsersVisit } = useContext()
+    const { $sendGaEventForUsersVisit } = useContext()
 
     useUpdateViewport()
 
     onMounted(() => {
-      $sendGaEvtForUsersVisit(`readr ${isReadr2User.value ? '2.0' : '3.0'}`)
+      $sendGaEventForUsersVisit(`readr ${isReadr2User.value ? '2.0' : '3.0'}`)
     })
 
     return {

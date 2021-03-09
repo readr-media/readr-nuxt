@@ -3,7 +3,7 @@
     type="button"
     class="btn-primary"
     :class="{ [`btn-primary--${subtype}`]: subtype }"
-    @click="$emit('sendGaEvt')"
+    @click="$emit('sendGaEvent')"
   >
     {{ text }}
   </button>

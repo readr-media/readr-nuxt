@@ -17,7 +17,7 @@
             :href="item.link"
             target="_blank"
             rel="noopener noreferrer"
-            @click="$emit('sendGaEvt:database')"
+            @click="$emit('sendGaEvent:database')"
           >
             <h1>{{ item.title }}</h1>
           </a>
@@ -32,7 +32,7 @@
               :href="gallery.link"
               target="_blank"
               rel="noopener noreferrer"
-              @click="$emit('sendGaEvt:portfolio')"
+              @click="$emit('sendGaEvent:portfolio')"
             >
               <img v-lazy="getImage(gallery)" alt="" />
             </a>
@@ -54,7 +54,7 @@
       v-if="shouldLoadMore"
       :loadMore="loadMore"
       class="database-list__btn-load-more"
-      @click.native="$emit('sendGaEvt:loadMore')"
+      @click.native="$emit('sendGaEvent:loadMore')"
     />
   </div>
 </template>

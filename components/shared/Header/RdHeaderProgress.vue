@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="logo-wrapper">
-      <RdHeaderWithLogo @sendGaEvt="$emit('sendGaEvt:logo')" />
+      <RdHeaderWithLogo @sendGaEvent="$emit('sendGaEvent:logo')" />
       <div class="progress-percent">
         閱讀進度<span>{{ percent }}%</span>
       </div>
@@ -38,7 +38,7 @@ export default {
 
     function handleWatchHasFinishedReading(hasFinished) {
       commitSetUserFinishedReading(hasFinished)
-      emit('sendGaEvt:progress')
+      emit('sendGaEvent:progress')
     }
 
     function commitSetUserFinishedReading(hasFinished) {

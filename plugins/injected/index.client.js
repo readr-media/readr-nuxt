@@ -1,27 +1,27 @@
 const bind = require('ramda/src/bind')
 
 const {
-  sendGaEvtForHomeClick,
-  sendGaEvtForHomeScroll,
-  sendGaEvtForArticleClick,
-  sendGaEvtForArticleScroll,
-  sendGaEvtForLandingClick,
-  sendGaEvtForHeaderClick,
-  sendGaEvtForFooterClick,
-  sendGaEvtForUsersVisit,
-  listenScrollDepthForGaEvt,
+  sendGaEventForHomeClick,
+  sendGaEventForHomeScroll,
+  sendGaEventForArticleClick,
+  sendGaEventForArticleScroll,
+  sendGaEventForLandingClick,
+  sendGaEventForHeaderClick,
+  sendGaEventForFooterClick,
+  sendGaEventForUsersVisit,
+  listenScrollDepthForGaEvent,
 } = require('./ga.client.js')
 
 module.exports = injectAllMethods
 
 function injectAllMethods(ctx, inject) {
-  inject('sendGaEvtForHomeClick', bind(sendGaEvtForHomeClick, ctx))
-  inject('sendGaEvtForHomeScroll', bind(sendGaEvtForHomeScroll, ctx))
-  inject('sendGaEvtForArticleClick', bind(sendGaEvtForArticleClick, ctx))
-  inject('sendGaEvtForArticleScroll', bind(sendGaEvtForArticleScroll, ctx))
-  inject('sendGaEvtForLandingClick', bind(sendGaEvtForLandingClick, ctx))
-  inject('sendGaEvtForHeaderClick', bind(sendGaEvtForHeaderClick, ctx))
-  inject('sendGaEvtForFooterClick', bind(sendGaEvtForFooterClick, ctx))
-  inject('sendGaEvtForUsersVisit', bind(sendGaEvtForUsersVisit, ctx))
-  inject('listenScrollDepthForGaEvt', listenScrollDepthForGaEvt)
+  inject('sendGaEventForHomeClick', bind(sendGaEventForHomeClick, ctx))
+  inject('sendGaEventForHomeScroll', bind(sendGaEventForHomeScroll, ctx))
+  inject('sendGaEventForArticleClick', bind(sendGaEventForArticleClick, ctx))
+  inject('sendGaEventForArticleScroll', bind(sendGaEventForArticleScroll, ctx))
+  inject('sendGaEventForLandingClick', bind(sendGaEventForLandingClick, ctx))
+  inject('sendGaEventForHeaderClick', bind(sendGaEventForHeaderClick, ctx))
+  inject('sendGaEventForFooterClick', bind(sendGaEventForFooterClick, ctx))
+  inject('sendGaEventForUsersVisit', bind(sendGaEventForUsersVisit, ctx))
+  inject('listenScrollDepthForGaEvent', listenScrollDepthForGaEvent)
 }

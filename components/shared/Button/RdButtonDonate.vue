@@ -3,7 +3,7 @@
     href="https://www.readr.tw/donate"
     target="_blank"
     rel="noopener noreferrer"
-    @click="$emit('sendGaEvt')"
+    @click="$emit('sendGaEvent')"
   >
     贊助 READr 一起媒體實驗改革
   </a>

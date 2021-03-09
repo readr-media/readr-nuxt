@@ -2,7 +2,7 @@
   <div class="category">
     <RdHeader
       class="category__header"
-      @sendGaEvt="$sendGaEvtForHeaderClick('logo')"
+      @sendGaEvent="$sendGaEventForHeaderClick('logo')"
     />
 
     <RdSectionHeading title="最新文章" fill="#ebf02c" />

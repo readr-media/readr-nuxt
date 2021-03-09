@@ -32,7 +32,7 @@ export default {
   methods: {
     handleClick(id, name) {
       this.$emit('clickNavItem', id)
-      this.$emit('sendGaEvt', { action: 'click', label: `${name}索引` })
+      this.$emit('sendGaEvent', { action: 'click', label: `${name}索引` })
     },
   },
 }

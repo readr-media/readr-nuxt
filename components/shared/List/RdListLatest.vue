@@ -1,7 +1,11 @@
 <template>
   <div class="list-latest">
     <article class="list-latest__main">
-      <a :href="$getHref(postMain)" target="_blank" @click="$emit('sendGaEvt')">
+      <a
+        :href="$getHref(postMain)"
+        target="_blank"
+        @click="$emit('sendGaEvent')"
+      >
         <div class="img-wrapper">
           <img v-lazy="$getImage(postMain)" alt="" />
         </div>
@@ -13,7 +17,7 @@
     <RdList
       :posts="postsSub"
       class="list-latest__sub"
-      @sendGaEvt="$emit('sendGaEvt')"
+      @sendGaEvent="$emit('sendGaEvent')"
     />
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div class="privacy-rule">
-    <RdHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
+    <RdHeader @sendGaEvent="$sendGaEventForHeaderClick('logo')" />
 
     <div class="container">
       <img src="~/assets/privacy-rule.svg" alt="隱私政策" />

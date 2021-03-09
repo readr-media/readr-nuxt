@@ -85,22 +85,22 @@ export default {
   data() {
     return {
       shouldOpenBodies: [],
-      wereGaEvtsSent: [],
+      wereGaEventsSent: [],
     }
   },
 
   beforeMount() {
     const { length } = this.cmsData.stories
     this.shouldOpenBodies = Array(length).fill(false)
-    this.wereGaEvtsSent = Array(length).fill(false)
+    this.wereGaEventsSent = Array(length).fill(false)
   },
 
   methods: {
     toggleBody(idx) {
       this.$set(this.shouldOpenBodies, idx, !this.shouldOpenBodies[idx])
-      if (!this.wereGaEvtsSent[idx]) {
-        this.$emit('sendGaEvt', { action: 'click', label: `家長${idx + 1}` })
-        this.$set(this.wereGaEvtsSent, idx, true)
+      if (!this.wereGaEventsSent[idx]) {
+        this.$emit('sendGaEvent', { action: 'click', label: `家長${idx + 1}` })
+        this.$set(this.wereGaEventsSent, idx, true)
       }
     },
     content(story) {

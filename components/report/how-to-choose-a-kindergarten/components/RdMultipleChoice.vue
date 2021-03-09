@@ -184,7 +184,7 @@ export default {
         })
       })
 
-      this.emitSendGaEvt({ label: 'send game result', value: this.playTimes })
+      this.emitSendGaEvent({ label: 'send game result', value: this.playTimes })
     },
     async handleAnimationend() {
       this.bagState = 'mid'
@@ -196,10 +196,10 @@ export default {
     },
     handleSkip() {
       this.$emit('skip')
-      this.emitSendGaEvt({ label: 'skip game' })
+      this.emitSendGaEvent({ label: 'skip game' })
     },
-    emitSendGaEvt({ action = 'click', label, value }) {
-      this.$emit('sendGaEvt', { action, label, value })
+    emitSendGaEvent({ action = 'click', label, value }) {
+      this.$emit('sendGaEvent', { action, label, value })
     },
   },
 }

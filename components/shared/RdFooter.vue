@@ -18,17 +18,17 @@
         href="https://www.readr.tw/about"
         target="_blank"
         rel="noopener noreferrer"
-        @click="$emit('sendGaEvt:about')"
+        @click="$emit('sendGaEvent:about')"
       >
         關於我們
       </a>
-      <a href="mailto:readr@readr.tw" @click="$emit('sendGaEvt:contact')"
+      <a href="mailto:readr@readr.tw" @click="$emit('sendGaEvent:contact')"
         >聯絡我們</a
       >
       <a
         href="/privacy-rule"
         target="_blank"
-        @click="$emit('sendGaEvt:privacy')"
+        @click="$emit('sendGaEvent:privacy')"
         >隱私政策</a
       >
       <a

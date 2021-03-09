@@ -1,6 +1,6 @@
 <template>
   <div class="error-page">
-    <RdHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
+    <RdHeader @sendGaEvent="$sendGaEventForHeaderClick('logo')" />
 
     <div class="container">
       <section class="error-info" :class="{ 'not-404': !is404 }">

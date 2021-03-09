@@ -17,7 +17,9 @@
       :publishedAt="contentApiData.publishedAt"
     />
     <div v-if="shouldMountDonateButton" class="donate-button">
-      <readr-donate-button @clickButton="sendGaClickEvt({ label: 'donate' })" />
+      <readr-donate-button
+        @clickButton="sendGaClickEvent({ label: 'donate' })"
+      />
     </div>
     <LazyRenderer
       v-if="shouldMountLatestCoverages"
@@ -106,11 +108,11 @@ export default {
   },
 
   methods: {
-    sendGaEvt({ action, label, value }) {
+    sendGaEvent({ action, label, value }) {
       this.$ga.event('projects', action, label, value)
     },
-    sendGaClickEvt({ label, value }) {
-      this.sendGaEvt({ action: 'click', label, value })
+    sendGaClickEvent({ label, value }) {
+      this.sendGaEvent({ action: 'click', label, value })
     },
   },
 

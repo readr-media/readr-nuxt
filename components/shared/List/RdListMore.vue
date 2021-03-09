@@ -9,7 +9,7 @@
               :href="$getHref(post)"
               target="_blank"
               rel="noopener noreferrer"
-              @click="$emit('sendGaEvt')"
+              @click="$emit('sendGaEvent')"
             >
               <div class="img-wrapper">
                 <img v-lazy="$getImage(post)" alt="" />

@@ -8,7 +8,7 @@
         :navItems="navItems"
         :activeId="activeNavItemId"
         @clickNavItem="handleClickNavItem"
-        @sendGaEvt="sendGaEvt"
+        @sendGaEvent="sendGaEvent"
       />
     </div>
 
@@ -23,7 +23,7 @@
         class="htcak__multiple-choice"
         @submitChoices="handleSubmitChoices"
         @skip="skipGame"
-        @sendGaEvt="sendGaEvt"
+        @sendGaEvent="sendGaEvent"
       />
     </div>
 
@@ -36,7 +36,7 @@
           :results="gameResults"
           @seeProfileStory="handleSeeProfileStory"
           @replayGame="replayGame"
-          @sendGaEvt="sendGaEvt"
+          @sendGaEvent="sendGaEvent"
         />
       </transition>
 
@@ -44,7 +44,7 @@
         :id="NAV_ITEMS_IDS[1]"
         v-intersect="intersectionObserver"
         :cmsData="contentApiData.profile"
-        @sendGaEvt="sendGaEvt"
+        @sendGaEvent="sendGaEvent"
       />
 
       <div id="report-article" v-intersect="intersectionObserver" />
@@ -168,7 +168,7 @@ export default {
     handleSubmitChoices(choicesByCategory) {
       this.setGameResults(choicesByCategory)
       this.openResult()
-      this.sendGaEvtsOfChoices(choicesByCategory)
+      this.sendGaEventsOfChoices(choicesByCategory)
       this.playTimes += 1
     },
     setGameResults(choicesByCategory = {}) {
@@ -195,13 +195,13 @@ export default {
       this.openGameResult()
       this.showMainBody()
     },
-    sendGaEvtsOfChoices(choicesByCategory) {
+    sendGaEventsOfChoices(choicesByCategory) {
       Object.values(choicesByCategory)
         .flat()
         .forEach((choice, idx) => {
           // ...thereafter processing is rate-limited to two event hits per second.
           setTimeout(() => {
-            this.sendGaClickEvt({ label: choice })
+            this.sendGaClickEvent({ label: choice })
           }, 1000 * idx)
         })
     },
@@ -330,11 +330,11 @@ export default {
       this.intersectionObserver = undefined
     },
 
-    sendGaEvt({ action, label, value }) {
+    sendGaEvent({ action, label, value }) {
       this.$ga.event('projects', action, label, value)
     },
-    sendGaClickEvt({ label, value }) {
-      this.sendGaEvt({ action: 'click', label, value })
+    sendGaClickEvent({ label, value }) {
+      this.sendGaEvent({ action: 'click', label, value })
     },
   },
 }

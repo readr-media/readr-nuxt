@@ -33,7 +33,7 @@
     </div>
 
     <RdButton
-      v-intersect="gaEvtObserver"
+      v-intersect="gaEventObserver"
       text="看專題報導"
       class="choice-result__btn"
       @click.native="handleSeeProfileStory"
@@ -75,14 +75,14 @@ export default {
   data() {
     return {
       intersectionObserver: undefined,
-      gaEvtObserver: undefined,
+      gaEventObserver: undefined,
     }
   },
 
   mounted() {
     this.intersectionObserver = new IntersectionObserver(this.handleIntersect)
-    this.gaEvtObserver = new IntersectionObserver(
-      this.handleIntersectToSendGaEvt
+    this.gaEventObserver = new IntersectionObserver(
+      this.handleIntersectToSendGaEvent
     )
   },
 
@@ -122,20 +122,20 @@ export default {
     },
     handleSeeProfileStory() {
       this.$emit('seeProfileStory')
-      this.emitSendGaEvt('看專題報導')
+      this.emitSendGaEvent('看專題報導')
     },
     handleReplay() {
       this.$emit('replayGame')
-      this.emitSendGaEvt('play again')
+      this.emitSendGaEvent('play again')
     },
-    emitSendGaEvt(label, action = 'click') {
-      this.$emit('sendGaEvt', { label, action })
+    emitSendGaEvent(label, action = 'click') {
+      this.$emit('sendGaEvent', { label, action })
     },
-    handleIntersectToSendGaEvt(entries) {
+    handleIntersectToSendGaEvent(entries) {
       entries.forEach(({ isIntersecting, target }) => {
         if (isIntersecting) {
-          this.emitSendGaEvt('scroll to 遊戲結果「專題報導」', 'scroll')
-          this.gaEvtObserver.unobserve(target)
+          this.emitSendGaEvent('scroll to 遊戲結果「專題報導」', 'scroll')
+          this.gaEventObserver.unobserve(target)
         }
       })
     },
@@ -143,8 +143,8 @@ export default {
       this.intersectionObserver.disconnect()
       this.intersectionObserver = undefined
 
-      this.gaEvtObserver.disconnect()
-      this.gaEvtObserver = undefined
+      this.gaEventObserver.disconnect()
+      this.gaEventObserver = undefined
     },
   },
 }

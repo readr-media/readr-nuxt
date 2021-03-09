@@ -1,6 +1,6 @@
 <template>
   <header>
-    <RdHeaderWithLogo @sendGaEvt="$emit('sendGaEvt')" />
+    <RdHeaderWithLogo @sendGaEvent="$emit('sendGaEvent')" />
   </header>
 </template>
 

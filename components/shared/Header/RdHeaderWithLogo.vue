@@ -1,6 +1,6 @@
 <template>
   <h1>
-    <nuxt-link to="/" @click.native="$emit('sendGaEvt')">
+    <nuxt-link to="/" @click.native="$emit('sendGaEvent')">
       <SvgReadrLogo />
     </nuxt-link>
   </h1>

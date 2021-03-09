@@ -1,8 +1,8 @@
 <template>
   <readr-header
-    @readrLogoLinkClick="sendGaClickEvt('back to home')"
-    @shareFacebookLinkClick="sendGaClickEvt('share to fb')"
-    @shareLineLinkClick="sendGaClickEvt('share to line')"
+    @readrLogoLinkClick="sendGaClickEvent('back to home')"
+    @shareFacebookLinkClick="sendGaClickEvent('share to fb')"
+    @shareLineLinkClick="sendGaClickEvent('share to line')"
   />
 </template>
 
@@ -11,7 +11,7 @@ export default {
   name: 'RdReportHeader',
 
   methods: {
-    sendGaClickEvt(label) {
+    sendGaClickEvent(label) {
       this.$ga.event('projects', 'click', label)
     },
   },

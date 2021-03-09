@@ -1,7 +1,10 @@
 <template>
   <div class="collaborative-list">
     <article v-for="item in items" :key="item.id">
-      <RdCollaborativeListItem :item="item" @sendGaEvt="$emit('sendGaEvt')" />
+      <RdCollaborativeListItem
+        :item="item"
+        @sendGaEvent="$emit('sendGaEvent')"
+      />
     </article>
   </div>
 </template>

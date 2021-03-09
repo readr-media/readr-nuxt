@@ -1,5 +1,5 @@
 <template>
-  <a :href="href" target="_blank" @click="$emit('sendGaEvt')">
+  <a :href="href" target="_blank" @click="$emit('sendGaEvent')">
     <div class="hero-block">
       <div class="img-wrapper">
         <img

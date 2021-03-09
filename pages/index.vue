@@ -1,12 +1,12 @@
 <template>
   <div>
-    <RdHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
+    <RdHeader @sendGaEvent="$sendGaEventForHeaderClick('logo')" />
 
     <section class="marquee-container">
       <RdMarquee class="home__marquee" />
       <nuxt-link
         to="/landing"
-        @click.native="$sendGaEvtForHomeClick('landing')"
+        @click.native="$sendGaEventForHomeClick('landing')"
       >
         <span>了解更多</span>
         <SvgArrowMore />
@@ -18,7 +18,7 @@
         v-if="shouldOpenEditorChoices"
         :posts="allEditorChoices"
         class="home__carousel"
-        @sendGaEvt="$sendGaEvtForHomeClick('editor choices')"
+        @sendGaEvent="$sendGaEventForHomeClick('editor choices')"
       >
         <template #heading>
           <RdSectionHeading title="編輯精選" />
@@ -36,7 +36,7 @@
         v-if="shouldOpenLatestList"
         :postMain="latestPostMain"
         :postsSub="latestPostsSub"
-        @sendGaEvt="$sendGaEvtForHomeClick('latest articles')"
+        @sendGaEvent="$sendGaEventForHomeClick('latest articles')"
       />
     </section>
 
@@ -49,14 +49,18 @@
         :loadMore="loadMoreDatabases"
         :shouldLoadMore="shouldLoadMoreDatabases"
         class="home__database-list"
-        @sendGaEvt:database="$sendGaEvtForHomeClick('open database github')"
-        @sendGaEvt:portfolio="$sendGaEvtForHomeClick('open database portfolio')"
-        @sendGaEvt:loadMore="$sendGaEvtForHomeClick('open database load more')"
+        @sendGaEvent:database="$sendGaEventForHomeClick('open database github')"
+        @sendGaEvent:portfolio="
+          $sendGaEventForHomeClick('open database portfolio')
+        "
+        @sendGaEvent:loadMore="
+          $sendGaEventForHomeClick('open database load more')
+        "
       />
 
       <RdButtonDonate
         class="home__donate-btn"
-        @sendGaEvt="$sendGaEvtForHomeClick('donate-opendata')"
+        @sendGaEvent="$sendGaEventForHomeClick('donate-opendata')"
       />
     </section>
 
@@ -76,13 +80,13 @@
           :count="countOfCollaboratorWall"
           :names="namesOfCollaboratorWall"
           :loadNames="loadCollaboratorNames"
-          @sendGaEvt="sendGaEvtForCollaboratorWall"
+          @sendGaEvent="sendGaEventForCollaboratorWall"
         />
       </div>
       <RdCollaborativeList
         class="home__collaborative-list"
         :items="allCollaborations"
-        @sendGaEvt="$sendGaEvtForHomeClick('collaboration')"
+        @sendGaEvent="$sendGaEventForHomeClick('collaboration')"
       />
     </section>
 
@@ -105,7 +109,7 @@
             :topic="morePosts.tag"
             :posts="morePosts.posts"
             class="home__list-more"
-            @sendGaEvt="sendGaEvtForMoreList(morePosts.tag)"
+            @sendGaEvent="sendGaEventForMoreList(morePosts.tag)"
           />
         </div>
       </div>
@@ -296,7 +300,7 @@ export default {
 
     this.scrollTo(this.$route.hash)
 
-    this.addListenerToScrollDepthForGaEvt()
+    this.addListenerToScrollDepthForGaEvent()
   },
   methods: {
     async fetchCountOfCollaboratorWall() {
@@ -454,26 +458,29 @@ export default {
       }
     },
 
-    sendGaEvtForCollaboratorWall(doesUnfold) {
-      this.$sendGaEvtForHomeClick(`credit-${doesUnfold ? 'open' : 'close'}`)
+    sendGaEventForCollaboratorWall(doesUnfold) {
+      this.$sendGaEventForHomeClick(`credit-${doesUnfold ? 'open' : 'close'}`)
     },
-    sendGaEvtForMoreList(topic) {
-      this.$sendGaEvtForHomeClick(`category ${topic}`)
+    sendGaEventForMoreList(topic) {
+      this.$sendGaEventForHomeClick(`category ${topic}`)
     },
-    addListenerToScrollDepthForGaEvt() {
+    addListenerToScrollDepthForGaEvent() {
       const { latest, database, collaboration, more } = this.$refs
       const triggers = [
-        { elem: latest, evtFields: ['scroll 到最新文章', 1] },
-        { elem: database, evtFields: ['scroll 到開放資料庫', 2] },
-        { elem: collaboration, evtFields: ['scroll 到協作專區', 3] },
-        { elem: more, evtFields: ['scroll 到更多專題', 4] },
+        { elem: latest, eventFields: ['scroll 到最新文章', 1] },
+        { elem: database, eventFields: ['scroll 到開放資料庫', 2] },
+        { elem: collaboration, eventFields: ['scroll 到協作專區', 3] },
+        { elem: more, eventFields: ['scroll 到更多專題', 4] },
         {
           elem: document.getElementById('default-footer'),
-          evtFields: ['scroll 到 footer ', 5],
+          eventFields: ['scroll 到 footer ', 5],
         },
       ]
 
-      this.$listenScrollDepthForGaEvt(triggers, this.$sendGaEvtForHomeScroll)
+      this.$listenScrollDepthForGaEvent(
+        triggers,
+        this.$sendGaEventForHomeScroll
+      )
     },
   },
 }
