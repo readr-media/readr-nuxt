@@ -51,7 +51,7 @@ pipeline:
       branch: [master]
 
   build:
-    image: node:12.16.2-slim
+    image: node:14.16.0-slim
     commands:
     - apt-get update && apt-get install -y node-gyp
     - yarn install
