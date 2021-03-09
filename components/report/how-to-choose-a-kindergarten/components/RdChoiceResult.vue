@@ -35,9 +35,9 @@
     <RdButton
       text="看專題報導"
       class="choice-result__btn"
-      @click.native="$emit('seeProfileStory')"
+      @click.native="handleSeeProfileStory"
     />
-    <RdButtonUnderline text="重玩一次" @click.native="$emit('replayGame')" />
+    <RdButtonUnderline text="重玩一次" @click.native="handleReplay" />
   </div>
 </template>
 
@@ -114,6 +114,17 @@ export default {
           })
         },
       })
+    },
+    handleSeeProfileStory() {
+      this.$emit('seeProfileStory')
+      this.emitSendGaEvt('看專題報導')
+    },
+    handleReplay() {
+      this.$emit('replayGame')
+      this.emitSendGaEvt('play again')
+    },
+    emitSendGaEvt(label, action = 'click') {
+      this.$emit('sendGaEvt', { label, action })
     },
     cleanupObserver() {
       this.intersectionObserver.disconnect()

@@ -18,9 +18,11 @@
       <RdMultipleChoice
         :id="NAV_ITEMS_IDS[0]"
         :cmsData="contentApiData.game.multipleChoice"
+        :playTimes="playTimes"
         class="htcak__multiple-choice"
         @submitChoices="handleSubmitChoices"
         @skip="skipGame"
+        @sendGaEvt="sendGaEvt"
       />
     </div>
 
@@ -33,6 +35,7 @@
           :results="gameResults"
           @seeProfileStory="handleSeeProfileStory"
           @replayGame="replayGame"
+          @sendGaEvt="sendGaEvt"
         />
       </transition>
 
@@ -95,6 +98,7 @@ export default {
       shouldOpenGame: true,
       shouldOpenGameResult: false,
       gameResults: [],
+      playTimes: 1,
 
       NAV_ITEMS_IDS: Object.freeze(NAV_ITEMS_IDS),
       navItems: Object.freeze([
@@ -162,6 +166,8 @@ export default {
     handleSubmitChoices(choicesByCategory) {
       this.setGameResults(choicesByCategory)
       this.openResult()
+      this.sendGaEvtsOfChoices(choicesByCategory)
+      this.playTimes += 1
     },
     setGameResults(choicesByCategory = {}) {
       const sortedChoices = Object.entries(
@@ -186,6 +192,16 @@ export default {
     openResult() {
       this.openGameResult()
       this.showMainBody()
+    },
+    sendGaEvtsOfChoices(choicesByCategory) {
+      Object.values(choicesByCategory)
+        .flat()
+        .forEach((choice, idx) => {
+          // ...thereafter processing is rate-limited to two event hits per second.
+          setTimeout(() => {
+            this.sendGaClickEvt({ label: choice })
+          }, 1000 * idx)
+        })
     },
     getResultBy(category) {
       return (
@@ -310,6 +326,13 @@ export default {
     cleanupObserver() {
       this.intersectionObserver.disconnect()
       this.intersectionObserver = undefined
+    },
+
+    sendGaEvt({ action, label, value }) {
+      this.$ga.event('projects', action, label, value)
+    },
+    sendGaClickEvt({ label, value }) {
+      this.sendGaEvt({ action: 'click', label, value })
     },
   },
 }

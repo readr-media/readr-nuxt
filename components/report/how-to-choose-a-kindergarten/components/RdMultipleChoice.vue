@@ -54,7 +54,7 @@
       :shouldDisable="!canSubmit"
       @click.native="submit"
     />
-    <RdButtonUnderline text="跳過遊戲看報導" @click.native="$emit('skip')" />
+    <RdButtonUnderline text="跳過遊戲看報導" @click.native="handleSkip" />
   </div>
 </template>
 
@@ -75,6 +75,11 @@ export default {
       type: Object,
       required: true,
       default: () => ({}),
+    },
+    playTimes: {
+      type: Number,
+      required: true,
+      default: undefined,
     },
   },
 
@@ -178,6 +183,8 @@ export default {
           },
         })
       })
+
+      this.emitSendGaEvt({ label: 'send game result', value: this.playTimes })
     },
     async handleAnimationend() {
       this.bagState = 'mid'
@@ -186,6 +193,13 @@ export default {
       await delay(600)
       this.$emit('submitChoices', this.checkedChoicesByCategory)
       this.isSubmitting = false
+    },
+    handleSkip() {
+      this.$emit('skip')
+      this.emitSendGaEvt({ label: 'skip game' })
+    },
+    emitSendGaEvt({ action = 'click', label, value }) {
+      this.$emit('sendGaEvt', { action, label, value })
     },
   },
 }
