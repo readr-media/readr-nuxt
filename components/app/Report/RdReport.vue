@@ -6,6 +6,7 @@
       v-if="shouldMountArticle"
       v-show="shouldShowArticle"
       :contents="contentApiData.article.contents"
+      @sendGaEvent="sendGaEvent"
     />
     <RdReportExtras
       v-if="shouldMountExtras"

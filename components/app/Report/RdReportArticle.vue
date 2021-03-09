@@ -4,10 +4,15 @@ import RdTitle from '~/components/shared/RdTitle.vue'
 import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnotation.vue'
 import RdInfogram from '~/components/shared/RdInfogram.vue'
 
+import intersect from '~/components/helpers/directives/intersect.js'
 import styleVariables from '~/scss/_variables.scss'
 
 export default {
   name: 'RdReportArticle',
+
+  directives: {
+    intersect,
+  },
 
   props: {
     contents: {
@@ -17,14 +22,41 @@ export default {
     },
   },
 
+  data() {
+    return {
+      scrollDepthObserver: undefined,
+    }
+  },
+
+  mounted() {
+    this.setupScrollDepthObserver()
+  },
+
+  beforeDestroy() {
+    this.cleanupObservers()
+  },
+
   methods: {
     buildContent(content) {
       switch (content.type) {
         case 'title':
-          return <RdTitle class="report-article__title" text={content.value} />
+          return (
+            <RdTitle
+              vIntersect={this.scrollDepthObserver}
+              class="report-article__title"
+              text={content.value}
+            />
+          )
 
         case 'subtitle':
-          return <h3 class="report-article__subtitle">{content.value}</h3>
+          return (
+            <h3
+              vIntersect={this.scrollDepthObserver}
+              class="report-article__subtitle"
+            >
+              {content.value}
+            </h3>
+          )
 
         case 'image': {
           const { name, urlMobileSized, urlTabletSized } = content.value
@@ -66,6 +98,25 @@ export default {
             ></p>
           )
       }
+    },
+
+    setupScrollDepthObserver() {
+      this.scrollDepthObserver = new IntersectionObserver((entries) => {
+        entries.forEach(({ isIntersecting, target }) => {
+          if (isIntersecting) {
+            const title = target.textContent
+            this.$emit('sendGaEvent', {
+              action: 'scroll',
+              label: `scroll to ${title}`,
+            })
+            this.scrollDepthObserver.unobserve(target)
+          }
+        })
+      })
+    },
+    cleanupObservers() {
+      this.scrollDepthObserver.disconnect()
+      this.scrollDepthObserver = undefined
     },
   },
 
