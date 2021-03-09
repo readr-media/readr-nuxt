@@ -5,7 +5,7 @@
         v-for="item in navItems"
         :key="item.id"
         :class="{ active: item.id === activeId }"
-        @click="handleClick(item.id)"
+        @click="handleClick(item.id, item.name)"
       >
         {{ item.name }}
       </li>
@@ -30,8 +30,9 @@ export default {
   },
 
   methods: {
-    handleClick(id) {
+    handleClick(id, name) {
       this.$emit('clickNavItem', id)
+      this.$emit('sendGaEvt', { action: 'click', label: `${name}索引` })
     },
   },
 }

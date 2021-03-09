@@ -8,6 +8,7 @@
         :navItems="navItems"
         :activeId="activeNavItemId"
         @clickNavItem="handleClickNavItem"
+        @sendGaEvt="sendGaEvt"
       />
     </div>
 
