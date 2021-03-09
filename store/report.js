@@ -13,7 +13,6 @@ function state() {
 const mutations = {
   unmountArticle(state) {
     state.shouldMountArticle = false
-    state.shouldShowArticle = false
   },
   showArticle(state) {
     state.shouldMountArticle = true
