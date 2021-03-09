@@ -112,7 +112,7 @@ export default {
         }),
         Object.freeze({
           id: NAV_ITEMS_IDS[1],
-          name: '找祕笈',
+          name: '讀秘笈',
         }),
         Object.freeze({
           id: NAV_ITEMS_IDS[2],

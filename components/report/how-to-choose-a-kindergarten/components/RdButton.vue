@@ -74,6 +74,7 @@ div {
 
   &:active {
     color: #fffcf5;
+    transition: none;
   }
 }
 </style>
