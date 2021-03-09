@@ -33,6 +33,7 @@
     </div>
 
     <RdButton
+      v-intersect="gaEvtObserver"
       text="看專題報導"
       class="choice-result__btn"
       @click.native="handleSeeProfileStory"
@@ -74,15 +75,19 @@ export default {
   data() {
     return {
       intersectionObserver: undefined,
+      gaEvtObserver: undefined,
     }
   },
 
   mounted() {
     this.intersectionObserver = new IntersectionObserver(this.handleIntersect)
+    this.gaEvtObserver = new IntersectionObserver(
+      this.handleIntersectToSendGaEvt
+    )
   },
 
   beforeDestroy() {
-    this.cleanupObserver()
+    this.cleanupObservers()
   },
 
   methods: {
@@ -126,9 +131,20 @@ export default {
     emitSendGaEvt(label, action = 'click') {
       this.$emit('sendGaEvt', { label, action })
     },
-    cleanupObserver() {
+    handleIntersectToSendGaEvt(entries) {
+      entries.forEach(({ isIntersecting, target }) => {
+        if (isIntersecting) {
+          this.emitSendGaEvt('scroll to 遊戲結果「專題報導」', 'scroll')
+          this.gaEvtObserver.unobserve(target)
+        }
+      })
+    },
+    cleanupObservers() {
       this.intersectionObserver.disconnect()
       this.intersectionObserver = undefined
+
+      this.gaEvtObserver.disconnect()
+      this.gaEvtObserver = undefined
     },
   },
 }
