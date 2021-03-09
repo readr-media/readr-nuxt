@@ -79,12 +79,16 @@ export default {
     ...mapState('report', [
       'shouldMountArticle',
       'shouldShowArticle',
+
       'shouldMountExtras',
+
       'shouldMountCredit',
+      'shouldObserveCredit',
+
       'shouldMountDonateButton',
+
       'shouldMountLatestCoverages',
       'shouldShowLatestCoverages',
-      'shouldObserveCredit',
     ]),
 
     featureComponent() {

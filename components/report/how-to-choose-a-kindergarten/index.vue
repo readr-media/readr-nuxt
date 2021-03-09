@@ -155,15 +155,19 @@ export default {
   methods: {
     ...mapMutations('report', [
       'unmountArticle',
-      'showArticle',
       'hideArticle',
+      'showArticle',
+
       'unmountExtras',
       'showExtras',
+
       'unmountDonateButton',
       'showDonateButton',
+
       'unmountLatestCoverages',
       'hideLatestCoverages',
       'showLatestCoverages',
+
       'unobserveCredit',
       'observeCredit',
     ]),
