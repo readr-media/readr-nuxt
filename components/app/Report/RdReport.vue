@@ -15,6 +15,7 @@
     />
     <RdReportCredit
       v-if="shouldMountCredit"
+      v-intersect="creditObserver"
       :authors="contentApiData.credit"
       :publishedAt="contentApiData.publishedAt"
     />
@@ -42,6 +43,8 @@ import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
+import intersect from '~/components/helpers/directives/intersect.js'
+
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 
 export default {
@@ -54,12 +57,22 @@ export default {
     RdReportCredit,
   },
 
+  directives: {
+    intersect,
+  },
+
   props: {
     report: {
       type: Object,
       required: true,
       default: () => ({}),
     },
+  },
+
+  data() {
+    return {
+      creditObserver: undefined,
+    }
   },
 
   computed: {
@@ -71,6 +84,7 @@ export default {
       'shouldMountDonateButton',
       'shouldMountLatestCoverages',
       'shouldShowLatestCoverages',
+      'shouldObserveCredit',
     ]),
 
     featureComponent() {
@@ -109,12 +123,42 @@ export default {
     },
   },
 
+  mounted() {
+    this.setupCreditObserver()
+  },
+
+  beforeDestroy() {
+    this.cleanupObserver('creditObserver')
+  },
+
   methods: {
+    setupCreditObserver() {
+      this.creditObserver = new IntersectionObserver((entries) => {
+        if (!this.shouldObserveCredit) {
+          return
+        }
+
+        entries.forEach(({ isIntersecting }) => {
+          if (isIntersecting) {
+            this.sendGaScrollEvent({ label: 'scroll to credit' })
+            this.cleanupObserver('creditObserver')
+          }
+        })
+      })
+    },
+    cleanupObserver(name) {
+      this[name].disconnect()
+      this[name] = undefined
+    },
+
     sendGaEvent({ action, label, value }) {
       this.$ga.event('projects', action, label, value)
     },
     sendGaClickEvent({ label, value }) {
       this.sendGaEvent({ action: 'click', label, value })
+    },
+    sendGaScrollEvent({ label, value }) {
+      this.sendGaEvent({ action: 'scroll', label, value })
     },
   },
 

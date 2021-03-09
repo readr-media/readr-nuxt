@@ -7,6 +7,7 @@ function state() {
     shouldMountDonateButton: true,
     shouldMountLatestCoverages: true,
     shouldShowLatestCoverages: true,
+    shouldObserveCredit: true,
   }
 }
 
@@ -42,6 +43,12 @@ const mutations = {
   showLatestCoverages(state) {
     state.shouldMountLatestCoverages = true
     state.shouldShowLatestCoverages = true
+  },
+  unobserveCredit(state) {
+    state.shouldObserveCredit = false
+  },
+  observeCredit(state) {
+    state.shouldObserveCredit = true
   },
 }
 

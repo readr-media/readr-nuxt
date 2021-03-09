@@ -138,6 +138,7 @@ export default {
     this.unmountExtras()
     this.unmountDonateButton()
     this.unmountLatestCoverages()
+    this.unobserveCredit()
   },
 
   mounted() {
@@ -163,6 +164,8 @@ export default {
       'unmountLatestCoverages',
       'hideLatestCoverages',
       'showLatestCoverages',
+      'unobserveCredit',
+      'observeCredit',
     ]),
 
     handleSubmitChoices(choicesByCategory) {
@@ -228,6 +231,7 @@ export default {
       this.unmountExtras()
       this.unmountDonateButton()
       this.hideLatestCoverages()
+      this.unobserveCredit()
     },
     handleSeeProfileStory() {
       this.scrollTo(NAV_ITEMS_IDS[1])
@@ -239,6 +243,7 @@ export default {
       this.showExtras()
       this.showDonateButton()
       this.showLatestCoverages()
+      this.observeCredit()
     },
     openGame() {
       this.shouldOpenGame = true
