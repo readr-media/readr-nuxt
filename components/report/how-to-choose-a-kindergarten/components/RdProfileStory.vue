@@ -24,7 +24,7 @@
           <p>{{ story.description }}</p>
         </div>
 
-        <SvgArror :class="{ open: shouldOpenBodies[storyIdx] }" />
+        <SvgArrow :class="{ open: shouldOpenBodies[storyIdx] }" />
       </div>
 
       <div v-if="shouldOpenBodies[storyIdx]" class="body">
@@ -64,14 +64,14 @@
 <script>
 import RdMainTitle from './RdMainTitle.vue'
 
-import SvgArror from '~/assets/report/how-to-choose-a-kindergarten/arrow.svg?inline'
+import SvgArrow from '~/assets/report/how-to-choose-a-kindergarten/arrow.svg?inline'
 
 export default {
   name: 'RdProfileStory',
 
   components: {
     RdMainTitle,
-    SvgArror,
+    SvgArrow,
   },
 
   props: {
