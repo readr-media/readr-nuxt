@@ -5,6 +5,7 @@ const { post: axiosPost, get: axiosGet } = require('axios')
 
 const {
   CMS_ENDPOINT,
+  KEYSTONE_DEV_ENDPOINT,
   CMS_ENDPOINT_DEPRECATED,
 } = require('../configs/config.js')
 
@@ -15,9 +16,13 @@ app.use(bodyParser()).use(router.routes())
 
 router.post('/', async function requestGraphqlApi(ctx) {
   const requestBody = ctx.request.body
+  const cmsEndpoint =
+    ctx.request.query.keystoneDev === 'true'
+      ? KEYSTONE_DEV_ENDPOINT
+      : CMS_ENDPOINT
 
   try {
-    const { data, status = 200 } = await axiosPost(CMS_ENDPOINT, requestBody)
+    const { data, status = 200 } = await axiosPost(cmsEndpoint, requestBody)
 
     ctx.status = status
     ctx.body = data

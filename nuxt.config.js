@@ -100,6 +100,10 @@ Object.assign(module.exports, {
         httpEndpoint: `${BASE_URL}/api/cms`,
         browserHttpEndpoint: '/api/cms',
       },
+      keystoneDevClient: {
+        httpEndpoint: `${BASE_URL}/api/cms?keystoneDev=true`,
+        browserHttpEndpoint: '/api/cms?keystoneDev=true',
+      },
     },
   },
   /*

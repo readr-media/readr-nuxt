@@ -8,7 +8,7 @@
 <script>
 import { post } from '~/apollo/queries/post.gql'
 
-const KEYSTONE_POST_IDS = [2749, 2834]
+const KEYSTONE_DEV_POST_IDS = [2749, 2834]
 
 export default {
   name: 'Post',
@@ -37,7 +37,7 @@ export default {
       return this.$route.params.id
     },
     shouldMountNews() {
-      return !KEYSTONE_POST_IDS.includes(Number(this.postId))
+      return !KEYSTONE_DEV_POST_IDS.includes(Number(this.postId))
     },
   },
 
@@ -47,8 +47,9 @@ export default {
       this.post = response.items?.[0] || {}
     },
     async loadReport() {
+      const { keystoneDevClient } = this.$apolloProvider.clients
       const response =
-        (await this.$apollo.query({
+        (await keystoneDevClient.query({
           query: post,
           variables: {
             id: this.postId,
