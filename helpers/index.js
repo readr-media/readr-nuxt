@@ -1,9 +1,9 @@
+const { ENV } = require('../configs/config.js')
+
+const isProdEnv = ENV === 'prod'
+
 Object.assign(module.exports, {
-  inProdEnv,
+  isProdEnv,
 
   ...require('./error.js'),
 })
-
-function inProdEnv(hostname) {
-  return /^www\.readr\.tw/i.test(hostname)
-}

@@ -140,7 +140,7 @@ import { quotes } from '~/apollo/queries/quotes.gql'
 import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/helpers/integrations/index.js'
-import { inProdEnv } from '~/helpers/index.js'
+import { isProdEnv } from '~/helpers/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'
 
@@ -148,16 +148,14 @@ const DATABASES_PAGE_SIZE = 3
 
 const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
 
-if (process.browser) {
-  /* eslint-disable no-var */
-  var TAG_ID_CURRENT_EVENTS = inProdEnv(document.domain) ? 1184 : 103
-  var TAG_ID_EDUCATION = inProdEnv(document.domain) ? 1185 : 104
-  var TAG_ID_POLITICS = inProdEnv(document.domain) ? 1186 : 14
-  var TAG_ID_HUMAN_RIGHTS = inProdEnv(document.domain) ? 1187 : 105
-  var TAG_ID_ENVIRONMENT = inProdEnv(document.domain) ? 1188 : 106
-  var TAG_ID_NEWS = inProdEnv(document.domain) ? 1189 : 107
-  /* eslint-enable no-var */
-}
+const MORE_POSTS_TAGS = [
+  { ID: isProdEnv ? 1184 : 103, NAME: '時事' },
+  { ID: isProdEnv ? 1185 : 104, NAME: '教育' },
+  { ID: isProdEnv ? 1186 : 14, NAME: '政治' },
+  { ID: isProdEnv ? 1187 : 105, NAME: '人權' },
+  { ID: isProdEnv ? 1188 : 106, NAME: '環境' },
+  { ID: isProdEnv ? 1189 : 107, NAME: '新鮮事' },
+]
 
 export default {
   name: 'Home',
@@ -211,18 +209,14 @@ export default {
         names: '',
       },
       quotes: [],
-      allMorePosts: [
-        { tag: '時事', posts: [] },
-        { tag: '教育', posts: [] },
-        { tag: '政治', posts: [] },
-        { tag: '人權', posts: [] },
-        { tag: '環境', posts: [] },
-        { tag: '新鮮事', posts: [] },
-      ],
+
+      allMorePosts: MORE_POSTS_TAGS.map(({ NAME }) => ({
+        tag: NAME,
+        posts: [],
+      })),
       isLoadingMacy: false,
       macyInstance: undefined,
       unwatchIsViewportWidthUpMd: undefined,
-
       shouldShowMoreSection: !this.isViewportWidthUpMd,
     }
   },
@@ -287,13 +281,7 @@ export default {
     },
   },
   async mounted() {
-    await this.loadAllMorePosts()
-
-    this.unwatchIsViewportWidthUpMd = this.$watch(
-      'isViewportWidthUpMd',
-      this.handleMacy,
-      { immediate: true }
-    )
+    this.handleAllMorePosts()
 
     this.countOfCollaboratorWall =
       (await this.fetchCountOfCollaboratorWall()) || 0
@@ -346,48 +334,26 @@ export default {
       }
     },
 
-    async loadAllMorePosts() {
-      const data = await this.fetchAllMorePosts()
-      this.setAllMorePosts(data)
-    },
-    fetchAllMorePosts() {
-      return Promise.allSettled([
-        this.$fetchPostsByTag(TAG_ID_CURRENT_EVENTS),
-        this.$fetchPostsByTag(TAG_ID_EDUCATION),
-        this.$fetchPostsByTag(TAG_ID_POLITICS),
-        this.$fetchPostsByTag(TAG_ID_HUMAN_RIGHTS),
-        this.$fetchPostsByTag(TAG_ID_ENVIRONMENT),
-        this.$fetchPostsByTag(TAG_ID_NEWS),
-      ])
-        .then(function settled(allPosts) {
-          return allPosts.filter(isFulfilled).map(extractValue)
+    async handleAllMorePosts() {
+      await Promise.all(
+        MORE_POSTS_TAGS.map(({ ID }, idx) => this.loadMorePosts(ID, idx))
+      )
 
-          function isFulfilled(postsByTag) {
-            return postsByTag.status === 'fulfilled'
-          }
-
-          function extractValue(postsByTag) {
-            return postsByTag.value
-          }
-        })
-        .catch(function handleError(error) {
-          // eslint-disable-next-line no-console
-          console.error(error)
-
-          return []
-        })
-    },
-    setAllMorePosts(allPosts) {
-      allPosts.forEach(
-        function insertPosts(postsByTag, idx) {
-          this.allMorePosts[idx].posts = postsByTag
-        }.bind(this)
+      this.unwatchIsViewportWidthUpMd = this.$watch(
+        'isViewportWidthUpMd',
+        this.handleMacy,
+        { immediate: true }
       )
     },
-    hasPosts(item) {
-      return item.posts.length > 0
+    async loadMorePosts(tagId, idx) {
+      try {
+        const posts = (await this.$fetchPostsByTag(tagId)) || []
+        this.allMorePosts[idx].posts = posts
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
+      }
     },
-
     async handleMacy(isViewportWidthUpMd) {
       if (this.macyInstance) {
         this.unwatchIsViewportWidthUpMd()
@@ -425,6 +391,10 @@ export default {
         },
       })
     },
+    hasPosts(item) {
+      return item.posts.length > 0
+    },
+
     loadMoreDatabases() {
       if (this.isDatabasesLoading) {
         return

@@ -1,9 +1,9 @@
-const { inProdEnv } = require('../../helpers/index.js')
+const { isProdEnv } = require('../../helpers/index.js')
 
 module.exports = setHeader
 
-function setHeader(req, res, next) {
-  if (inProdEnv(req.headers.host)) {
+function setHeader(_, res, next) {
+  if (isProdEnv) {
     res.setHeader('Cache-Control', 'private, max-age=300')
   } else {
     res.setHeader('Cache-Control', 'no-store')
