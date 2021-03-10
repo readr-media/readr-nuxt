@@ -1,7 +1,6 @@
 Object.assign(module.exports, {
   inProdEnv,
 
-  ...require('./cookie.js'),
   ...require('./error.js'),
 })
 
