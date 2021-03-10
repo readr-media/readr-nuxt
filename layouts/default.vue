@@ -23,12 +23,12 @@ import {
   onBeforeUnmount,
   useContext,
 } from '@nuxtjs/composition-api'
+import rafThrottle from 'raf-throttle'
 
 import RdFooter from '~/components/shared/RdFooter.vue'
 import RdGdpr from '~/components/shared/RdGdpr.vue'
 
 import { setViewport } from '~/composition/store/viewport.js'
-import { rafWithThrottle } from '~/utils/index.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
@@ -61,22 +61,21 @@ export default {
 }
 
 function useUpdateViewport() {
+  const updateViewportThrottle = rafThrottle(updateViewport)
   onBeforeMount(() => {
     updateViewport()
 
-    window.addEventListener('resize', updateViewport)
-    window.addEventListener('orientationChange', updateViewport)
+    window.addEventListener('resize', updateViewportThrottle)
+    window.addEventListener('orientationChange', updateViewportThrottle)
   })
   onBeforeUnmount(() => {
-    window.removeEventListener('resize', updateViewport)
-    window.removeEventListener('orientationChange', updateViewport)
+    window.removeEventListener('resize', updateViewportThrottle)
+    window.removeEventListener('orientationChange', updateViewportThrottle)
   })
 
   function updateViewport() {
-    rafWithThrottle(() => {
-      const { clientWidth, clientHeight } = document.documentElement
-      setViewport(clientWidth, clientHeight)
-    })
+    const { clientWidth, clientHeight } = document.documentElement
+    setViewport(clientWidth, clientHeight)
   }
 }
 </script>

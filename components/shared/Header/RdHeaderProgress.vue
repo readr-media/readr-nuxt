@@ -14,12 +14,12 @@
 
 <script>
 import { ref, watch, onMounted, onBeforeUnmount } from '@nuxtjs/composition-api'
+import rafThrottle from 'raf-throttle'
 
 import RdHeaderWithLogo from '~/components/shared/Header/RdHeaderWithLogo.vue'
 
 import { setUserFinishedReading } from '~/composition/store/user.js'
 import { viewportHeight } from '~/composition/store/viewport.js'
-import { rafWithThrottle } from '~/utils/index.js'
 
 export default {
   name: 'RdHeaderProgress',
@@ -58,36 +58,35 @@ function useProgress(elemId) {
   const percent = ref(0)
   const hasFinishedReading = ref(false)
   let elem
+  const calculateProgressPercentThrottle = rafThrottle(calculateProgressPercent)
 
   onMounted(() => {
     elem = document.getElementById(elemId)
 
     calculateProgressPercent()
-    window.addEventListener('scroll', calculateProgressPercent)
+    window.addEventListener('scroll', calculateProgressPercentThrottle)
   })
 
   onBeforeUnmount(() => {
-    window.removeEventListener('scroll', calculateProgressPercent)
+    window.removeEventListener('scroll', calculateProgressPercentThrottle)
   })
 
   function calculateProgressPercent() {
-    rafWithThrottle(() => {
-      const { bottom } = elem.getBoundingClientRect()
-      const { pageYOffset } = window
-      const elemBottomDistance = bottom + pageYOffset
+    const { bottom } = elem.getBoundingClientRect()
+    const { pageYOffset } = window
+    const elemBottomDistance = bottom + pageYOffset
 
-      if (bottom - viewportHeight.value < 0) {
-        percent.value = 100
-        if (hasFinishedReading.value === false) {
-          hasFinishedReading.value = true
-        }
-        return
+    if (bottom - viewportHeight.value < 0) {
+      percent.value = 100
+      if (hasFinishedReading.value === false) {
+        hasFinishedReading.value = true
       }
+      return
+    }
 
-      percent.value = Math.round(
-        (pageYOffset / (elemBottomDistance - viewportHeight.value)) * 100
-      )
-    })
+    percent.value = Math.round(
+      (pageYOffset / (elemBottomDistance - viewportHeight.value)) * 100
+    )
   }
 
   return {

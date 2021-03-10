@@ -1,6 +1,5 @@
 const partial = require('ramda/src/partial')
-
-const { rafWithThrottle } = require('~/utils/index.js')
+const rafThrottle = require('raf-throttle')
 
 const sendGaEventForHomeClick = partial(sendGaEvent, ['Home', 'click'])
 const sendGaEventForHomeScroll = partial(sendGaEvent, ['Home', 'scroll'])
@@ -18,26 +17,25 @@ function sendGaEvent(category, action, label, value = 0) {
 function listenScrollDepthForGaEvent(triggers = [], sendGaEventMethod) {
   const totalScrollDepth = triggers.length
   let currentScrollDepth = 0
+  const sendGaEventOfScrollDepthThrottle = rafThrottle(sendGaEventOfScrollDepth)
 
-  window.addEventListener('scroll', sendGaEventOfScrollDepth)
+  window.addEventListener('scroll', sendGaEventOfScrollDepthThrottle)
 
   function sendGaEventOfScrollDepth() {
-    rafWithThrottle(() => {
-      const currentTrigger = triggers[currentScrollDepth]
-      const { elem, eventFields } = currentTrigger
-      const { top } = elem.getBoundingClientRect()
-      const { clientHeight: viewportHeight } = document.documentElement
+    const currentTrigger = triggers[currentScrollDepth]
+    const { elem, eventFields } = currentTrigger
+    const { top } = elem.getBoundingClientRect()
+    const { clientHeight: viewportHeight } = document.documentElement
 
-      if (top - viewportHeight < 0) {
-        sendGaEventMethod(...eventFields)
+    if (top - viewportHeight < 0) {
+      sendGaEventMethod(...eventFields)
 
-        currentScrollDepth += 1
+      currentScrollDepth += 1
 
-        if (currentScrollDepth >= totalScrollDepth) {
-          window.removeEventListener('scroll', sendGaEventOfScrollDepth)
-        }
+      if (currentScrollDepth >= totalScrollDepth) {
+        window.removeEventListener('scroll', sendGaEventOfScrollDepthThrottle)
       }
-    })
+    }
   }
 }
 
