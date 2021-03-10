@@ -3,6 +3,7 @@ Object.assign(module.exports, {
 
   ...require('./animation.js'),
   ...require('./cookie.js'),
+  ...require('./error.js'),
 })
 
 function inProdEnv(hostname) {

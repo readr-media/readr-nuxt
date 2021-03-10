@@ -3,6 +3,7 @@ const Router = require('koa-router')
 const { create: createAxios } = require('axios')
 
 const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config.js')
+const { getErrorName } = require('../utils/index.js')
 
 const app = new Koa()
 const router = new Router()
@@ -49,7 +50,9 @@ async function checkQueryFields(notAllowedFields, ctx, next) {
     await next()
   } else {
     ctx.status = 403
-    ctx.body = `Not allowed query fields: [${notAllowedFields.join(', ')}]`
+    ctx.body = `${getErrorName()}: Not allowed query fields: [${notAllowedFields.join(
+      ', '
+    )}]`
   }
 }
 

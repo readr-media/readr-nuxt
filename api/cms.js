@@ -8,6 +8,7 @@ const {
   KEYSTONE_DEV_ENDPOINT,
   CMS_ENDPOINT_DEPRECATED,
 } = require('../configs/config.js')
+const { getErrorName, reportApiErrorFromKoa } = require('../utils/index.js')
 
 const app = new Koa()
 const router = new Router()
@@ -26,13 +27,8 @@ router.post('/', async function requestGraphqlApi(ctx) {
 
     ctx.status = status
     ctx.body = data
-  } catch ({ response = {}, message }) {
-    ctx.status = response.status || 500
-    ctx.body = `
-      ApiError:
-        message: ${message}
-        requestBody: ${requestBody}
-    `
+  } catch (err) {
+    reportCmsApiError(err, ctx)
   }
 })
 
@@ -48,8 +44,8 @@ router.get(
 
       ctx.status = status
       ctx.body = data
-    } catch ({ response = {} }) {
-      ctx.status = response.status || 500
+    } catch (err) {
+      reportCmsApiError(err, ctx)
     }
   }
 )
@@ -62,7 +58,7 @@ async function checkApiPath(ctx, next) {
     await next()
   } else {
     ctx.status = 403
-    ctx.body = 'Not allowed api path'
+    ctx.body = `${getErrorName()}: Not allowed api path: ${apiPath}`
   }
 }
 
@@ -72,6 +68,10 @@ function isAllowedApiPath(apiPath) {
   return allowedApiPaths.some((allowedApiPath) =>
     apiPath.startsWith(allowedApiPath)
   )
+}
+
+function reportCmsApiError(err, koaCtx) {
+  reportApiErrorFromKoa(err, koaCtx, { scope: 'CMS' })
 }
 
 Object.assign(module.exports, {

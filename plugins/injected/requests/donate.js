@@ -1,6 +1,8 @@
 const { camelizeKeys } = require('humps')
 const { create: createAxios } = require('axios')
 
+const { logApiError } = require('~/utils/index.js')
+
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
 
 const publicApi = createAxios({
@@ -13,15 +15,9 @@ function createPost(requestUrl) {
     try {
       const { data } = await publicApi.post(requestUrl, params)
       return camelizeKeys(data).items
-    } catch ({ response = {}, message }) {
-      // eslint-disable-next-line no-console
-      console.error(`
-      ApiError:
-        url: ${requestUrl}
-        message: ${message}
-        data: ${response.data ?? ''}
-    `)
-      throw new Error(message)
+    } catch (err) {
+      logApiError(err, 'Donate')
+      throw new Error(err.message)
     }
   }
 }

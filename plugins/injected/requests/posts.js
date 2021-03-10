@@ -3,6 +3,7 @@ const { stringify: qsStringify } = require('qs')
 const { create: createAxios, get: axiosGet } = require('axios')
 
 const { REQUEST_TIMEOUT } = require('~/configs/config.js')
+const { logApiError } = require('~/utils/index.js')
 
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
 
@@ -18,15 +19,8 @@ async function fetchPosts(params = {}) {
     const { data } = await publicApi.get(requestUrl)
 
     return camelizeKeys(data).items || []
-  } catch ({ response = {}, message }) {
-    // eslint-disable-next-line no-console
-    console.error(`
-      ApiError:
-        url: ${requestUrl}
-        message: ${message}
-        data: ${response.data ?? ''}
-    `)
-
+  } catch (err) {
+    logPostsApiError(err)
     return []
   }
 }
@@ -53,17 +47,11 @@ async function fetchPost(postId) {
     const { data } = await publicApi.get(requestUrl)
 
     return camelizeKeys(data)
-  } catch ({ response = {}, message }) {
-    // eslint-disable-next-line no-console
-    console.error(`
-      ApiError:
-        url: ${requestUrl}
-        message: ${message}
-        data: ${response.data ?? ''}
-    `)
+  } catch (err) {
+    logPostsApiError(err)
 
-    const statusCode = response.status || 404
-    this.error({ statusCode, message })
+    const { response = {}, message } = err
+    this.error({ statusCode: response.status || 404, message })
   }
 }
 
@@ -80,15 +68,8 @@ async function fetchPostsByTag(tagId) {
     })
 
     return camelizeKeys(data).items
-  } catch ({ response = {}, message }) {
-    // eslint-disable-next-line no-console
-    console.error(`
-      ApiError:
-        url: ${requestUrl}
-        message: ${message}
-        data: ${response.data ?? ''}
-    `)
-
+  } catch (err) {
+    logPostsApiError(err)
     return []
   }
 }
@@ -99,6 +80,10 @@ function buildParams(params = {}) {
   }
 
   return `?${qsStringify(decamelizeKeys(params))}`
+}
+
+function logPostsApiError(err) {
+  logApiError(err, 'Posts')
 }
 
 Object.assign(module.exports, {
