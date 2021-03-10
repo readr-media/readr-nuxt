@@ -28,7 +28,7 @@ import RdFooter from '~/components/shared/RdFooter.vue'
 import RdGdpr from '~/components/shared/RdGdpr.vue'
 
 import { setViewport } from '~/composition/store/viewport.js'
-import { rafWithDebounce } from '~/utils/index.js'
+import { rafWithThrottle } from '~/utils/index.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
@@ -73,7 +73,7 @@ function useUpdateViewport() {
   })
 
   function updateViewport() {
-    rafWithDebounce(() => {
+    rafWithThrottle(() => {
       const { clientWidth, clientHeight } = document.documentElement
       setViewport(clientWidth, clientHeight)
     })

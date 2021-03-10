@@ -19,7 +19,7 @@ import RdHeaderWithLogo from '~/components/shared/Header/RdHeaderWithLogo.vue'
 
 import { setUserFinishedReading } from '~/composition/store/user.js'
 import { viewportHeight } from '~/composition/store/viewport.js'
-import { rafWithDebounce } from '~/utils/index.js'
+import { rafWithThrottle } from '~/utils/index.js'
 
 export default {
   name: 'RdHeaderProgress',
@@ -71,7 +71,7 @@ function useProgress(elemId) {
   })
 
   function calculateProgressPercent() {
-    rafWithDebounce(() => {
+    rafWithThrottle(() => {
       const { bottom } = elem.getBoundingClientRect()
       const { pageYOffset } = window
       const elemBottomDistance = bottom + pageYOffset

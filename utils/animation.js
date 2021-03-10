@@ -1,11 +1,11 @@
 Object.assign(module.exports, {
-  rafWithDebounce,
+  rafWithThrottle,
 })
 
-function rafWithDebounce(func) {
+function rafWithThrottle(func) {
   let isTicking = false
 
-  return (function immediatelySetRafWithDebounce() {
+  return (function immediatelySetRafWithThrottle() {
     if (isTicking) {
       return
     }

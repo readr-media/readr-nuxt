@@ -1,6 +1,6 @@
 const partial = require('ramda/src/partial')
 
-const { rafWithDebounce } = require('~/utils/index.js')
+const { rafWithThrottle } = require('~/utils/index.js')
 
 const sendGaEventForHomeClick = partial(sendGaEvent, ['Home', 'click'])
 const sendGaEventForHomeScroll = partial(sendGaEvent, ['Home', 'scroll'])
@@ -22,7 +22,7 @@ function listenScrollDepthForGaEvent(triggers = [], sendGaEventMethod) {
   window.addEventListener('scroll', sendGaEventOfScrollDepth)
 
   function sendGaEventOfScrollDepth() {
-    rafWithDebounce(() => {
+    rafWithThrottle(() => {
       const currentTrigger = triggers[currentScrollDepth]
       const { elem, eventFields } = currentTrigger
       const { top } = elem.getBoundingClientRect()
