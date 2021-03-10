@@ -1,13 +1,11 @@
 const { camelizeKeys } = require('humps')
 const { create: createAxios } = require('axios')
 
-const { REQUEST_TIMEOUT } = require('../../../configs/config.js')
-
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
 
 const publicApi = createAxios({
   baseURL: `${baseUrl}/api/public`,
-  timeout: REQUEST_TIMEOUT,
+  timeout: 20000,
 })
 
 function createPost(requestUrl) {
