@@ -1,7 +1,7 @@
 const { reactive, watchEffect, toRefs } = require('@nuxtjs/composition-api')
 const { v4: createUuid } = require('uuid')
 
-const { getCookieValue } = require('../../utils/index.js')
+const { getCookieValue } = require('../../helpers/index.js')
 
 const readr2UserUuId = getCookieValue('readrid')
 const isReadr2User = readr2UserUuId !== undefined

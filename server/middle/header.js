@@ -1,4 +1,4 @@
-const { inProdEnv } = require('../../utils/index.js')
+const { inProdEnv } = require('../../helpers/index.js')
 
 module.exports = setHeader
 

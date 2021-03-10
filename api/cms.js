@@ -8,7 +8,7 @@ const {
   KEYSTONE_DEV_ENDPOINT,
   CMS_ENDPOINT_DEPRECATED,
 } = require('../configs/config.js')
-const { getErrorName, reportApiErrorFromKoa } = require('../utils/index.js')
+const { getErrorName, reportApiErrorFromKoa } = require('../helpers/index.js')
 
 const app = new Koa()
 const router = new Router()

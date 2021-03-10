@@ -139,8 +139,8 @@ import { quotes } from '~/apollo/queries/quotes.gql'
 
 import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
-import { onDemand } from '~/utils/integrations/index.js'
-import { inProdEnv } from '~/utils/index.js'
+import { onDemand } from '~/helpers/integrations/index.js'
+import { inProdEnv } from '~/helpers/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'
 

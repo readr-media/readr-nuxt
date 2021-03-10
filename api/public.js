@@ -3,7 +3,7 @@ const Router = require('koa-router')
 const { create: createAxios } = require('axios')
 
 const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config.js')
-const { getErrorName } = require('../utils/index.js')
+const { getErrorName } = require('../helpers/index.js')
 
 const app = new Koa()
 const router = new Router()

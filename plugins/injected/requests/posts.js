@@ -3,7 +3,7 @@ const { stringify: qsStringify } = require('qs')
 const { create: createAxios, get: axiosGet } = require('axios')
 
 const { REQUEST_TIMEOUT } = require('~/configs/config.js')
-const { logApiError } = require('~/utils/index.js')
+const { logApiError } = require('~/helpers/index.js')
 
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
 

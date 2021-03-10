@@ -1,7 +1,7 @@
 const { camelizeKeys } = require('humps')
 const { create: createAxios } = require('axios')
 
-const { logApiError } = require('~/utils/index.js')
+const { logApiError } = require('~/helpers/index.js')
 
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
 

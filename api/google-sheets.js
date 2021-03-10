@@ -8,7 +8,7 @@ const bodyParser = require('koa-bodyparser')
 const Router = require('koa-router')
 const { google } = require('googleapis')
 
-const { reportApiErrorFromKoa } = require('../utils/index.js')
+const { reportApiErrorFromKoa } = require('../helpers/index.js')
 const auth = require('./middle/auth.js')
 
 const app = new Koa()
