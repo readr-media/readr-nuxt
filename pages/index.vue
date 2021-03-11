@@ -280,30 +280,27 @@ export default {
       return this.allMorePosts.filter(this.hasPosts)
     },
   },
-  async mounted() {
+  mounted() {
     this.handleAllMorePosts()
-
-    this.countOfCollaboratorWall =
-      (await this.fetchCountOfCollaboratorWall()) || 0
-
+    this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
-
     this.addListenerToScrollDepthForGaEvent()
   },
   methods: {
-    async fetchCountOfCollaboratorWall() {
+    async loadCollaboratorsCount() {
       try {
-        const response = await axiosGet('/api/google-sheets', {
-          params: {
-            spreadsheetId: '1vEuoCAAXR8NMoh6qiOnj6kNdLv0lc-CaInLnWUuvySo',
-            range: '名稱列表!F1',
-          },
-        })
+        const response =
+          (await axiosGet('/api/google-sheets', {
+            params: {
+              spreadsheetId: '1vEuoCAAXR8NMoh6qiOnj6kNdLv0lc-CaInLnWUuvySo',
+              range: '名稱列表!F1',
+            },
+          })) || {}
 
-        return Number(response.data.values[0][0])
-      } catch (error) {
+        this.countOfCollaboratorWall = Number(response.data?.values?.[0]?.[0])
+      } catch (err) {
         // eslint-disable-next-line no-console
-        console.error(error)
+        console.error(err)
       }
     },
     async loadCollaboratorNames() {
