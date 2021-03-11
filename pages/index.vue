@@ -28,6 +28,7 @@
 
     <section ref="latest" class="container container--latest">
       <RdSectionHeading
+        v-intersect="scrollDepthObserver"
         title="最新文章"
         fill="#ebf02c"
         class="home__section-heading"
@@ -40,8 +41,8 @@
       />
     </section>
 
-    <section ref="database" class="container container--database">
-      <div class="database-heading">
+    <section class="container container--database">
+      <div v-intersect="scrollDepthObserver" class="database-heading">
         <h2>開放資料庫</h2>
       </div>
       <RdDatabaseList
@@ -67,6 +68,7 @@
     <section ref="collaboration" class="collaboration-container">
       <div class="container container--quote">
         <RdSectionHeading
+          v-intersect="scrollDepthObserver"
           title="協作專區"
           color="#f5ebff"
           fill="#04295e"
@@ -93,11 +95,11 @@
     <section
       v-if="hasAnyMorePosts"
       v-show="shouldShowMoreSection"
-      ref="more"
       class="more-section yellow-bg"
     >
       <div class="container">
         <RdSectionHeading
+          v-intersect="scrollDepthObserver"
           title="更多專題"
           linkHref="/category/"
           class="home__section-heading"
@@ -132,11 +134,17 @@ import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
 import RdListMore from '~/components/shared/List/RdListMore.vue'
 
+import intersect from '~/components/helpers/directives/intersect.js'
+
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
 import { databases } from '~/apollo/queries/data.gql'
 import { quotes } from '~/apollo/queries/quotes.gql'
 
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/components/helpers/index.js'
 import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { onDemand } from '~/helpers/integrations/index.js'
@@ -174,6 +182,11 @@ export default {
 
     SvgArrowMore,
   },
+
+  directives: {
+    intersect,
+  },
+
   apollo: {
     allEditorChoices: {
       query: allEditorChoices,
@@ -218,6 +231,8 @@ export default {
       macyInstance: undefined,
       unwatchIsViewportWidthUpMd: undefined,
       shouldShowMoreSection: !this.isViewportWidthUpMd,
+
+      scrollDepthObserver: undefined,
     }
   },
   computed: {
@@ -284,8 +299,13 @@ export default {
     this.handleAllMorePosts()
     this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
-    this.addListenerToScrollDepthForGaEvent()
+    this.setupScrollDepthObserver()
   },
+
+  beforeDestroy() {
+    cleanupIntersectionObserver(this, 'scrollDepthObserver')
+  },
+
   methods: {
     async loadCollaboratorsCount() {
       try {
@@ -431,23 +451,24 @@ export default {
     sendGaEventForMoreList(topic) {
       this.$sendGaEventForHomeClick(`category ${topic}`)
     },
-    addListenerToScrollDepthForGaEvent() {
-      const { latest, database, collaboration, more } = this.$refs
-      const triggers = [
-        { elem: latest, eventFields: ['scroll 到最新文章', 1] },
-        { elem: database, eventFields: ['scroll 到開放資料庫', 2] },
-        { elem: collaboration, eventFields: ['scroll 到協作專區', 3] },
-        { elem: more, eventFields: ['scroll 到更多專題', 4] },
-        {
-          elem: document.getElementById('default-footer'),
-          eventFields: ['scroll 到 footer ', 5],
-        },
-      ]
+    async setupScrollDepthObserver() {
+      const footerId = 'default-footer'
 
-      this.$listenScrollDepthForGaEvent(
-        triggers,
-        this.$sendGaEventForHomeScroll
-      )
+      this.scrollDepthObserver = await setupIntersectionObserver((entries) => {
+        entries.forEach(({ isIntersecting, target }) => {
+          if (isIntersecting) {
+            if (target.id === footerId) {
+              this.$sendGaEventForHomeScroll('scroll 到 footer')
+            } else {
+              this.$sendGaEventForHomeScroll(
+                `scroll 到${target.textContent.trim()}`
+              )
+            }
+            this.scrollDepthObserver.unobserve(target)
+          }
+        })
+      })
+      this.scrollDepthObserver.observe(document.getElementById(footerId))
     },
   },
 }

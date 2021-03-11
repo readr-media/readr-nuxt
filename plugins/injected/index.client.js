@@ -9,7 +9,6 @@ const {
   sendGaEventForHeaderClick,
   sendGaEventForFooterClick,
   sendGaEventForUsersVisit,
-  listenScrollDepthForGaEvent,
 } = require('./ga.client.js')
 
 module.exports = injectAllMethods
@@ -23,5 +22,4 @@ function injectAllMethods(ctx, inject) {
   inject('sendGaEventForHeaderClick', bind(sendGaEventForHeaderClick, ctx))
   inject('sendGaEventForFooterClick', bind(sendGaEventForFooterClick, ctx))
   inject('sendGaEventForUsersVisit', bind(sendGaEventForUsersVisit, ctx))
-  inject('listenScrollDepthForGaEvent', listenScrollDepthForGaEvent)
 }
