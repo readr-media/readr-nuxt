@@ -92,11 +92,7 @@
       />
     </section>
 
-    <section
-      v-if="hasAnyMorePosts"
-      v-show="shouldShowMoreSection"
-      class="more-section yellow-bg"
-    >
+    <section v-show="shouldShowMoreSection" class="more-section yellow-bg">
       <div class="container">
         <RdSectionHeading
           v-intersect="scrollDepthObserver"
@@ -230,7 +226,6 @@ export default {
       isLoadingMacy: false,
       macyInstance: undefined,
       unwatchIsViewportWidthUpMd: undefined,
-      shouldShowMoreSection: !this.isViewportWidthUpMd,
 
       scrollDepthObserver: undefined,
     }
@@ -288,6 +283,11 @@ export default {
       },
     },
 
+    shouldShowMoreSection() {
+      return (
+        (!this.isViewportWidthUpMd || this.macyInstance) && this.hasAnyMorePosts
+      )
+    },
     hasAnyMorePosts() {
       return this.allMorePosts.some(this.hasPosts)
     },
@@ -384,8 +384,6 @@ export default {
         try {
           await loadMacy()
           this.initMacy()
-
-          this.shouldShowMoreSection = true
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error)
