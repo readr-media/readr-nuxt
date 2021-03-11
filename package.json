@@ -47,6 +47,7 @@
     "koa-helmet": "^5.2.0",
     "koa-router": "^9.1.0",
     "locutus": "^2.0.10",
+    "macy": "^2.5.1",
     "nuxt": "2.14.7",
     "nuxt-ssr-cache": "^1.5.2",
     "qs": "^6.9.4",

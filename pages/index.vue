@@ -143,7 +143,6 @@ import {
 } from '~/components/helpers/index.js'
 import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
-import { onDemand } from '~/helpers/integrations/index.js'
 import { isProdEnv } from '~/helpers/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'
@@ -223,7 +222,7 @@ export default {
         tag: NAME,
         posts: [],
       })),
-      isLoadingMacy: false,
+      isInitializingMacy: false,
       macyInstance: undefined,
       unwatchIsViewportWidthUpMd: undefined,
 
@@ -358,7 +357,7 @@ export default {
 
       this.unwatchIsViewportWidthUpMd = this.$watch(
         'isViewportWidthUpMd',
-        this.handleMacy,
+        this.handleMoreSectionLayout,
         { immediate: true }
       )
     },
@@ -371,40 +370,40 @@ export default {
         console.error(err)
       }
     },
-    async handleMacy(isViewportWidthUpMd) {
+    async handleMoreSectionLayout(isViewportWidthUpMd) {
       if (this.macyInstance) {
         this.unwatchIsViewportWidthUpMd()
         return
       }
 
-      if (isViewportWidthUpMd && this.hasAnyMorePosts && !this.isLoadingMacy) {
-        const loadMacy = onDemand('https://cdn.jsdelivr.net/npm/macy@2')
-        this.isLoadingMacy = true
+      if (
+        isViewportWidthUpMd &&
+        this.hasAnyMorePosts &&
+        !this.isInitializingMacy
+      ) {
+        this.isInitializingMacy = true
 
         try {
-          await loadMacy()
-          this.initMacy()
-        } catch (error) {
+          const initMacy = (await import('macy')).default
+          this.macyInstance = initMacy({
+            container: '#more-list-container',
+            mobileFirst: true,
+            trueOrder: true,
+            columns: 1,
+            breakAt: {
+              [this.breakpointMd]: {
+                margin: { x: 22 },
+                columns: 3,
+              },
+            },
+          })
+        } catch (err) {
           // eslint-disable-next-line no-console
-          console.error(error)
+          console.error(err)
         }
 
-        this.isLoadingMacy = false
+        this.isInitializingMacy = false
       }
-    },
-    initMacy() {
-      this.macyInstance = window.Macy({
-        container: '#more-list-container',
-        mobileFirst: true,
-        trueOrder: true,
-        columns: 1,
-        breakAt: {
-          [this.breakpointMd]: {
-            margin: { x: 22 },
-            columns: 3,
-          },
-        },
-      })
     },
     hasPosts(item) {
       return item.posts.length > 0
