@@ -5,12 +5,12 @@ const doesSupportIntersectionObserver =
   'IntersectionObserverEntry' in window &&
   'intersectionRatio' in window.IntersectionObserverEntry.prototype
 
-async function setupIntersectionObserver(obj, prop, handleIntersect, options) {
+async function setupIntersectionObserver(callback, options) {
   if (!doesSupportIntersectionObserver) {
     await import('intersection-observer')
   }
 
-  obj[prop] = new IntersectionObserver(handleIntersect, options)
+  return new IntersectionObserver(callback, options)
 }
 
 function cleanupIntersectionObserver(obj, prop) {

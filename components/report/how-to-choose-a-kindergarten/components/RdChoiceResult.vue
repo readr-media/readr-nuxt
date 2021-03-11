@@ -95,8 +95,8 @@ export default {
   },
 
   methods: {
-    setupSummariesObserver() {
-      setupIntersectionObserver(this, 'summariesObserver', (entries) => {
+    async setupSummariesObserver() {
+      this.summariesObserver = await setupIntersectionObserver((entries) => {
         entries.forEach(({ isIntersecting, target }) => {
           if (isIntersecting) {
             this.typeTopicAndPercents(target.id.slice(-1))
@@ -137,8 +137,8 @@ export default {
     emitSendGaEvent(label, action = 'click') {
       this.$emit('sendGaEvent', { label, action })
     },
-    setupButtonObserver() {
-      setupIntersectionObserver(this, 'buttonObserver', (entries) => {
+    async setupButtonObserver() {
+      this.buttonObserver = await setupIntersectionObserver((entries) => {
         entries.forEach(({ isIntersecting, target }) => {
           if (isIntersecting) {
             this.emitSendGaEvent('scroll to 遊戲結果「專題報導」', 'scroll')

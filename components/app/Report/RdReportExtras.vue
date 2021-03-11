@@ -66,8 +66,8 @@ export default {
       }
     },
 
-    setupScrollDepthObserver() {
-      setupIntersectionObserver(this, 'scrollDepthObserver', (entries) => {
+    async setupScrollDepthObserver() {
+      this.scrollDepthObserver = await setupIntersectionObserver((entries) => {
         entries.forEach(({ isIntersecting, target }) => {
           if (isIntersecting) {
             const title = target.textContent

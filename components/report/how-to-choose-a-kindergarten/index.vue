@@ -320,10 +320,8 @@ export default {
       window.scrollTo(0, 0)
     },
 
-    setupIndexesObserver() {
-      setupIntersectionObserver(
-        this,
-        'indexesObserver',
+    async setupIndexesObserver() {
+      this.indexesObserver = await setupIntersectionObserver(
         (entries) => {
           if (this.isAutoScrolling) {
             return

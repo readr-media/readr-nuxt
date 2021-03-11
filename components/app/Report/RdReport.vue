@@ -142,8 +142,8 @@ export default {
   },
 
   methods: {
-    setupCreditObserver() {
-      setupIntersectionObserver(this, 'creditObserver', (entries) => {
+    async setupCreditObserver() {
+      this.creditObserver = await setupIntersectionObserver((entries) => {
         if (!this.shouldObserveCredit) {
           return
         }
