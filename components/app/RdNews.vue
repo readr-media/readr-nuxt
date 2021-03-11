@@ -9,8 +9,8 @@
       <div class="date">{{ $getFormattedDate(news.publishedAt) }}</div>
       <h1>{{ news.title }}</h1>
       <div class="container container--post">
-        <picture class="hero-img">
-          <img :src="$getImage(news)" alt="" />
+        <picture v-if="heroImg" class="hero-img">
+          <img :src="heroImg" alt="" />
         </picture>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div class="content" v-html="news.content" />
@@ -151,7 +151,7 @@ export default {
     },
   },
 
-  setup() {
+  setup(props) {
     const latestPosts = ref([])
 
     const {
@@ -160,6 +160,9 @@ export default {
       // $sendGaEventForArticleClick,
     } = useContext()
     const postId = route.value.params.id
+
+    const { heroImage, ogImage } = props.news
+    const heroImg = heroImage || ogImage
 
     // const wordCount = 100
     // const userReadingTime = useUserReadingTime(userState.hasUserFinishedReading)
@@ -270,6 +273,8 @@ export default {
     }
 
     return {
+      heroImg,
+
       latestPosts,
 
       // wordCount,
