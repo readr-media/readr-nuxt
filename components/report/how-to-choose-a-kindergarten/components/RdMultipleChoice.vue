@@ -364,6 +364,9 @@ label {
   cursor: pointer;
   user-select: none;
   z-index: 9;
+  @media (hover: hover) {
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+  }
   @include media-breakpoint-up(md) {
     font-size: 18px;
     line-height: 34px;
@@ -371,18 +374,23 @@ label {
     margin: 20px 7px 0 7px;
   }
 
-  &.checked {
-    z-index: 19;
-  }
-
-  &.checked,
-  &:hover:not(.disabled) {
+  @mixin checked {
     border-color: #2b2b2b;
     box-shadow: none;
     background-color: var(--primary-color);
     color: #161616;
     font-weight: 500;
-    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+  }
+
+  &.checked {
+    @include checked;
+    z-index: 19;
+  }
+
+  @media (hover: hover) {
+    &:hover:not(.disabled) {
+      @include checked;
+    }
   }
 
   &.disabled {

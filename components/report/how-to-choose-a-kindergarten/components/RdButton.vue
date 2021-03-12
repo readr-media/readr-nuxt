@@ -65,14 +65,19 @@ div {
   padding: 12px 48px 12px #{$letter-spacing + 48px};
   z-index: 9;
   position: relative;
-  transition: background-color 0.3s, color 0.3s;
+  @media (hover: hover) {
+    transition: background-color 0.3s, color 0.3s;
+  }
 
-  &:hover {
-    background-color: #161616;
-    color: var(--primary-color);
+  @media (hover: hover) {
+    &:hover {
+      background-color: #161616;
+      color: var(--primary-color);
+    }
   }
 
   &:active {
+    background-color: #161616;
     color: #fffcf5;
     transition: none;
   }
