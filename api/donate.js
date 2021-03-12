@@ -10,7 +10,7 @@ const {
   CMS_ENDPOINT_DEPRECATED,
 } = require('../configs/config')
 const { genInvoice } = require('./middle/invoice')
-const corsMiddle = require('./middle/cors-middle-express')
+const { handleExpressCors: handleCors } = require('./middle/cors.js')
 
 const apiHost = CMS_ENDPOINT_DEPRECATED
 
@@ -52,7 +52,7 @@ const validateDonator = (req, res, next) => {
 router.use(bodyParser.json())
 
 // For CORS non-simple requests
-router.options('/*', corsMiddle, (res) => {
+router.options('/*', handleCors, (res) => {
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
   res.header(
     'Access-Control-Allow-Headers',
@@ -63,7 +63,7 @@ router.options('/*', corsMiddle, (res) => {
 
 router.post(
   '/',
-  corsMiddle,
+  handleCors,
   validateObjectType,
   validateDonator,
   async (req, res, next) => {

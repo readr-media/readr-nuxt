@@ -1,34 +1,15 @@
 const Koa = require('koa')
 const Router = require('koa-router')
-const cors = require('@koa/cors')
 const { create: createAxios } = require('axios')
 
 const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config.js')
 const { getErrorName } = require('../helpers/index.js')
+const { handleKoaCors: handleCors } = require('./middle/cors.js')
 
 const app = new Koa()
 const router = new Router()
 
-app.use(
-  cors({
-    origin(ctx) {
-      const allowedOrigins = [
-        /https?:\/\/(localhost|127\.0\.0\.1):(\d+)/,
-        /\.mirrormedia\.mg$/,
-        /\.readr\.tw$/,
-      ]
-      const { origin: requestOrigin } = ctx.request.header
-      const isAllowedOrigin = allowedOrigins.some((allowedOrigin) =>
-        allowedOrigin.test(requestOrigin)
-      )
-      if (isAllowedOrigin) {
-        return requestOrigin
-      }
-
-      return false
-    },
-  })
-)
+app.use(handleCors)
 app.use(router.routes())
 
 const cmsDeprecatedApi = createAxios({
