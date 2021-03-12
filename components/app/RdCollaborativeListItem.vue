@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+
 export default {
   name: 'RdCollaborativeListItem',
   props: {
@@ -45,7 +47,7 @@ export default {
   },
   data() {
     return {
-      now: this.$dayjs(),
+      now: dayjs(),
     }
   },
   computed: {
@@ -59,7 +61,7 @@ export default {
       return `${this.item.progress || 0}%`
     },
     remainingDays() {
-      const days = this.$dayjs(this.item.endTime).diff(this.now, 'day')
+      const days = dayjs(this.item.endTime).diff(this.now, 'day')
       if (days < 0) {
         return '已結束'
       }

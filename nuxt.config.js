@@ -167,7 +167,7 @@ Object.assign(module.exports, {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/dayjs', '@nuxtjs/apollo', '@nuxtjs/svg', 'nuxt-ssr-cache'],
+  modules: ['@nuxtjs/apollo', '@nuxtjs/svg', 'nuxt-ssr-cache'],
 
   cache: !inDevEnv && {
     pages: ['/'],

@@ -244,6 +244,8 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+
 import RdDonateRadioItem from '~/components/shared/Donate/RdDonateRadioItem.vue'
 import { TAPPAY as configTappay } from '~/configs/config'
 
@@ -481,7 +483,7 @@ export default {
                   donateAmount: this.donateAmount,
                   carrierTypeSelected: this.carrierTypeSelected,
                   carrierInputs: this.carrierInputs[this.carrierTypeSelected],
-                  date: this.$dayjs(now).format('YYYY/MM/DD HH:mm:ss'),
+                  date: dayjs(now).format('YYYY/MM/DD HH:mm:ss'),
                 })
                 this.isDepositing = false
                 this.$emit('showResultSuccess')

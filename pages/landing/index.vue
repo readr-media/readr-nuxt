@@ -70,6 +70,7 @@
 <script>
 import { ref, computed, useContext } from '@nuxtjs/composition-api'
 import { post as axiosPost } from 'axios'
+import dayjs from 'dayjs'
 
 import SvgReadrLogoYellow from '~/assets/readr-logo-yellow.svg?inline'
 
@@ -82,7 +83,7 @@ export default {
   setup() {
     const shouldOpenEmailInput = ref(true)
 
-    const { route, $dayjs, $sendGaEventForLandingClick } = useContext()
+    const { route, $sendGaEventForLandingClick } = useContext()
     const email = ref('')
     const hasEmail = computed(() => email.value !== '')
 
@@ -105,7 +106,7 @@ export default {
           values: [
             [
               email.value,
-              $dayjs().format('YYYYMMDDHHmm'),
+              dayjs().format('YYYYMMDDHHmm'),
               'readr3.0-landing-page',
               route.value.path,
             ],
