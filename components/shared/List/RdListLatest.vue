@@ -1,16 +1,12 @@
 <template>
   <div class="list-latest">
     <article class="list-latest__main">
-      <a
-        :href="$getHref(postMain)"
-        target="_blank"
-        @click="$emit('sendGaEvent')"
-      >
+      <a :href="postMain.href" target="_blank" @click="$emit('sendGaEvent')">
         <div class="img-wrapper">
-          <img v-lazy="$getImage(postMain)" alt="" />
+          <img v-lazy="postMain.img" alt="" />
         </div>
         <h1>{{ postMain.title }}</h1>
-        <span class="date">{{ $getFormattedDate(postMain.publishedAt) }}</span>
+        <span class="date">{{ postMain.date }}</span>
       </a>
     </article>
 

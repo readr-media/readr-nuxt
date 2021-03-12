@@ -143,7 +143,7 @@ import {
 } from '~/components/helpers/index.js'
 import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
-import { isProdEnv } from '~/helpers/index.js'
+import { isProdEnv, getHref, getImg, formatDate } from '~/helpers/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'
 
@@ -197,13 +197,17 @@ export default {
       query: quotes,
     },
   },
+
   async fetch() {
-    this.latestPosts = await this.$fetchLatestPosts()
+    await this.loadLatestPosts()
   },
+
   data() {
     return {
       allEditorChoices: [],
       allCollaborations: [],
+
+      latestPosts: [],
 
       databases: {
         all: [],
@@ -211,7 +215,6 @@ export default {
       },
       databasesPage: 0,
 
-      latestPosts: [],
       collaboratorWall: {
         count: 0,
         names: '',
@@ -239,6 +242,7 @@ export default {
     shouldOpenEditorChoices() {
       return this.allEditorChoices && this.allEditorChoices.length > 0
     },
+
     shouldOpenLatestList() {
       return this.latestPosts.length > 0
     },
@@ -306,6 +310,11 @@ export default {
   },
 
   methods: {
+    async loadLatestPosts() {
+      const posts = (await this.$fetchLatestPosts()) || []
+      this.latestPosts = posts.map(transformPostContent)
+    },
+
     async loadCollaboratorsCount() {
       try {
         const response =
@@ -364,7 +373,7 @@ export default {
     async loadMorePosts(tagId, idx) {
       try {
         const posts = (await this.$fetchPostsByTag(tagId)) || []
-        this.allMorePosts[idx].posts = posts
+        this.allMorePosts[idx].posts = posts.map(transformPostContent)
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
@@ -468,6 +477,18 @@ export default {
       this.scrollDepthObserver.observe(document.getElementById(footerId))
     },
   },
+}
+
+function transformPostContent(post) {
+  const { id, title = '', publishedAt = '' } = post
+
+  return {
+    id,
+    title,
+    href: getHref(post),
+    img: getImg(post),
+    date: formatDate(publishedAt),
+  }
 }
 </script>
 

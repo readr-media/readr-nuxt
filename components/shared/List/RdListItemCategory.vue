@@ -3,10 +3,10 @@
     <a :href="post.href" target="_blank">
       <article>
         <picture>
-          <img :src="post.heroImg" alt="" />
+          <img :src="post.img" alt="" />
         </picture>
         <h1>{{ post.title }}</h1>
-        <div class="date">{{ post.publishedAt }}</div>
+        <div class="date">{{ post.date }}</div>
       </article>
     </a>
   </li>

@@ -120,7 +120,6 @@ Object.assign(module.exports, {
   plugins: [
     '~/plugins/vue-plugins/lazyload.client.js',
     '~/plugins/vue-plugins/web-components.client.js',
-    '~/plugins/injected/index.js',
     '~/plugins/injected/index.client.js',
     '~/plugins/injected/requests/index.js',
   ],

@@ -9,7 +9,7 @@
 
     <ul class="post-list">
       <RdListItemCategory
-        v-for="post in latestPosts"
+        v-for="post in latestList.items"
         :key="post.id"
         :post="post"
         class="category__post"
@@ -46,6 +46,8 @@ import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
 import RdListItemCategory from '~/components/shared/List/RdListItemCategory.vue'
 
+import { getHref, getImg, formatDate } from '~/helpers/index.js'
+
 export default {
   name: 'Category',
 
@@ -70,32 +72,29 @@ export default {
     }
   },
 
-  computed: {
-    latestPosts() {
-      return this.latestList.items.map((post) => {
-        const { id, title = '', publishedAt = '' } = post
-
-        return {
-          id,
-          title,
-          href: this.$getHref(post),
-          heroImg: this.$getImage(post),
-          publishedAt: this.$getFormattedDate(publishedAt),
-        }
-      })
-    },
-  },
-
   methods: {
     async loadLatestList() {
       this.latestList.page += 1
 
-      const items = await this.$fetchLatestPosts({
-        maxResult: 25,
-        page: this.latestList.page,
-      })
+      const items =
+        (await this.$fetchLatestPosts({
+          maxResult: 25,
+          page: this.latestList.page,
+        })) || []
 
-      this.latestList.items.push(...items)
+      this.latestList.items.push(
+        ...items.map(function transformContent(post) {
+          const { id, title = '', publishedAt = '' } = post
+
+          return {
+            id,
+            title,
+            href: getHref(post),
+            img: getImg(post),
+            date: formatDate(publishedAt),
+          }
+        })
+      )
 
       return items
     },

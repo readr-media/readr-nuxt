@@ -1,7 +1,8 @@
-const {
+import {
   READR_MEDIA_OLD_PROJECT_SLUGS,
   MIRROR_MEDIA_OLD_PROJECT_SLUGS,
-} = require('@readr-media/old-news-project-slugs')
+} from '@readr-media/old-news-project-slugs'
+import dayjs from 'dayjs'
 
 function getHref({ type, id, slug } = {}) {
   switch (type) {
@@ -20,6 +21,12 @@ function getHref({ type, id, slug } = {}) {
   }
 }
 
-Object.assign(module.exports, {
-  getHref,
-})
+function formatDate(datetime = '') {
+  return dayjs(datetime).format('MMM D, YYYY')
+}
+
+function getImg({ heroImage, ogImage, image } = {}) {
+  return heroImage || ogImage || image || require('~/assets/default/post.svg')
+}
+
+export { getHref, getImg, formatDate }

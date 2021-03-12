@@ -3,6 +3,7 @@ function newline2br(str = '') {
 }
 
 export { newline2br }
+
 export {
   setupIntersectionObserver,
   cleanupIntersectionObserver,

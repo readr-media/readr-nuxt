@@ -6,7 +6,7 @@
     />
 
     <article id="post">
-      <div class="date">{{ $getFormattedDate(news.publishedAt) }}</div>
+      <div class="date">{{ publishedAt }}</div>
       <h1>{{ news.title }}</h1>
       <div class="container container--post">
         <picture v-if="heroImg" class="hero-img">
@@ -120,6 +120,7 @@ import RdList from '~/components/shared/List/RdList.vue'
 
 // import { state as userState } from '~/composition/store/user.js'
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
+import { getHref, getImg, formatDate } from '~/helpers/index.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
@@ -151,18 +152,12 @@ export default {
     },
   },
 
-  setup(props) {
-    const latestPosts = ref([])
-
+  setup() {
     const {
       route,
-      $fetchLatestPosts,
       // $sendGaEventForArticleClick,
     } = useContext()
     const postId = route.value.params.id
-
-    const { heroImage, ogImage } = props.news
-    const heroImg = heroImage || ogImage
 
     // const wordCount = 100
     // const userReadingTime = useUserReadingTime(userState.hasUserFinishedReading)
@@ -176,20 +171,8 @@ export default {
     // )
 
     onMounted(() => {
-      loadLatestPosts()
-
       // setShouldOpenRecordWord()
     })
-
-    async function loadLatestPosts() {
-      const data = await $fetchLatestPosts({
-        maxResult: 3,
-      })
-      setLatestPosts(data)
-    }
-    function setLatestPosts(data) {
-      latestPosts.value = data
-    }
 
     // const shouldOpenRecordWord = ref(false)
     // function setShouldOpenRecordWord() {
@@ -273,10 +256,6 @@ export default {
     }
 
     return {
-      heroImg,
-
-      latestPosts,
-
       // wordCount,
       // wordReadingPerSecond,
       // hasWordPerSecond,
@@ -296,6 +275,46 @@ export default {
 
       postFeedbackStep,
     }
+  },
+
+  data() {
+    return {
+      latestPosts: [],
+    }
+  },
+
+  computed: {
+    heroImg() {
+      return this.news.heroImage || this.news.ogImage
+    },
+    publishedAt() {
+      return formatDate(this.news.publishedAt)
+    },
+  },
+
+  mounted() {
+    this.loadLatestPosts()
+  },
+
+  methods: {
+    async loadLatestPosts() {
+      const posts =
+        (await this.$fetchLatestPosts({
+          maxResult: 3,
+        })) || []
+
+      this.latestPosts = posts.map(function transformContent(post) {
+        const { id, title = '', publishedAt = '' } = post
+
+        return {
+          id,
+          title,
+          href: getHref(post),
+          img: getImg(post),
+          date: formatDate(publishedAt),
+        }
+      })
+    },
   },
 
   head() {

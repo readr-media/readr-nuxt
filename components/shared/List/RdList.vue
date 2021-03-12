@@ -2,14 +2,14 @@
   <ul class="list">
     <li v-for="post in posts" :key="post.id">
       <article>
-        <a :href="$getHref(post)" target="_blank" @click="$emit('sendGaEvent')">
+        <a :href="post.href" target="_blank" @click="$emit('sendGaEvent')">
           <div class="img-wrapper">
-            <img v-lazy="$getImage(post)" alt="" />
+            <img v-lazy="post.img" alt="" />
           </div>
           <div class="text-wrapper">
             <h1>{{ post.title }}</h1>
             <div class="date">
-              {{ $getFormattedDate(post.publishedAt) }}
+              {{ post.date }}
             </div>
           </div>
         </a>
@@ -21,6 +21,7 @@
 <script>
 export default {
   name: 'RdList',
+
   props: {
     posts: {
       type: Array,

@@ -1,24 +1,23 @@
 <template>
   <div class="list-more">
     <h3 v-if="topic">{{ topic }}</h3>
+
     <div class="list-wrapper">
       <ul>
         <li v-for="post in posts" :key="post.id">
           <article>
             <a
-              :href="$getHref(post)"
+              :href="post.href"
               target="_blank"
               rel="noopener noreferrer"
               @click="$emit('sendGaEvent')"
             >
               <div class="img-wrapper">
-                <img v-lazy="$getImage(post)" alt="" />
+                <img v-lazy="post.img" alt="" />
               </div>
               <div class="text-wrapper">
                 <h1>{{ post.title }}</h1>
-                <div class="date">
-                  {{ $getFormattedDate(post.publishedAt) }}
-                </div>
+                <div class="date">{{ post.date }}</div>
               </div>
             </a>
           </article>
@@ -31,6 +30,7 @@
 <script>
 export default {
   name: 'RdListMore',
+
   props: {
     topic: {
       type: String,

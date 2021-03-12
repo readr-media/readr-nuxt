@@ -27,11 +27,12 @@
 </template>
 
 <script>
-import { ref, computed, useFetch, useContext } from '@nuxtjs/composition-api'
+import { computed } from '@nuxtjs/composition-api'
 
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import RdButtonPrimary from '~/components/shared/Button/RdButtonPrimary.vue'
 
+import { getHref, getImg } from '~/helpers/index.js'
 import { SITE_TITLE } from '~/constants/metadata.js'
 
 export default {
@@ -57,31 +58,42 @@ export default {
       is404.value ? '抱歉，找不到這個網址' : '系統忙碌中，請稍後再試'
     )
 
-    useFetch(async () => {
-      await loadLatestPosts()
-    })
-
-    const latestPosts = ref([])
-    const { $fetchLatestPosts } = useContext()
-    async function loadLatestPosts() {
-      const data = await $fetchLatestPosts({
-        maxResult: 4,
-      })
-      setLatestPosts(data)
-    }
-
-    function setLatestPosts(data) {
-      latestPosts.value = data
-    }
-
     return {
       is404,
       errorMessage,
 
-      latestPosts,
-
       backToHome,
     }
+  },
+
+  async fetch() {
+    await this.loadLatestPosts()
+  },
+
+  data() {
+    return {
+      latestPosts: [],
+    }
+  },
+
+  methods: {
+    async loadLatestPosts() {
+      const posts =
+        (await this.$fetchLatestPosts({
+          maxResult: 4,
+        })) || []
+
+      this.latestPosts = posts.map(function transformContent(post) {
+        const { id, title = '' } = post
+
+        return {
+          id,
+          title,
+          href: getHref(post),
+          img: getImg(post),
+        }
+      })
+    },
   },
 
   head() {

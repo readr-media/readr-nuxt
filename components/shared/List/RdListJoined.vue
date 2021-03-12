@@ -1,14 +1,9 @@
 <template>
   <div class="list-joined">
-    <a
-      v-for="post in posts"
-      :key="post.id"
-      :href="$getHref(post)"
-      target="_blank"
-    >
+    <a v-for="post in posts" :key="post.id" :href="post.href" target="_blank">
       <article>
         <div class="img-wrapper">
-          <img v-lazy="$getImage(post)" alt="" />
+          <img v-lazy="post.img" alt="" />
         </div>
         <h1>{{ post.title }}</h1>
       </article>
@@ -19,6 +14,7 @@
 <script>
 export default {
   name: 'RdListJoined',
+
   props: {
     posts: {
       type: Array,
