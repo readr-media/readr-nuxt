@@ -10,11 +10,14 @@
     </div>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <h1 class="htcak-h1" v-html="title"></h1>
-    <p class="htcak-body description">{{ cmsData.description }}</p>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <p class="htcak-body description" v-html="description"></p>
   </div>
 </template>
 
 <script>
+import { newline2br } from '~/components/helpers/index.js'
+
 export default {
   name: 'RdCover',
 
@@ -28,7 +31,10 @@ export default {
 
   computed: {
     title() {
-      return this.cmsData.title.replace(/\n/g, '<br />')
+      return newline2br(this.cmsData.title)
+    },
+    description() {
+      return newline2br(this.cmsData.description)
     },
   },
 }

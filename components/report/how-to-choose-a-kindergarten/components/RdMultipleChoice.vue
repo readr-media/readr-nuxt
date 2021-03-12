@@ -62,6 +62,8 @@
 import RdButton from './RdButton.vue'
 import RdButtonUnderline from './RdButtonUnderline.vue'
 
+import { newline2br } from '~/components/helpers/index.js'
+
 export default {
   name: 'RdMultipleChoice',
 
@@ -99,7 +101,7 @@ export default {
       return this.checkedChoices.length >= Number(this.cmsData.minChoices)
     },
     title() {
-      return this.cmsData.title.replace(/\n/g, '<br />')
+      return newline2br(this.cmsData.title)
     },
   },
 
