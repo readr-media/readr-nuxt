@@ -24,6 +24,7 @@
     }
   },
   "dependencies": {
+    "@koa/cors": "^3.1.0",
     "@nuxtjs/apollo": "^4.0.1-rc.1",
     "@nuxtjs/composition-api": "^0.18.1",
     "@nuxtjs/dayjs": "^1.1.9",
