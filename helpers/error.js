@@ -35,8 +35,4 @@ function getErrorName(scope = '') {
   return `[${scope || 'READr'} error]`
 }
 
-Object.assign(module.exports, {
-  getErrorName,
-  reportApiErrorFromKoa,
-  logApiError,
-})
+export { reportApiErrorFromKoa, logApiError, getErrorName }

@@ -1,10 +1,9 @@
-const { ENV } = require('../configs/config.js')
+import { ENV } from '~/configs/config.js'
 
 const isProdEnv = ENV === 'prod'
 
-Object.assign(module.exports, {
-  isProdEnv,
+export { isProdEnv }
 
-  ...require('./post.js'),
-  ...require('./error.js'),
-})
+export { reportApiErrorFromKoa, logApiError, getErrorName } from './error.js'
+
+export { getHref, getImg, formatDate } from './post.js'
