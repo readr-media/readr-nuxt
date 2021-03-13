@@ -1,4 +1,4 @@
-import { ENV } from '~/configs/config.js'
+import { ENV } from '../configs/config.js'
 
 const isProdEnv = ENV === 'prod'
 
