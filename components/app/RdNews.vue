@@ -1,9 +1,6 @@
 <template>
   <div class="news">
-    <RdHeaderProgress
-      @sendGaEvent:logo="$sendGaEventForHeaderClick('logo')"
-      @sendGaEvent:progress="$sendGaEventForArticleScroll('end')"
-    />
+    <RdHeaderProgress @sendGaEvent="sendGaScrollEvent('end')" />
 
     <article id="post">
       <div class="date">{{ publishedAt }}</div>
@@ -61,7 +58,7 @@
             :text="starRatingBtnText"
             class="post-feedback__btn"
             @click.native="handleClickRatingBtn"
-            @sendGaEvent="$sendGaEventForArticleClick('rate')"
+            @sendGaEvent="sendGaClickEvent('rate')"
           />
         </div>
 
@@ -92,7 +89,7 @@
       </h2>
       <RdList
         :posts="latestPosts"
-        @sendGaEvent="$sendGaEventForArticleClick('related articles')"
+        @sendGaEvent="sendGaClickEvent('related articles')"
       />
     </section>
   </div>
@@ -314,6 +311,16 @@ export default {
           date: formatDate(publishedAt),
         }
       })
+    },
+
+    sendGaClickEvent(label, value) {
+      this.sendGaEvent('click', label, value)
+    },
+    sendGaScrollEvent(label, value) {
+      this.sendGaEvent('scroll', label, value)
+    },
+    sendGaEvent(action, label, value) {
+      this.$ga.event('Article', action, label, value)
     },
   },
 

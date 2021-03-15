@@ -1,13 +1,10 @@
 <template>
   <div>
-    <RdHeader @sendGaEvent="$sendGaEventForHeaderClick('logo')" />
+    <RdHeader />
 
     <section class="marquee-container">
       <RdMarquee class="home__marquee" />
-      <nuxt-link
-        to="/landing"
-        @click.native="$sendGaEventForHomeClick('landing')"
-      >
+      <nuxt-link to="/landing" @click.native="sendGaClickEvent('landing')">
         <span>了解更多</span>
         <SvgArrowMore />
       </nuxt-link>
@@ -18,7 +15,7 @@
         v-if="shouldOpenEditorChoices"
         :posts="allEditorChoices"
         class="home__carousel"
-        @sendGaEvent="$sendGaEventForHomeClick('editor choices')"
+        @sendGaEvent="sendGaClickEvent('editor choices')"
       >
         <template #heading>
           <RdSectionHeading title="編輯精選" />
@@ -37,7 +34,7 @@
         v-if="shouldOpenLatestList"
         :postMain="latestPostMain"
         :postsSub="latestPostsSub"
-        @sendGaEvent="$sendGaEventForHomeClick('latest articles')"
+        @sendGaEvent="sendGaClickEvent('latest articles')"
       />
     </section>
 
@@ -50,18 +47,14 @@
         :loadMore="loadMoreDatabases"
         :shouldLoadMore="shouldLoadMoreDatabases"
         class="home__database-list"
-        @sendGaEvent:database="$sendGaEventForHomeClick('open database github')"
-        @sendGaEvent:portfolio="
-          $sendGaEventForHomeClick('open database portfolio')
-        "
-        @sendGaEvent:loadMore="
-          $sendGaEventForHomeClick('open database load more')
-        "
+        @sendGaEvent:database="sendGaClickEvent('open database github')"
+        @sendGaEvent:portfolio="sendGaClickEvent('open database portfolio')"
+        @sendGaEvent:loadMore="sendGaClickEvent('open database load more')"
       />
 
       <RdButtonDonate
         class="home__donate-btn"
-        @sendGaEvent="$sendGaEventForHomeClick('donate-opendata')"
+        @sendGaEvent="sendGaClickEvent('donate-opendata')"
       />
     </section>
 
@@ -88,7 +81,7 @@
       <RdCollaborativeList
         class="home__collaborative-list"
         :items="allCollaborations"
-        @sendGaEvent="$sendGaEventForHomeClick('collaboration')"
+        @sendGaEvent="sendGaClickEvent('collaboration')"
       />
     </section>
 
@@ -107,7 +100,7 @@
             :topic="morePosts.tag"
             :posts="morePosts.posts"
             class="home__list-more"
-            @sendGaEvent="sendGaEventForMoreList(morePosts.tag)"
+            @sendGaEvent="sendGaClickEvent(`category ${morePosts.tag}`)"
           />
         </div>
       </div>
@@ -454,11 +447,18 @@ export default {
     },
 
     sendGaEventForCollaboratorWall(doesUnfold) {
-      this.$sendGaEventForHomeClick(`credit-${doesUnfold ? 'open' : 'close'}`)
+      this.sendGaClickEvent(`credit-${doesUnfold ? 'open' : 'close'}`)
     },
-    sendGaEventForMoreList(topic) {
-      this.$sendGaEventForHomeClick(`category ${topic}`)
+    sendGaClickEvent(label, value) {
+      this.sendGaEvent('click', label, value)
     },
+    sendGaScrollEvent(label, value) {
+      this.sendGaEvent('scroll', label, value)
+    },
+    sendGaEvent(action, label, value) {
+      this.$ga.event('Home', action, label, value)
+    },
+
     async setupScrollDepthObserver() {
       const footerId = 'default-footer'
 
@@ -466,11 +466,9 @@ export default {
         entries.forEach(({ isIntersecting, target }) => {
           if (isIntersecting) {
             if (target.id === footerId) {
-              this.$sendGaEventForHomeScroll('scroll 到 footer')
+              this.sendGaScrollEvent('scroll 到 footer')
             } else {
-              this.$sendGaEventForHomeScroll(
-                `scroll 到${target.textContent.trim()}`
-              )
+              this.sendGaScrollEvent(`scroll 到${target.textContent.trim()}`)
             }
             this.scrollDepthObserver.unobserve(target)
           }

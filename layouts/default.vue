@@ -5,9 +5,9 @@
     <RdFooter
       id="default-footer"
       class="default__footer"
-      @sendGaEvent:about="$sendGaEventForFooterClick('aboutus')"
-      @sendGaEvent:contact="$sendGaEventForFooterClick('contact')"
-      @sendGaEvent:privacy="$sendGaEventForFooterClick('privacy')"
+      @sendGaEvent:about="sendGaClickFooterEvent('aboutus')"
+      @sendGaEvent:contact="sendGaClickFooterEvent('contact')"
+      @sendGaEvent:privacy="sendGaClickFooterEvent('privacy')"
     />
 
     <ClientOnly>
@@ -18,7 +18,6 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import { onMounted, useContext } from '@nuxtjs/composition-api'
 import rafThrottle from 'raf-throttle'
 
 import RdFooter from '~/components/shared/RdFooter.vue'
@@ -39,12 +38,6 @@ export default {
   },
 
   setup() {
-    const { $sendGaEventForUsersVisit } = useContext()
-
-    onMounted(() => {
-      $sendGaEventForUsersVisit(`readr ${isReadr2User.value ? '2.0' : '3.0'}`)
-    })
-
     return {
       shouldOpenGdpr,
       closeGdpr,
@@ -53,6 +46,14 @@ export default {
 
   beforeMount() {
     this.initViewport()
+  },
+
+  mounted() {
+    this.sendGaEvent(
+      'users',
+      'visit',
+      `readr ${isReadr2User.value ? '2.0' : '3.0'}`
+    )
   },
 
   beforeDestroy() {
@@ -76,6 +77,13 @@ export default {
         const { innerWidth, innerHeight } = window
         this.setViewport({ width: innerWidth, height: innerHeight })
       })()
+    },
+
+    sendGaEvent(category, action, label, value) {
+      this.$ga.event(category, action, label, value)
+    },
+    sendGaClickFooterEvent(label) {
+      this.sendGaEvent('footer', 'click', label)
     },
   },
 }

@@ -1,9 +1,6 @@
 <template>
   <div class="category">
-    <RdHeader
-      class="category__header"
-      @sendGaEvent="$sendGaEventForHeaderClick('logo')"
-    />
+    <RdHeader class="category__header" />
 
     <RdSectionHeading title="最新文章" fill="#ebf02c" />
 

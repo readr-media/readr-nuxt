@@ -1,7 +1,7 @@
 <template>
   <div>
     <header>
-      <nuxt-link to="/" @click.native="$sendGaEventForLandingClick('logo')">
+      <nuxt-link to="/" @click.native="sendGaClickEvent('logo')">
         <SvgReadrLogoYellow />
       </nuxt-link>
     </header>
@@ -24,20 +24,20 @@
             <div class="actions">
               <nuxt-link
                 to="/#collaboration"
-                @click.native="$sendGaEventForLandingClick('collaboration')"
+                @click.native="sendGaClickEvent('collaboration')"
               >
                 <button type="button">參與協作</button>
               </nuxt-link>
               <nuxt-link
                 to="/#latest"
-                @click.native="$sendGaEventForLandingClick('latest articles')"
+                @click.native="sendGaClickEvent('latest articles')"
               >
                 <button type="button">閱讀文章</button>
               </nuxt-link>
               <a
                 href="/donate"
                 target="_blank"
-                @click="$sendGaEventForLandingClick('donate')"
+                @click="sendGaClickEvent('donate')"
               >
                 <button type="button">贊助我們</button>
               </a>
@@ -107,7 +107,7 @@ export default {
 
       this.sendEmailToGoogleSheet()
       this.closeEmailInput()
-      this.$sendGaEventForLandingClick('subscribe')
+      this.sendGaClickEvent('subscribe')
     },
     sendEmailToGoogleSheet() {
       axiosPost('/api/google-sheets/append', {
@@ -128,6 +128,13 @@ export default {
     },
     closeEmailInput() {
       this.shouldOpenEmailInput = false
+    },
+
+    sendGaClickEvent(label, value) {
+      this.sendGaEvent('click', label, value)
+    },
+    sendGaEvent(action, label, value) {
+      this.$ga.event('Landing', action, label, value)
     },
   },
 }

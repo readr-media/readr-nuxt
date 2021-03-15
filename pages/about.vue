@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <RdHeader @sendGaEvent="$sendGaEventForHeaderClick('logo')" />
+    <RdHeader />
 
     <RdAboutIntro />
     <RdAboutCoreValues />

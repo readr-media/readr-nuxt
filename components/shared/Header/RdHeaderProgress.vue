@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="logo-wrapper">
-      <RdHeaderWithLogo @sendGaEvent="$emit('sendGaEvent:logo')" />
+      <RdHeaderWithLogo />
       <div class="progress-percent">
         閱讀進度<span>{{ percent }}%</span>
       </div>
@@ -40,7 +40,7 @@ export default {
   watch: {
     hasFinishedReading(hasFinished) {
       if (hasFinished === true) {
-        this.$emit('sendGaEvent:progress')
+        this.$emit('sendGaEvent')
       }
     },
   },
