@@ -1,15 +1,15 @@
 <template>
   <div class="category">
-    <UiHeader
+    <RdHeader
       class="category__header"
-      @sendGaEvt="$sendGaEvtForHeaderClick('logo')"
+      @sendGaEvent="$sendGaEventForHeaderClick('logo')"
     />
 
-    <UiSectionHeading title="最新文章" fill="#ebf02c" />
+    <RdSectionHeading title="最新文章" fill="#ebf02c" />
 
     <ul class="post-list">
-      <UiPostListItem
-        v-for="post in latestPosts"
+      <RdListItemCategory
+        v-for="post in latestList.items"
         :key="post.id"
         :post="post"
         class="category__post"
@@ -42,14 +42,20 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import UiPostListItem from '~/components/category/ui/PostListItem.vue'
+import RdHeader from '~/components/shared/Header/RdHeader.vue'
+import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
+import RdListItemCategory from '~/components/shared/List/RdListItemCategory.vue'
+
+import { getHref, getImg, formatDate } from '~/helpers/index.js'
 
 export default {
   name: 'Category',
 
   components: {
-    UiPostListItem,
     InfiniteLoading,
+    RdHeader,
+    RdSectionHeading,
+    RdListItemCategory,
   },
 
   async fetch() {
@@ -66,32 +72,29 @@ export default {
     }
   },
 
-  computed: {
-    latestPosts() {
-      return this.latestList.items.map((post) => {
-        const { id, title = '', publishedAt = '' } = post
-
-        return {
-          id,
-          title,
-          href: this.$getHref(post),
-          heroImg: this.$getImage(post),
-          publishedAt: this.$getFormattedDate(publishedAt),
-        }
-      })
-    },
-  },
-
   methods: {
     async loadLatestList() {
       this.latestList.page += 1
 
-      const items = await this.$fetchLatestPosts({
-        maxResult: 25,
-        page: this.latestList.page,
-      })
+      const items =
+        (await this.$fetchLatestPosts({
+          maxResult: 25,
+          page: this.latestList.page,
+        })) || []
 
-      this.latestList.items.push(...items)
+      this.latestList.items.push(
+        ...items.map(function transformContent(post) {
+          const { id, title = '', publishedAt = '' } = post
+
+          return {
+            id,
+            title,
+            href: getHref(post),
+            img: getImg(post),
+            date: formatDate(publishedAt),
+          }
+        })
+      )
 
       return items
     },

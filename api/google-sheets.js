@@ -8,6 +8,7 @@ const bodyParser = require('koa-bodyparser')
 const Router = require('koa-router')
 const { google } = require('googleapis')
 
+const { reportApiErrorFromKoa } = require('../helpers/index.js')
 const auth = require('./middle/auth.js')
 
 const app = new Koa()
@@ -22,7 +23,6 @@ const sheets = google.sheets({
 
 router.get('/', async function getFromGoogleSheet(ctx) {
   const sheetsRequest = ctx.query
-  const { spreadsheetId } = sheetsRequest
 
   try {
     const { data, status = 200 } = await sheets.spreadsheets.values.get(
@@ -30,26 +30,14 @@ router.get('/', async function getFromGoogleSheet(ctx) {
     )
 
     ctx.status = status
-    ctx.body =
-      data ||
-      createErrorBodyOfGoogleSheets({
-        method: 'spreadsheets.values.get',
-        message: 'no data found',
-        spreadsheetId,
-      })
-  } catch (error) {
-    ctx.status = 500
-    ctx.body = createErrorBodyOfGoogleSheets({
-      method: 'spreadsheets.values.get',
-      message: error.message,
-      spreadsheetId,
-    })
+    ctx.body = data
+  } catch (err) {
+    reportGoogleSheetsApiError(err, ctx)
   }
 })
 
 router.post('/append', async function appendToGoogleSheet(ctx) {
   const { body: sheetsRequest } = ctx.request
-  const { spreadsheetId } = sheetsRequest
 
   try {
     const { data, status = 200 } = await sheets.spreadsheets.values.append(
@@ -57,30 +45,14 @@ router.post('/append', async function appendToGoogleSheet(ctx) {
     )
 
     ctx.status = status
-    ctx.body =
-      data ||
-      createErrorBodyOfGoogleSheets({
-        method: 'spreadsheets.values.append',
-        message: 'no data found',
-        spreadsheetId,
-      })
-  } catch (error) {
-    ctx.status = 500
-    ctx.body = createErrorBodyOfGoogleSheets({
-      method: 'spreadsheets.values.append',
-      message: error.message,
-      spreadsheetId,
-    })
+    ctx.body = data
+  } catch (err) {
+    reportGoogleSheetsApiError(err, ctx)
   }
 })
 
-function createErrorBodyOfGoogleSheets({ method, message, spreadsheetId }) {
-  return `
-    api: google sheets
-    method: ${method}
-    message: ${message}
-    spreadsheet id: ${spreadsheetId}
-  `
+function reportGoogleSheetsApiError(err, koaCtx) {
+  reportApiErrorFromKoa(err, koaCtx, { scope: 'Google Sheets' })
 }
 
 Object.assign(module.exports, {

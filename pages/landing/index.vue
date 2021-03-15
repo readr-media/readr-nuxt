@@ -1,7 +1,7 @@
 <template>
   <div>
     <header>
-      <nuxt-link to="/" @click.native="$sendGaEvtForLandingClick('logo')">
+      <nuxt-link to="/" @click.native="$sendGaEventForLandingClick('logo')">
         <SvgReadrLogoYellow />
       </nuxt-link>
     </header>
@@ -24,20 +24,20 @@
             <div class="actions">
               <nuxt-link
                 to="/#collaboration"
-                @click.native="$sendGaEvtForLandingClick('collaboration')"
+                @click.native="$sendGaEventForLandingClick('collaboration')"
               >
                 <button type="button">參與協作</button>
               </nuxt-link>
               <nuxt-link
                 to="/#latest"
-                @click.native="$sendGaEvtForLandingClick('latest articles')"
+                @click.native="$sendGaEventForLandingClick('latest articles')"
               >
                 <button type="button">閱讀文章</button>
               </nuxt-link>
               <a
                 href="/donate"
                 target="_blank"
-                @click="$sendGaEvtForLandingClick('donate')"
+                @click="$sendGaEventForLandingClick('donate')"
               >
                 <button type="button">贊助我們</button>
               </a>
@@ -70,6 +70,7 @@
 <script>
 import { ref, computed, useContext } from '@nuxtjs/composition-api'
 import { post as axiosPost } from 'axios'
+import dayjs from 'dayjs'
 
 import SvgReadrLogoYellow from '~/assets/readr-logo-yellow.svg?inline'
 
@@ -82,18 +83,18 @@ export default {
   setup() {
     const shouldOpenEmailInput = ref(true)
 
-    const { route, $dayjs, $sendGaEvtForLandingClick } = useContext()
+    const { route, $sendGaEventForLandingClick } = useContext()
     const email = ref('')
     const hasEmail = computed(() => email.value !== '')
 
-    function handleSubmitEmail(evt) {
-      if (!hasEmail.value || !shouldOpenEmailInput.value || evt.isComposing) {
+    function handleSubmitEmail(event) {
+      if (!hasEmail.value || !shouldOpenEmailInput.value || event.isComposing) {
         return
       }
 
       sendEmailToGoogleSheet()
       closeEmailInput()
-      $sendGaEvtForLandingClick('subscribe')
+      $sendGaEventForLandingClick('subscribe')
     }
 
     function sendEmailToGoogleSheet() {
@@ -105,7 +106,7 @@ export default {
           values: [
             [
               email.value,
-              $dayjs().format('YYYYMMDDHHmm'),
+              dayjs().format('YYYYMMDDHHmm'),
               'readr3.0-landing-page',
               route.value.path,
             ],

@@ -100,6 +100,10 @@ Object.assign(module.exports, {
         httpEndpoint: `${BASE_URL}/api/cms`,
         browserHttpEndpoint: '/api/cms',
       },
+      keystoneDevClient: {
+        httpEndpoint: `${BASE_URL}/api/cms?keystoneDev=true`,
+        browserHttpEndpoint: '/api/cms?keystoneDev=true',
+      },
     },
   },
   /*
@@ -114,10 +118,10 @@ Object.assign(module.exports, {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    '~/plugins/vue-plugins.client.js',
-    '~/plugins/index.js',
-    '~/plugins/index.client.js',
-    '~/plugins/requests/index.js',
+    '~/plugins/vue-plugins/lazyload.client.js',
+    '~/plugins/vue-plugins/web-components.client.js',
+    '~/plugins/injected/index.client.js',
+    '~/plugins/injected/requests/index.js',
   ],
 
   serverMiddleware: [
@@ -125,6 +129,8 @@ Object.assign(module.exports, {
     { path: '/api/public', handler: '~/api/public.js' },
     { path: '/api/cms', handler: '~/api/cms.js' },
     { path: '/api/google-sheets', handler: '~/api/google-sheets.js' },
+    { path: '/api/donate', handler: '~/api/donate.js' },
+    { path: '/api/subscriptions', handler: '~/api/subscriptions.js' },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -161,7 +167,7 @@ Object.assign(module.exports, {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/dayjs', '@nuxtjs/apollo', '@nuxtjs/svg', 'nuxt-ssr-cache'],
+  modules: ['@nuxtjs/apollo', '@nuxtjs/svg', 'nuxt-ssr-cache'],
 
   cache: !inDevEnv && {
     pages: ['/'],
@@ -172,8 +178,6 @@ Object.assign(module.exports, {
       ttl: 60 * 5,
     },
   },
-
-  components: ['~/components', { path: '~/components/ui/', prefix: 'ui' }],
 
   telemetry: {
     enabled: true,

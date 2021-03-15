@@ -1,12 +1,12 @@
 <template>
   <div>
-    <UiHeader @sendGaEvt="$sendGaEvtForHeaderClick('logo')" />
+    <RdHeader @sendGaEvent="$sendGaEventForHeaderClick('logo')" />
 
     <section class="marquee-container">
-      <UiMarquee class="home__marquee" />
+      <RdMarquee class="home__marquee" />
       <nuxt-link
         to="/landing"
-        @click.native="$sendGaEvtForHomeClick('landing')"
+        @click.native="$sendGaEventForHomeClick('landing')"
       >
         <span>了解更多</span>
         <SvgArrowMore />
@@ -14,98 +14,100 @@
     </section>
 
     <section>
-      <UiCarousel
+      <RdCarousel
         v-if="shouldOpenEditorChoices"
         :posts="allEditorChoices"
         class="home__carousel"
-        @sendGaEvt="$sendGaEvtForHomeClick('editor choices')"
+        @sendGaEvent="$sendGaEventForHomeClick('editor choices')"
       >
         <template #heading>
-          <UiSectionHeading title="編輯精選" />
+          <RdSectionHeading title="編輯精選" />
         </template>
-      </UiCarousel>
+      </RdCarousel>
     </section>
 
     <section ref="latest" class="container container--latest">
-      <UiSectionHeading
+      <RdSectionHeading
+        v-intersect="scrollDepthObserver"
         title="最新文章"
         fill="#ebf02c"
         class="home__section-heading"
       />
-      <UiPostLatestList
+      <RdListLatest
         v-if="shouldOpenLatestList"
         :postMain="latestPostMain"
         :postsSub="latestPostsSub"
-        @sendGaEvt="$sendGaEvtForHomeClick('latest articles')"
+        @sendGaEvent="$sendGaEventForHomeClick('latest articles')"
       />
     </section>
 
-    <section ref="database" class="container container--database">
-      <div class="database-heading">
+    <section class="container container--database">
+      <div v-intersect="scrollDepthObserver" class="database-heading">
         <h2>開放資料庫</h2>
       </div>
-      <UiDatabaseList
+      <RdDatabaseList
         :list="databases.all"
         :loadMore="loadMoreDatabases"
         :shouldLoadMore="shouldLoadMoreDatabases"
         class="home__database-list"
-        @sendGaEvt:database="$sendGaEvtForHomeClick('open database github')"
-        @sendGaEvt:portfolio="$sendGaEvtForHomeClick('open database portfolio')"
-        @sendGaEvt:loadMore="$sendGaEvtForHomeClick('open database load more')"
+        @sendGaEvent:database="$sendGaEventForHomeClick('open database github')"
+        @sendGaEvent:portfolio="
+          $sendGaEventForHomeClick('open database portfolio')
+        "
+        @sendGaEvent:loadMore="
+          $sendGaEventForHomeClick('open database load more')
+        "
       />
 
-      <UiButtonDonate
+      <RdButtonDonate
         class="home__donate-btn"
-        @sendGaEvt="$sendGaEvtForHomeClick('donate-opendata')"
+        @sendGaEvent="$sendGaEventForHomeClick('donate-opendata')"
       />
     </section>
 
-    <section ref="collaboration" class="horizontal-container">
+    <section ref="collaboration" class="collaboration-container">
       <div class="container container--quote">
-        <UiSectionHeading
+        <RdSectionHeading
+          v-intersect="scrollDepthObserver"
           title="協作專區"
           color="#f5ebff"
           fill="#04295e"
           class="home__section-heading"
         />
-        <UiQuoteSlide :quotes="quotes" />
+        <RdQuoteSlide :quotes="quotes" />
       </div>
       <div class="container container--wall">
-        <UiCollaboratorWall
+        <RdCollaboratorWall
           v-if="countOfCollaboratorWall"
           :count="countOfCollaboratorWall"
           :names="namesOfCollaboratorWall"
           :loadNames="loadCollaboratorNames"
-          @sendGaEvt="sendGaEvtForCollaboratorWall"
+          @sendGaEvent="sendGaEventForCollaboratorWall"
         />
       </div>
-      <UiHorizontalList
-        class="home__horizontal-list"
+      <RdCollaborativeList
+        class="home__collaborative-list"
         :items="allCollaborations"
-        @sendGaEvt="$sendGaEvtForHomeClick('collaboration')"
+        @sendGaEvent="$sendGaEventForHomeClick('collaboration')"
       />
     </section>
 
-    <section
-      v-if="hasAnyMorePosts"
-      v-show="shouldShowMoreSection"
-      ref="more"
-      class="more-section yellow-bg"
-    >
+    <section v-show="shouldShowMoreSection" class="more-section yellow-bg">
       <div class="container">
-        <UiSectionHeading
+        <RdSectionHeading
+          v-intersect="scrollDepthObserver"
           title="更多專題"
           linkHref="/category/"
           class="home__section-heading"
         />
         <div id="more-list-container">
-          <UiMoreList
+          <RdListMore
             v-for="morePosts in displayedAllMorePosts"
             :key="morePosts.tag"
             :topic="morePosts.tag"
             :posts="morePosts.posts"
-            class="home__more-list"
-            @sendGaEvt="sendGaEvtForMoreList(morePosts.tag)"
+            class="home__list-more"
+            @sendGaEvent="sendGaEventForMoreList(morePosts.tag)"
           />
         </div>
       </div>
@@ -116,15 +118,32 @@
 <script>
 import { get as axiosGet } from 'axios'
 
+import RdHeader from '~/components/shared/Header/RdHeader.vue'
+import RdMarquee from '~/components/shared/RdMarquee.vue'
+import RdCarousel from '~/components/app/RdCarousel.vue'
+import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
+import RdListLatest from '~/components/shared/List/RdListLatest.vue'
+import RdDatabaseList from '~/components/app/RdDatabaseList.vue'
+import RdQuoteSlide from '~/components/app/RdQuoteSlide.vue'
+import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
+import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
+import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
+import RdListMore from '~/components/shared/List/RdListMore.vue'
+
+import intersect from '~/components/helpers/directives/intersect.js'
+
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
 import { databases } from '~/apollo/queries/data.gql'
 import { quotes } from '~/apollo/queries/quotes.gql'
 
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/components/helpers/index.js'
 import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
-import { onDemand } from '~/utils/integrations/index.js'
-import { inProdEnv } from '~/utils/index.js'
+import { isProdEnv, getHref, getImg, formatDate } from '~/helpers/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'
 
@@ -132,22 +151,37 @@ const DATABASES_PAGE_SIZE = 3
 
 const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
 
-if (process.browser) {
-  /* eslint-disable no-var */
-  var TAG_ID_CURRENT_EVENTS = inProdEnv(document.domain) ? 1184 : 103
-  var TAG_ID_EDUCATION = inProdEnv(document.domain) ? 1185 : 104
-  var TAG_ID_POLITICS = inProdEnv(document.domain) ? 1186 : 14
-  var TAG_ID_HUMAN_RIGHTS = inProdEnv(document.domain) ? 1187 : 105
-  var TAG_ID_ENVIRONMENT = inProdEnv(document.domain) ? 1188 : 106
-  var TAG_ID_NEWS = inProdEnv(document.domain) ? 1189 : 107
-  /* eslint-enable no-var */
-}
+const MORE_POSTS_TAGS = [
+  { ID: isProdEnv ? 1184 : 103, NAME: '時事' },
+  { ID: isProdEnv ? 1185 : 104, NAME: '教育' },
+  { ID: isProdEnv ? 1186 : 14, NAME: '政治' },
+  { ID: isProdEnv ? 1187 : 105, NAME: '人權' },
+  { ID: isProdEnv ? 1188 : 106, NAME: '環境' },
+  { ID: isProdEnv ? 1189 : 107, NAME: '新鮮事' },
+]
 
 export default {
   name: 'Home',
   components: {
+    RdHeader,
+    RdMarquee,
+    RdCarousel,
+    RdSectionHeading,
+    RdListLatest,
+    RdDatabaseList,
+    RdQuoteSlide,
+    RdCollaboratorWall,
+    RdCollaborativeList,
+    RdButtonDonate,
+    RdListMore,
+
     SvgArrowMore,
   },
+
+  directives: {
+    intersect,
+  },
+
   apollo: {
     allEditorChoices: {
       query: allEditorChoices,
@@ -163,13 +197,17 @@ export default {
       query: quotes,
     },
   },
+
   async fetch() {
-    this.latestPosts = await this.$fetchLatestPosts()
+    await this.loadLatestPosts()
   },
+
   data() {
     return {
       allEditorChoices: [],
       allCollaborations: [],
+
+      latestPosts: [],
 
       databases: {
         all: [],
@@ -177,25 +215,21 @@ export default {
       },
       databasesPage: 0,
 
-      latestPosts: [],
       collaboratorWall: {
         count: 0,
         names: '',
       },
       quotes: [],
-      allMorePosts: [
-        { tag: '時事', posts: [] },
-        { tag: '教育', posts: [] },
-        { tag: '政治', posts: [] },
-        { tag: '人權', posts: [] },
-        { tag: '環境', posts: [] },
-        { tag: '新鮮事', posts: [] },
-      ],
-      isLoadingMacy: false,
+
+      allMorePosts: MORE_POSTS_TAGS.map(({ NAME }) => ({
+        tag: NAME,
+        posts: [],
+      })),
+      isInitializingMacy: false,
       macyInstance: undefined,
       unwatchIsViewportWidthUpMd: undefined,
 
-      shouldShowMoreSection: !this.isViewportWidthUpMd,
+      scrollDepthObserver: undefined,
     }
   },
   computed: {
@@ -208,6 +242,7 @@ export default {
     shouldOpenEditorChoices() {
       return this.allEditorChoices && this.allEditorChoices.length > 0
     },
+
     shouldOpenLatestList() {
       return this.latestPosts.length > 0
     },
@@ -251,6 +286,11 @@ export default {
       },
     },
 
+    shouldShowMoreSection() {
+      return (
+        (!this.isViewportWidthUpMd || this.macyInstance) && this.hasAnyMorePosts
+      )
+    },
     hasAnyMorePosts() {
       return this.allMorePosts.some(this.hasPosts)
     },
@@ -258,36 +298,37 @@ export default {
       return this.allMorePosts.filter(this.hasPosts)
     },
   },
-  async mounted() {
-    await this.loadAllMorePosts()
-
-    this.unwatchIsViewportWidthUpMd = this.$watch(
-      'isViewportWidthUpMd',
-      this.handleMacy,
-      { immediate: true }
-    )
-
-    this.countOfCollaboratorWall =
-      (await this.fetchCountOfCollaboratorWall()) || 0
-
+  mounted() {
+    this.handleAllMorePosts()
+    this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
-
-    this.addListenerToScrollDepthForGaEvt()
+    this.setupScrollDepthObserver()
   },
-  methods: {
-    async fetchCountOfCollaboratorWall() {
-      try {
-        const response = await axiosGet('/api/google-sheets', {
-          params: {
-            spreadsheetId: '1vEuoCAAXR8NMoh6qiOnj6kNdLv0lc-CaInLnWUuvySo',
-            range: '名稱列表!F1',
-          },
-        })
 
-        return Number(response.data.values[0][0])
-      } catch (error) {
+  beforeDestroy() {
+    cleanupIntersectionObserver(this, 'scrollDepthObserver')
+  },
+
+  methods: {
+    async loadLatestPosts() {
+      const posts = (await this.$fetchLatestPosts()) || []
+      this.latestPosts = posts.map(transformPostContent)
+    },
+
+    async loadCollaboratorsCount() {
+      try {
+        const response =
+          (await axiosGet('/api/google-sheets', {
+            params: {
+              spreadsheetId: '1vEuoCAAXR8NMoh6qiOnj6kNdLv0lc-CaInLnWUuvySo',
+              range: '名稱列表!F1',
+            },
+          })) || {}
+
+        this.countOfCollaboratorWall = Number(response.data?.values?.[0]?.[0])
+      } catch (err) {
         // eslint-disable-next-line no-console
-        console.error(error)
+        console.error(err)
       }
     },
     async loadCollaboratorNames() {
@@ -318,85 +359,65 @@ export default {
       }
     },
 
-    async loadAllMorePosts() {
-      const data = await this.fetchAllMorePosts()
-      this.setAllMorePosts(data)
-    },
-    fetchAllMorePosts() {
-      return Promise.allSettled([
-        this.$fetchPostsByTag(TAG_ID_CURRENT_EVENTS),
-        this.$fetchPostsByTag(TAG_ID_EDUCATION),
-        this.$fetchPostsByTag(TAG_ID_POLITICS),
-        this.$fetchPostsByTag(TAG_ID_HUMAN_RIGHTS),
-        this.$fetchPostsByTag(TAG_ID_ENVIRONMENT),
-        this.$fetchPostsByTag(TAG_ID_NEWS),
-      ])
-        .then(function settled(allPosts) {
-          return allPosts.filter(isFulfilled).map(extractValue)
+    async handleAllMorePosts() {
+      await Promise.all(
+        MORE_POSTS_TAGS.map(({ ID }, idx) => this.loadMorePosts(ID, idx))
+      )
 
-          function isFulfilled(postsByTag) {
-            return postsByTag.status === 'fulfilled'
-          }
-
-          function extractValue(postsByTag) {
-            return postsByTag.value
-          }
-        })
-        .catch(function handleError(error) {
-          // eslint-disable-next-line no-console
-          console.error(error)
-
-          return []
-        })
-    },
-    setAllMorePosts(allPosts) {
-      allPosts.forEach(
-        function insertPosts(postsByTag, idx) {
-          this.allMorePosts[idx].posts = postsByTag
-        }.bind(this)
+      this.unwatchIsViewportWidthUpMd = this.$watch(
+        'isViewportWidthUpMd',
+        this.handleMoreSectionLayout,
+        { immediate: true }
       )
     },
-    hasPosts(item) {
-      return item.posts.length > 0
+    async loadMorePosts(tagId, idx) {
+      try {
+        const posts = (await this.$fetchPostsByTag(tagId)) || []
+        this.allMorePosts[idx].posts = posts.map(transformPostContent)
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
+      }
     },
-
-    async handleMacy(isViewportWidthUpMd) {
+    async handleMoreSectionLayout(isViewportWidthUpMd) {
       if (this.macyInstance) {
         this.unwatchIsViewportWidthUpMd()
         return
       }
 
-      if (isViewportWidthUpMd && this.hasAnyMorePosts && !this.isLoadingMacy) {
-        const loadMacy = onDemand('https://cdn.jsdelivr.net/npm/macy@2')
-        this.isLoadingMacy = true
+      if (
+        isViewportWidthUpMd &&
+        this.hasAnyMorePosts &&
+        !this.isInitializingMacy
+      ) {
+        this.isInitializingMacy = true
 
         try {
-          await loadMacy()
-          this.initMacy()
-
-          this.shouldShowMoreSection = true
-        } catch (error) {
+          const initMacy = (await import('macy')).default
+          this.macyInstance = initMacy({
+            container: '#more-list-container',
+            mobileFirst: true,
+            trueOrder: true,
+            columns: 1,
+            breakAt: {
+              [this.breakpointMd]: {
+                margin: { x: 22 },
+                columns: 3,
+              },
+            },
+          })
+        } catch (err) {
           // eslint-disable-next-line no-console
-          console.error(error)
+          console.error(err)
         }
 
-        this.isLoadingMacy = false
+        this.isInitializingMacy = false
       }
     },
-    initMacy() {
-      this.macyInstance = window.Macy({
-        container: '#more-list-container',
-        mobileFirst: true,
-        trueOrder: true,
-        columns: 1,
-        breakAt: {
-          [this.breakpointMd]: {
-            margin: { x: 22 },
-            columns: 3,
-          },
-        },
-      })
+    hasPosts(item) {
+      return item.posts.length > 0
     },
+
     loadMoreDatabases() {
       if (this.isDatabasesLoading) {
         return
@@ -430,28 +451,44 @@ export default {
       }
     },
 
-    sendGaEvtForCollaboratorWall(doesUnfold) {
-      this.$sendGaEvtForHomeClick(`credit-${doesUnfold ? 'open' : 'close'}`)
+    sendGaEventForCollaboratorWall(doesUnfold) {
+      this.$sendGaEventForHomeClick(`credit-${doesUnfold ? 'open' : 'close'}`)
     },
-    sendGaEvtForMoreList(topic) {
-      this.$sendGaEvtForHomeClick(`category ${topic}`)
+    sendGaEventForMoreList(topic) {
+      this.$sendGaEventForHomeClick(`category ${topic}`)
     },
-    addListenerToScrollDepthForGaEvt() {
-      const { latest, database, collaboration, more } = this.$refs
-      const triggers = [
-        { elem: latest, evtFields: ['scroll 到最新文章', 1] },
-        { elem: database, evtFields: ['scroll 到開放資料庫', 2] },
-        { elem: collaboration, evtFields: ['scroll 到協作專區', 3] },
-        { elem: more, evtFields: ['scroll 到更多專題', 4] },
-        {
-          elem: document.getElementById('default-footer'),
-          evtFields: ['scroll 到 footer ', 5],
-        },
-      ]
+    async setupScrollDepthObserver() {
+      const footerId = 'default-footer'
 
-      this.$listenScrollDepthForGaEvt(triggers, this.$sendGaEvtForHomeScroll)
+      this.scrollDepthObserver = await setupIntersectionObserver((entries) => {
+        entries.forEach(({ isIntersecting, target }) => {
+          if (isIntersecting) {
+            if (target.id === footerId) {
+              this.$sendGaEventForHomeScroll('scroll 到 footer')
+            } else {
+              this.$sendGaEventForHomeScroll(
+                `scroll 到${target.textContent.trim()}`
+              )
+            }
+            this.scrollDepthObserver.unobserve(target)
+          }
+        })
+      })
+      this.scrollDepthObserver.observe(document.getElementById(footerId))
     },
   },
+}
+
+function transformPostContent(post) {
+  const { id, title = '', publishedAt = '' } = post
+
+  return {
+    id,
+    title,
+    href: getHref(post),
+    img: getImg(post),
+    date: formatDate(publishedAt),
+  }
 }
 </script>
 
@@ -483,7 +520,7 @@ export default {
       margin-right: auto;
     }
   }
-  &__horizontal-list {
+  &__collaborative-list {
     padding-left: 20px;
     @media (min-width: 1096px) {
       // (100vw - 1096px) / 2 + 20px
@@ -494,7 +531,7 @@ export default {
       padding-left: calc(50% - 548px);
     }
   }
-  &__more-list {
+  &__list-more {
     padding-bottom: 30px;
     @include media-breakpoint-up(md) {
       padding-bottom: 60px;
@@ -590,7 +627,7 @@ export default {
 .home__carousel,
 .container--latest,
 .container--database,
-.horizontal-container {
+.collaboration-container {
   margin-bottom: 40px;
   @include media-breakpoint-up(md) {
     margin-bottom: 60px;

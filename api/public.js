@@ -3,10 +3,13 @@ const Router = require('koa-router')
 const { create: createAxios } = require('axios')
 
 const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config.js')
+const { getErrorName } = require('../helpers/index.js')
+const { handleKoaCors: handleCors } = require('./middle/cors.js')
 
 const app = new Koa()
 const router = new Router()
 
+app.use(handleCors)
 app.use(router.routes())
 
 const cmsDeprecatedApi = createAxios({
@@ -49,7 +52,9 @@ async function checkQueryFields(notAllowedFields, ctx, next) {
     await next()
   } else {
     ctx.status = 403
-    ctx.body = `Not allowed query fields: [${notAllowedFields.join(', ')}]`
+    ctx.body = `${getErrorName()}: Not allowed query fields: [${notAllowedFields.join(
+      ', '
+    )}]`
   }
 }
 
