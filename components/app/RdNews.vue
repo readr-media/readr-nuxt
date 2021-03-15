@@ -14,34 +14,6 @@
       </div>
     </article>
 
-    <!-- <ClientOnly>
-      <RdRecordBox
-        v-if="shouldOpenRecordWord"
-        class="news__record-box container"
-        :class="{ hidden: !hasWordPerSecond }"
-        @cancel="handleCancelRecordWord"
-      >
-        <template #record>
-          <div class="record-word">
-            你閱讀了 <span>{{ wordCount }}</span> 字，平均每字
-            <span>{{ wordReadingPerSecond }}</span> 秒鐘
-          </div>
-        </template>
-
-        <template #feedback>
-          <RdRecordFeedback
-            :options="[
-              '這訊息沒意義',
-              '你知道太多了',
-              '看了壓力很大',
-              '沒有特別原因',
-            ]"
-            @userGiveFeedback="sendFeedbackOfRecordWordToGoogleSheet"
-          />
-        </template>
-      </RdRecordBox>
-    </ClientOnly> -->
-
     <ClientOnly>
       <section class="post-feedback container">
         <div v-if="postFeedbackStep === 'rating'" class="post-feedback__step">
@@ -96,34 +68,23 @@
 </template>
 
 <script>
-import {
-  ref,
-  reactive,
-  computed,
-  // watch,
-  useContext,
-  onMounted,
-} from '@nuxtjs/composition-api'
+import { ref, reactive, computed, useContext } from '@nuxtjs/composition-api'
 import { post as axiosPost } from 'axios'
 
 import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
-// import RdRecordBox from '~/components/shared/Record/RdRecordBox.vue'
-// import RdRecordFeedback from '~/components/shared/Record/RdRecordFeedback.vue'
 import RdFeedbackForm from '~/components/shared/Feedback/RdFeedbackForm.vue'
 import RdFeedbackThanks from '~/components/shared/Feedback/RdFeedbackThanks.vue'
 import RdButtonPrimary from '~/components/shared/Button/RdButtonPrimary.vue'
 import RdStarRating from '~/components/shared/RdStarRating.vue'
 import RdList from '~/components/shared/List/RdList.vue'
 
-// import { state as userState } from '~/composition/store/user.js'
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 import { getHref, getImg, formatDate } from '~/helpers/index.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
   var {
-    state: { userUuid /*, shouldActivateRecordWord */ },
-    // deactivateRecordWord,
+    state: { userUuid },
   } = require('~/composition/store/local-storage.js')
 }
 
@@ -132,8 +93,6 @@ export default {
 
   components: {
     RdHeaderProgress,
-    // RdRecordBox,
-    // RdRecordFeedback,
     RdFeedbackForm,
     RdFeedbackThanks,
     RdButtonPrimary,
@@ -150,47 +109,8 @@ export default {
   },
 
   setup() {
-    const {
-      route,
-      // $sendGaEventForArticleClick,
-    } = useContext()
+    const { route } = useContext()
     const postId = route.value.params.id
-
-    // const wordCount = 100
-    // const userReadingTime = useUserReadingTime(userState.hasUserFinishedReading)
-    // const wordReadingPerSecond = computed(() => {
-    //   if (userReadingTime.value !== undefined) {
-    //     return (userReadingTime.value / 1000 / wordCount).toFixed(2)
-    //   }
-    // })
-    // const hasWordPerSecond = computed(
-    //   () => wordReadingPerSecond.value !== undefined
-    // )
-
-    onMounted(() => {
-      // setShouldOpenRecordWord()
-    })
-
-    // const shouldOpenRecordWord = ref(false)
-    // function setShouldOpenRecordWord() {
-    //   shouldOpenRecordWord.value = shouldActivateRecordWord.value === true
-    // }
-
-    // function handleCancelRecordWord() {
-    //   deactivateRecordWord()
-    //   $sendGaEventForArticleClick('words count close')
-    // }
-
-    // function sendFeedbackOfRecordWordToGoogleSheet(feedback) {
-    //   axiosPost('/api/google-sheets/append', {
-    //     spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-    //     range: '閱讀字數回饋!A2:D',
-    //     valueInputOption: 'RAW',
-    //     resource: {
-    //       values: [[Date.now(), userUuid.value, postId, feedback]],
-    //     },
-    //   })
-    // }
 
     const postFeedback = reactive({
       rating: 0,
@@ -253,14 +173,6 @@ export default {
     }
 
     return {
-      // wordCount,
-      // wordReadingPerSecond,
-      // hasWordPerSecond,
-      // sendFeedbackOfRecordWordToGoogleSheet,
-
-      // shouldOpenRecordWord,
-      // handleCancelRecordWord,
-
       hasRating,
       starRatingBtnText,
       setRating,
@@ -372,55 +284,12 @@ export default {
     }
   },
 }
-
-// function useUserReadingTime(hasUserFinishedReading) {
-//   let userStartReadingTime
-//   const userFinishedReadingTime = ref(undefined)
-
-//   onMounted(setUserStartReadingTime)
-
-//   const stopWatchingHasUserFinishedReading = watch(
-//     hasUserFinishedReading,
-//     setUserFinishedReadingTime
-//   )
-
-//   const userReadingTime = computed(() => {
-//     if (userFinishedReadingTime.value !== undefined) {
-//       return userFinishedReadingTime.value - userStartReadingTime
-//     }
-//   })
-
-//   function setUserStartReadingTime() {
-//     userStartReadingTime = Date.now()
-//   }
-//   function setUserFinishedReadingTime(hasFinished) {
-//     if (hasFinished === true) {
-//       userFinishedReadingTime.value = Date.now()
-//       stopWatchingHasUserFinishedReading()
-//     }
-//   }
-
-//   return userReadingTime
-// }
 </script>
 
 <style lang="scss" scoped>
 .news {
   padding-top: 68.63px;
   overflow: hidden;
-
-  /* &__record-box {
-    margin-bottom: 20px;
-    transition: opacity 0.3s, transform 0.3s;
-    @include media-breakpoint-up(md) {
-      margin-bottom: 30px;
-    }
-
-    &.hidden {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-  } */
 }
 
 article {
@@ -687,30 +556,6 @@ h1 {
     }
   }
 }
-
-/* .record-word {
-  font-size: 15px;
-  text-align: center;
-  line-height: 2;
-  letter-spacing: 0.6px;
-  @include media-breakpoint-up(md) {
-    font-size: 18px;
-    line-height: 1.8;
-    letter-spacing: 2.5px;
-    font-weight: 500;
-  }
-
-  span {
-    font-weight: 900;
-    font-size: 24px;
-    line-height: 1.5;
-    color: #04295e;
-    @include media-breakpoint-up(md) {
-      font-size: 26px;
-      line-height: 1.8;
-    }
-  }
-} */
 
 .post-feedback {
   background-color: rgba(#f5ebff, 0.2);
