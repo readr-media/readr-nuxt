@@ -13,12 +13,10 @@
 </template>
 
 <script>
-import { ref, watch, onMounted, onBeforeUnmount } from '@nuxtjs/composition-api'
 import rafThrottle from 'raf-throttle'
 
 import RdHeaderWithLogo from '~/components/shared/Header/RdHeaderWithLogo.vue'
 
-import { setUserFinishedReading } from '~/composition/store/user.js'
 import { viewportHeight } from '~/composition/store/viewport.js'
 
 export default {
@@ -28,71 +26,58 @@ export default {
     RdHeaderWithLogo,
   },
 
-  setup(props, { emit }) {
-    const { percent, hasFinishedReading } = useProgress('post')
-
-    const stopWatchingHasFinishedReading = watch(
-      hasFinishedReading,
-      handleWatchHasFinishedReading
-    )
-
-    function handleWatchHasFinishedReading(hasFinished) {
-      commitSetUserFinishedReading(hasFinished)
-      emit('sendGaEvent:progress')
-    }
-
-    function commitSetUserFinishedReading(hasFinished) {
-      if (hasFinished === true) {
-        setUserFinishedReading(true)
-        stopWatchingHasFinishedReading()
-      }
-    }
-
+  data() {
     return {
-      percent,
+      target: undefined,
+      percent: 0,
+      hasFinishedReading: false,
     }
   },
-}
 
-function useProgress(elemId) {
-  const percent = ref(0)
-  const hasFinishedReading = ref(false)
-  let elem
-  const calculateProgressPercentThrottle = rafThrottle(calculateProgressPercent)
-
-  onMounted(() => {
-    elem = document.getElementById(elemId)
-
-    calculateProgressPercent()
-    window.addEventListener('scroll', calculateProgressPercentThrottle)
-  })
-
-  onBeforeUnmount(() => {
-    window.removeEventListener('scroll', calculateProgressPercentThrottle)
-  })
-
-  function calculateProgressPercent() {
-    const { bottom } = elem.getBoundingClientRect()
-    const { pageYOffset } = window
-    const elemBottomDistance = bottom + pageYOffset
-
-    if (bottom - viewportHeight.value < 0) {
-      percent.value = 100
-      if (hasFinishedReading.value === false) {
-        hasFinishedReading.value = true
+  watch: {
+    hasFinishedReading(hasFinished) {
+      if (hasFinished === true) {
+        this.$emit('sendGaEvent:progress')
       }
-      return
-    }
+    },
+  },
 
-    percent.value = Math.round(
-      (pageYOffset / (elemBottomDistance - viewportHeight.value)) * 100
-    )
-  }
+  mounted() {
+    this.initProgress()
+  },
 
-  return {
-    percent,
-    hasFinishedReading,
-  }
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.calculateProgress)
+  },
+
+  methods: {
+    initProgress() {
+      this.calculateProgress()
+      window.addEventListener('scroll', this.calculateProgress)
+    },
+    calculateProgress() {
+      rafThrottle(() => {
+        if (!this.target) {
+          this.target = document.getElementById('post')
+        }
+
+        const { bottom } = this.target.getBoundingClientRect()
+        if (bottom - viewportHeight.value < 0) {
+          this.percent = 100
+
+          if (this.hasFinishedReading === false) {
+            this.hasFinishedReading = true
+          }
+          return
+        }
+
+        const { pageYOffset } = window
+        this.percent = Math.round(
+          (pageYOffset / (bottom + pageYOffset - viewportHeight.value)) * 100
+        )
+      })()
+    },
+  },
 }
 </script>
 
