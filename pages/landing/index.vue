@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import { ref, computed, useContext } from '@nuxtjs/composition-api'
 import { post as axiosPost } from 'axios'
 import dayjs from 'dayjs'
 
@@ -76,28 +75,41 @@ import SvgReadrLogoYellow from '~/assets/readr-logo-yellow.svg?inline'
 
 export default {
   name: 'Landing',
+
   layout: 'empty',
+
   components: {
     SvgReadrLogoYellow,
   },
-  setup() {
-    const shouldOpenEmailInput = ref(true)
 
-    const { route, $sendGaEventForLandingClick } = useContext()
-    const email = ref('')
-    const hasEmail = computed(() => email.value !== '')
+  data() {
+    return {
+      email: '',
+      shouldOpenEmailInput: true,
+    }
+  },
 
-    function handleSubmitEmail(event) {
-      if (!hasEmail.value || !shouldOpenEmailInput.value || event.isComposing) {
+  computed: {
+    doesHaveEmail() {
+      return this.email !== ''
+    },
+  },
+
+  methods: {
+    handleSubmitEmail(event) {
+      if (
+        !this.doesHaveEmail ||
+        !this.shouldOpenEmailInput ||
+        event.isComposing
+      ) {
         return
       }
 
-      sendEmailToGoogleSheet()
-      closeEmailInput()
-      $sendGaEventForLandingClick('subscribe')
-    }
-
-    function sendEmailToGoogleSheet() {
+      this.sendEmailToGoogleSheet()
+      this.closeEmailInput()
+      this.$sendGaEventForLandingClick('subscribe')
+    },
+    sendEmailToGoogleSheet() {
       axiosPost('/api/google-sheets/append', {
         spreadsheetId: '1-7YTT5Y-VINVAYy8Aem0kGnerQfTEoBASQxI_J1YR8c',
         range: 'Email!A2:D',
@@ -105,25 +117,18 @@ export default {
         resource: {
           values: [
             [
-              email.value,
+              this.email,
               dayjs().format('YYYYMMDDHHmm'),
               'readr3.0-landing-page',
-              route.value.path,
+              this.$route.path,
             ],
           ],
         },
       })
-    }
-
-    function closeEmailInput() {
-      shouldOpenEmailInput.value = false
-    }
-
-    return {
-      shouldOpenEmailInput,
-      email,
-      handleSubmitEmail,
-    }
+    },
+    closeEmailInput() {
+      this.shouldOpenEmailInput = false
+    },
   },
 }
 </script>
