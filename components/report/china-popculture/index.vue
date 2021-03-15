@@ -1,9 +1,45 @@
 <template>
-  <div></div>
+  <div class="cp">
+    <RdCover
+      :coverImgs="coverImgs"
+      :title="cmsData.contentApiData.cover.title"
+      :description="cmsData.contentApiData.cover.description"
+    />
+  </div>
 </template>
 
 <script>
-export default {}
+import RdCover from './components/RdCover.vue'
+
+export default {
+  components: {
+    RdCover,
+  },
+  props: {
+    cmsData: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
+  },
+  computed: {
+    coverImgs() {
+      return {
+        large: this.getImageSrcByType('cp-cover-large'),
+        small: this.getImageSrcByType('cp-cover-small'),
+      }
+    },
+  },
+  methods: {
+    getImageSrcByType(type) {
+      return (this.cmsData?.contentApiData?.images ?? []).find(
+        function findObjectByType(object) {
+          return object.type === type
+        }
+      )?.value?.urlMobileSized
+    },
+  },
+}
 </script>
 
 <style lang="scss">
