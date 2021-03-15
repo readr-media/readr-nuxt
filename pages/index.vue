@@ -116,6 +116,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { get as axiosGet } from 'axios'
 
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
@@ -141,7 +142,6 @@ import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
 } from '~/components/helpers/index.js'
-import { viewportWidth } from '~/composition/store/viewport.js'
 import styleVariables from '~/scss/_variables.scss'
 import { isProdEnv, getHref, getImg, formatDate } from '~/helpers/index.js'
 
@@ -233,8 +233,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('viewport', ['viewportWidth']),
+
     isViewportWidthUpMd() {
-      return viewportWidth.value >= this.breakpointMd
+      return this.viewportWidth >= this.breakpointMd
     },
     breakpointMd() {
       return parseInt(styleVariables['breakpoint-md'], 10)

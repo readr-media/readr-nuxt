@@ -13,11 +13,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import rafThrottle from 'raf-throttle'
 
 import RdHeaderWithLogo from '~/components/shared/Header/RdHeaderWithLogo.vue'
-
-import { viewportHeight } from '~/composition/store/viewport.js'
 
 export default {
   name: 'RdHeaderProgress',
@@ -32,6 +31,10 @@ export default {
       percent: 0,
       hasFinishedReading: false,
     }
+  },
+
+  computed: {
+    ...mapGetters('viewport', ['viewportHeight']),
   },
 
   watch: {
@@ -62,7 +65,7 @@ export default {
         }
 
         const { bottom } = this.target.getBoundingClientRect()
-        if (bottom - viewportHeight.value < 0) {
+        if (bottom - this.viewportHeight < 0) {
           this.percent = 100
 
           if (this.hasFinishedReading === false) {
@@ -73,7 +76,7 @@ export default {
 
         const { pageYOffset } = window
         this.percent = Math.round(
-          (pageYOffset / (bottom + pageYOffset - viewportHeight.value)) * 100
+          (pageYOffset / (bottom + pageYOffset - this.viewportHeight)) * 100
         )
       })()
     },
