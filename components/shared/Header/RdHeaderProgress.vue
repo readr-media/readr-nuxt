@@ -108,12 +108,10 @@ header {
 .progress-percent {
   color: rgba(#000, 0.87);
   font-size: 13px;
-  line-height: 1.4;
   display: flex;
   align-items: center;
   span {
     font-size: 18px;
-    line-height: 1.5;
     font-weight: 700;
     margin-left: 6px;
   }
