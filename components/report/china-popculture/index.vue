@@ -6,6 +6,8 @@
       :title="cmsData.contentApiData.cover.title"
       :description="cmsData.contentApiData.cover.description"
       :textGoToArticle="cmsData.contentApiData.cover.textGoToArticle"
+      :textGoToQuiz="cmsData.contentApiData.cover.textGoToQuiz"
+      @goToQuiz="handleGoToQuiz"
       @goToArticle="handleGoToArticle"
     />
   </div>
@@ -76,6 +78,10 @@ export default {
           return object.type === type
         }
       )?.value?.urlMobileSized
+    },
+    handleGoToQuiz() {
+      this.hideCover()
+      window.scrollTo(0, 0)
     },
     handleGoToArticle() {
       this.showArticle()

@@ -19,6 +19,12 @@
     <p class="cover__description description" v-html="descriptionHtml"></p>
     <div class="cover__navs navs">
       <button
+        class="navs__to-to-quiz-button go-to-quiz-button"
+        @click="$emit('goToQuiz')"
+      >
+        <div v-text="textGoToQuiz" />
+      </button>
+      <button
         class="navs__go-to-article-button go-to-article-button"
         @click="$emit('goToArticle')"
         v-text="textGoToArticle"
@@ -46,6 +52,10 @@ export default {
       default: '',
     },
     textGoToArticle: {
+      type: String,
+      default: '',
+    },
+    textGoToQuiz: {
       type: String,
       default: '',
     },
@@ -142,8 +152,58 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    &__go-to-article-button {
+      margin: 20px 0 0 0;
+    }
   }
 
+  .go-to-quiz-button {
+    width: 100%;
+    display: block;
+    text-decoration: none;
+    letter-spacing: 2.5px;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+
+    div {
+      padding: 12px 0 12px 2.5px;
+      transition: background-color 0.3s, color 0.3s;
+      z-index: 1;
+      position: relative;
+      border-radius: 2px;
+      background-color: #ff3f3f;
+      color: white;
+      border-color: white;
+
+      &:active {
+        background-color: #000928;
+        transition: none;
+        color: white;
+      }
+      &:hover {
+        background-color: #111111;
+        color: white;
+      }
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 100%;
+      height: 100%;
+      border-radius: 2px;
+      background-color: #111111;
+    }
+
+    @include media-breakpoint-up(md) {
+      width: 276px;
+    }
+  }
   .go-to-article-button {
     font-size: 16px;
     font-weight: bold;
