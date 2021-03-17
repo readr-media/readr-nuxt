@@ -2,11 +2,6 @@
   <div class="report">
     <component :is="featureComponent" :cmsData="cmsData"></component>
 
-    <div v-if="shouldMountDonateButton" class="donate-button">
-      <readr-donate-button
-        @clickButton="sendGaClickEvent({ label: 'donate' })"
-      />
-    </div>
     <LazyRenderer
       v-if="shouldMountLatestCoverages"
       v-show="shouldShowLatestCoverages"
@@ -47,8 +42,6 @@ export default {
 
   computed: {
     ...mapState('report', [
-      'shouldMountDonateButton',
-
       'shouldMountLatestCoverages',
       'shouldShowLatestCoverages',
     ]),
@@ -86,15 +79,6 @@ export default {
     },
     contentApiData() {
       return this.cmsData.contentApiData
-    },
-  },
-
-  methods: {
-    sendGaEvent({ action, label, value }) {
-      this.$ga.event('projects', action, label, value)
-    },
-    sendGaClickEvent({ label, value }) {
-      this.sendGaEvent({ action: 'click', label, value })
     },
   },
 
@@ -154,21 +138,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.donate-button {
-  padding: 24px 24px 28px 20px;
-  @include media-breakpoint-up(md) {
-    padding: 48px 24px 52px 20px;
-  }
-  @include media-breakpoint-up(xl) {
-    padding: 60px 24px 64px 20px;
-  }
-}
-
-readr-donate-button {
-  max-width: 476px;
-  margin: 0 auto;
-}
-
 .latest-coverages {
   padding: 24px 8px;
   @include media-breakpoint-up(md) {

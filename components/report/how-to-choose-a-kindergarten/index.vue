@@ -65,6 +65,12 @@
         :canSendGaEvent="canSendCreditGaEvent"
       />
     </main>
+
+    <div v-if="!shouldOpenGame" class="donate-button">
+      <readr-donate-button
+        @clickButton="sendGaClickEvent({ label: 'donate' })"
+      />
+    </div>
   </div>
 </template>
 
@@ -163,7 +169,6 @@ export default {
   },
 
   beforeMount() {
-    this.unmountDonateButton()
     this.unmountLatestCoverages()
   },
 
@@ -177,9 +182,6 @@ export default {
 
   methods: {
     ...mapMutations('report', [
-      'unmountDonateButton',
-      'showDonateButton',
-
       'unmountLatestCoverages',
       'hideLatestCoverages',
       'showLatestCoverages',
@@ -244,7 +246,6 @@ export default {
       await this.$nextTick()
       this.jumpToTop()
       this.scrollTo(NAV_ITEMS_IDS[0])
-      this.unmountDonateButton()
       this.hideLatestCoverages()
       this.canSendCreditGaEvent = false
     },
@@ -254,7 +255,6 @@ export default {
     showMainBody() {
       this.closeGame()
       this.jumpToTop()
-      this.showDonateButton()
       this.showLatestCoverages()
       this.canSendCreditGaEvent = true
     },
@@ -517,6 +517,21 @@ readr-header {
   @include media-breakpoint-up(md) {
     padding-top: $header-height--md;
   }
+}
+
+.donate-button {
+  padding: 24px 24px 28px 20px;
+  @include media-breakpoint-up(md) {
+    padding: 48px 24px 52px 20px;
+  }
+  @include media-breakpoint-up(xl) {
+    padding: 60px 24px 64px 20px;
+  }
+}
+
+readr-donate-button {
+  max-width: 476px;
+  margin: 0 auto;
 }
 
 .fade-in {
