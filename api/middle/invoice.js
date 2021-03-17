@@ -213,10 +213,15 @@ const createInvoice = (data) =>
     const decryptedData = bytes.toString(CryptoJS.enc.Utf8)
     console.log('decryptedData: ', decryptedData)
 
-    axiosPost(EZPAY?.HOST ?? '', {
-      MerchantID_: EZPAY?.ID ?? '',
-      PostData_: ciphertext,
-    })
+    axiosPost(
+      EZPAY?.HOST ?? '',
+      `MerchantID_=${EZPAY?.ID ?? ''}&PostData_=${ciphertext}`,
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    )
       .then(({ data: result }) => {
         if (result?.Status === 'SUCCESS') {
           resolve(result)
