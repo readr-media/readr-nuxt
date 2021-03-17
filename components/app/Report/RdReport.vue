@@ -1,21 +1,11 @@
 <template>
   <div class="report">
     <component :is="featureComponent" :cmsData="cmsData"></component>
-
-    <LazyRenderer
-      v-if="shouldMountLatestCoverages"
-      v-show="shouldShowLatestCoverages"
-      class="latest-coverages"
-    >
-      <readr-latest-coverages />
-    </LazyRenderer>
   </div>
 </template>
 
 <script>
 import archieml from 'archieml'
-import { mapState } from 'vuex'
-import LazyRenderer from 'vue-lazy-renderer'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
@@ -23,10 +13,6 @@ import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 
 export default {
   name: 'RdReport',
-
-  components: {
-    LazyRenderer,
-  },
 
   directives: {
     intersect,
@@ -41,11 +27,6 @@ export default {
   },
 
   computed: {
-    ...mapState('report', [
-      'shouldMountLatestCoverages',
-      'shouldShowLatestCoverages',
-    ]),
-
     featureComponent() {
       return () => import(`~/components/report/${this.report.slug}/index.vue`)
     },
@@ -136,20 +117,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.latest-coverages {
-  padding: 24px 8px;
-  @include media-breakpoint-up(md) {
-    padding: 48px 8px;
-  }
-  @include media-breakpoint-up(xl) {
-    padding: 60px 8px;
-  }
-}
-
-readr-latest-coverages {
-  margin: 0 auto;
-  max-width: 600px;
-}
-</style>

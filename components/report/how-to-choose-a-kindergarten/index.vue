@@ -71,12 +71,16 @@
         @clickButton="sendGaClickEvent({ label: 'donate' })"
       />
     </div>
+
+    <LazyRenderer v-show="!shouldOpenGame" class="latest-coverages">
+      <readr-latest-coverages />
+    </LazyRenderer>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import scrollIntoView from 'scroll-into-view'
+import LazyRenderer from 'vue-lazy-renderer'
 
 import RdNavbar from './components/RdNavbar.vue'
 import RdCover from './components/RdCover.vue'
@@ -103,6 +107,8 @@ export default {
   name: 'HowToChooseAKindergarten',
 
   components: {
+    LazyRenderer,
+
     RdNavbar,
     RdCover,
     RdMultipleChoice,
@@ -168,10 +174,6 @@ export default {
     },
   },
 
-  beforeMount() {
-    this.unmountLatestCoverages()
-  },
-
   mounted() {
     this.setupIndexesObserver()
   },
@@ -181,12 +183,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations('report', [
-      'unmountLatestCoverages',
-      'hideLatestCoverages',
-      'showLatestCoverages',
-    ]),
-
     handleSubmitChoices(choicesByCategory) {
       this.setGameResults(choicesByCategory)
       this.openResult()
@@ -246,7 +242,6 @@ export default {
       await this.$nextTick()
       this.jumpToTop()
       this.scrollTo(NAV_ITEMS_IDS[0])
-      this.hideLatestCoverages()
       this.canSendCreditGaEvent = false
     },
     handleSeeProfileStory() {
@@ -255,7 +250,6 @@ export default {
     showMainBody() {
       this.closeGame()
       this.jumpToTop()
-      this.showLatestCoverages()
       this.canSendCreditGaEvent = true
     },
     openGame() {
@@ -532,6 +526,21 @@ readr-header {
 readr-donate-button {
   max-width: 476px;
   margin: 0 auto;
+}
+
+.latest-coverages {
+  padding: 24px 8px;
+  @include media-breakpoint-up(md) {
+    padding: 48px 8px;
+  }
+  @include media-breakpoint-up(xl) {
+    padding: 60px 8px;
+  }
+}
+
+readr-latest-coverages {
+  margin: 0 auto;
+  max-width: 600px;
 }
 
 .fade-in {
