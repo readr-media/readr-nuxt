@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="logo-wrapper">
-      <RdHeaderWithLogo @sendGaEvent="$emit('sendGaEvent:logo')" />
+      <RdHeaderWithLogo />
       <div class="progress-percent">
         閱讀進度<span>{{ percent }}%</span>
       </div>
@@ -13,13 +13,10 @@
 </template>
 
 <script>
-import { ref, watch, onMounted, onBeforeUnmount } from '@nuxtjs/composition-api'
+import { mapGetters } from 'vuex'
 import rafThrottle from 'raf-throttle'
 
 import RdHeaderWithLogo from '~/components/shared/Header/RdHeaderWithLogo.vue'
-
-import { setUserFinishedReading } from '~/composition/store/user.js'
-import { viewportHeight } from '~/composition/store/viewport.js'
 
 export default {
   name: 'RdHeaderProgress',
@@ -28,71 +25,62 @@ export default {
     RdHeaderWithLogo,
   },
 
-  setup(props, { emit }) {
-    const { percent, hasFinishedReading } = useProgress('post')
-
-    const stopWatchingHasFinishedReading = watch(
-      hasFinishedReading,
-      handleWatchHasFinishedReading
-    )
-
-    function handleWatchHasFinishedReading(hasFinished) {
-      commitSetUserFinishedReading(hasFinished)
-      emit('sendGaEvent:progress')
-    }
-
-    function commitSetUserFinishedReading(hasFinished) {
-      if (hasFinished === true) {
-        setUserFinishedReading(true)
-        stopWatchingHasFinishedReading()
-      }
-    }
-
+  data() {
     return {
-      percent,
+      target: undefined,
+      percent: 0,
+      hasFinishedReading: false,
     }
   },
-}
 
-function useProgress(elemId) {
-  const percent = ref(0)
-  const hasFinishedReading = ref(false)
-  let elem
-  const calculateProgressPercentThrottle = rafThrottle(calculateProgressPercent)
+  computed: {
+    ...mapGetters('viewport', ['viewportHeight']),
+  },
 
-  onMounted(() => {
-    elem = document.getElementById(elemId)
-
-    calculateProgressPercent()
-    window.addEventListener('scroll', calculateProgressPercentThrottle)
-  })
-
-  onBeforeUnmount(() => {
-    window.removeEventListener('scroll', calculateProgressPercentThrottle)
-  })
-
-  function calculateProgressPercent() {
-    const { bottom } = elem.getBoundingClientRect()
-    const { pageYOffset } = window
-    const elemBottomDistance = bottom + pageYOffset
-
-    if (bottom - viewportHeight.value < 0) {
-      percent.value = 100
-      if (hasFinishedReading.value === false) {
-        hasFinishedReading.value = true
+  watch: {
+    hasFinishedReading(hasFinished) {
+      if (hasFinished === true) {
+        this.$emit('sendGaEvent')
       }
-      return
-    }
+    },
+  },
 
-    percent.value = Math.round(
-      (pageYOffset / (elemBottomDistance - viewportHeight.value)) * 100
-    )
-  }
+  mounted() {
+    this.initProgress()
+  },
 
-  return {
-    percent,
-    hasFinishedReading,
-  }
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.calculateProgress)
+  },
+
+  methods: {
+    initProgress() {
+      this.calculateProgress()
+      window.addEventListener('scroll', this.calculateProgress)
+    },
+    calculateProgress() {
+      rafThrottle(() => {
+        if (!this.target) {
+          this.target = document.getElementById('post')
+        }
+
+        const { bottom } = this.target.getBoundingClientRect()
+        if (bottom - this.viewportHeight < 0) {
+          this.percent = 100
+
+          if (this.hasFinishedReading === false) {
+            this.hasFinishedReading = true
+          }
+          return
+        }
+
+        const { pageYOffset } = window
+        this.percent = Math.round(
+          (pageYOffset / (bottom + pageYOffset - this.viewportHeight)) * 100
+        )
+      })()
+    },
+  },
 }
 </script>
 
@@ -120,12 +108,10 @@ header {
 .progress-percent {
   color: rgba(#000, 0.87);
   font-size: 13px;
-  line-height: 1.4;
   display: flex;
   align-items: center;
   span {
     font-size: 18px;
-    line-height: 1.5;
     font-weight: 700;
     margin-left: 6px;
   }

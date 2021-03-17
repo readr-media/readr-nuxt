@@ -1,6 +1,6 @@
 <template>
   <div>
-    <RdHeader @sendGaEvent="$sendGaEventForHeaderClick('logo')" />
+    <RdHeader />
     <RdDonateContainer />
   </div>
 </template>

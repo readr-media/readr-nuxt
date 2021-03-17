@@ -1,7 +1,7 @@
 <template>
   <div>
     <header>
-      <nuxt-link to="/" @click.native="$sendGaEventForLandingClick('logo')">
+      <nuxt-link to="/" @click.native="sendGaClickEvent('logo')">
         <SvgReadrLogoYellow />
       </nuxt-link>
     </header>
@@ -24,20 +24,20 @@
             <div class="actions">
               <nuxt-link
                 to="/#collaboration"
-                @click.native="$sendGaEventForLandingClick('collaboration')"
+                @click.native="sendGaClickEvent('collaboration')"
               >
                 <button type="button">參與協作</button>
               </nuxt-link>
               <nuxt-link
                 to="/#latest"
-                @click.native="$sendGaEventForLandingClick('latest articles')"
+                @click.native="sendGaClickEvent('latest articles')"
               >
                 <button type="button">閱讀文章</button>
               </nuxt-link>
               <a
                 href="/donate"
                 target="_blank"
-                @click="$sendGaEventForLandingClick('donate')"
+                @click="sendGaClickEvent('donate')"
               >
                 <button type="button">贊助我們</button>
               </a>
@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import { ref, computed, useContext } from '@nuxtjs/composition-api'
 import { post as axiosPost } from 'axios'
 import dayjs from 'dayjs'
 
@@ -76,28 +75,41 @@ import SvgReadrLogoYellow from '~/assets/readr-logo-yellow.svg?inline'
 
 export default {
   name: 'Landing',
+
   layout: 'empty',
+
   components: {
     SvgReadrLogoYellow,
   },
-  setup() {
-    const shouldOpenEmailInput = ref(true)
 
-    const { route, $sendGaEventForLandingClick } = useContext()
-    const email = ref('')
-    const hasEmail = computed(() => email.value !== '')
+  data() {
+    return {
+      email: '',
+      shouldOpenEmailInput: true,
+    }
+  },
 
-    function handleSubmitEmail(event) {
-      if (!hasEmail.value || !shouldOpenEmailInput.value || event.isComposing) {
+  computed: {
+    doesHaveEmail() {
+      return this.email !== ''
+    },
+  },
+
+  methods: {
+    handleSubmitEmail(event) {
+      if (
+        !this.doesHaveEmail ||
+        !this.shouldOpenEmailInput ||
+        event.isComposing
+      ) {
         return
       }
 
-      sendEmailToGoogleSheet()
-      closeEmailInput()
-      $sendGaEventForLandingClick('subscribe')
-    }
-
-    function sendEmailToGoogleSheet() {
+      this.sendEmailToGoogleSheet()
+      this.closeEmailInput()
+      this.sendGaClickEvent('subscribe')
+    },
+    sendEmailToGoogleSheet() {
       axiosPost('/api/google-sheets/append', {
         spreadsheetId: '1-7YTT5Y-VINVAYy8Aem0kGnerQfTEoBASQxI_J1YR8c',
         range: 'Email!A2:D',
@@ -105,25 +117,25 @@ export default {
         resource: {
           values: [
             [
-              email.value,
+              this.email,
               dayjs().format('YYYYMMDDHHmm'),
               'readr3.0-landing-page',
-              route.value.path,
+              this.$route.path,
             ],
           ],
         },
       })
-    }
+    },
+    closeEmailInput() {
+      this.shouldOpenEmailInput = false
+    },
 
-    function closeEmailInput() {
-      shouldOpenEmailInput.value = false
-    }
-
-    return {
-      shouldOpenEmailInput,
-      email,
-      handleSubmitEmail,
-    }
+    sendGaClickEvent(label, value) {
+      this.sendGaEvent('click', label, value)
+    },
+    sendGaEvent(action, label, value) {
+      this.$ga.event('Landing', action, label, value)
+    },
   },
 }
 </script>

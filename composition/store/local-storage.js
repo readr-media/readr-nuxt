@@ -10,7 +10,6 @@ const savedState = JSON.parse(window.localStorage.getItem('readr3')) || {}
 const state = reactive({
   userUuid,
   isReadr2User,
-  shouldActivateRecordWord: true,
 
   shouldOpenGdpr: true,
 
@@ -20,10 +19,6 @@ const state = reactive({
 watchEffect(() => {
   window.localStorage.setItem('readr3', JSON.stringify(state))
 })
-
-function deactivateRecordWord() {
-  state.shouldActivateRecordWord = false
-}
 
 function closeGdpr() {
   state.shouldOpenGdpr = false
@@ -46,7 +41,6 @@ const stateAsRef = toRefs(state)
 
 Object.assign(module.exports, {
   state: stateAsRef,
-  deactivateRecordWord,
 
   closeGdpr,
 })

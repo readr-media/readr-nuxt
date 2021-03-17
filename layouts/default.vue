@@ -5,9 +5,9 @@
     <RdFooter
       id="default-footer"
       class="default__footer"
-      @sendGaEvent:about="$sendGaEventForFooterClick('aboutus')"
-      @sendGaEvent:contact="$sendGaEventForFooterClick('contact')"
-      @sendGaEvent:privacy="$sendGaEventForFooterClick('privacy')"
+      @sendGaEvent:about="sendGaClickFooterEvent('aboutus')"
+      @sendGaEvent:contact="sendGaClickFooterEvent('contact')"
+      @sendGaEvent:privacy="sendGaClickFooterEvent('privacy')"
     />
 
     <ClientOnly>
@@ -17,18 +17,11 @@
 </template>
 
 <script>
-import {
-  onBeforeMount,
-  onMounted,
-  onBeforeUnmount,
-  useContext,
-} from '@nuxtjs/composition-api'
+import { mapMutations } from 'vuex'
 import rafThrottle from 'raf-throttle'
 
 import RdFooter from '~/components/shared/RdFooter.vue'
 import RdGdpr from '~/components/shared/RdGdpr.vue'
-
-import { setViewport } from '~/composition/store/viewport.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
@@ -45,38 +38,54 @@ export default {
   },
 
   setup() {
-    const { $sendGaEventForUsersVisit } = useContext()
-
-    useUpdateViewport()
-
-    onMounted(() => {
-      $sendGaEventForUsersVisit(`readr ${isReadr2User.value ? '2.0' : '3.0'}`)
-    })
-
     return {
       shouldOpenGdpr,
       closeGdpr,
     }
   },
-}
 
-function useUpdateViewport() {
-  const updateViewportThrottle = rafThrottle(updateViewport)
-  onBeforeMount(() => {
-    updateViewport()
+  beforeMount() {
+    this.initViewport()
+  },
 
-    window.addEventListener('resize', updateViewportThrottle)
-    window.addEventListener('orientationChange', updateViewportThrottle)
-  })
-  onBeforeUnmount(() => {
-    window.removeEventListener('resize', updateViewportThrottle)
-    window.removeEventListener('orientationChange', updateViewportThrottle)
-  })
+  mounted() {
+    this.sendGaEvent(
+      'users',
+      'visit',
+      `readr ${isReadr2User.value ? '2.0' : '3.0'}`
+    )
+  },
 
-  function updateViewport() {
-    const { clientWidth, clientHeight } = document.documentElement
-    setViewport(clientWidth, clientHeight)
-  }
+  beforeDestroy() {
+    this.cleanupViewportListeners()
+  },
+
+  methods: {
+    ...mapMutations('viewport', ['setViewport']),
+
+    initViewport() {
+      this.updateViewport()
+      window.addEventListener('resize', this.updateViewport)
+      window.addEventListener('orientationChange', this.updateViewport)
+    },
+    cleanupViewportListeners() {
+      window.removeEventListener('resize', this.updateViewport)
+      window.removeEventListener('orientationChange', this.updateViewport)
+    },
+    updateViewport() {
+      rafThrottle(() => {
+        const { innerWidth, innerHeight } = window
+        this.setViewport({ width: innerWidth, height: innerHeight })
+      })()
+    },
+
+    sendGaEvent(category, action, label, value) {
+      this.$ga.event(category, action, label, value)
+    },
+    sendGaClickFooterEvent(label) {
+      this.sendGaEvent('footer', 'click', label)
+    },
+  },
 }
 </script>
 
