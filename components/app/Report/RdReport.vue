@@ -2,12 +2,6 @@
   <div class="report">
     <component :is="featureComponent" :cmsData="cmsData"></component>
 
-    <RdReportArticle
-      v-if="shouldMountArticle"
-      v-show="shouldShowArticle"
-      :contents="contentApiData.article.contents"
-      @sendGaEvent="sendGaEvent"
-    />
     <RdReportExtras
       v-if="shouldMountExtras"
       v-show="shouldShowExtras"
@@ -40,7 +34,6 @@ import archieml from 'archieml'
 import { mapState } from 'vuex'
 import LazyRenderer from 'vue-lazy-renderer'
 
-import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
@@ -57,7 +50,6 @@ export default {
 
   components: {
     LazyRenderer,
-    RdReportArticle,
     RdReportExtras,
     RdReportCredit,
   },
@@ -82,9 +74,6 @@ export default {
 
   computed: {
     ...mapState('report', [
-      'shouldMountArticle',
-      'shouldShowArticle',
-
       'shouldMountExtras',
       'shouldShowExtras',
 

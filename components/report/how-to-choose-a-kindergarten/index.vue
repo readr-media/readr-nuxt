@@ -27,7 +27,7 @@
       />
     </div>
 
-    <div v-if="!shouldOpenGame" class="result">
+    <main v-show="!shouldOpenGame" class="result">
       <transition name="fade-in">
         <RdChoiceResult
           v-if="shouldOpenGameResult"
@@ -48,7 +48,11 @@
       />
 
       <div id="report-article" v-intersect="indexesObserver" />
-    </div>
+      <RdReportArticle
+        :contents="contentApiData.article.contents"
+        @sendGaEvent="sendGaEvent"
+      />
+    </main>
   </div>
 </template>
 
@@ -62,6 +66,7 @@ import RdMultipleChoice from './components/RdMultipleChoice.vue'
 import RdChoiceResult from './components/RdChoiceResult.vue'
 import RdProfileStory from './components/RdProfileStory.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
+import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
@@ -84,6 +89,7 @@ export default {
     RdChoiceResult,
     RdProfileStory,
     RdReportHeader,
+    RdReportArticle,
   },
 
   directives: {
@@ -139,7 +145,6 @@ export default {
   },
 
   beforeMount() {
-    this.unmountArticle()
     this.unmountExtras()
     this.unmountDonateButton()
     this.unmountLatestCoverages()
@@ -156,10 +161,6 @@ export default {
 
   methods: {
     ...mapMutations('report', [
-      'unmountArticle',
-      'hideArticle',
-      'showArticle',
-
       'unmountExtras',
       'hideExtras',
       'showExtras',
@@ -234,7 +235,6 @@ export default {
       await this.$nextTick()
       this.jumpToTop()
       this.scrollTo(NAV_ITEMS_IDS[0])
-      this.hideArticle()
       this.hideExtras()
       this.unmountDonateButton()
       this.hideLatestCoverages()
@@ -246,7 +246,6 @@ export default {
     showMainBody() {
       this.closeGame()
       this.jumpToTop()
-      this.showArticle()
       this.showExtras()
       this.showDonateButton()
       this.showLatestCoverages()

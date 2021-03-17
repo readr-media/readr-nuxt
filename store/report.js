@@ -1,8 +1,5 @@
 function state() {
   return {
-    shouldMountArticle: true,
-    shouldShowArticle: true,
-
     shouldMountExtras: true,
     shouldShowExtras: true,
 
@@ -17,17 +14,6 @@ function state() {
 }
 
 const mutations = {
-  unmountArticle(state) {
-    state.shouldMountArticle = false
-  },
-  hideArticle(state) {
-    state.shouldShowArticle = false
-  },
-  showArticle(state) {
-    state.shouldMountArticle = true
-    state.shouldShowArticle = true
-  },
-
   unmountExtras(state) {
     state.shouldMountExtras = false
   },
