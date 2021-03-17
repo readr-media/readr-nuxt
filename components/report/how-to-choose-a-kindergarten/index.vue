@@ -27,34 +27,42 @@
       />
     </div>
 
-    <main v-show="!shouldOpenGame" class="result">
-      <transition name="fade-in">
-        <RdChoiceResult
-          v-if="shouldOpenGameResult"
-          :id="NAV_ITEMS_IDS[0]"
+    <main>
+      <div v-show="!shouldOpenGame" class="result">
+        <transition name="fade-in">
+          <RdChoiceResult
+            v-if="shouldOpenGameResult"
+            :id="NAV_ITEMS_IDS[0]"
+            v-intersect="indexesObserver"
+            :results="gameResults"
+            @seeProfileStory="handleSeeProfileStory"
+            @replayGame="replayGame"
+            @sendGaEvent="sendGaEvent"
+          />
+        </transition>
+
+        <RdProfileStory
+          :id="NAV_ITEMS_IDS[1]"
           v-intersect="indexesObserver"
-          :results="gameResults"
-          @seeProfileStory="handleSeeProfileStory"
-          @replayGame="replayGame"
+          :cmsData="contentApiData.profile"
           @sendGaEvent="sendGaEvent"
         />
-      </transition>
 
-      <RdProfileStory
-        :id="NAV_ITEMS_IDS[1]"
-        v-intersect="indexesObserver"
-        :cmsData="contentApiData.profile"
-        @sendGaEvent="sendGaEvent"
-      />
+        <div id="report-article" v-intersect="indexesObserver" />
+        <RdReportArticle
+          :contents="contentApiData.article.contents"
+          @sendGaEvent="sendGaEvent"
+        />
+        <RdReportExtras
+          :sections="contentApiData.extras"
+          @sendGaEvent="sendGaEvent"
+        />
+      </div>
 
-      <div id="report-article" v-intersect="indexesObserver" />
-      <RdReportArticle
-        :contents="contentApiData.article.contents"
-        @sendGaEvent="sendGaEvent"
-      />
-      <RdReportExtras
-        :sections="contentApiData.extras"
-        @sendGaEvent="sendGaEvent"
+      <RdReportCredit
+        :authors="contentApiData.credit"
+        :publishedAt="contentApiData.publishedAt"
+        :canSendGaEvent="canSendCreditGaEvent"
       />
     </main>
   </div>
@@ -72,6 +80,7 @@ import RdProfileStory from './components/RdProfileStory.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
+import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
@@ -96,6 +105,7 @@ export default {
     RdReportHeader,
     RdReportArticle,
     RdReportExtras,
+    RdReportCredit,
   },
 
   directives: {
@@ -138,6 +148,8 @@ export default {
       isAutoScrolling: false,
 
       indexesObserver: undefined,
+
+      canSendCreditGaEvent: false,
     }
   },
 
@@ -153,7 +165,6 @@ export default {
   beforeMount() {
     this.unmountDonateButton()
     this.unmountLatestCoverages()
-    this.unobserveCredit()
   },
 
   mounted() {
@@ -172,9 +183,6 @@ export default {
       'unmountLatestCoverages',
       'hideLatestCoverages',
       'showLatestCoverages',
-
-      'unobserveCredit',
-      'observeCredit',
     ]),
 
     handleSubmitChoices(choicesByCategory) {
@@ -238,7 +246,7 @@ export default {
       this.scrollTo(NAV_ITEMS_IDS[0])
       this.unmountDonateButton()
       this.hideLatestCoverages()
-      this.unobserveCredit()
+      this.canSendCreditGaEvent = false
     },
     handleSeeProfileStory() {
       this.scrollTo(NAV_ITEMS_IDS[1])
@@ -248,7 +256,7 @@ export default {
       this.jumpToTop()
       this.showDonateButton()
       this.showLatestCoverages()
-      this.observeCredit()
+      this.canSendCreditGaEvent = true
     },
     openGame() {
       this.shouldOpenGame = true

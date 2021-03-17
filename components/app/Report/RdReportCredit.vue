@@ -1,5 +1,5 @@
 <template>
-  <div class="report-credit">
+  <div v-intersect="gaEventObserver" class="report-credit">
     <div class="container">
       <ul>
         <li v-for="author in authors" :key="author.role">
@@ -13,8 +13,19 @@
 </template>
 
 <script>
+import intersect from '~/components/helpers/directives/intersect.js'
+
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/components/helpers/index.js'
+
 export default {
   name: 'RdReportCredit',
+
+  directives: {
+    intersect,
+  },
 
   props: {
     authors: {
@@ -26,11 +37,48 @@ export default {
       type: String,
       default: undefined,
     },
+    canSendGaEvent: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
+  },
+
+  data() {
+    return {
+      gaEventObserver: undefined,
+    }
+  },
+
+  mounted() {
+    this.setupGaEventObserver()
+  },
+
+  beforeDestroy() {
+    this.cleanupGaEventObserver()
   },
 
   methods: {
     formatAuthor(author) {
       return `${author.role}：${author.names.join('、')}`
+    },
+
+    async setupGaEventObserver() {
+      this.gaEventObserver = await setupIntersectionObserver((entries) => {
+        if (!this.canSendGaEvent) {
+          return
+        }
+
+        entries.forEach(({ isIntersecting }) => {
+          if (isIntersecting) {
+            this.$ga.event('projects', 'scroll', 'scroll to credit')
+            this.cleanupGaEventObserver()
+          }
+        })
+      })
+    },
+    cleanupGaEventObserver() {
+      cleanupIntersectionObserver(this, 'gaEventObserver')
     },
   },
 }

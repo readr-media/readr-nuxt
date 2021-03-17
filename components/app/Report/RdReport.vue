@@ -2,12 +2,6 @@
   <div class="report">
     <component :is="featureComponent" :cmsData="cmsData"></component>
 
-    <RdReportCredit
-      v-if="shouldMountCredit"
-      v-intersect="creditObserver"
-      :authors="contentApiData.credit"
-      :publishedAt="contentApiData.publishedAt"
-    />
     <div v-if="shouldMountDonateButton" class="donate-button">
       <readr-donate-button
         @clickButton="sendGaClickEvent({ label: 'donate' })"
@@ -28,14 +22,8 @@ import archieml from 'archieml'
 import { mapState } from 'vuex'
 import LazyRenderer from 'vue-lazy-renderer'
 
-import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
-
 import intersect from '~/components/helpers/directives/intersect.js'
 
-import {
-  setupIntersectionObserver,
-  cleanupIntersectionObserver,
-} from '~/components/helpers/index.js'
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 
 export default {
@@ -43,7 +31,6 @@ export default {
 
   components: {
     LazyRenderer,
-    RdReportCredit,
   },
 
   directives: {
@@ -58,17 +45,8 @@ export default {
     },
   },
 
-  data() {
-    return {
-      creditObserver: undefined,
-    }
-  },
-
   computed: {
     ...mapState('report', [
-      'shouldMountCredit',
-      'shouldObserveCredit',
-
       'shouldMountDonateButton',
 
       'shouldMountLatestCoverages',
@@ -111,38 +89,12 @@ export default {
     },
   },
 
-  mounted() {
-    this.setupCreditObserver()
-  },
-
-  beforeDestroy() {
-    cleanupIntersectionObserver(this, 'creditObserver')
-  },
-
   methods: {
-    async setupCreditObserver() {
-      this.creditObserver = await setupIntersectionObserver((entries) => {
-        if (!this.shouldObserveCredit) {
-          return
-        }
-
-        entries.forEach(({ isIntersecting, target }) => {
-          if (isIntersecting) {
-            this.sendGaScrollEvent({ label: 'scroll to credit' })
-            this.creditObserver.unobserve(target)
-          }
-        })
-      })
-    },
-
     sendGaEvent({ action, label, value }) {
       this.$ga.event('projects', action, label, value)
     },
     sendGaClickEvent({ label, value }) {
       this.sendGaEvent({ action: 'click', label, value })
-    },
-    sendGaScrollEvent({ label, value }) {
-      this.sendGaEvent({ action: 'scroll', label, value })
     },
   },
 

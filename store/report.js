@@ -1,8 +1,5 @@
 function state() {
   return {
-    shouldMountCredit: true,
-    shouldObserveCredit: true,
-
     shouldMountDonateButton: true,
 
     shouldMountLatestCoverages: true,
@@ -11,13 +8,6 @@ function state() {
 }
 
 const mutations = {
-  unobserveCredit(state) {
-    state.shouldObserveCredit = false
-  },
-  observeCredit(state) {
-    state.shouldObserveCredit = true
-  },
-
   unmountDonateButton(state) {
     state.shouldMountDonateButton = false
   },
