@@ -52,6 +52,10 @@
         :contents="contentApiData.article.contents"
         @sendGaEvent="sendGaEvent"
       />
+      <RdReportExtras
+        :sections="contentApiData.extras"
+        @sendGaEvent="sendGaEvent"
+      />
     </main>
   </div>
 </template>
@@ -67,6 +71,7 @@ import RdChoiceResult from './components/RdChoiceResult.vue'
 import RdProfileStory from './components/RdProfileStory.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
+import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
@@ -90,6 +95,7 @@ export default {
     RdProfileStory,
     RdReportHeader,
     RdReportArticle,
+    RdReportExtras,
   },
 
   directives: {
@@ -145,7 +151,6 @@ export default {
   },
 
   beforeMount() {
-    this.unmountExtras()
     this.unmountDonateButton()
     this.unmountLatestCoverages()
     this.unobserveCredit()
@@ -161,10 +166,6 @@ export default {
 
   methods: {
     ...mapMutations('report', [
-      'unmountExtras',
-      'hideExtras',
-      'showExtras',
-
       'unmountDonateButton',
       'showDonateButton',
 
@@ -235,7 +236,6 @@ export default {
       await this.$nextTick()
       this.jumpToTop()
       this.scrollTo(NAV_ITEMS_IDS[0])
-      this.hideExtras()
       this.unmountDonateButton()
       this.hideLatestCoverages()
       this.unobserveCredit()
@@ -246,7 +246,6 @@ export default {
     showMainBody() {
       this.closeGame()
       this.jumpToTop()
-      this.showExtras()
       this.showDonateButton()
       this.showLatestCoverages()
       this.observeCredit()

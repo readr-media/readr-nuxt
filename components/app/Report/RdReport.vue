@@ -2,12 +2,6 @@
   <div class="report">
     <component :is="featureComponent" :cmsData="cmsData"></component>
 
-    <RdReportExtras
-      v-if="shouldMountExtras"
-      v-show="shouldShowExtras"
-      :sections="contentApiData.extras"
-      @sendGaEvent="sendGaEvent"
-    />
     <RdReportCredit
       v-if="shouldMountCredit"
       v-intersect="creditObserver"
@@ -34,7 +28,6 @@ import archieml from 'archieml'
 import { mapState } from 'vuex'
 import LazyRenderer from 'vue-lazy-renderer'
 
-import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
@@ -50,7 +43,6 @@ export default {
 
   components: {
     LazyRenderer,
-    RdReportExtras,
     RdReportCredit,
   },
 
@@ -74,9 +66,6 @@ export default {
 
   computed: {
     ...mapState('report', [
-      'shouldMountExtras',
-      'shouldShowExtras',
-
       'shouldMountCredit',
       'shouldObserveCredit',
 
