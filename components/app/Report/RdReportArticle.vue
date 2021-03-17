@@ -191,19 +191,19 @@ export default {
     letter-spacing: 0.01em;
     font-weight: 300;
     text-align: justify;
-  }
 
-  &::v-deep {
-    a {
-      border-bottom: 1px solid currentColor;
+    &::v-deep {
+      a {
+        border-bottom: 1px solid currentColor;
 
-      &:hover {
+        &:hover {
+          font-weight: 500;
+        }
+      }
+
+      strong {
         font-weight: 500;
       }
-    }
-
-    strong {
-      font-weight: 500;
     }
   }
 }

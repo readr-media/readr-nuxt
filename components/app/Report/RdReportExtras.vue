@@ -59,7 +59,12 @@ export default {
           )
 
         default:
-          return <p domPropsInnerHTML={content.value}></p>
+          return (
+            <p
+              class="report-extras__paragraph"
+              domPropsInnerHTML={content.value}
+            ></p>
+          )
       }
     },
 
@@ -119,17 +124,26 @@ export default {
     margin: 32px 0;
   }
 
-  &::v-deep {
-    a {
-      border-bottom: 1px solid currentColor;
+  &__paragraph {
+    font-size: 18px;
+    line-height: 36px;
+    text-align: justify;
+    letter-spacing: 0.01em;
+    font-weight: 300;
+    margin: 32px 0;
 
-      &:hover {
+    &::v-deep {
+      a {
+        border-bottom: 1px solid currentColor;
+
+        &:hover {
+          font-weight: 500;
+        }
+      }
+
+      strong {
         font-weight: 500;
       }
-    }
-
-    strong {
-      font-weight: 500;
     }
   }
 }
@@ -145,14 +159,5 @@ export default {
   > :last-child {
     margin-bottom: 0 !important;
   }
-}
-
-p {
-  font-size: 18px;
-  line-height: 36px;
-  text-align: justify;
-  letter-spacing: 0.01em;
-  font-weight: 300;
-  margin: 32px 0;
 }
 </style>
