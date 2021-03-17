@@ -1,14 +1,18 @@
 <template>
   <div class="cp">
     <RdCover
+      v-show="shouldShowCover"
       :coverImgs="coverImgs"
       :title="cmsData.contentApiData.cover.title"
       :description="cmsData.contentApiData.cover.description"
+      :textGoToArticle="cmsData.contentApiData.cover.textGoToArticle"
+      @goToArticle="handleGoToArticle"
     />
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import RdCover from './components/RdCover.vue'
 
 export default {
@@ -22,6 +26,11 @@ export default {
       default: () => ({}),
     },
   },
+  data() {
+    return {
+      shouldShowCover: true,
+    }
+  },
   computed: {
     coverImgs() {
       return {
@@ -30,13 +39,52 @@ export default {
       }
     },
   },
+  beforeMount() {
+    this.unmountArticle()
+    this.unmountExtras()
+    this.unmountDonateButton()
+    this.unmountLatestCoverages()
+    this.unobserveCredit()
+  },
   methods: {
+    ...mapMutations('report', [
+      'unmountArticle',
+      'hideArticle',
+      'showArticle',
+
+      'unmountExtras',
+      'hideExtras',
+      'showExtras',
+
+      'unmountDonateButton',
+      'showDonateButton',
+
+      'unmountLatestCoverages',
+      'hideLatestCoverages',
+      'showLatestCoverages',
+
+      'unobserveCredit',
+      'observeCredit',
+    ]),
+    hideCover() {
+      this.shouldShowCover = false
+    },
+
     getImageSrcByType(type) {
       return (this.cmsData?.contentApiData?.images ?? []).find(
         function findObjectByType(object) {
           return object.type === type
         }
       )?.value?.urlMobileSized
+    },
+    handleGoToArticle() {
+      this.showArticle()
+      this.showExtras()
+      this.showDonateButton()
+      this.showLatestCoverages()
+      // this.observeCredit()
+      this.hideCover()
+      window.scrollTo(0, 0)
     },
   },
 }

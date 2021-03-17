@@ -17,6 +17,13 @@
     </h1>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <p class="cover__description description" v-html="descriptionHtml"></p>
+    <div class="cover__navs navs">
+      <button
+        class="navs__go-to-article-button go-to-article-button"
+        @click="$emit('goToArticle')"
+        v-text="textGoToArticle"
+      />
+    </div>
   </section>
 </template>
 
@@ -35,6 +42,10 @@ export default {
       default: '',
     },
     description: {
+      type: String,
+      default: '',
+    },
+    textGoToArticle: {
       type: String,
       default: '',
     },
@@ -58,7 +69,7 @@ export default {
 <style lang="scss" scoped>
 .cp {
   .cover {
-    padding: 0 20px;
+    padding: 48px 20px;
     &__title {
       margin: 12px 0 0 0;
       @include media-breakpoint-up(md) {
@@ -72,12 +83,21 @@ export default {
       margin: 24px 0 0 0;
     }
     @include media-breakpoint-up(md) {
-      padding: 0;
+      padding: 60px 0;
       max-width: 568px;
       margin: 0 auto;
     }
     @include media-breakpoint-up(xl) {
       max-width: 600px;
+    }
+    &__navs {
+      margin: 6px 0 0;
+      @include media-breakpoint-up(md) {
+        margin: 38px 0 0 0;
+      }
+      @include media-breakpoint-up(xl) {
+        margin: 50px 0 0 0;
+      }
     }
   }
 
@@ -116,6 +136,22 @@ export default {
     @include media-breakpoint-up(md) {
       text-align: left;
     }
+  }
+
+  .navs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .go-to-article-button {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 2.5px;
+    text-decoration-line: underline;
+    color: #2b2b2b;
   }
 }
 </style>
