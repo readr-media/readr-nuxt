@@ -17,7 +17,7 @@ export default {
   },
 
   props: {
-    sections: {
+    contents: {
       type: Array,
       required: true,
       default: () => [],
@@ -39,20 +39,17 @@ export default {
   },
 
   methods: {
-    buildSection(section) {
-      return (
-        <section>
-          <RdTitle
-            vIntersect={this.scrollDepthObserver}
-            class="report-extras__title"
-            text={section.title}
-          />
-          {section.contents.map(this.buildContent)}
-        </section>
-      )
-    },
     buildContent(content) {
       switch (content.type) {
+        case 'title':
+          return (
+            <RdTitle
+              vIntersect={this.scrollDepthObserver}
+              class="report-extras__title"
+              text={content.value}
+            />
+          )
+
         case 'unordered-list':
           return (
             <RdUnorderedList
@@ -84,7 +81,9 @@ export default {
 
   render() {
     return (
-      <div class="report-extras">{this.sections.map(this.buildSection)}</div>
+      <div class="report-extras">
+        <div class="container">{this.contents.map(this.buildContent)}</div>
+      </div>
     )
   },
 }
@@ -94,14 +93,21 @@ export default {
 .report-extras {
   color: #161616;
   background-color: #fffcf5;
+  padding: 48px 20px;
+  @include media-breakpoint-up(md) {
+    padding: 48px 100px;
+  }
+  @include media-breakpoint-up(md) {
+    padding: 60px 100px;
+  }
 
   &__title {
-    margin: 48px 0 24px 0;
+    margin: 96px 0 24px 0;
     @include media-breakpoint-up(md) {
-      margin: 48px 0 32px 0;
+      margin: 96px 0 32px 0;
     }
     @include media-breakpoint-up(xl) {
-      margin: 60px 0 24px 0;
+      margin: 120px 0 40px 0;
     }
 
     + * {
@@ -128,17 +134,9 @@ export default {
   }
 }
 
-section {
-  padding: 48px 20px;
+.container {
   max-width: 600px;
-  box-sizing: content-box;
   margin: 0 auto;
-  @include media-breakpoint-up(md) {
-    padding: 48px 100px;
-  }
-  @include media-breakpoint-up(md) {
-    padding: 60px 100px;
-  }
 
   > :first-child {
     margin-top: 0 !important;

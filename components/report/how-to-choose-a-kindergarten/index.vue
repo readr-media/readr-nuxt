@@ -54,7 +54,7 @@
           @sendGaEvent="sendGaEvent"
         />
         <RdReportExtras
-          :sections="contentApiData.extras"
+          :contents="contentApiData.extras.contents"
           @sendGaEvent="sendGaEvent"
         />
       </div>
