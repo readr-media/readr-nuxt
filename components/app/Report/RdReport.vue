@@ -27,7 +27,7 @@
     </div>
     <LazyRenderer
       v-if="shouldMountLatestCoverages"
-      v-show="shouldShowArticle"
+      v-show="shouldShowLatestCoverages"
       class="latest-coverages"
     >
       <readr-latest-coverages />
