@@ -127,6 +127,7 @@ import RdListMore from '~/components/shared/List/RdListMore.vue'
 import intersect from '~/components/helpers/directives/intersect.js'
 
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
+import { latestPosts } from '~/apollo/queries/posts.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
 import { databases } from '~/apollo/queries/data.gql'
 import { quotes } from '~/apollo/queries/quotes.gql'
@@ -136,7 +137,13 @@ import {
   cleanupIntersectionObserver,
 } from '~/components/helpers/index.js'
 import styleVariables from '~/scss/_variables.module.scss'
-import { isProdEnv, getHref, getImg, formatDate } from '~/helpers/index.js'
+import {
+  isProdEnv,
+  getHref,
+  getHrefFromKeystone,
+  getImg,
+  formatDate,
+} from '~/helpers/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'
 
@@ -179,6 +186,35 @@ export default {
     allEditorChoices: {
       query: allEditorChoices,
     },
+    latestPosts: {
+      query: latestPosts,
+      variables: {
+        first: 5,
+      },
+      update(result) {
+        return result.latestPosts.map(function transformContent(post) {
+          const {
+            id = '',
+            name = '',
+            heroImage = {},
+            ogImage = {},
+            publishTime = '',
+          } = post || {}
+
+          return {
+            id,
+            title: name,
+            href: getHrefFromKeystone(post),
+            img:
+              heroImage?.urlTabletSized ||
+              ogImage?.urlTabletSized ||
+              require('~/assets/default/post.svg'),
+            alt: heroImage?.name || ogImage?.name || '',
+            date: formatDate(publishTime),
+          }
+        })
+      },
+    },
     allCollaborations: {
       query: allCollaborations,
     },
@@ -191,16 +227,11 @@ export default {
     },
   },
 
-  async fetch() {
-    await this.loadLatestPosts()
-  },
-
   data() {
     return {
       allEditorChoices: [],
-      allCollaborations: [],
-
       latestPosts: [],
+      allCollaborations: [],
 
       databases: {
         all: [],
@@ -305,11 +336,6 @@ export default {
   },
 
   methods: {
-    async loadLatestPosts() {
-      const posts = (await this.$fetchLatestPosts()) || []
-      this.latestPosts = posts.map(transformPostContent)
-    },
-
     async loadCollaboratorsCount() {
       try {
         const response =

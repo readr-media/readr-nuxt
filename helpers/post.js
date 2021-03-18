@@ -21,6 +21,23 @@ function getHref({ type, id, slug } = {}) {
   }
 }
 
+function getHrefFromKeystone({ style, id, slug } = {}) {
+  switch (style) {
+    case 'news':
+      return `/post/${id}`
+    case 'report':
+      if (READR_MEDIA_OLD_PROJECT_SLUGS.includes(slug)) {
+        return `/project/${slug}`
+      } else if (MIRROR_MEDIA_OLD_PROJECT_SLUGS.includes(slug)) {
+        return `https://www.mirrormedia.mg/projects/${slug}/index.html`
+      } else {
+        return `/project/3/${slug}`
+      }
+    default:
+      return undefined
+  }
+}
+
 function formatDate(datetime = '') {
   return dayjs(datetime).format('MMM D, YYYY')
 }
@@ -29,4 +46,4 @@ function getImg({ heroImage, ogImage, image } = {}) {
   return heroImage || ogImage || image || require('~/assets/default/post.svg')
 }
 
-export { getHref, getImg, formatDate }
+export { getHref, getHrefFromKeystone, getImg, formatDate }

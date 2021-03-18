@@ -3,7 +3,7 @@
     <article class="list-latest__main">
       <a :href="postMain.href" target="_blank" @click="$emit('sendGaEvent')">
         <div class="img-wrapper">
-          <img v-lazy="postMain.img" alt="" />
+          <img v-lazy="postMain.img" :alt="postMain.alt" />
         </div>
         <h1>{{ postMain.title }}</h1>
         <span class="date">{{ postMain.date }}</span>
