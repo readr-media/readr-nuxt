@@ -1,6 +1,7 @@
 <script>
 import RdTitle from '~/components/shared/RdTitle.vue'
 import RdUnorderedList from '~/components/shared/RdUnorderedList.vue'
+import RdQandA from '~/components/shared/RdQandA.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
@@ -57,6 +58,9 @@ export default {
               items={content.value}
             />
           )
+
+        case 'qAndA':
+          return <RdQandA contents={content.value} />
 
         default:
           return (
