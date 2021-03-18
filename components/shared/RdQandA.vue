@@ -4,7 +4,7 @@ import SvgOpen from '~/assets/report/how-to-choose-a-kindergarten/open.svg?inlin
 import SvgClose from '~/assets/report/how-to-choose-a-kindergarten/close.svg?inline'
 
 export default {
-  name: 'RdQandA',
+  name: 'RdQAndA',
 
   props: {
     contents: {

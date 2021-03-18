@@ -1,7 +1,7 @@
 <script>
 import RdTitle from '~/components/shared/RdTitle.vue'
 import RdUnorderedList from '~/components/shared/RdUnorderedList.vue'
-import RdQandA from '~/components/shared/RdQandA.vue'
+import RdQAndA from '~/components/shared/RdQAndA.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
@@ -61,7 +61,7 @@ export default {
 
         case 'qAndA':
           return (
-            <RdQandA
+            <RdQAndA
               contents={content.value}
               onSendGaEvent={(fields) => {
                 this.$emit('sendGaEvent', fields)
