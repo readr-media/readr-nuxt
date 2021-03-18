@@ -32,7 +32,9 @@ import { computed } from '@nuxtjs/composition-api'
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import RdButtonPrimary from '~/components/shared/Button/RdButtonPrimary.vue'
 
-import { getHref, getImg } from '~/helpers/index.js'
+import { latestPostsInErrorPage } from '~/apollo/queries/posts.gql'
+
+import { getHrefFromKeystone } from '~/helpers/index.js'
 import { SITE_TITLE } from '~/constants/metadata.js'
 
 export default {
@@ -66,34 +68,33 @@ export default {
     }
   },
 
-  async fetch() {
-    await this.loadLatestPosts()
+  apollo: {
+    latestPosts: {
+      query: latestPostsInErrorPage,
+      update(result) {
+        return result.latestPosts.map(function transformContent(post) {
+          const { id = '', name = '', heroImage = {}, ogImage = {} } =
+            post || {}
+
+          return {
+            id,
+            title: name,
+            href: getHrefFromKeystone(post),
+            img:
+              heroImage?.urlMobileSized ||
+              ogImage?.urlMobileSized ||
+              require('~/assets/default/post.svg'),
+            alt: heroImage?.name || ogImage?.name || '',
+          }
+        })
+      },
+    },
   },
 
   data() {
     return {
       latestPosts: [],
     }
-  },
-
-  methods: {
-    async loadLatestPosts() {
-      const posts =
-        (await this.$fetchLatestPosts({
-          maxResult: 4,
-        })) || []
-
-      this.latestPosts = posts.map(function transformContent(post) {
-        const { id, title = '' } = post
-
-        return {
-          id,
-          title,
-          href: getHref(post),
-          img: getImg(post),
-        }
-      })
-    },
   },
 
   head() {

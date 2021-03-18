@@ -19,3 +19,24 @@ query latestPosts($first: Int! = 3) {
     publishTime
   }
 }
+
+query latestPostsInErrorPage {
+  latestPosts: allPosts(
+    first: 4
+    where: { state: published, style_in: [news, report] }
+    sortBy: [publishTime_DESC]
+  ) {
+    id
+    slug
+    name
+    style
+    heroImage {
+      name
+      urlMobileSized
+    }
+    ogImage {
+      name
+      urlMobileSized
+    }
+  }
+}
