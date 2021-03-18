@@ -60,7 +60,14 @@ export default {
           )
 
         case 'qAndA':
-          return <RdQandA contents={content.value} />
+          return (
+            <RdQandA
+              contents={content.value}
+              onSendGaEvent={(fields) => {
+                this.$emit('sendGaEvent', fields)
+              }}
+            />
+          )
 
         default:
           return (

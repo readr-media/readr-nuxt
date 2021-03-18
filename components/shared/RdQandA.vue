@@ -17,14 +17,21 @@ export default {
   data() {
     return {
       shouldOpenAnswers: [],
+      wereGaEventsSent: [],
     }
   },
 
   beforeMount() {
-    this.shouldOpenAnswers = Array(this.contents.length).fill(false)
+    this.initData()
   },
 
   methods: {
+    initData() {
+      const { length } = this.contents
+      this.shouldOpenAnswers = Array(length).fill(false)
+      this.wereGaEventsSent = Array(length).fill(false)
+    },
+
     buildContent(content, idx) {
       const shouldOpenAnswer = this.shouldOpenAnswers[idx]
 
@@ -64,6 +71,11 @@ export default {
     },
     handleClick(idx) {
       this.$set(this.shouldOpenAnswers, idx, !this.shouldOpenAnswers[idx])
+
+      if (!this.wereGaEventsSent[idx]) {
+        this.$emit('sendGaEvent', { action: 'click', label: `提問${idx + 1}` })
+        this.$set(this.wereGaEventsSent, idx, true)
+      }
     },
   },
 
