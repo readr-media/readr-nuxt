@@ -1,6 +1,13 @@
 <template>
   <div class="cp">
     <RdReportHeader class="header" :class="{ hidden: shouldHideHeader }" />
+    <RdSectionNav
+      class="section-nav"
+      :class="{ upper: shouldHideHeader }"
+      :navs="cmsData.contentApiData.sectionNav"
+      :activeIndex="sectionIndex"
+      @navigateToIndex="handleNavigateToIndex"
+    />
     <RdCover
       v-show="shouldShowCover"
       :coverImgs="coverImgs"
@@ -8,8 +15,8 @@
       :description="cmsData.contentApiData.cover.description"
       :textGoToArticle="cmsData.contentApiData.cover.textGoToArticle"
       :textGoToQuiz="cmsData.contentApiData.cover.textGoToQuiz"
-      @goToQuiz="handleGoToQuiz"
-      @goToArticle="handleGoToArticle"
+      @goToQuiz="handleNavigateToIndex(0)"
+      @goToArticle="handleNavigateToIndex(1)"
     />
     <RdQuizInfo
       v-show="shouldShowQuizInfo"
@@ -47,6 +54,7 @@
 <script>
 import LazyRenderer from 'vue-lazy-renderer'
 
+import RdSectionNav from './components/RdSectionNav.vue'
 import RdCover from './components/RdCover.vue'
 import RdQuizInfo from './components/RdQuizInfo.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
@@ -63,6 +71,7 @@ export default {
 
     RdReportHeader,
 
+    RdSectionNav,
     RdCover,
     RdQuizInfo,
 
@@ -85,6 +94,7 @@ export default {
       shouldShowArticle: false,
       shouldShowLatestCoverages: false,
       quizInfoCookieName: 'chinaPopcultureReadQuizInfo',
+      sectionIndex: -1,
     }
   },
   computed: {
@@ -98,9 +108,21 @@ export default {
       return this.isScrollingDown
     },
   },
+  watch: {
+    sectionIndex(value) {
+      if (value === 0) {
+        this.handleGoToQuiz()
+      } else if (value === 1) {
+        this.handleGoToArticle()
+      }
+    },
+  },
   methods: {
     showArticle() {
       this.shouldShowArticle = true
+    },
+    hideArticle() {
+      this.shouldShowArticle = false
     },
     hideCover() {
       this.shouldShowCover = false
@@ -118,6 +140,9 @@ export default {
     showLatestCoverages() {
       this.shouldShowLatestCoverages = true
     },
+    hideLatestCoverages() {
+      this.shouldShowLatestCoverages = false
+    },
 
     getImageSrcByType(type) {
       return (this.cmsData?.contentApiData?.images ?? []).find(
@@ -128,6 +153,10 @@ export default {
     },
     handleGoToQuiz() {
       this.hideCover()
+
+      this.hideArticle()
+      this.hideLatestCoverages()
+
       if (!getCookie(this.quizInfoCookieName)) {
         this.showQuizInfo()
       }
@@ -151,11 +180,17 @@ export default {
       }
     },
     handleGoToArticle() {
+      this.hideCover()
+
+      this.hideQuizInfo()
+
       this.showArticle()
       // this.observeCredit()
       this.showLatestCoverages()
-      this.hideCover()
       window.scrollTo(0, 0)
+    },
+    handleNavigateToIndex(index) {
+      this.sectionIndex = index
     },
   },
 }
@@ -213,9 +248,9 @@ a.sc-readr-donate-button {
 
 <style lang="scss" scoped>
 .cp {
-  padding: 68px 0 0 0;
+  padding: 118px 0 0 0;
   @include media-breakpoint-up(md) {
-    padding: 85px 0 0 0;
+    padding: 135px 0 0 0;
   }
 }
 
@@ -237,6 +272,24 @@ a.sc-readr-donate-button {
     h1 svg * {
       fill: #2b2b2b;
     }
+  }
+}
+
+.section-nav {
+  position: fixed;
+  top: 68px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  transition: transform 0.3s ease-out;
+  &.upper {
+    transform: translateY(-68px);
+    @include media-breakpoint-up(md) {
+      transform: translateY(-85px);
+    }
+  }
+  @include media-breakpoint-up(md) {
+    top: 85px;
   }
 }
 
