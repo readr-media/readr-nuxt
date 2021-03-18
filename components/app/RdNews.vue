@@ -78,8 +78,10 @@ import RdButtonPrimary from '~/components/shared/Button/RdButtonPrimary.vue'
 import RdStarRating from '~/components/shared/RdStarRating.vue'
 import RdList from '~/components/shared/List/RdList.vue'
 
+import { latestPosts } from '~/apollo/queries/posts.gql'
+
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
-import { getHref, getImg, formatDate } from '~/helpers/index.js'
+import { getHrefFromKeystone, formatDate } from '~/helpers/index.js'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
@@ -186,6 +188,36 @@ export default {
     }
   },
 
+  apollo: {
+    latestPosts: {
+      query: latestPosts,
+      prefetch: false,
+      update(result) {
+        return result.latestPosts.map(function transformContent(post) {
+          const {
+            id = '',
+            name = '',
+            heroImage = {},
+            ogImage = {},
+            publishTime = '',
+          } = post || {}
+
+          return {
+            id,
+            title: name,
+            href: getHrefFromKeystone(post),
+            img:
+              heroImage?.urlTabletSized ||
+              ogImage?.urlTabletSized ||
+              require('~/assets/default/post.svg'),
+            alt: heroImage?.name || ogImage?.name || '',
+            date: formatDate(publishTime),
+          }
+        })
+      },
+    },
+  },
+
   data() {
     return {
       latestPosts: [],
@@ -201,30 +233,7 @@ export default {
     },
   },
 
-  mounted() {
-    this.loadLatestPosts()
-  },
-
   methods: {
-    async loadLatestPosts() {
-      const posts =
-        (await this.$fetchLatestPosts({
-          maxResult: 3,
-        })) || []
-
-      this.latestPosts = posts.map(function transformContent(post) {
-        const { id, title = '', publishedAt = '' } = post
-
-        return {
-          id,
-          title,
-          href: getHref(post),
-          img: getImg(post),
-          date: formatDate(publishedAt),
-        }
-      })
-    },
-
     sendGaClickEvent(label, value) {
       this.sendGaEvent('click', label, value)
     },
