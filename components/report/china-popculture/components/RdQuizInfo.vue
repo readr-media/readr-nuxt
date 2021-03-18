@@ -56,7 +56,8 @@ export default {
   backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  overflow-y: scroll;
   padding: 0 20px;
   &__description {
     margin: 16px 0 0 0;
@@ -74,9 +75,11 @@ export default {
 }
 
 .wrapper {
+  margin: auto;
+  padding: 20px 0;
   @include media-breakpoint-up(md) {
     max-width: 568px;
-    margin: 0 auto;
+    padding: 0;
   }
   @include media-breakpoint-up(xl) {
     max-width: 600px;
