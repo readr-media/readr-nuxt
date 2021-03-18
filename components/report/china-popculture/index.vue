@@ -1,5 +1,6 @@
 <template>
   <div class="cp">
+    <RdReportHeader class="header" :class="{ hidden: shouldHideHeader }" />
     <RdCover
       v-show="shouldShowCover"
       :coverImgs="coverImgs"
@@ -48,14 +49,19 @@ import LazyRenderer from 'vue-lazy-renderer'
 
 import RdCover from './components/RdCover.vue'
 import RdQuizInfo from './components/RdQuizInfo.vue'
+import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
+import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
+
 export default {
   components: {
     LazyRenderer,
+
+    RdReportHeader,
 
     RdCover,
     RdQuizInfo,
@@ -64,6 +70,7 @@ export default {
     RdReportExtras,
     RdReportCredit,
   },
+  mixins: [scrollDirection],
   props: {
     cmsData: {
       type: Object,
@@ -86,6 +93,9 @@ export default {
         large: this.getImageSrcByType('cp-cover-large'),
         small: this.getImageSrcByType('cp-cover-small'),
       }
+    },
+    shouldHideHeader() {
+      return this.isScrollingDown
     },
   },
   methods: {
@@ -202,6 +212,34 @@ a.sc-readr-donate-button {
 </style>
 
 <style lang="scss" scoped>
+.cp {
+  padding: 68px 0 0 0;
+  @include media-breakpoint-up(md) {
+    padding: 85px 0 0 0;
+  }
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  transition: transform 0.3s ease-out;
+  visibility: visible;
+  background-color: #ebebeb;
+
+  &.hidden {
+    transform: translateY(-100%);
+  }
+
+  &::v-deep {
+    h1 svg * {
+      fill: #2b2b2b;
+    }
+  }
+}
+
 .donate-button {
   padding: 0 20px;
   margin: 72px 0;
