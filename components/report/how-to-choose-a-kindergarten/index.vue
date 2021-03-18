@@ -29,10 +29,10 @@
 
     <main>
       <div v-show="!shouldOpenGame" class="result">
+        <div :id="NAV_ITEMS_IDS[0]" v-intersect="indexesObserver" />
         <transition name="fade-in">
           <RdChoiceResult
             v-if="shouldOpenGameResult"
-            :id="NAV_ITEMS_IDS[0]"
             v-intersect="indexesObserver"
             :results="gameResults"
             @seeProfileStory="handleSeeProfileStory"
@@ -41,14 +41,14 @@
           />
         </transition>
 
+        <div :id="NAV_ITEMS_IDS[1]" v-intersect="indexesObserver" />
         <RdProfileStory
-          :id="NAV_ITEMS_IDS[1]"
           v-intersect="indexesObserver"
           :cmsData="contentApiData.profile"
           @sendGaEvent="sendGaEvent"
         />
 
-        <div id="report-article" v-intersect="indexesObserver" />
+        <div :id="NAV_ITEMS_IDS[2]" v-intersect="indexesObserver" />
         <RdReportArticle
           :contents="contentApiData.article.contents"
           @sendGaEvent="sendGaEvent"
