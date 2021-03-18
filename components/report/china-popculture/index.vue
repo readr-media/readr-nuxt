@@ -17,18 +17,52 @@
       :textSubmit="cmsData.contentApiData.quizInfo.textSubmit"
       @close="hideQuizInfoAndMemoize"
     />
+    <section v-show="shouldShowArticle" class="article">
+      <RdReportArticle
+        :contents="cmsData.contentApiData.article.contents"
+        @sendGaEvent="sendGaEvent"
+      />
+      <RdReportExtras
+        :contents="cmsData.contentApiData.extras.contents"
+        @sendGaEvent="sendGaEvent"
+      />
+      <div class="donate-button">
+        <readr-donate-button
+          @clickButton="sendGaClickEvent({ label: 'donate' })"
+        />
+      </div>
+    </section>
+    <RdReportCredit
+      :authors="cmsData.contentApiData.credit"
+      :publishedAt="cmsData.contentApiData.publishedAt"
+      :canSendGaEvent="cmsData.canSendCreditGaEvent"
+    />
+    <LazyRenderer v-show="shouldShowLatestCoverages" class="latest-coverages">
+      <readr-latest-coverages />
+    </LazyRenderer>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import LazyRenderer from 'vue-lazy-renderer'
+
 import RdCover from './components/RdCover.vue'
 import RdQuizInfo from './components/RdQuizInfo.vue'
 
+import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
+import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
+import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
+
 export default {
   components: {
+    LazyRenderer,
+
     RdCover,
     RdQuizInfo,
+
+    RdReportArticle,
+    RdReportExtras,
+    RdReportCredit,
   },
   props: {
     cmsData: {
@@ -41,6 +75,8 @@ export default {
     return {
       shouldShowCover: true,
       shouldShowQuizInfo: false,
+      shouldShowArticle: false,
+      shouldShowLatestCoverages: false,
       quizInfoCookieName: 'chinaPopcultureReadQuizInfo',
     }
   },
@@ -52,33 +88,10 @@ export default {
       }
     },
   },
-  beforeMount() {
-    this.unmountArticle()
-    this.unmountExtras()
-    this.unmountDonateButton()
-    this.unmountLatestCoverages()
-    this.unobserveCredit()
-  },
   methods: {
-    ...mapMutations('report', [
-      'unmountArticle',
-      'hideArticle',
-      'showArticle',
-
-      'unmountExtras',
-      'hideExtras',
-      'showExtras',
-
-      'unmountDonateButton',
-      'showDonateButton',
-
-      'unmountLatestCoverages',
-      'hideLatestCoverages',
-      'showLatestCoverages',
-
-      'unobserveCredit',
-      'observeCredit',
-    ]),
+    showArticle() {
+      this.shouldShowArticle = true
+    },
     hideCover() {
       this.shouldShowCover = false
     },
@@ -91,6 +104,9 @@ export default {
     hideQuizInfoAndMemoize() {
       this.hideQuizInfo()
       document.cookie = `${this.quizInfoCookieName}=true`
+    },
+    showLatestCoverages() {
+      this.shouldShowLatestCoverages = true
     },
 
     getImageSrcByType(type) {
@@ -126,10 +142,8 @@ export default {
     },
     handleGoToArticle() {
       this.showArticle()
-      this.showExtras()
-      this.showDonateButton()
-      this.showLatestCoverages()
       // this.observeCredit()
+      this.showLatestCoverages()
       this.hideCover()
       window.scrollTo(0, 0)
     },
@@ -187,4 +201,35 @@ a.sc-readr-donate-button {
 }
 </style>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.donate-button {
+  padding: 0 20px;
+  margin: 72px 0;
+  @include media-breakpoint-up(md) {
+    max-width: 476px;
+    margin: 96px auto;
+  }
+  @include media-breakpoint-up(xl) {
+    margin: 120px auto;
+  }
+}
+
+.latest-coverages {
+  padding: 24px 8px;
+  background-color: #ebebeb;
+  ::v-deep h2 {
+    background-color: #111111;
+    color: white;
+  }
+  @include media-breakpoint-up(md) {
+    padding: 48px 84px;
+  }
+  @include media-breakpoint-up(xl) {
+    padding: 60px 0;
+    ::v-deep readr-latest-coverages {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+}
+</style>
