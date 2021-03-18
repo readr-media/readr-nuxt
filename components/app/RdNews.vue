@@ -55,15 +55,17 @@
       </section>
     </ClientOnly>
 
-    <section class="latest-posts container">
-      <h2>
-        <div>最新報導</div>
-      </h2>
-      <RdList
-        :posts="latestPosts"
-        @sendGaEvent="sendGaClickEvent('related articles')"
-      />
-    </section>
+    <ClientOnly>
+      <section class="latest-posts container">
+        <h2>
+          <div>最新報導</div>
+        </h2>
+        <RdList
+          :posts="latestPosts"
+          @sendGaEvent="sendGaClickEvent('related articles')"
+        />
+      </section>
+    </ClientOnly>
   </div>
 </template>
 
