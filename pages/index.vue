@@ -192,7 +192,7 @@ export default {
         first: 5,
       },
       update(result) {
-        return result.latestPosts.map(function transformContent(post) {
+        return result.items.map(function transformContent(post) {
           const {
             id = '',
             name = '',

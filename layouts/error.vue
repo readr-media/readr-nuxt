@@ -72,7 +72,7 @@ export default {
     latestPosts: {
       query: latestPostsInErrorPage,
       update(result) {
-        return result.latestPosts.map(function transformContent(post) {
+        return result.items.map(function transformContent(post) {
           const { id = '', name = '', heroImage = {}, ogImage = {} } =
             post || {}
 
