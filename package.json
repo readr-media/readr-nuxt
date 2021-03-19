@@ -52,7 +52,6 @@
     "macy": "^2.5.1",
     "nuxt": "^2.15.3",
     "nuxt-ssr-cache": "^1.5.2",
-    "qs": "^6.9.4",
     "raf-throttle": "^2.0.5",
     "scroll-into-view": "^1.15.0",
     "uuid": "^8.3.0",
