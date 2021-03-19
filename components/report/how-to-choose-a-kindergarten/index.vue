@@ -51,6 +51,7 @@
         <div :id="NAV_ITEMS_IDS[2]" v-intersect="indexesObserver" />
         <RdReportArticle
           :contents="contentApiData.article.contents"
+          :slug="reportSlug"
           @sendGaEvent="sendGaEvent"
         />
         <RdReportExtras
@@ -131,6 +132,11 @@ export default {
       type: Object,
       required: true,
       default: () => ({}),
+    },
+    reportSlug: {
+      type: String,
+      required: true,
+      default: 'how-to-choose-a-kindergarten',
     },
   },
 

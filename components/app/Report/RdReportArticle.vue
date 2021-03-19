@@ -25,6 +25,11 @@ export default {
       required: true,
       default: () => [],
     },
+    slug: {
+      type: String,
+      required: true,
+      default: undefined,
+    },
   },
 
   data() {
@@ -63,16 +68,19 @@ export default {
             </h3>
           )
 
-        case 'image': {
-          const { name, urlMobileSized, urlTabletSized } = content.value
+        case 'picture': {
+          const { id } = content.value
 
           return (
-            <LazyRenderer tagName="picture" class="report-article__image">
+            <LazyRenderer tagName="picture" class="report-article__picture">
               <source
                 media={`(min-width: ${styleVariables['breakpoint-sm']})`}
-                srcset={urlTabletSized}
+                srcset={require(`~/assets/report/${this.slug}/report-article-picture-${id}-sm.png`)}
               />
-              <img src={urlMobileSized} alt={name} />
+              <img
+                src={require(`~/assets/report/${this.slug}/report-article-picture-${id}.png`)}
+                alt=""
+              />
             </LazyRenderer>
           )
         }
@@ -175,11 +183,11 @@ export default {
     }
   }
 
-  &__image img {
+  &__picture img {
     width: 100%;
   }
 
-  &__image,
+  &__picture,
   &__infogram {
     margin: 32px -20px;
   }

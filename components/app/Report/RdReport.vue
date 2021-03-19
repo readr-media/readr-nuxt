@@ -1,6 +1,10 @@
 <template>
   <div class="report">
-    <component :is="featureComponent" :cmsData="cmsData"></component>
+    <component
+      :is="featureComponent"
+      :cmsData="cmsData"
+      :reportSlug="slug"
+    ></component>
   </div>
 </template>
 
@@ -28,26 +32,15 @@ export default {
 
   computed: {
     featureComponent() {
-      return () => import(`~/components/report/${this.report.slug}/index.vue`)
+      return () => import(`~/components/report/${this.slug}/index.vue`)
     },
     cmsData() {
       const aml = JSON.parse(this.report.contentApiData)
         .filter(function isNeededType(item) {
-          return ['unstyled', 'annotation', 'image'].includes(item.type)
+          return ['unstyled', 'annotation'].includes(item.type)
         })
-        .map(function buildContent({ type, content = [] } = {}) {
-          if (type === 'image') {
-            const [{ name, urlTabletSized, urlMobileSized }] = content || [{}]
-            return `
-              {.${type}}
-              name: ${name}
-              urlMobileSized: ${urlMobileSized}
-              urlTabletSized: ${urlTabletSized}
-              {}
-            `
-          }
-
-          return content[0]
+        .flatMap(function getContent(item) {
+          return item.content
         })
         .join('\n')
 
@@ -57,6 +50,10 @@ export default {
         ...this.report,
         contentApiData: json,
       }
+    },
+
+    slug() {
+      return this.report.slug
     },
     contentApiData() {
       return this.cmsData.contentApiData
