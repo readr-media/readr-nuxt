@@ -27,7 +27,7 @@
       </template>
     </ul>
     <ClientOnly>
-      <InfiniteLoading @infinite="loadMoreLatestPosts">
+      <InfiniteLoading @infinite="loadMoreLatestItems">
         <div slot="spinner" />
         <div slot="no-more" />
         <div slot="no-results" />
@@ -43,7 +43,9 @@ import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
 import RdListItemCategory from '~/components/shared/List/RdListItemCategory.vue'
 
-import { getHref, getImg, formatDate } from '~/helpers/index.js'
+import { latestPosts } from '~/apollo/queries/posts.gql'
+
+import { getHrefFromKeystone, formatDate } from '~/helpers/index.js'
 
 export default {
   name: 'Category',
@@ -55,53 +57,89 @@ export default {
     RdListItemCategory,
   },
 
-  async fetch() {
-    await this.loadLatestList()
-  },
-
   data() {
     return {
       latestList: {
         items: [],
-        page: 0,
+        meta: {
+          count: 0,
+        },
         isLoading: false,
       },
     }
   },
 
-  methods: {
-    async loadLatestList() {
-      this.latestList.page += 1
+  apollo: {
+    latestList: {
+      query: latestPosts,
+      variables: {
+        first: 25,
+        shouldQueryMeta: true,
+      },
+      update(result) {
+        const { items, meta } = result
 
-      const items =
-        (await this.$fetchLatestPosts({
-          maxResult: 25,
-          page: this.latestList.page,
-        })) || []
+        return {
+          items: items.map(function transformContent(post) {
+            const {
+              id = '',
+              name = '',
+              heroImage = {},
+              ogImage = {},
+              publishTime = '',
+            } = post || {}
 
-      this.latestList.items.push(
-        ...items.map(function transformContent(post) {
-          const { id, title = '', publishedAt = '' } = post
-
-          return {
-            id,
-            title,
-            href: getHref(post),
-            img: getImg(post),
-            date: formatDate(publishedAt),
-          }
-        })
-      )
-
-      return items
+            return {
+              id,
+              title: name,
+              href: getHrefFromKeystone(post),
+              img:
+                heroImage?.urlTabletSized ||
+                ogImage?.urlTabletSized ||
+                require('~/assets/default/post.svg'),
+              alt: heroImage?.name || ogImage?.name || '',
+              date: formatDate(publishTime),
+            }
+          }),
+          meta,
+          isLoading: this.latestList.isLoading,
+        }
+      },
     },
-    async loadMoreLatestPosts(state) {
+  },
+
+  computed: {
+    doesHaveAnyLatestItemsLeftToLoad() {
+      return this.totalLatestItems < this.latestList.meta.count
+    },
+    totalLatestItems() {
+      return this.latestList.items.length
+    },
+  },
+
+  methods: {
+    async loadMoreLatestItems(state) {
+      if (this.latestList.isLoading) {
+        return
+      }
+      this.latestList.isLoading = true
+
       try {
-        this.latestList.isLoading = true
+        await this.$apollo.queries.latestList.fetchMore({
+          variables: {
+            first: 25,
+            skip: this.totalLatestItems,
+            shouldQueryMeta: false,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            return {
+              items: [...previousResult.items, ...fetchMoreResult.items],
+              meta: this.latestList.meta,
+            }
+          },
+        })
 
-        const items = await this.loadLatestList()
-
-        if (items.length > 0) {
+        if (this.doesHaveAnyLatestItemsLeftToLoad) {
           state.loaded()
         } else {
           state.complete()

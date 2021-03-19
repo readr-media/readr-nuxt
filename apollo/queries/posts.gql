@@ -1,6 +1,11 @@
-query latestPosts($first: Int! = 3) {
+query latestPosts(
+  $first: Int! = 3
+  $skip: Int
+  $shouldQueryMeta: Boolean! = false
+) {
   items: allPosts(
     first: $first
+    skip: $skip
     where: { state: published, style_in: [news, report] }
     sortBy: [publishTime_DESC]
   ) {
@@ -17,6 +22,10 @@ query latestPosts($first: Int! = 3) {
       urlTabletSized
     }
     publishTime
+  }
+
+  meta: _allPostsMeta @include(if: $shouldQueryMeta) {
+    count
   }
 }
 
