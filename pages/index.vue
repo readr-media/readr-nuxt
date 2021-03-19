@@ -85,7 +85,10 @@
       />
     </section>
 
-    <section v-show="shouldShowMoreSection" class="more-section yellow-bg">
+    <section
+      v-show="shouldShowCategorySection"
+      class="category-section yellow-bg"
+    >
       <div class="container">
         <RdSectionHeading
           v-intersect="scrollDepthObserver"
@@ -93,14 +96,14 @@
           linkHref="/category/"
           class="home__section-heading"
         />
-        <div id="more-list-container">
-          <RdListMore
-            v-for="morePosts in displayedAllMorePosts"
-            :key="morePosts.tag"
-            :topic="morePosts.tag"
-            :posts="morePosts.posts"
-            class="home__list-more"
-            @sendGaEvent="sendGaClickEvent(`category ${morePosts.tag}`)"
+        <div id="category-list-container">
+          <RdListCategory
+            v-for="categoryList in displayedCategoryLists"
+            :key="categoryList.tag"
+            :category="categoryList.tag"
+            :posts="categoryList.posts"
+            class="home__list-category"
+            @sendGaEvent="sendGaClickEvent(`category ${categoryList.tag}`)"
           />
         </div>
       </div>
@@ -122,7 +125,7 @@ import RdQuoteSlide from '~/components/app/RdQuoteSlide.vue'
 import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
 import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
-import RdListMore from '~/components/shared/List/RdListMore.vue'
+import RdListCategory from '~/components/shared/List/RdListCategory.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
@@ -151,7 +154,7 @@ const DATABASES_PAGE_SIZE = 3
 
 const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
 
-const MORE_POSTS_TAGS = [
+const CATEGORIES = [
   { ID: isProdEnv ? 1184 : 103, NAME: '時事' },
   { ID: isProdEnv ? 1185 : 104, NAME: '教育' },
   { ID: isProdEnv ? 1186 : 14, NAME: '政治' },
@@ -173,7 +176,7 @@ export default {
     RdCollaboratorWall,
     RdCollaborativeList,
     RdButtonDonate,
-    RdListMore,
+    RdListCategory,
 
     SvgArrowMore,
   },
@@ -245,7 +248,7 @@ export default {
       },
       quotes: [],
 
-      allMorePosts: MORE_POSTS_TAGS.map(({ NAME }) => ({
+      categoryLists: CATEGORIES.map(({ NAME }) => ({
         tag: NAME,
         posts: [],
       })),
@@ -312,20 +315,21 @@ export default {
       },
     },
 
-    shouldShowMoreSection() {
+    shouldShowCategorySection() {
       return (
-        (!this.isViewportWidthUpMd || this.macyInstance) && this.hasAnyMorePosts
+        (!this.isViewportWidthUpMd || this.macyInstance) &&
+        this.doesHaveCategoryList
       )
     },
-    hasAnyMorePosts() {
-      return this.allMorePosts.some(this.hasPosts)
+    doesHaveCategoryList() {
+      return this.categoryLists.some(this.doesHavePosts)
     },
-    displayedAllMorePosts() {
-      return this.allMorePosts.filter(this.hasPosts)
+    displayedCategoryLists() {
+      return this.categoryLists.filter(this.doesHavePosts)
     },
   },
   mounted() {
-    this.handleAllMorePosts()
+    this.handleCategoryLists()
     this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
@@ -380,27 +384,27 @@ export default {
       }
     },
 
-    async handleAllMorePosts() {
+    async handleCategoryLists() {
       await Promise.all(
-        MORE_POSTS_TAGS.map(({ ID }, idx) => this.loadMorePosts(ID, idx))
+        CATEGORIES.map(({ ID }, idx) => this.loadCategoryList(ID, idx))
       )
 
       this.unwatchIsViewportWidthUpMd = this.$watch(
         'isViewportWidthUpMd',
-        this.handleMoreSectionLayout,
+        this.handleCategorySectionLayout,
         { immediate: true }
       )
     },
-    async loadMorePosts(tagId, idx) {
+    async loadCategoryList(tagId, idx) {
       try {
         const posts = (await this.$fetchPostsByTag(tagId)) || []
-        this.allMorePosts[idx].posts = posts.map(transformPostContent)
+        this.categoryLists[idx].posts = posts.map(transformPostContent)
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
       }
     },
-    async handleMoreSectionLayout(isViewportWidthUpMd) {
+    async handleCategorySectionLayout(isViewportWidthUpMd) {
       if (this.macyInstance) {
         this.unwatchIsViewportWidthUpMd()
         return
@@ -408,7 +412,7 @@ export default {
 
       if (
         isViewportWidthUpMd &&
-        this.hasAnyMorePosts &&
+        this.doesHaveCategoryList &&
         !this.isInitializingMacy
       ) {
         this.isInitializingMacy = true
@@ -416,7 +420,7 @@ export default {
         try {
           const initMacy = (await import('macy')).default
           this.macyInstance = initMacy({
-            container: '#more-list-container',
+            container: '#category-list-container',
             mobileFirst: true,
             trueOrder: true,
             columns: 1,
@@ -435,7 +439,7 @@ export default {
         this.isInitializingMacy = false
       }
     },
-    hasPosts(item) {
+    doesHavePosts(item) {
       return item.posts.length > 0
     },
 
@@ -557,7 +561,7 @@ function transformPostContent(post) {
       padding-left: calc(50% - 548px);
     }
   }
-  &__list-more {
+  &__list-category {
     padding-bottom: 30px;
     @include media-breakpoint-up(md) {
       padding-bottom: 60px;
@@ -686,7 +690,7 @@ function transformPostContent(post) {
   }
 }
 
-.more-section {
+.category-section {
   padding-top: 20px;
   @include media-breakpoint-up(md) {
     padding-top: 30px;

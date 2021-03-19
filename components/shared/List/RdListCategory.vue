@@ -1,6 +1,6 @@
 <template>
-  <div class="list-more">
-    <h3 v-if="topic">{{ topic }}</h3>
+  <div class="list-category">
+    <h3 v-if="category">{{ category }}</h3>
 
     <div class="list-wrapper">
       <ul>
@@ -29,10 +29,10 @@
 
 <script>
 export default {
-  name: 'RdListMore',
+  name: 'RdListCategory',
 
   props: {
-    topic: {
+    category: {
       type: String,
       default: '',
     },
