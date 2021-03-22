@@ -277,19 +277,19 @@ a.sc-readr-donate-button {
 
 .section-nav {
   position: fixed;
-  top: 68px;
+  top: 67px;
   left: 0;
   width: 100%;
-  z-index: 999;
+  z-index: 998;
   transition: transform 0.3s ease-out;
   &.upper {
-    transform: translateY(-68px);
+    transform: translateY(-67px);
     @include media-breakpoint-up(md) {
-      transform: translateY(-85px);
+      transform: translateY(-84px);
     }
   }
   @include media-breakpoint-up(md) {
-    top: 85px;
+    top: 84px;
   }
 }
 
