@@ -1,0 +1,10 @@
+query categories {
+  categories: allCategories(
+    first: 6
+    where: { state: active }
+    sortBy: [createdAt_ASC]
+  ) {
+    slug
+    name
+  }
+}

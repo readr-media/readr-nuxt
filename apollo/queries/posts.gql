@@ -49,3 +49,24 @@ query latestPostsInErrorPage {
     }
   }
 }
+
+query categoryPosts($first: Int! = 3, $categorySlug: String!) {
+  items: allPosts(
+    first: $first
+    where: { categories_some: { slug: $categorySlug } }
+    sortBy: [publishTime_DESC]
+  ) {
+    id
+    name
+    style
+    heroImage {
+      name
+      urlMobileSized
+    }
+    ogImage {
+      name
+      urlMobileSized
+    }
+    publishTime
+  }
+}

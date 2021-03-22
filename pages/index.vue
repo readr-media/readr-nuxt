@@ -99,11 +99,11 @@
         <div id="category-list-container">
           <RdListCategory
             v-for="categoryList in displayedCategoryLists"
-            :key="categoryList.tag"
-            :category="categoryList.tag"
-            :posts="categoryList.posts"
+            :key="categoryList.name"
+            :category="categoryList.name"
+            :posts="categoryList.items"
             class="home__list-category"
-            @sendGaEvent="sendGaClickEvent(`category ${categoryList.tag}`)"
+            @sendGaEvent="sendGaClickEvent(`category ${categoryList.name}`)"
           />
         </div>
       </div>
@@ -130,38 +130,24 @@ import RdListCategory from '~/components/shared/List/RdListCategory.vue'
 import intersect from '~/components/helpers/directives/intersect.js'
 
 import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
-import { latestPosts } from '~/apollo/queries/posts.gql'
+import { latestPosts, categoryPosts } from '~/apollo/queries/posts.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
 import { databases } from '~/apollo/queries/data.gql'
 import { quotes } from '~/apollo/queries/quotes.gql'
+import { categories } from '~/apollo/queries/categories.gql'
 
 import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
 } from '~/components/helpers/index.js'
 import styleVariables from '~/scss/_variables.module.scss'
-import {
-  isProdEnv,
-  getHref,
-  getHrefFromKeystone,
-  getImg,
-  formatDate,
-} from '~/helpers/index.js'
+import { getHrefFromKeystone, formatDate } from '~/helpers/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'
 
 const DATABASES_PAGE_SIZE = 3
 
 const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
-
-const CATEGORIES = [
-  { ID: isProdEnv ? 1184 : 103, NAME: '時事' },
-  { ID: isProdEnv ? 1185 : 104, NAME: '教育' },
-  { ID: isProdEnv ? 1186 : 14, NAME: '政治' },
-  { ID: isProdEnv ? 1187 : 105, NAME: '人權' },
-  { ID: isProdEnv ? 1188 : 106, NAME: '環境' },
-  { ID: isProdEnv ? 1189 : 107, NAME: '新鮮事' },
-]
 
 export default {
   name: 'Home',
@@ -228,6 +214,22 @@ export default {
     quotes: {
       query: quotes,
     },
+    categories: {
+      query: categories,
+      prefetch: false,
+      manual: true,
+      async result({ data, loading }) {
+        if (!loading) {
+          await Promise.allSettled(data.categories.map(this.loadCategoryList))
+
+          this.unwatchIsViewportWidthUpMd = this.$watch(
+            'isViewportWidthUpMd',
+            this.handleCategorySectionLayout,
+            { immediate: true }
+          )
+        }
+      },
+    },
   },
 
   data() {
@@ -248,10 +250,7 @@ export default {
       },
       quotes: [],
 
-      categoryLists: CATEGORIES.map(({ NAME }) => ({
-        tag: NAME,
-        posts: [],
-      })),
+      categoryLists: [],
       isInitializingMacy: false,
       macyInstance: undefined,
       unwatchIsViewportWidthUpMd: undefined,
@@ -318,18 +317,19 @@ export default {
     shouldShowCategorySection() {
       return (
         (!this.isViewportWidthUpMd || this.macyInstance) &&
-        this.doesHaveCategoryList
+        this.doesHaveCategoryLists
       )
     },
-    doesHaveCategoryList() {
-      return this.categoryLists.some(this.doesHavePosts)
+    doesHaveCategoryLists() {
+      return this.displayedCategoryLists.length > 0
     },
     displayedCategoryLists() {
-      return this.categoryLists.filter(this.doesHavePosts)
+      return this.categoryLists.filter(function doesHaveItems(list) {
+        return list.items.length > 0
+      })
     },
   },
   mounted() {
-    this.handleCategoryLists()
     this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
@@ -384,21 +384,41 @@ export default {
       }
     },
 
-    async handleCategoryLists() {
-      await Promise.all(
-        CATEGORIES.map(({ ID }, idx) => this.loadCategoryList(ID, idx))
-      )
-
-      this.unwatchIsViewportWidthUpMd = this.$watch(
-        'isViewportWidthUpMd',
-        this.handleCategorySectionLayout,
-        { immediate: true }
-      )
-    },
-    async loadCategoryList(tagId, idx) {
+    async loadCategoryList(category, idx) {
       try {
-        const posts = (await this.$fetchPostsByTag(tagId)) || []
-        this.categoryLists[idx].posts = posts.map(transformPostContent)
+        const { data = {} } =
+          (await this.$apolloProvider.defaultClient.query({
+            query: categoryPosts,
+            variables: {
+              categorySlug: category.slug,
+            },
+            prefetch: false,
+          })) || {}
+        this.$set(this.categoryLists, idx, {
+          name: category.name,
+          items:
+            data?.items.map(function transformContent(post) {
+              const {
+                id = '',
+                name = '',
+                heroImage = {},
+                ogImage = {},
+                publishTime = '',
+              } = post || {}
+
+              return {
+                id,
+                title: name,
+                href: getHrefFromKeystone(post),
+                img:
+                  heroImage?.urlMobileSized ||
+                  ogImage?.urlMobileSized ||
+                  require('~/assets/default/post.svg'),
+                alt: heroImage?.name || ogImage?.name || '',
+                date: formatDate(publishTime),
+              }
+            }) || [],
+        })
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
@@ -412,7 +432,7 @@ export default {
 
       if (
         isViewportWidthUpMd &&
-        this.doesHaveCategoryList &&
+        this.doesHaveCategoryLists &&
         !this.isInitializingMacy
       ) {
         this.isInitializingMacy = true
@@ -507,18 +527,6 @@ export default {
       this.scrollDepthObserver.observe(document.getElementById(footerId))
     },
   },
-}
-
-function transformPostContent(post) {
-  const { id, title = '', publishedAt = '' } = post
-
-  return {
-    id,
-    title,
-    href: getHref(post),
-    img: getImg(post),
-    date: formatDate(publishedAt),
-  }
 }
 </script>
 
