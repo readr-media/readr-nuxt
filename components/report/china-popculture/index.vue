@@ -199,9 +199,19 @@ export default {
 .report-article {
   background-color: #f1f1f1 !important;
   .report-article__title {
-    span {
-      box-shadow: inset 0 -0.175em #f1f1f1,
-        inset 0 -0.55em rgba(255, 63, 63, 0.8);
+    &:first-child {
+      font-size: 28px;
+      span {
+        box-shadow: inset 0 -0.175em #f1f1f1,
+          inset 0 -0.55em rgba(255, 63, 63, 0.8);
+      }
+      @include media-breakpoint-up(md) {
+        font-size: 32px;
+      }
+    }
+    font-size: 24px;
+    @include media-breakpoint-up(md) {
+      font-size: 28px;
     }
   }
 
