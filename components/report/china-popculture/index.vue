@@ -193,20 +193,21 @@ export default {
   background-color: #f1f1f1 !important;
   .report-article__title {
     span {
-      box-shadow: inset 0 -0.175em white, inset 0 -0.55em rgba(255, 63, 63, 0.8);
+      box-shadow: inset 0 -0.175em #f1f1f1,
+        inset 0 -0.55em rgba(255, 63, 63, 0.8);
     }
   }
 
   .toggle {
-    border: 1px solid #ff3f3f;
-    background-color: white;
+    border: 1px solid #ff3f3f !important;
+    background-color: white !important;
     svg path {
       fill: #ff3f3f !important;
     }
   }
 
   .annotation {
-    background-color: #ffeded;
+    background-color: #ffeded !important;
   }
 }
 
