@@ -100,8 +100,8 @@ export default {
   computed: {
     coverImgs() {
       return {
-        large: this.getImageSrcByType('cp-cover-large'),
-        small: this.getImageSrcByType('cp-cover-small'),
+        large: require('~/assets/report/china-popculture/cp-cover-large.png'),
+        small: require('~/assets/report/china-popculture/cp-cover-small.png'),
       }
     },
     shouldHideHeader() {
@@ -142,14 +142,6 @@ export default {
     },
     hideLatestCoverages() {
       this.shouldShowLatestCoverages = false
-    },
-
-    getImageSrcByType(type) {
-      return (this.cmsData?.contentApiData?.images ?? []).find(
-        function findObjectByType(object) {
-          return object.type === type
-        }
-      )?.value?.urlMobileSized
     },
     handleGoToQuiz() {
       this.hideCover()
