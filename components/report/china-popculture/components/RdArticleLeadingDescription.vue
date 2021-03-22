@@ -64,11 +64,9 @@ export default {
   padding: 16px 24px;
   background-color: white;
   width: 90%;
-  min-height: 200px;
   text-align: justify;
   @include media-breakpoint-up(md) {
     width: 74%;
-    min-height: 140px;
   }
 }
 </style>
