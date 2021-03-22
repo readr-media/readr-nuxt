@@ -17,6 +17,19 @@
     </h1>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <p class="cover__description description" v-html="descriptionHtml"></p>
+    <div class="cover__navs navs">
+      <button
+        class="navs__to-to-quiz-button go-to-quiz-button"
+        @click="$emit('goToQuiz')"
+      >
+        <div v-text="textGoToQuiz" />
+      </button>
+      <button
+        class="navs__go-to-article-button go-to-article-button"
+        @click="$emit('goToArticle')"
+        v-text="textGoToArticle"
+      />
+    </div>
   </section>
 </template>
 
@@ -35,6 +48,14 @@ export default {
       default: '',
     },
     description: {
+      type: String,
+      default: '',
+    },
+    textGoToArticle: {
+      type: String,
+      default: '',
+    },
+    textGoToQuiz: {
       type: String,
       default: '',
     },
@@ -58,7 +79,7 @@ export default {
 <style lang="scss" scoped>
 .cp {
   .cover {
-    padding: 0 20px;
+    padding: 48px 20px;
     &__title {
       margin: 12px 0 0 0;
       @include media-breakpoint-up(md) {
@@ -72,12 +93,21 @@ export default {
       margin: 24px 0 0 0;
     }
     @include media-breakpoint-up(md) {
-      padding: 0;
+      padding: 60px 0;
       max-width: 568px;
       margin: 0 auto;
     }
     @include media-breakpoint-up(xl) {
       max-width: 600px;
+    }
+    &__navs {
+      margin: 6px 0 0;
+      @include media-breakpoint-up(md) {
+        margin: 38px 0 0 0;
+      }
+      @include media-breakpoint-up(xl) {
+        margin: 50px 0 0 0;
+      }
     }
   }
 
@@ -116,6 +146,72 @@ export default {
     @include media-breakpoint-up(md) {
       text-align: left;
     }
+  }
+
+  .navs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &__go-to-article-button {
+      margin: 20px 0 0 0;
+    }
+  }
+
+  .go-to-quiz-button {
+    width: 100%;
+    display: block;
+    text-decoration: none;
+    letter-spacing: 2.5px;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+
+    div {
+      padding: 12px 0 12px 2.5px;
+      transition: background-color 0.3s, color 0.3s;
+      z-index: 1;
+      position: relative;
+      border-radius: 2px;
+      background-color: #ff3f3f;
+      color: white;
+      border-color: white;
+
+      &:active {
+        background-color: #000928;
+        transition: none;
+        color: white;
+      }
+      &:hover {
+        background-color: #111111;
+        color: white;
+      }
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 100%;
+      height: 100%;
+      border-radius: 2px;
+      background-color: #111111;
+    }
+
+    @include media-breakpoint-up(md) {
+      width: 276px;
+    }
+  }
+  .go-to-article-button {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 2.5px;
+    text-decoration-line: underline;
+    color: #2b2b2b;
   }
 }
 </style>

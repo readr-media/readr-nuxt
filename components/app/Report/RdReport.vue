@@ -1,66 +1,22 @@
 <template>
   <div class="report">
-    <component :is="featureComponent" :cmsData="cmsData"></component>
-
-    <RdReportArticle
-      v-if="shouldMountArticle"
-      v-show="shouldShowArticle"
-      :contents="contentApiData.article.contents"
-      @sendGaEvent="sendGaEvent"
-    />
-    <RdReportExtras
-      v-if="shouldMountExtras"
-      v-show="shouldShowExtras"
-      :sections="contentApiData.extras"
-      @sendGaEvent="sendGaEvent"
-    />
-    <RdReportCredit
-      v-if="shouldMountCredit"
-      v-intersect="creditObserver"
-      :authors="contentApiData.credit"
-      :publishedAt="contentApiData.publishedAt"
-    />
-    <div v-if="shouldMountDonateButton" class="donate-button">
-      <readr-donate-button
-        @clickButton="sendGaClickEvent({ label: 'donate' })"
-      />
-    </div>
-    <LazyRenderer
-      v-if="shouldMountLatestCoverages"
-      v-show="shouldShowArticle"
-      class="latest-coverages"
-    >
-      <readr-latest-coverages />
-    </LazyRenderer>
+    <component
+      :is="featureComponent"
+      :cmsData="cmsData"
+      :reportSlug="slug"
+    ></component>
   </div>
 </template>
 
 <script>
 import archieml from 'archieml'
-import { mapState } from 'vuex'
-import LazyRenderer from 'vue-lazy-renderer'
-
-import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
-import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
-import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
-import {
-  setupIntersectionObserver,
-  cleanupIntersectionObserver,
-} from '~/components/helpers/index.js'
 import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 
 export default {
   name: 'RdReport',
-
-  components: {
-    LazyRenderer,
-    RdReportArticle,
-    RdReportExtras,
-    RdReportCredit,
-  },
 
   directives: {
     intersect,
@@ -74,50 +30,17 @@ export default {
     },
   },
 
-  data() {
-    return {
-      creditObserver: undefined,
-    }
-  },
-
   computed: {
-    ...mapState('report', [
-      'shouldMountArticle',
-      'shouldShowArticle',
-
-      'shouldMountExtras',
-      'shouldShowExtras',
-
-      'shouldMountCredit',
-      'shouldObserveCredit',
-
-      'shouldMountDonateButton',
-
-      'shouldMountLatestCoverages',
-      'shouldShowLatestCoverages',
-    ]),
-
     featureComponent() {
-      return () => import(`~/components/report/${this.report.slug}/index.vue`)
+      return () => import(`~/components/report/${this.slug}/index.vue`)
     },
     cmsData() {
       const aml = JSON.parse(this.report.contentApiData)
         .filter(function isNeededType(item) {
-          return ['unstyled', 'annotation', 'image'].includes(item.type)
+          return ['unstyled', 'annotation'].includes(item.type)
         })
-        .map(function buildContent({ type, content = [] } = {}) {
-          if (type === 'image') {
-            const [{ name, urlTabletSized, urlMobileSized }] = content || [{}]
-            return `
-              {.${type}}
-              name: ${name}
-              urlMobileSized: ${urlMobileSized}
-              urlTabletSized: ${urlTabletSized}
-              {}
-            `
-          }
-
-          return content[0]
+        .flatMap(function getContent(item) {
+          return item.content
         })
         .join('\n')
 
@@ -128,43 +51,12 @@ export default {
         contentApiData: json,
       }
     },
+
+    slug() {
+      return this.report.slug
+    },
     contentApiData() {
       return this.cmsData.contentApiData
-    },
-  },
-
-  mounted() {
-    this.setupCreditObserver()
-  },
-
-  beforeDestroy() {
-    cleanupIntersectionObserver(this, 'creditObserver')
-  },
-
-  methods: {
-    async setupCreditObserver() {
-      this.creditObserver = await setupIntersectionObserver((entries) => {
-        if (!this.shouldObserveCredit) {
-          return
-        }
-
-        entries.forEach(({ isIntersecting, target }) => {
-          if (isIntersecting) {
-            this.sendGaScrollEvent({ label: 'scroll to credit' })
-            this.creditObserver.unobserve(target)
-          }
-        })
-      })
-    },
-
-    sendGaEvent({ action, label, value }) {
-      this.$ga.event('projects', action, label, value)
-    },
-    sendGaClickEvent({ label, value }) {
-      this.sendGaEvent({ action: 'click', label, value })
-    },
-    sendGaScrollEvent({ label, value }) {
-      this.sendGaEvent({ action: 'scroll', label, value })
     },
   },
 
@@ -222,35 +114,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.donate-button {
-  padding: 24px 24px 28px 20px;
-  @include media-breakpoint-up(md) {
-    padding: 48px 24px 52px 20px;
-  }
-  @include media-breakpoint-up(xl) {
-    padding: 60px 24px 64px 20px;
-  }
-}
-
-readr-donate-button {
-  max-width: 476px;
-  margin: 0 auto;
-}
-
-.latest-coverages {
-  padding: 24px 8px;
-  @include media-breakpoint-up(md) {
-    padding: 48px 8px;
-  }
-  @include media-breakpoint-up(xl) {
-    padding: 60px 8px;
-  }
-}
-
-readr-latest-coverages {
-  margin: 0 auto;
-  max-width: 600px;
-}
-</style>

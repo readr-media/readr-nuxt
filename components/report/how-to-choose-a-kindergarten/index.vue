@@ -27,34 +27,61 @@
       />
     </div>
 
-    <div v-if="!shouldOpenGame" class="result">
-      <transition name="fade-in">
-        <RdChoiceResult
-          v-if="shouldOpenGameResult"
-          :id="NAV_ITEMS_IDS[0]"
+    <main>
+      <div v-show="!shouldOpenGame" class="result">
+        <div :id="NAV_ITEMS_IDS[0]" v-intersect="indexesObserver" />
+        <transition name="fade-in">
+          <RdChoiceResult
+            v-if="shouldOpenGameResult"
+            v-intersect="indexesObserver"
+            :results="gameResults"
+            @seeProfileStory="handleSeeProfileStory"
+            @replayGame="replayGame"
+            @sendGaEvent="sendGaEvent"
+          />
+        </transition>
+
+        <div :id="NAV_ITEMS_IDS[1]" v-intersect="indexesObserver" />
+        <RdProfileStory
           v-intersect="indexesObserver"
-          :results="gameResults"
-          @seeProfileStory="handleSeeProfileStory"
-          @replayGame="replayGame"
+          :cmsData="contentApiData.profile"
           @sendGaEvent="sendGaEvent"
         />
-      </transition>
 
-      <RdProfileStory
-        :id="NAV_ITEMS_IDS[1]"
-        v-intersect="indexesObserver"
-        :cmsData="contentApiData.profile"
-        @sendGaEvent="sendGaEvent"
+        <div :id="NAV_ITEMS_IDS[2]" v-intersect="indexesObserver" />
+        <RdReportArticle
+          :contents="contentApiData.article.contents"
+          :slug="reportSlug"
+          @sendGaEvent="sendGaEvent"
+        />
+        <RdReportExtras
+          :contents="contentApiData.extras.contents"
+          @sendGaEvent="sendGaEvent"
+        />
+      </div>
+
+      <RdReportCredit
+        :authors="contentApiData.credit"
+        :publishedAt="contentApiData.publishedAt"
+        :canSendGaEvent="canSendCreditGaEvent"
       />
+    </main>
 
-      <div id="report-article" v-intersect="indexesObserver" />
+    <div v-if="!shouldOpenGame" class="donate-button">
+      <readr-donate-button
+        @clickButton="sendGaClickEvent({ label: 'donate' })"
+      />
     </div>
+
+    <LazyRenderer v-show="!shouldOpenGame" class="latest-coverages">
+      <readr-latest-coverages />
+    </LazyRenderer>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import scrollIntoView from 'scroll-into-view'
+import LazyRenderer from 'vue-lazy-renderer'
 
 import RdNavbar from './components/RdNavbar.vue'
 import RdCover from './components/RdCover.vue'
@@ -62,6 +89,9 @@ import RdMultipleChoice from './components/RdMultipleChoice.vue'
 import RdChoiceResult from './components/RdChoiceResult.vue'
 import RdProfileStory from './components/RdProfileStory.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
+import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
+import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
+import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
@@ -78,12 +108,17 @@ export default {
   name: 'HowToChooseAKindergarten',
 
   components: {
+    LazyRenderer,
+
     RdNavbar,
     RdCover,
     RdMultipleChoice,
     RdChoiceResult,
     RdProfileStory,
     RdReportHeader,
+    RdReportArticle,
+    RdReportExtras,
+    RdReportCredit,
   },
 
   directives: {
@@ -97,6 +132,11 @@ export default {
       type: Object,
       required: true,
       default: () => ({}),
+    },
+    reportSlug: {
+      type: String,
+      required: true,
+      default: 'how-to-choose-a-kindergarten',
     },
   },
 
@@ -126,6 +166,8 @@ export default {
       isAutoScrolling: false,
 
       indexesObserver: undefined,
+
+      canSendCreditGaEvent: false,
     }
   },
 
@@ -138,14 +180,6 @@ export default {
     },
   },
 
-  beforeMount() {
-    this.unmountArticle()
-    this.unmountExtras()
-    this.unmountDonateButton()
-    this.unmountLatestCoverages()
-    this.unobserveCredit()
-  },
-
   mounted() {
     this.setupIndexesObserver()
   },
@@ -155,26 +189,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations('report', [
-      'unmountArticle',
-      'hideArticle',
-      'showArticle',
-
-      'unmountExtras',
-      'hideExtras',
-      'showExtras',
-
-      'unmountDonateButton',
-      'showDonateButton',
-
-      'unmountLatestCoverages',
-      'hideLatestCoverages',
-      'showLatestCoverages',
-
-      'unobserveCredit',
-      'observeCredit',
-    ]),
-
     handleSubmitChoices(choicesByCategory) {
       this.setGameResults(choicesByCategory)
       this.openResult()
@@ -234,11 +248,7 @@ export default {
       await this.$nextTick()
       this.jumpToTop()
       this.scrollTo(NAV_ITEMS_IDS[0])
-      this.hideArticle()
-      this.hideExtras()
-      this.unmountDonateButton()
-      this.hideLatestCoverages()
-      this.unobserveCredit()
+      this.canSendCreditGaEvent = false
     },
     handleSeeProfileStory() {
       this.scrollTo(NAV_ITEMS_IDS[1])
@@ -246,11 +256,7 @@ export default {
     showMainBody() {
       this.closeGame()
       this.jumpToTop()
-      this.showArticle()
-      this.showExtras()
-      this.showDonateButton()
-      this.showLatestCoverages()
-      this.observeCredit()
+      this.canSendCreditGaEvent = true
     },
     openGame() {
       this.shouldOpenGame = true
@@ -511,6 +517,36 @@ readr-header {
   @include media-breakpoint-up(md) {
     padding-top: $header-height--md;
   }
+}
+
+.donate-button {
+  padding: 24px 24px 28px 20px;
+  @include media-breakpoint-up(md) {
+    padding: 48px 24px 52px 20px;
+  }
+  @include media-breakpoint-up(xl) {
+    padding: 60px 24px 64px 20px;
+  }
+}
+
+readr-donate-button {
+  max-width: 476px;
+  margin: 0 auto;
+}
+
+.latest-coverages {
+  padding: 24px 8px;
+  @include media-breakpoint-up(md) {
+    padding: 48px 8px;
+  }
+  @include media-breakpoint-up(xl) {
+    padding: 60px 8px;
+  }
+}
+
+readr-latest-coverages {
+  margin: 0 auto;
+  max-width: 600px;
 }
 
 .fade-in {
