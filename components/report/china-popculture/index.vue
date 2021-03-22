@@ -26,6 +26,11 @@
       @close="hideQuizInfoAndMemoize"
     />
     <section v-show="shouldShowArticle" class="article">
+      <div class="article__article-leading-description-wrapper">
+        <RdArticleLeadingDescription
+          :description="cmsData.contentApiData.articleLeadingDescription"
+        />
+      </div>
       <RdReportArticle
         :contents="cmsData.contentApiData.article.contents"
         @sendGaEvent="sendGaEvent"
@@ -57,6 +62,7 @@ import LazyRenderer from 'vue-lazy-renderer'
 import RdSectionNav from './components/RdSectionNav.vue'
 import RdCover from './components/RdCover.vue'
 import RdQuizInfo from './components/RdQuizInfo.vue'
+import RdArticleLeadingDescription from './components/RdArticleLeadingDescription.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
@@ -75,6 +81,7 @@ export default {
     RdCover,
     RdQuizInfo,
 
+    RdArticleLeadingDescription,
     RdReportArticle,
     RdReportExtras,
     RdReportCredit,
@@ -304,6 +311,18 @@ a.sc-readr-donate-button {
   }
   @include media-breakpoint-up(md) {
     top: 84px;
+  }
+}
+
+.article {
+  &__article-leading-description-wrapper {
+    background-color: #f1f1f1;
+    padding: 48px 20px 0 20px;
+    display: flex;
+    justify-content: center;
+    @include media-breakpoint-up(xl) {
+      padding: 60px 0 0 0;
+    }
   }
 }
 
