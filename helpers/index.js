@@ -6,4 +6,4 @@ export { isProdEnv }
 
 export { reportApiErrorFromKoa, logApiError, getErrorName } from './error.js'
 
-export { getHref, getHrefFromKeystone, getImg, formatDate } from './post.js'
+export { getHrefFromKeystone, formatDate } from './post.js'
