@@ -3,6 +3,7 @@ import LazyRenderer from 'vue-lazy-renderer'
 import RdTitle from '~/components/shared/RdTitle.vue'
 import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnotation.vue'
 import RdInfogram from '~/components/shared/RdInfogram.vue'
+import RdFlourish from '~/components/shared/RdFlourish.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
@@ -99,6 +100,15 @@ export default {
           return (
             <LazyRenderer class="report-article__infogram" preLoad={2}>
               <RdInfogram chartId={id} title={title} />
+            </LazyRenderer>
+          )
+        }
+
+        case 'flourish': {
+          const { id = '', title = '', info = '' } = content.value
+          return (
+            <LazyRenderer class="report-article__flourish" preLoad={2}>
+              <RdFlourish chartId={id} title={title} info={info} />
             </LazyRenderer>
           )
         }
