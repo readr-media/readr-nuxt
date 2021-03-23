@@ -10406,12 +10406,6 @@ nuxt-ssr-cache@^1.5.2:
     cache-manager-memcached-store "^2.1.0"
     cache-manager-redis "^0.6.0"
 
-"nuxt-vitals@https://github.com/yeefun/nuxt-vitals/tarball/475c9c3acb541dc9d921cbefcd0fd68300c2d2c3":
-  version "1.1.0"
-  resolved "https://github.com/yeefun/nuxt-vitals/tarball/475c9c3acb541dc9d921cbefcd0fd68300c2d2c3#393ec118de973c8d0795abd621e3d929a3a9f450"
-  dependencies:
-    web-vitals "^0.2.1"
-
 nuxt@2.14.7:
   version "2.14.7"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-2.14.7.tgz#041bb3f5c659b1fec80042d974f68a0ed4e93aa9"
@@ -14563,11 +14557,6 @@ watchpack@^1.7.4:
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"
-
-web-vitals@^0.2.1:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-0.2.4.tgz#ec3df43c834a207fd7cdefd732b2987896e08511"
-  integrity sha512-6BjspCO9VriYy12z356nL6JBS0GYeEcA457YyRzD+dD6XYCQ75NKhcOHUMHentOE7OcVCIXXDvOm0jKFfQG2Gg==
 
 webpack-bundle-analyzer@^3.9.0:
   version "3.9.0"
