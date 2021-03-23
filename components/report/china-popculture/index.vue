@@ -33,6 +33,7 @@
       </div>
       <RdReportArticle
         :contents="cmsData.contentApiData.article.contents"
+        :slug="'china-popculture'"
         @sendGaEvent="sendGaEvent"
       />
       <RdReportExtras
