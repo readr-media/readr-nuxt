@@ -5,15 +5,15 @@ const { logApiError } = require('~/helpers/index.js')
 
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
 
-const publicApi = createAxios({
-  baseURL: `${baseUrl}/api/public`,
+const apiAxios = createAxios({
+  baseURL: `${baseUrl}/api`,
   timeout: 20000,
 })
 
 function createPost(requestUrl) {
   return async function (params = {}) {
     try {
-      const { data } = await publicApi.post(requestUrl, params)
+      const { data } = await apiAxios.post(requestUrl, params)
       return camelizeKeys(data).items
     } catch (err) {
       logApiError(err, 'Donate')
@@ -23,10 +23,10 @@ function createPost(requestUrl) {
 }
 
 async function postDonate(params = {}) {
-  return await createPost(`${baseUrl}/api/donate`)(params)
+  return await createPost('/donate')(params)
 }
 async function postSubscribe(params = {}) {
-  return await createPost(`${baseUrl}/api/subscriptions`)(params)
+  return await createPost('/subscriptions')(params)
 }
 
 Object.assign(module.exports, {
