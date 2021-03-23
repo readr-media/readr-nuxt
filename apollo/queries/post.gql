@@ -18,3 +18,27 @@ query post($id: ID!) {
     updatedAt
   }
 }
+
+query news($id: ID!) {
+  news: Post(where: { id: $id }) {
+    title: name
+    heroImage {
+      name
+      urlMobileSized
+      urlDesktopSized
+    }
+    contentHtml
+    ogTitle
+    ogDescription
+    ogImage {
+      name
+      urlMobileSized
+      urlDesktopSized
+    }
+    tags {
+      name
+    }
+    publishTime
+    updatedAt
+  }
+}

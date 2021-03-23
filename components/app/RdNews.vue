@@ -3,11 +3,15 @@
     <RdHeaderProgress @sendGaEvent="sendGaScrollEvent('end')" />
 
     <article id="post">
-      <div class="date">{{ publishedAt }}</div>
+      <div class="date">{{ news.date }}</div>
       <h1>{{ news.title }}</h1>
       <div class="container container--post">
-        <picture v-if="heroImg" class="hero-img">
-          <img :src="heroImg" alt="" />
+        <picture v-if="heroImg.src.xs" class="hero-img">
+          <source
+            :media="`(min-width: ${breakpointSm})`"
+            :srcset="heroImg.src.sm"
+          />
+          <img :src="heroImg.src.xs" :alt="heroImg.alt" />
         </picture>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div class="content" v-html="news.content" />
@@ -82,8 +86,9 @@ import RdList from '~/components/shared/List/RdList.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.gql'
 
-import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
+import { SITE_URL } from '~/constants/metadata.js'
 import { getHrefFromKeystone, formatDate } from '~/helpers/index.js'
+import styleVariables from '~/scss/_variables.scss'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
@@ -223,15 +228,13 @@ export default {
   data() {
     return {
       latestPosts: [],
+      breakpointSm: styleVariables['breakpoint-sm'],
     }
   },
 
   computed: {
     heroImg() {
-      return this.news.heroImage || this.news.ogImage
-    },
-    publishedAt() {
-      return formatDate(this.news.publishedAt)
+      return this.news.heroImg
     },
   },
 
@@ -249,23 +252,13 @@ export default {
 
   head() {
     const {
-      ogTitle,
-      title,
+      metaTitle,
       ogDescription,
-      ogImage,
-      heroImage,
-      publishedAt,
+      ogImg,
+      ogTags,
+      publishTime,
       updatedAt,
-      tags = [],
     } = this.news
-
-    const metaTitle = `${ogTitle || title} - ${SITE_TITLE}`
-    const ogImg = ogImage || heroImage || '/og.jpg'
-    const ogUrl = `${SITE_URL}${this.$route.path}`
-    const ogTags = tags.map((tag) => ({
-      property: 'article:tag',
-      content: tag.text,
-    }))
 
     const metaOg = [
       { hid: 'og:title', property: 'og:title', content: metaTitle },
@@ -275,13 +268,17 @@ export default {
         content: ogDescription,
       },
       { hid: 'og:image', property: 'og:image', content: ogImg },
-      { hid: 'og:url', property: 'og:url', content: ogUrl },
+      {
+        hid: 'og:url',
+        property: 'og:url',
+        content: `${SITE_URL}${this.$route.path}`,
+      },
       { hid: 'og:type', property: 'og:type', content: 'article' },
       {
         property: 'article:publisher',
         content: 'https://www.facebook.com/readr.tw',
       },
-      { property: 'article:published_time', content: publishedAt },
+      { property: 'article:published_time', content: publishTime },
       { property: 'article:modified_time', content: updatedAt },
       ...ogTags,
     ]
