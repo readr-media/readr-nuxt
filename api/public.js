@@ -1,6 +1,6 @@
 const Koa = require('koa')
 const Router = require('koa-router')
-const { create: createAxios } = require('axios')
+const { create: axiosCreate } = require('axios')
 
 const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config.js')
 const { getErrorName } = require('../helpers/index.js')
@@ -12,7 +12,7 @@ const router = new Router()
 app.use(handleCors)
 app.use(router.routes())
 
-const cmsDeprecatedApi = createAxios({
+const cmsDeprecatedAxios = axiosCreate({
   baseURL: CMS_ENDPOINT_DEPRECATED,
 })
 
@@ -27,7 +27,7 @@ router.get('/posts', checkPostsQueryFields, async function getPosts(ctx) {
   }
 
   try {
-    const { data, status = 200 } = await cmsDeprecatedApi.get(ctx.url)
+    const { data, status = 200 } = await cmsDeprecatedAxios.get(ctx.url)
 
     ctx.status = status
     ctx.body = data

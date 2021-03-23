@@ -1,10 +1,10 @@
 import { camelizeKeys } from 'humps'
-import { create as createAxios } from 'axios'
+import { create as axiosCreate } from 'axios'
 
 import { logApiError } from '~/helpers/index.js'
 
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
-const apiAxios = createAxios({
+const apiAxios = axiosCreate({
   baseURL: `${baseUrl}/api`,
   timeout: 20000,
 })
