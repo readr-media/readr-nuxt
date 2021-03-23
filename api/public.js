@@ -36,17 +36,6 @@ router.get('/posts', checkPostsQueryFields, async function getPosts(ctx) {
   }
 })
 
-router.get('/post/:id', async function getPost(ctx) {
-  try {
-    const { data, status = 200 } = await cmsDeprecatedApi.get(ctx.url)
-
-    ctx.status = status
-    ctx.body = data
-  } catch ({ response = {} }) {
-    ctx.status = response.status || 404
-  }
-})
-
 async function checkQueryFields(notAllowedFields, ctx, next) {
   if (hasAllValidQueryFields(notAllowedFields, ctx.query)) {
     await next()
