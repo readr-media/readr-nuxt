@@ -141,7 +141,7 @@ import {
   cleanupIntersectionObserver,
 } from '~/components/helpers/index.js'
 import styleVariables from '~/scss/_variables.module.scss'
-import { getHrefFromKeystone, formatDate } from '~/helpers/index.js'
+import { getHref, formatDate } from '~/helpers/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'
 
@@ -193,7 +193,7 @@ export default {
           return {
             id,
             title: name,
-            href: getHrefFromKeystone(post),
+            href: getHref(post),
             img:
               heroImage?.urlTabletSized ||
               ogImage?.urlTabletSized ||
@@ -409,7 +409,7 @@ export default {
               return {
                 id,
                 title: name,
-                href: getHrefFromKeystone(post),
+                href: getHref(post),
                 img:
                   heroImage?.urlMobileSized ||
                   ogImage?.urlMobileSized ||

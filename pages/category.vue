@@ -45,7 +45,7 @@ import RdListItemCategory from '~/components/shared/List/RdListItemCategory.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.gql'
 
-import { getHrefFromKeystone, formatDate } from '~/helpers/index.js'
+import { getHref, formatDate } from '~/helpers/index.js'
 
 export default {
   name: 'Category',
@@ -92,7 +92,7 @@ export default {
             return {
               id,
               title: name,
-              href: getHrefFromKeystone(post),
+              href: getHref(post),
               img:
                 heroImage?.urlTabletSized ||
                 ogImage?.urlTabletSized ||

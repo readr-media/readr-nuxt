@@ -4,7 +4,7 @@ import {
 } from '@readr-media/old-news-project-slugs'
 import dayjs from 'dayjs'
 
-function getHrefFromKeystone({ style, id, slug } = {}) {
+function getHref({ style, id, slug } = {}) {
   switch (style) {
     case 'news':
       return `/post/${id}`
@@ -25,4 +25,4 @@ function formatDate(datetime = '') {
   return dayjs(datetime).format('MMM D, YYYY')
 }
 
-export { getHrefFromKeystone, formatDate }
+export { getHref, formatDate }

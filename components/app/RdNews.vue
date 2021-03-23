@@ -87,7 +87,7 @@ import RdList from '~/components/shared/List/RdList.vue'
 import { latestPosts } from '~/apollo/queries/posts.gql'
 
 import { SITE_URL } from '~/constants/metadata.js'
-import { getHrefFromKeystone, formatDate } from '~/helpers/index.js'
+import { getHref, formatDate } from '~/helpers/index.js'
 import styleVariables from '~/scss/_variables.scss'
 
 if (process.browser) {
@@ -212,7 +212,7 @@ export default {
           return {
             id,
             title: name,
-            href: getHrefFromKeystone(post),
+            href: getHref(post),
             img:
               heroImage?.urlTabletSized ||
               ogImage?.urlTabletSized ||

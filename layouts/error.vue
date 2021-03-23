@@ -34,7 +34,7 @@ import RdButtonPrimary from '~/components/shared/Button/RdButtonPrimary.vue'
 
 import { latestPostsInErrorPage } from '~/apollo/queries/posts.gql'
 
-import { getHrefFromKeystone } from '~/helpers/index.js'
+import { getHref } from '~/helpers/index.js'
 import { SITE_TITLE } from '~/constants/metadata.js'
 
 export default {
@@ -79,7 +79,7 @@ export default {
           return {
             id,
             title: name,
-            href: getHrefFromKeystone(post),
+            href: getHref(post),
             img:
               heroImage?.urlMobileSized ||
               ogImage?.urlMobileSized ||
