@@ -246,8 +246,10 @@
 <script>
 import dayjs from 'dayjs'
 
-import RdDonateRadioItem from '~/components/shared/Donate/RdDonateRadioItem.vue'
+import { postDonate, postSubscribe } from './utils.js'
 import { TAPPAY as configTappay } from '~/configs/config'
+
+import RdDonateRadioItem from '~/components/shared/Donate/RdDonateRadioItem.vue'
 
 const CARRIER_TYPE_NUM = {
   carrierEmail: '2',
@@ -431,11 +433,11 @@ export default {
         requestBody.invoiceInfos.carrierNum = this.carrierInfo?.carrierNum
       }
 
-      return this.$postSubscribe(requestBody)
+      return postSubscribe(requestBody)
     },
 
     processOnce(primeResult, now) {
-      return this.$postDonate({
+      return postDonate({
         invoiceItem: {
           businessTitle: this.carrierInputs?.carrierBusiness?.title,
           businessTaxNo: this.carrierInputs?.carrierBusiness?.taxNumber,

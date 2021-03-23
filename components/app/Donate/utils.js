@@ -1,10 +1,9 @@
-const { camelizeKeys } = require('humps')
-const { create: createAxios } = require('axios')
+import { camelizeKeys } from 'humps'
+import { create as createAxios } from 'axios'
 
-const { logApiError } = require('~/helpers/index.js')
+import { logApiError } from '~/helpers/index.js'
 
 const baseUrl = process.browser ? `//${location.host}` : process.env.BASE_URL
-
 const apiAxios = createAxios({
   baseURL: `${baseUrl}/api`,
   timeout: 20000,
@@ -29,7 +28,4 @@ async function postSubscribe(params = {}) {
   return await createPost('/subscriptions')(params)
 }
 
-Object.assign(module.exports, {
-  postDonate,
-  postSubscribe,
-})
+export { postDonate, postSubscribe }
