@@ -80,11 +80,13 @@ export default {
             id,
             title: name,
             href: getHref(post),
-            img:
-              heroImage?.urlMobileSized ||
-              ogImage?.urlMobileSized ||
-              require('~/assets/default/post.svg'),
-            alt: heroImage?.name || ogImage?.name || '',
+            img: {
+              src:
+                heroImage?.urlMobileSized ||
+                ogImage?.urlMobileSized ||
+                require('~/assets/default/post.svg'),
+              alt: heroImage?.name || ogImage?.name || '',
+            },
           }
         })
       },

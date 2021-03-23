@@ -4,7 +4,7 @@
       <article>
         <a :href="post.href" target="_blank" @click="$emit('sendGaEvent')">
           <div class="img-wrapper">
-            <img v-lazy="post.img" :alt="post.alt" />
+            <img v-lazy="post.img.src" :alt="post.img.alt" />
           </div>
           <div class="text-wrapper">
             <h1>{{ post.title }}</h1>

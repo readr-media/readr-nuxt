@@ -3,7 +3,7 @@
     <a :href="post.href" target="_blank">
       <article>
         <picture>
-          <img :src="post.img" :alt="post.alt" />
+          <img :src="post.img.src" :alt="post.img.alt" />
         </picture>
         <h1>{{ post.title }}</h1>
         <div class="date">{{ post.date }}</div>

@@ -93,11 +93,13 @@ export default {
               id,
               title: name,
               href: getHref(post),
-              img:
-                heroImage?.urlTabletSized ||
-                ogImage?.urlTabletSized ||
-                require('~/assets/default/post.svg'),
-              alt: heroImage?.name || ogImage?.name || '',
+              img: {
+                src:
+                  heroImage?.urlTabletSized ||
+                  ogImage?.urlTabletSized ||
+                  require('~/assets/default/post.svg'),
+                alt: heroImage?.name || ogImage?.name || '',
+              },
               date: formatDate(publishTime),
             }
           }),

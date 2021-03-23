@@ -3,7 +3,7 @@
     <a v-for="post in posts" :key="post.id" :href="post.href" target="_blank">
       <article>
         <div class="img-wrapper">
-          <img v-lazy="post.img" :alt="post.alt" />
+          <img v-lazy="post.img.src" :alt="post.img.alt" />
         </div>
         <h1>{{ post.title }}</h1>
       </article>
