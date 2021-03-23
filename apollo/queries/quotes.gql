@@ -1,5 +1,9 @@
 query quotes {
-  quotes: allQuotes(first: 10, where: {state: published}, sortBy: [publishTime_DESC]) {
+  quotes: allQuotes(
+    first: 10
+    where: { state: published }
+    sortBy: [publishTime_DESC]
+  ) {
     id
     title: name
     byline
