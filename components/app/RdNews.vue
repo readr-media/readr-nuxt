@@ -3,8 +3,8 @@
     <RdHeaderProgress @sendGaEvent="sendGaScrollEvent('end')" />
 
     <article id="post">
-      <div class="date">{{ news.date }}</div>
-      <h1>{{ news.title }}</h1>
+      <div class="date">{{ transformedNews.date }}</div>
+      <h1>{{ transformedNews.title }}</h1>
       <div class="container container--post">
         <picture v-if="heroImg.src.xs" class="hero-img">
           <source
@@ -14,7 +14,7 @@
           <img :src="heroImg.src.xs" :alt="heroImg.alt" />
         </picture>
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="content" v-html="news.content" />
+        <div class="content" v-html="transformedNews.contentHtml" />
       </div>
     </article>
 
@@ -86,7 +86,7 @@ import RdList from '~/components/shared/List/RdList.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.gql'
 
-import { SITE_URL } from '~/constants/metadata.js'
+import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 import { getHref, formatDate } from '~/helpers/index.js'
 import styleVariables from '~/scss/_variables.scss'
 
@@ -235,8 +235,46 @@ export default {
   },
 
   computed: {
+    transformedNews() {
+      const {
+        title = '',
+        heroImage = {},
+        contentHtml = '',
+        ogTitle = '',
+        ogDescription = '',
+        ogImage = {},
+        tags = [],
+        publishTime = '',
+        updatedAt = '',
+      } = this.news
+
+      return {
+        title,
+        heroImg: {
+          src: {
+            xs: heroImage?.urlMobileSized,
+            sm: heroImage?.urlDesktopSized,
+          },
+          alt: heroImage?.name || '',
+        },
+        date: formatDate(publishTime),
+        contentHtml,
+        metaTitle: `${ogTitle || title} - ${SITE_TITLE}`,
+        ogDescription,
+        ogImg:
+          ogImage?.urlDesktopSized || heroImage?.urlDesktopSized || '/og.jpg',
+        ogTags: tags.map(function (tag) {
+          return {
+            property: 'article:tag',
+            content: tag.name,
+          }
+        }),
+        publishTime,
+        updatedAt,
+      }
+    },
     heroImg() {
-      return this.news.heroImg
+      return this.transformedNews.heroImg
     },
   },
 
@@ -260,7 +298,7 @@ export default {
       ogTags,
       publishTime,
       updatedAt,
-    } = this.news
+    } = this.transformedNews
 
     const metaOg = [
       { hid: 'og:title', property: 'og:title', content: metaTitle },

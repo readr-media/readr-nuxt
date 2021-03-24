@@ -1,5 +1,5 @@
 query report($id: ID!) {
-  report: Post(where: { id: $id }) {
+  post: Post(where: { id: $id }) {
     slug
     title: name
     heroImage {
@@ -20,7 +20,7 @@ query report($id: ID!) {
 }
 
 query news($id: ID!) {
-  news: Post(where: { id: $id }) {
+  post: Post(where: { id: $id }) {
     title: name
     heroImage {
       name

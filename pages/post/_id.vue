@@ -8,9 +8,6 @@
 <script>
 import { news, report } from '~/apollo/queries/post.gql'
 
-import { SITE_TITLE } from '~/constants/metadata.js'
-import { formatDate } from '~/helpers/index.js'
-
 const KEYSTONE_POST_IDS = [2749, 2834, 2836, 2840]
 
 export default {
@@ -21,12 +18,17 @@ export default {
     RdReport: () => import('~/components/app/Report/RdReport.vue'),
   },
 
-  async fetch() {
-    if (this.shouldMountNews) {
-      await this.loadNews()
-    } else {
-      await this.loadReport()
-    }
+  apollo: {
+    post: {
+      query() {
+        return this.shouldMountNews ? news : report
+      },
+      variables() {
+        return {
+          id: this.postId,
+        }
+      },
+    },
   },
 
   data() {
@@ -41,61 +43,6 @@ export default {
     },
     shouldMountNews() {
       return !KEYSTONE_POST_IDS.includes(Number(this.postId))
-    },
-  },
-
-  methods: {
-    async loadNews() {
-      const response =
-        (await this.$apolloProvider.defaultClient.query({
-          query: news,
-          variables: {
-            id: this.postId,
-          },
-        })) || {}
-      const {
-        title = '',
-        heroImage = {},
-        contentHtml = '',
-        ogTitle = '',
-        ogDescription = '',
-        ogImage = {},
-        tags = [],
-        publishTime = '',
-        updatedAt = '',
-      } = response.data?.news || {}
-      this.post = {
-        title,
-        heroImg: {
-          src: {
-            xs: heroImage?.urlMobileSized,
-            sm: heroImage?.urlDesktopSized,
-          },
-          alt: heroImage?.name || '',
-        },
-        date: formatDate(publishTime),
-        content: contentHtml,
-        metaTitle: `${ogTitle || title} - ${SITE_TITLE}`,
-        ogDescription,
-        ogImg:
-          ogImage?.urlDesktopSized || heroImage?.urlDesktopSized || '/og.jpg',
-        ogTags: tags.map((tag) => ({
-          property: 'article:tag',
-          content: tag.name,
-        })),
-        publishTime,
-        updatedAt,
-      }
-    },
-    async loadReport() {
-      const response =
-        (await this.$apollo.query({
-          query: report,
-          variables: {
-            id: this.postId,
-          },
-        })) || {}
-      this.post = response.data?.report || {}
     },
   },
 }
