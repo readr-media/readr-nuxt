@@ -18,13 +18,7 @@
       @goToQuiz="handleNavigateToIndex(0)"
       @goToArticle="handleNavigateToIndex(1)"
     />
-    <RdQuizInfo
-      v-show="shouldShowQuizInfo"
-      :title="cmsData.contentApiData.quizInfo.title"
-      :description="cmsData.contentApiData.quizInfo.description"
-      :textSubmit="cmsData.contentApiData.quizInfo.textSubmit"
-      @close="hideQuizInfoAndMemoize"
-    />
+    <RdQuiz v-show="shouldShowQuiz" :cmsData="cmsData" />
     <section v-show="shouldShowArticle" class="article">
       <div class="article__article-leading-description-wrapper">
         <RdArticleLeadingDescription
@@ -62,10 +56,10 @@ import LazyRenderer from 'vue-lazy-renderer'
 
 import RdSectionNav from './components/RdSectionNav.vue'
 import RdCover from './components/RdCover.vue'
-import RdQuizInfo from './components/RdQuizInfo.vue'
 import RdArticleLeadingDescription from './components/RdArticleLeadingDescription.vue'
-import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
+import RdQuiz from './components/RdQuiz.vue'
 
+import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
@@ -80,7 +74,7 @@ export default {
 
     RdSectionNav,
     RdCover,
-    RdQuizInfo,
+    RdQuiz,
 
     RdArticleLeadingDescription,
     RdReportArticle,
@@ -98,10 +92,9 @@ export default {
   data() {
     return {
       shouldShowCover: true,
-      shouldShowQuizInfo: false,
+      shouldShowQuiz: false,
       shouldShowArticle: false,
       shouldShowLatestCoverages: false,
-      quizInfoCookieName: 'chinaPopcultureReadQuizInfo',
       sectionIndex: -1,
     }
   },
@@ -135,15 +128,11 @@ export default {
     hideCover() {
       this.shouldShowCover = false
     },
-    showQuizInfo() {
-      this.shouldShowQuizInfo = true
+    showQuiz() {
+      this.shouldShowQuiz = true
     },
-    hideQuizInfo() {
-      this.shouldShowQuizInfo = false
-    },
-    hideQuizInfoAndMemoize() {
-      this.hideQuizInfo()
-      document.cookie = `${this.quizInfoCookieName}=true`
+    hideQuiz() {
+      this.shouldShowQuiz = false
     },
     showLatestCoverages() {
       this.shouldShowLatestCoverages = true
@@ -157,32 +146,13 @@ export default {
       this.hideArticle()
       this.hideLatestCoverages()
 
-      if (!getCookie(this.quizInfoCookieName)) {
-        this.showQuizInfo()
-      }
+      this.showQuiz()
       window.scrollTo(0, 0)
-
-      function getCookie(cname) {
-        const name = cname + '='
-        const ca = document.cookie.split(';')
-        for (let i = 0; i < ca.length; i++) {
-          let c = ca[i]
-          // eslint-disable-next-line eqeqeq
-          while (c.charAt(0) == ' ') {
-            c = c.substring(1)
-          }
-          // eslint-disable-next-line eqeqeq
-          if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length)
-          }
-        }
-        return ''
-      }
     },
     handleGoToArticle() {
       this.hideCover()
 
-      this.hideQuizInfo()
+      this.hideQuiz()
 
       this.showArticle()
       // this.observeCredit()
