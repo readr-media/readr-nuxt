@@ -233,22 +233,8 @@ a.sc-readr-donate-button {
   }
 }
 
-.default__footer {
+#default-footer {
   background-color: #ebebeb !important;
-  position: relative;
-  &:before {
-    display: none;
-    @include media-breakpoint-up(xl) {
-      z-index: -1;
-      position: absolute;
-      left: calc((100vw - 1096px) / 2 * -1);
-      display: block;
-      content: '';
-      width: 100vw;
-      height: 100%;
-      background-color: #ebebeb !important;
-    }
-  }
 }
 </style>
 
