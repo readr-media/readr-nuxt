@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section class="quiz">
     <RdQuizInfo
       v-show="shouldShowQuizInfo"
       :title="cmsData.contentApiData.quizInfo.title"
@@ -7,14 +7,18 @@
       :textSubmit="cmsData.contentApiData.quizInfo.textSubmit"
       @close="hideQuizInfoAndMemoize"
     />
-  </div>
+    <RdQuizHeader class="quiz__header" />
+  </section>
 </template>
 
 <script>
 import RdQuizInfo from '../components/RdQuizInfo.vue'
+import RdQuizHeader from '../components/RdQuizHeader'
 
 export default {
+  name: 'RdQuiz',
   components: {
+    RdQuizHeader,
     RdQuizInfo,
   },
   props: {
@@ -66,5 +70,3 @@ function getCookie(cname) {
   return ''
 }
 </script>
-
-<style lang="scss" scoped></style>
