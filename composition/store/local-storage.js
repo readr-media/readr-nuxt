@@ -12,8 +12,6 @@ const state = reactive({
   userUuid,
   isReadr2User,
 
-  shouldOpenGdpr: true,
-
   ...savedState,
 })
 
@@ -21,14 +19,8 @@ watchEffect(() => {
   window.localStorage.setItem('readr3', JSON.stringify(state))
 })
 
-function closeGdpr() {
-  state.shouldOpenGdpr = false
-}
-
 const stateAsRef = toRefs(state)
 
 Object.assign(module.exports, {
   state: stateAsRef,
-
-  closeGdpr,
 })

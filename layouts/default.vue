@@ -9,9 +9,7 @@
       @privacyLinkClick="sendGaClickFooterEvent('privacy')"
     />
 
-    <ClientOnly>
-      <RdGdpr v-if="shouldOpenGdpr" @cancel="closeGdpr" />
-    </ClientOnly>
+    <RdGdpr />
   </div>
 </template>
 
@@ -24,21 +22,13 @@ import RdGdpr from '~/components/shared/RdGdpr.vue'
 if (process.browser) {
   // eslint-disable-next-line no-var
   var {
-    state: { isReadr2User, shouldOpenGdpr },
-    closeGdpr,
+    state: { isReadr2User },
   } = require('~/composition/store/local-storage.js')
 }
 
 export default {
   components: {
     RdGdpr,
-  },
-
-  setup() {
-    return {
-      shouldOpenGdpr,
-      closeGdpr,
-    }
   },
 
   beforeMount() {

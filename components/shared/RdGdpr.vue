@@ -1,24 +1,50 @@
 <template>
-  <div class="the-gdpr">
-    <button type="button" @click="$emit('cancel')">
-      <span>我知道了</span>
-    </button>
-    <div class="explan">
-      <p>
-        本網站使用 cookie
-        以及相關技術分析來改善使用者體驗。點選「我知道了」，視窗會關閉。<a
-          href="https://www.readr.tw/privacy-rule"
-          target="_blank"
-          >了解更多</a
-        >
-      </p>
-    </div>
+  <div v-if="shouldOpenGdpr" class="the-gdpr">
+    <ClientOnly>
+      <button type="button" @click="closeGdpr">
+        <span>我知道了</span>
+      </button>
+      <div class="explan">
+        <p>
+          本網站使用 cookie
+          以及相關技術分析來改善使用者體驗。點選「我知道了」，視窗會關閉。<a
+            href="https://www.readr.tw/privacy-rule"
+            target="_blank"
+            >了解更多</a
+          >
+        </p>
+      </div>
+    </ClientOnly>
   </div>
 </template>
 
 <script>
 export default {
   name: 'RdGdpr',
+
+  data() {
+    return {
+      shouldOpenGdpr: false,
+    }
+  },
+
+  mounted() {
+    this.handleGdpr()
+  },
+
+  methods: {
+    handleGdpr() {
+      this.shouldOpenGdpr =
+        JSON.parse(window.localStorage.getItem('readr3.shouldOpenGdpr')) ?? true
+    },
+    closeGdpr() {
+      this.shouldOpenGdpr = false
+      window.localStorage.setItem(
+        'readr3.shouldOpenGdpr',
+        JSON.stringify(this.shouldOpenGdpr)
+      )
+    },
+  },
 }
 </script>
 
