@@ -11,7 +11,7 @@ import { post, news } from '~/apollo/queries/post.gql'
 import { SITE_TITLE } from '~/constants/metadata.js'
 import { formatDate } from '~/helpers/index.js'
 
-const KEYSTONE_DEV_POST_IDS = [2749, 2834, 2836, 2840]
+const KEYSTONE_POST_IDS = [2749, 2834, 2836, 2840]
 
 export default {
   name: 'Post',
@@ -40,7 +40,7 @@ export default {
       return this.$route.params.id
     },
     shouldMountNews() {
-      return !KEYSTONE_DEV_POST_IDS.includes(Number(this.postId))
+      return !KEYSTONE_POST_IDS.includes(Number(this.postId))
     },
   },
 
@@ -88,9 +88,8 @@ export default {
       }
     },
     async loadReport() {
-      const { keystoneDevClient } = this.$apolloProvider.clients
       const response =
-        (await keystoneDevClient.query({
+        (await this.$apollo.query({
           query: post,
           variables: {
             id: this.postId,
