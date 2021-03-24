@@ -8,7 +8,7 @@
 <script>
 import { news, report } from '~/apollo/queries/post.gql'
 
-import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
+import { SITE_TITLE, SITE_URL } from '~/helpers/index.js'
 
 const KEYSTONE_POST_IDS = [2749, 2834, 2836, 2840]
 

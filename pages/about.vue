@@ -16,7 +16,7 @@ import RdAboutCoreValues from '~/components/shared/About/RdAboutCoreValues.vue'
 import RdAboutTeamMembers from '~/components/shared/About/RdAboutTeamMembers.vue'
 import RdAboutTimeline from '~/components/shared/About/RdAboutTimeline.vue'
 
-import { SITE_TITLE } from '~/constants/metadata.js'
+import { SITE_TITLE } from '~/helpers/index.js'
 
 export default {
   name: 'About',

@@ -126,7 +126,7 @@
 <script>
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
 
-import { SITE_TITLE } from '~/constants/metadata.js'
+import { SITE_TITLE } from '~/helpers/index.js'
 
 export default {
   name: 'PrivacyRule',

@@ -34,8 +34,7 @@ import RdButtonPrimary from '~/components/shared/Button/RdButtonPrimary.vue'
 
 import { latestPostsInErrorPage } from '~/apollo/queries/posts.gql'
 
-import { getHref } from '~/helpers/index.js'
-import { SITE_TITLE } from '~/constants/metadata.js'
+import { getHref, SITE_TITLE } from '~/helpers/index.js'
 
 export default {
   name: 'Error',
