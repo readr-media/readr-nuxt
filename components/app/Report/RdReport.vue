@@ -1,10 +1,6 @@
 <template>
   <div class="report">
-    <component
-      :is="featureComponent"
-      :cmsData="cmsData"
-      :reportSlug="slug"
-    ></component>
+    <component :is="featureComponent" :cmsData="cmsData"></component>
   </div>
 </template>
 
@@ -32,7 +28,7 @@ export default {
 
   computed: {
     featureComponent() {
-      return () => import(`~/components/report/${this.slug}/index.vue`)
+      return () => import(`~/components/report/${this.cmsData.slug}/index.vue`)
     },
     cmsData() {
       const aml = JSON.parse(this.report.contentApiData)
@@ -52,9 +48,6 @@ export default {
       }
     },
 
-    slug() {
-      return this.report.slug
-    },
     contentApiData() {
       return this.cmsData.contentApiData
     },
