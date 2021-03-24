@@ -389,7 +389,7 @@ export default {
     async loadCategoryList(category, idx) {
       try {
         const { data = {} } =
-          (await this.$apolloProvider.defaultClient.query({
+          (await this.$apollo.query({
             query: categoryPosts,
             variables: {
               categorySlug: category.slug,
