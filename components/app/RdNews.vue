@@ -87,7 +87,7 @@ import RdList from '~/components/shared/List/RdList.vue'
 import { latestPosts } from '~/apollo/queries/posts.gql'
 
 import { getHref, formatDate } from '~/helpers/index.js'
-import styleVariables from '~/scss/_variables.scss'
+import styleVariables from '~/scss/_variables.module.scss'
 
 if (process.browser) {
   // eslint-disable-next-line no-var
