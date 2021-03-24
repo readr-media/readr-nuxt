@@ -63,7 +63,9 @@ export default {
 
     const metaTitle = `${ogTitle || title} - ${SITE_TITLE}`
     const ogImg =
-      ogImage?.urlOriginal || heroImage?.urlOriginal || `${SITE_URL}/og.jpg`
+      ogImage?.urlDesktopSized ||
+      heroImage?.urlDesktopSized ||
+      `${SITE_URL}/og.jpg`
     const ogTags = tags.map(function buildOgTag(tag) {
       return {
         property: 'article:tag',

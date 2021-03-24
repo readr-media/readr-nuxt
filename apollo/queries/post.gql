@@ -3,13 +3,13 @@ query report($id: ID!) {
     slug
     title: name
     heroImage {
-      urlOriginal
+      urlDesktopSized
     }
     contentApiData
     ogTitle
     ogDescription
     ogImage {
-      urlOriginal
+      urlDesktopSized
     }
     tags {
       name
