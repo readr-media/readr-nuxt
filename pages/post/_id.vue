@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { post, news } from '~/apollo/queries/post.gql'
+import { news, report } from '~/apollo/queries/post.gql'
 
 import { SITE_TITLE } from '~/constants/metadata.js'
 import { formatDate } from '~/helpers/index.js'
@@ -90,12 +90,12 @@ export default {
     async loadReport() {
       const response =
         (await this.$apollo.query({
-          query: post,
+          query: report,
           variables: {
             id: this.postId,
           },
         })) || {}
-      this.post = response.data?.post || {}
+      this.post = response.data?.report || {}
     },
   },
 }

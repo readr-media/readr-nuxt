@@ -1,5 +1,5 @@
-query post($id: ID!) {
-  post: Post(where: { id: $id }) {
+query report($id: ID!) {
+  report: Post(where: { id: $id }) {
     slug
     title: name
     heroImage {
