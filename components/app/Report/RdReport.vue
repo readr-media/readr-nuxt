@@ -7,14 +7,8 @@
 <script>
 import archieml from 'archieml'
 
-import intersect from '~/components/helpers/directives/intersect.js'
-
 export default {
   name: 'RdReport',
-
-  directives: {
-    intersect,
-  },
 
   props: {
     report: {
