@@ -86,7 +86,6 @@ import RdList from '~/components/shared/List/RdList.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.gql'
 
-import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
 import { getHref, formatDate } from '~/helpers/index.js'
 import styleVariables from '~/scss/_variables.scss'
 
@@ -240,12 +239,7 @@ export default {
         title = '',
         heroImage = {},
         contentHtml = '',
-        ogTitle = '',
-        ogDescription = '',
-        ogImage = {},
-        tags = [],
         publishTime = '',
-        updatedAt = '',
       } = this.news
 
       return {
@@ -259,18 +253,6 @@ export default {
         },
         date: formatDate(publishTime),
         contentHtml,
-        metaTitle: `${ogTitle || title} - ${SITE_TITLE}`,
-        ogDescription,
-        ogImg:
-          ogImage?.urlDesktopSized || heroImage?.urlDesktopSized || '/og.jpg',
-        ogTags: tags.map(function (tag) {
-          return {
-            property: 'article:tag',
-            content: tag.name,
-          }
-        }),
-        publishTime,
-        updatedAt,
       }
     },
     heroImg() {
@@ -288,48 +270,6 @@ export default {
     sendGaEvent(action, label, value) {
       this.$ga.event('Article', action, label, value)
     },
-  },
-
-  head() {
-    const {
-      metaTitle,
-      ogDescription,
-      ogImg,
-      ogTags,
-      publishTime,
-      updatedAt,
-    } = this.transformedNews
-
-    const metaOg = [
-      { hid: 'og:title', property: 'og:title', content: metaTitle },
-      {
-        hid: 'og:description',
-        property: 'og:description',
-        content: ogDescription,
-      },
-      { hid: 'og:image', property: 'og:image', content: ogImg },
-      {
-        hid: 'og:url',
-        property: 'og:url',
-        content: `${SITE_URL}${this.$route.path}`,
-      },
-      { hid: 'og:type', property: 'og:type', content: 'article' },
-      {
-        property: 'article:publisher',
-        content: 'https://www.facebook.com/readr.tw',
-      },
-      { property: 'article:published_time', content: publishTime },
-      { property: 'article:modified_time', content: updatedAt },
-      ...ogTags,
-    ]
-
-    return {
-      title: metaTitle,
-      meta: [
-        { hid: 'description', name: 'description', content: ogDescription },
-        ...metaOg,
-      ],
-    }
   },
 }
 </script>

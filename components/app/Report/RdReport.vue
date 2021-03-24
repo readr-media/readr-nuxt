@@ -9,8 +9,6 @@ import archieml from 'archieml'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
-import { SITE_TITLE, SITE_URL } from '~/constants/metadata.js'
-
 export default {
   name: 'RdReport',
 
@@ -32,7 +30,9 @@ export default {
         import(`~/components/report/${this.transformedReport.slug}/index.vue`)
     },
     transformedReport() {
-      const aml = JSON.parse(this.report.contentApiData)
+      const { slug, contentApiData } = this.report
+
+      const aml = JSON.parse(contentApiData)
         .filter(function isNeededType(item) {
           return ['unstyled', 'annotation'].includes(item.type)
         })
@@ -40,69 +40,13 @@ export default {
           return item.content
         })
         .join('\n')
-
       const json = archieml.load(aml) || {}
 
       return {
-        ...this.report,
+        slug,
         contentApiData: json,
       }
     },
-  },
-
-  head() {
-    const {
-      title,
-      heroImage,
-      ogTitle,
-      ogDescription,
-      ogImage,
-      tags = [],
-      publishTime,
-      updatedAt,
-    } = this.transformedReport
-
-    const metaTitle = `${ogTitle || title} - ${SITE_TITLE}`
-    const ogImg =
-      ogImage?.urlDesktopSized ||
-      heroImage?.urlDesktopSized ||
-      `${SITE_URL}/og.jpg`
-    const ogTags = tags.map(function buildOgTag(tag) {
-      return {
-        property: 'article:tag',
-        content: tag.name,
-      }
-    })
-    const metaOg = [
-      { hid: 'og:title', property: 'og:title', content: metaTitle },
-      {
-        hid: 'og:description',
-        property: 'og:description',
-        content: ogDescription,
-      },
-      { hid: 'og:image', property: 'og:image', content: ogImg },
-      {
-        hid: 'og:url',
-        property: 'og:url',
-        content: `${SITE_URL}${this.$route.path}`,
-      },
-      { hid: 'og:type', property: 'og:type', content: 'article' },
-      {
-        property: 'article:publisher',
-        content: 'https://www.facebook.com/readr.tw',
-      },
-      { property: 'article:published_time', content: publishTime },
-      { property: 'article:modified_time', content: updatedAt },
-      ...ogTags,
-    ]
-
-    return {
-      title: metaTitle,
-      meta: [
-        { hid: 'description', name: 'description', content: ogDescription },
-        ...metaOg,
-      ],
-    }
   },
 }
 </script>
