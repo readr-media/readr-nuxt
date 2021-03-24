@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import styleVariables from '~/scss/_variables.scss'
+import styleVariables from '~/scss/_variables.module.scss'
 import { newline2br } from '~/components/helpers/index.js'
 
 export default {
