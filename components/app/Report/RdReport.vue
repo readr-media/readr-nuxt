@@ -47,10 +47,6 @@ export default {
         contentApiData: json,
       }
     },
-
-    contentApiData() {
-      return this.cmsData.contentApiData
-    },
   },
 
   head() {
