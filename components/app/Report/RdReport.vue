@@ -1,6 +1,6 @@
 <template>
   <div class="report">
-    <component :is="featureComponent" :cmsData="cmsData"></component>
+    <component :is="featureComponent" :cmsData="transformedReport"></component>
   </div>
 </template>
 
@@ -28,9 +28,10 @@ export default {
 
   computed: {
     featureComponent() {
-      return () => import(`~/components/report/${this.cmsData.slug}/index.vue`)
+      return () =>
+        import(`~/components/report/${this.transformedReport.slug}/index.vue`)
     },
-    cmsData() {
+    transformedReport() {
       const aml = JSON.parse(this.report.contentApiData)
         .filter(function isNeededType(item) {
           return ['unstyled', 'annotation'].includes(item.type)
@@ -59,7 +60,7 @@ export default {
       tags = [],
       publishTime,
       updatedAt,
-    } = this.cmsData
+    } = this.transformedReport
 
     const metaTitle = `${ogTitle || title} - ${SITE_TITLE}`
     const ogImg =
