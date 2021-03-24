@@ -199,6 +199,10 @@ export default {
   }
 }
 
+.report-article__flourish {
+  margin: -30px 0 !important;
+}
+
 .report-extras {
   background-color: white !important;
 }
