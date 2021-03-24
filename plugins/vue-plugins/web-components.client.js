@@ -9,6 +9,7 @@ Vue.config.ignoredElements = [
   'readr-annotation',
   'readr-donate-button',
   'readr-latest-coverages',
+  'readr-footer',
 ]
 
 // Bind the custom elements to the window object
