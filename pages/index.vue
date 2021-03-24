@@ -220,7 +220,7 @@ export default {
       query: categories,
       prefetch: false,
       manual: true,
-      async result({ data, loading }) {
+      result: async function handleCategoryLists({ data, loading }) {
         if (!loading && !this.doesHaveCategoryLists) {
           await Promise.allSettled(data.categories.map(this.loadCategoryList))
 
