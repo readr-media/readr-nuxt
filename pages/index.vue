@@ -221,7 +221,7 @@ export default {
       prefetch: false,
       manual: true,
       async result({ data, loading }) {
-        if (!loading) {
+        if (!loading && !this.doesHaveCategoryLists) {
           await Promise.allSettled(data.categories.map(this.loadCategoryList))
 
           this.unwatchIsViewportWidthUpMd = this.$watch(
