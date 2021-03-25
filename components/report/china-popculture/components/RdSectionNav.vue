@@ -33,7 +33,7 @@ export default {
 }
 
 .button {
-  padding: 12px 32px;
+  padding: 12px 22px;
   flex: 1 1 auto;
   max-width: 246px;
   display: flex;
