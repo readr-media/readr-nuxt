@@ -8,12 +8,14 @@
       @close="hideQuizInfoAndMemoize"
     />
     <RdQuizHeader
+      v-show="!shouldShowQuizResult"
       class="quiz__header"
       :class="{ upper: shouldHideHeader }"
       :texts="headerTexts"
       :textHighlight="headerTextsCount"
     />
     <RdQuizArticle
+      v-if="!shouldShowQuizResult"
       class="quiz__article"
       :authorProfile="currentQuiz.authorProfile"
       :title="currentQuiz.title"
@@ -22,6 +24,17 @@
       :textSubmitButton="cmsData.contentApiData.quizCommon.textSubmit"
       :shouldDisableAnswerClick="shouldDisableAnswerClick"
       @answerClick="handleAnswerClick"
+      @submit="handleSubmit"
+    />
+    <RdQuizResult
+      v-show="shouldShowQuizResult"
+      :textInfoCardTitle="textResultInfoCardTitle"
+      :textInfoCardSubtitle="textResultInfoCardSubtitle"
+      :textsInfoCardDescriptions="textResultInfoCardDescriptions"
+      :textSubmitButton="textResultSubmitButton"
+      :textAgainButton="cmsData.contentApiData.quizCommon.textQuizAgain"
+      @submit="handleSubmitResult"
+      @again="handleAgain"
     />
   </section>
 </template>
@@ -30,6 +43,7 @@
 import RdQuizInfo from './RdQuizInfo.vue'
 import RdQuizHeader from './RdQuizHeader.vue'
 import RdQuizArticle from './RdQuizArticle.vue'
+import RdQuizResult from './RdQuizResult.vue'
 import scrollDirection from '~/components/helpers/mixins/scroll-direction'
 
 export default {
@@ -38,6 +52,7 @@ export default {
     RdQuizHeader,
     RdQuizInfo,
     RdQuizArticle,
+    RdQuizResult,
   },
   mixins: [scrollDirection],
   props: {
@@ -53,6 +68,9 @@ export default {
       quizInfoCookieName: 'chinaPopcultureReadQuizInfo',
       currentQuizIndex: 0,
       currentAnswerClickCount: 0,
+      currentAnswerCollection: [],
+      shouldShowQuizResult: false,
+      numberZhtw: ['一', '二', '三'],
     }
   },
   computed: {
@@ -65,6 +83,9 @@ export default {
     },
     quizzesLength() {
       return this.quizzes.length
+    },
+    isCurrentQuizLast() {
+      return this.currentQuizIndex + 1 === this.quizzesLength
     },
     currentQuiz() {
       return this.quizzes?.[this.currentQuizIndex] ?? {}
@@ -90,15 +111,83 @@ export default {
       return `${this.currentAnswerClickCount} / ${this.currentQuizAnswerCorrectCount} 個`
     },
     headerTexts() {
-      const numberZhtw = ['一', '二', '三']
       return [
-        `第${numberZhtw[this.currentQuizIndex]}題：`,
+        `第${this.numberZhtw[this.currentQuizIndex]}題：`,
         '已選擇',
         ' ',
         this.headerTextsCount,
         ' ',
         '字詞',
       ]
+    },
+    textResultSubmitButton() {
+      const quizNext = this.cmsData?.contentApiData?.quizCommon?.textQuizNext
+      const scoreBoard = this.cmsData?.contentApiData?.quizCommon
+        ?.textScoreBoard
+      return this.isCurrentQuizLast ? scoreBoard : quizNext
+    },
+
+    textResultInfoCardTitle() {
+      return `第${this.numberZhtw[this.currentQuizIndex]}題挑戰成果`
+    },
+    currentAnswerCollectionState() {
+      const types = this.currentAnswerCollection.map(function getType(answer) {
+        return answer.type
+      })
+      const allCorrect = types.reduce(function assertAllCorrect(acc, curr) {
+        return acc && curr === 'answerCorrect'
+      }, true)
+      const allWrong = types.reduce(function assertAllWrong(acc, curr) {
+        return acc && curr === 'answerWrong'
+      }, true)
+      if (allCorrect) {
+        return 'allCorrect'
+      } else if (allWrong) {
+        return 'allWrong'
+      } else {
+        return 'partial'
+      }
+    },
+    textResultInfoCardSubtitle() {
+      const results = {
+        allCorrect: '全部答對',
+        allWrong: '全部答錯',
+        partial: '部分答對，部分答錯',
+      }
+
+      return results[this.currentAnswerCollectionState]
+    },
+    textResultInfoCardDescriptions() {
+      switch (this.currentAnswerCollectionState) {
+        case 'allCorrect': {
+          return [
+            '恭喜你全部答對！',
+            `還有 ${
+              this.quizzesLength - (this.currentQuizIndex + 1)
+            } 題等你挑戰完成！`,
+          ]
+        }
+        case 'allWrong': {
+          return ['太可惜了，你選的詞彙都不是中國流行語！']
+        }
+        case 'partial': {
+          const answerCorrectCount = this.currentAnswerCollection
+            .map(function getType(answer) {
+              return answer.type
+            })
+            .filter(function filterCorrect(type) {
+              return type === 'answerCorrect'
+            }).length
+          return [
+            `有點可惜，你找出了 ${answerCorrectCount} 個詞彙，`,
+            `還有 ${
+              this.currentQuizAnswerCorrectCount - answerCorrectCount
+            } 個詞彙沒有選出來！`,
+          ]
+        }
+        default:
+          return []
+      }
     },
   },
   beforeMount() {
@@ -119,6 +208,35 @@ export default {
     },
     handleAnswerClick({ text, isToggle }) {
       this.currentAnswerClickCount += isToggle ? 1 : -1
+
+      if (isToggle) {
+        this.currentAnswerCollection.push(text)
+      } else {
+        // remove answer from currentAnswerCollection
+        const index = this.currentAnswerCollection.findIndex(function findValue(
+          answer
+        ) {
+          return text.value === answer.value
+        })
+        this.currentAnswerCollection.splice(index, 1)
+      }
+    },
+    handleSubmit() {
+      this.shouldShowQuizResult = true
+      window.scrollTo(0, 0)
+    },
+    handleSubmitResult() {
+      if (this.isCurrentQuizLast) {
+        this.goToScoreBoard()
+      } else {
+        this.goToNextQuiz()
+      }
+    },
+    handleAgain() {
+      this.shouldShowQuizResult = false
+      this.currentAnswerCollection = []
+      this.currentAnswerClickCount = 0
+      window.scrollTo(0, 0)
     },
   },
 }
@@ -143,7 +261,6 @@ function getCookie(cname) {
 
 <style lang="scss" scoped>
 .quiz {
-  padding: 48px 0 0 0;
   &__header {
     position: fixed;
     top: 117px;

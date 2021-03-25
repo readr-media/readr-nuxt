@@ -30,6 +30,7 @@
       class="article__submit-button"
       :state="!shouldDisableAnswerClick ? 'disable' : 'normal'"
       :text="textSubmitButton"
+      @click.native="handleSubmitButtonClick"
     />
   </article>
 </template>
@@ -93,13 +94,19 @@ export default {
     handleTextToggle(isToggle, text) {
       this.$emit('answerClick', { text, isToggle })
     },
+    handleSubmitButtonClick() {
+      if (!this.shouldDisableAnswerClick) {
+        return
+      }
+      this.$emit('submit')
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
 .article {
-  padding: 18px 20px 48px 20px;
+  padding: 66px 20px 48px 20px;
   @include media-breakpoint-up(md) {
     padding: 52px 0 48px 0;
     max-width: 568px;
