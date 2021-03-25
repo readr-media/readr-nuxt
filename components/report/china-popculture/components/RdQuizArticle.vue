@@ -26,18 +26,25 @@
         </template>
       </p>
     </div>
+    <RdSubmitButton
+      class="article__submit-button"
+      :state="!shouldDisableAnswerClick ? 'disable' : 'normal'"
+      :text="'完成！送出看解答'"
+    />
   </article>
 </template>
 
 <script>
 import RdQuizArticleAuthorProfile from './RdQuizArticleAuthorProfile.vue'
 import RdQuizArticleAnswerText from './RdQuizArticleAnswerText.vue'
+import RdSubmitButton from './RdSubmitButton.vue'
 
 export default {
   name: 'RdQuizArticle',
   components: {
     RdQuizArticleAuthorProfile,
     RdQuizArticleAnswerText,
+    RdSubmitButton,
   },
   props: {
     authorProfile: {
@@ -107,6 +114,13 @@ export default {
   }
   &__contents {
     margin: 24px 0 0 0;
+  }
+  &__submit-button {
+    margin: 48px 0 0 0;
+    @include media-breakpoint-up(md) {
+      margin: 48px auto 0 auto;
+      max-width: 280px;
+    }
   }
 }
 
