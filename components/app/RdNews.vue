@@ -89,13 +89,6 @@ import { latestPosts } from '~/apollo/queries/posts.gql'
 import { getHref, formatDate } from '~/helpers/index.js'
 import styleVariables from '~/scss/_variables.module.scss'
 
-if (process.browser) {
-  // eslint-disable-next-line no-var
-  var {
-    state: { userUuid },
-  } = require('~/composition/store/local-storage.js')
-}
-
 export default {
   name: 'RdNews',
 
@@ -117,8 +110,9 @@ export default {
   },
 
   setup() {
-    const { route } = useContext()
+    const { route, store } = useContext()
     const postId = route.value.params.id
+    const userUuid = store.state.user.uuid
 
     const postFeedback = reactive({
       rating: 0,
@@ -146,7 +140,7 @@ export default {
         range: '評分!A2:D',
         valueInputOption: 'RAW',
         resource: {
-          values: [[Date.now(), userUuid.value, postId, postFeedback.rating]],
+          values: [[Date.now(), userUuid, postId, postFeedback.rating]],
         },
       })
     }
@@ -168,9 +162,7 @@ export default {
         range: '回饋!A2:F',
         valueInputOption: 'RAW',
         resource: {
-          values: [
-            [Date.now(), userUuid.value, postId, nickname, email, content],
-          ],
+          values: [[Date.now(), userUuid, postId, nickname, email, content]],
         },
       })
     }

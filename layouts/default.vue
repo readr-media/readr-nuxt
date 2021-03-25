@@ -14,21 +14,20 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import rafThrottle from 'raf-throttle'
 
 import RdGdpr from '~/components/shared/RdGdpr.vue'
 
-if (process.browser) {
-  // eslint-disable-next-line no-var
-  var {
-    state: { isReadr2User },
-  } = require('~/composition/store/local-storage.js')
-}
-
 export default {
   components: {
     RdGdpr,
+  },
+
+  computed: {
+    ...mapState({
+      isReadr2User: (state) => state.user.isReadr2,
+    }),
   },
 
   beforeMount() {
@@ -39,7 +38,7 @@ export default {
     this.sendGaEvent(
       'users',
       'visit',
-      `readr ${isReadr2User.value ? '2.0' : '3.0'}`
+      `readr ${this.isReadr2User ? '2.0' : '3.0'}`
     )
   },
 
