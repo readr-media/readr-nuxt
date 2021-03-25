@@ -109,12 +109,12 @@ export default {
 .article {
   padding: 66px 20px 48px 20px;
   @include media-breakpoint-up(md) {
-    padding: 52px 0 48px 0;
+    padding: 100px 0 48px 0;
     max-width: 568px;
     margin: 0 auto;
   }
   @include media-breakpoint-up(xl) {
-    padding: 50px 0 60px 0;
+    padding: 98px 0 60px 0;
     max-width: 600px;
   }
   &__title,
