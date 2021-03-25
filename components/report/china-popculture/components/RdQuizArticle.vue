@@ -18,6 +18,7 @@
           <RdQuizArticleAnswerText
             v-if="isTextTypeAnswer(text)"
             :key="text.value"
+            class="contents__answer-text"
             :text="text.value"
             :shouldDisableAnswerClick="shouldDisableAnswerClick"
             @toggle="(isToggle) => handleTextToggle(isToggle, text)"
@@ -158,6 +159,11 @@ export default {
   color: #111111;
   p + p {
     margin: 48px 0 0 0;
+  }
+  &__answer-text {
+    & + & {
+      margin: 0 0 0 10px;
+    }
   }
 }
 </style>
