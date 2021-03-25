@@ -19,6 +19,10 @@
 </template>
 
 <script>
+import { getLocalStorage, setLocalStorage } from '~/helpers/index.js'
+
+const LOCAL_STORAGE_KEY = 'shouldOpenGdpr'
+
 export default {
   name: 'RdGdpr',
 
@@ -34,15 +38,11 @@ export default {
 
   methods: {
     handleGdpr() {
-      this.shouldOpenGdpr =
-        JSON.parse(window.localStorage.getItem('readr3.shouldOpenGdpr')) ?? true
+      this.shouldOpenGdpr = getLocalStorage(LOCAL_STORAGE_KEY, true)
     },
     closeGdpr() {
       this.shouldOpenGdpr = false
-      window.localStorage.setItem(
-        'readr3.shouldOpenGdpr',
-        JSON.stringify(this.shouldOpenGdpr)
-      )
+      setLocalStorage(LOCAL_STORAGE_KEY, this.shouldOpenGdpr)
     },
   },
 }
