@@ -19,6 +19,7 @@
       :title="currentQuiz.title"
       :info="currentQuiz.info"
       :contents="currentQuiz.contents"
+      :textSubmitButton="cmsData.contentApiData.quizCommon.textSubmit"
       :shouldDisableAnswerClick="shouldDisableAnswerClick"
       @answerClick="handleAnswerClick"
     />

@@ -29,7 +29,7 @@
     <RdSubmitButton
       class="article__submit-button"
       :state="!shouldDisableAnswerClick ? 'disable' : 'normal'"
-      :text="'完成！送出看解答'"
+      :text="textSubmitButton"
     />
   </article>
 </template>
@@ -68,6 +68,10 @@ export default {
     contents: {
       type: Array,
       default: () => [],
+    },
+    textSubmitButton: {
+      type: String,
+      default: '',
     },
     shouldDisableAnswerClick: {
       type: Boolean,
