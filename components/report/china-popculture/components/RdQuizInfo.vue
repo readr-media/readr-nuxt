@@ -4,19 +4,23 @@
       <h1 class="section__title title" v-text="title" />
       <!-- eslint-disable-next-line vue/no-v-html -->
       <p class="section__description description" v-html="descriptionHtml" />
-      <button
-        class="section__submit-button submit-button"
-        @click="handleClose"
-        v-text="textSubmit"
+      <RdSubmitButton
+        class="section__submit-button"
+        :text="textSubmit"
+        @click.native="handleClose"
       />
     </div>
   </section>
 </template>
 
 <script>
+import RdSubmitButton from './RdSubmitButton.vue'
 import { newline2br } from '~/components/helpers'
 
 export default {
+  components: {
+    RdSubmitButton,
+  },
   props: {
     title: {
       type: String,
@@ -112,27 +116,6 @@ export default {
     display: block;
     content: '';
     margin: 16px 0;
-  }
-}
-
-.submit-button {
-  width: 100%;
-  height: 48px;
-  background: #ff3f3f;
-  border: 1px solid #ffffff;
-  border-radius: 2px;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  letter-spacing: 2.5px;
-  color: #ffffff;
-  transition: background 0.25s ease-out;
-  &:hover {
-    background: #111111;
   }
 }
 </style>
