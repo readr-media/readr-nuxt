@@ -18,18 +18,41 @@
         v-text="textAgainButton"
       />
     </section>
-    <section class="quiz-result__info-detail info-detail"></section>
+    <section class="quiz-result__info-detail info-detail">
+      <RdCollapsible
+        class="info-detail__collapsible"
+        :textButton="textSolutionButton"
+      >
+        <ol class="info-detail__solution-list solution-list">
+          <li
+            v-for="(solution, i) in solutions"
+            :key="i"
+            class="solution-list__solution solution"
+          >
+            <RdQuizResultSolution
+              :order="i + 1"
+              :contents="solution.texts"
+              :description="solution.description"
+            />
+          </li>
+        </ol>
+      </RdCollapsible>
+    </section>
   </section>
 </template>
 
 <script>
 import RdQuizResultInfoCard from './RdQuizResultInfoCard.vue'
 import RdSubmitButton from './RdSubmitButton.vue'
+import RdCollapsible from './RdCollapsible'
+import RdQuizResultSolution from './RdQuizResultSolution'
 
 export default {
   components: {
     RdQuizResultInfoCard,
     RdSubmitButton,
+    RdCollapsible,
+    RdQuizResultSolution,
   },
   props: {
     textInfoCardTitle: {
@@ -51,6 +74,14 @@ export default {
     textAgainButton: {
       type: String,
       default: '',
+    },
+    textSolutionButton: {
+      type: String,
+      default: '',
+    },
+    solutions: {
+      type: Array,
+      default: () => [],
     },
   },
   methods: {
@@ -106,5 +137,30 @@ export default {
   letter-spacing: 2.5px;
   text-decoration-line: underline;
   color: #2b2b2b;
+}
+
+.info-detail {
+  padding: 32px 20px;
+  &__collapsible {
+    @include media-breakpoint-up(md) {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+  }
+  @include media-breakpoint-up(md) {
+    padding: 48px 0;
+  }
+  @include media-breakpoint-up(xl) {
+    padding: 60px 0;
+  }
+}
+
+.solution-list {
+  padding: 16px 0 6px 0;
+  &__solution {
+    & + & {
+      margin: 24px 0 0 0;
+    }
+  }
 }
 </style>
