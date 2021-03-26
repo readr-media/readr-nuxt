@@ -37,13 +37,16 @@ export default {
 .info-card {
   width: 100%;
   background: #ffffff;
-  border: 1.5px solid #111111;
+  border: 2px solid #111111;
   box-shadow: 0 2px 12px -4px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
   padding: 16px 12px;
   text-align: center;
   &__descriptions {
     margin: 12px 0 0 0;
+    @include media-breakpoint-up(md) {
+      margin: 16px 0 0 0;
+    }
   }
 
   @include media-breakpoint-up(md) {
@@ -52,7 +55,7 @@ export default {
 }
 
 .titles {
-  border-bottom: 1.5px solid #111111;
+  border-bottom: 2px solid #111111;
   padding: 0 0 16px 0;
   h1 {
     font-weight: 500;
@@ -67,6 +70,9 @@ export default {
     letter-spacing: 0.032em;
     color: #f50e0e;
     margin: 4px 0 0 0;
+    @include media-breakpoint-up(md) {
+      margin: 8px 0 0 0;
+    }
   }
 }
 
