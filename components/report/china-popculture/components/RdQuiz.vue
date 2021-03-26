@@ -162,12 +162,14 @@ export default {
     textResultInfoCardDescriptions() {
       switch (this.currentAnswerCollectionState) {
         case 'allCorrect': {
-          return [
-            '恭喜你全部答對！',
-            `還有 ${
-              this.quizzesLength - (this.currentQuizIndex + 1)
-            } 題等你挑戰完成！`,
-          ]
+          const howManyQuizLast =
+            this.quizzesLength - (this.currentQuizIndex + 1)
+          return howManyQuizLast !== 0
+            ? ['恭喜你全部答對！', `還有 ${howManyQuizLast} 題等你挑戰完成！`]
+            : [
+                '恭喜你全答對，好有毅力完成所有試券！',
+                '點右上「深度專題報導」，看更多中國流行語背後故事',
+              ]
         }
         case 'allWrong': {
           return ['太可惜了，你選的詞彙都不是中國流行語！']
