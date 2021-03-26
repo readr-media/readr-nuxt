@@ -70,7 +70,7 @@ export default {
   flex-direction: column;
   align-items: center;
   padding: 24px 20px 48px 20px;
-  background-color: #ebebeb;
+  background-color: #f1f1f1;
   &__info-card {
     @include media-breakpoint-up(md) {
       max-width: 568px;
