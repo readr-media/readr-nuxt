@@ -43,10 +43,12 @@ export default {
   transition: background-color 0.1s ease-out, border-bottom 0.1s ease-out,
     color 0.1s ease-out, font-weight 0.1s ease-out;
   &:hover {
-    font-weight: 500;
-    background-color: #ffeded;
-    color: black;
-    border-bottom: 1px solid transparent;
+    @include media-breakpoint-up(xl) {
+      font-weight: 500;
+      background-color: #ffeded;
+      color: black;
+      border-bottom: 1px solid transparent;
+    }
   }
 }
 
