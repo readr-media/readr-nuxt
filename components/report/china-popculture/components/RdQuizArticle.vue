@@ -155,15 +155,13 @@ export default {
   font-weight: 300;
   font-size: 24px;
   line-height: 48px;
-  letter-spacing: 0.032em;
+  letter-spacing: 1px;
   color: #111111;
   p + p {
     margin: 48px 0 0 0;
   }
   &__answer-text {
-    & + & {
-      margin: 0 0 0 10px;
-    }
+    margin: 0 1px;
   }
 }
 </style>
