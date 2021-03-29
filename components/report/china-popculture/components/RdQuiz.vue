@@ -226,6 +226,10 @@ export default {
       this.shouldShowQuizResult = true
       window.scrollTo(0, 0)
     },
+    goToNextQuiz() {
+      this.currentQuizIndex += 1
+      this.resetQuiz()
+    },
     handleSubmitResult() {
       if (this.isCurrentQuizLast) {
         this.goToScoreBoard()
@@ -233,11 +237,14 @@ export default {
         this.goToNextQuiz()
       }
     },
-    handleAgain() {
+    resetQuiz() {
       this.shouldShowQuizResult = false
       this.currentAnswerCollection = []
       this.currentAnswerClickCount = 0
       window.scrollTo(0, 0)
+    },
+    handleAgain() {
+      this.resetQuiz()
     },
   },
 }
