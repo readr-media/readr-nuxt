@@ -1,43 +1,54 @@
 <template>
   <section class="quiz">
-    <RdQuizInfo
-      v-show="shouldShowQuizInfo"
-      :title="cmsData.contentApiData.quizInfo.title"
-      :description="cmsData.contentApiData.quizInfo.description"
-      :textSubmit="cmsData.contentApiData.quizInfo.textSubmit"
-      @close="hideQuizInfoAndMemoize"
-    />
-    <RdQuizHeader
-      v-show="!shouldShowQuizResult"
-      class="quiz__header"
-      :class="{ upper: shouldHideHeader }"
-      :texts="headerTexts"
-      :textHighlight="headerTextsCount"
-    />
-    <RdQuizArticle
-      v-if="!shouldShowQuizResult"
-      class="quiz__article"
-      :authorProfile="currentQuiz.authorProfile"
-      :title="currentQuiz.title"
-      :info="currentQuiz.info"
-      :contents="currentQuiz.contents"
-      :textSubmitButton="cmsData.contentApiData.quizCommon.textSubmit"
-      :shouldDisableAnswerClick="shouldDisableAnswerClick"
-      @answerClick="handleAnswerClick"
-      @submit="handleSubmit"
-    />
-    <RdQuizResult
-      v-show="shouldShowQuizResult"
-      :textInfoCardTitle="textResultInfoCardTitle"
-      :textInfoCardSubtitle="textResultInfoCardSubtitle"
-      :textsInfoCardDescriptions="textResultInfoCardDescriptions"
-      :textSubmitButton="textResultSubmitButton"
-      :textAgainButton="cmsData.contentApiData.quizCommon.textQuizAgain"
-      :textSolutionButton="cmsData.contentApiData.quizCommon.textSolution"
-      :solutions="currentQuiz.solutions"
-      @submit="handleSubmitResult"
-      @again="handleAgain"
-    />
+    <template v-if="!shouldShowQuizScoreBoard">
+      <RdQuizInfo
+        v-show="shouldShowQuizInfo"
+        :title="cmsData.contentApiData.quizInfo.title"
+        :description="cmsData.contentApiData.quizInfo.description"
+        :textSubmit="cmsData.contentApiData.quizInfo.textSubmit"
+        @close="hideQuizInfoAndMemoize"
+      />
+      <RdQuizHeader
+        v-show="!shouldShowQuizResult"
+        class="quiz__header"
+        :class="{ upper: shouldHideHeader }"
+        :texts="headerTexts"
+        :textHighlight="headerTextsCount"
+      />
+      <RdQuizArticle
+        v-if="!shouldShowQuizResult"
+        class="quiz__article"
+        :authorProfile="currentQuiz.authorProfile"
+        :title="currentQuiz.title"
+        :info="currentQuiz.info"
+        :contents="currentQuiz.contents"
+        :textSubmitButton="cmsData.contentApiData.quizCommon.textSubmit"
+        :shouldDisableAnswerClick="shouldDisableAnswerClick"
+        @answerClick="handleAnswerClick"
+        @submit="handleSubmit"
+      />
+      <RdQuizResult
+        v-show="shouldShowQuizResult"
+        :textInfoCardTitle="textResultInfoCardTitle"
+        :textInfoCardSubtitle="textResultInfoCardSubtitle"
+        :textsInfoCardDescriptions="textResultInfoCardDescriptions"
+        :textSubmitButton="textResultSubmitButton"
+        :textAgainButton="cmsData.contentApiData.quizCommon.textQuizAgain"
+        :textSolutionButton="cmsData.contentApiData.quizCommon.textSolution"
+        :solutions="currentQuiz.solutions"
+        @submit="handleSubmitResult"
+        @again="handleAgain"
+      />
+    </template>
+    <template v-else>
+      <RdQuizScoreBoard
+        :textGoToArticle="cmsData.contentApiData.scoreBoard.textGoToArticle"
+        :textQuizAgain="cmsData.contentApiData.scoreBoard.textQuizAgain"
+        :textMethodology="cmsData.contentApiData.scoreBoard.textMethodology"
+        :methodologies="cmsData.contentApiData.scoreBoard.methodologies"
+        @quizAgain="handleScoreBoardQuizAgain"
+      />
+    </template>
   </section>
 </template>
 
@@ -46,6 +57,7 @@ import RdQuizInfo from './RdQuizInfo.vue'
 import RdQuizHeader from './RdQuizHeader.vue'
 import RdQuizArticle from './RdQuizArticle.vue'
 import RdQuizResult from './RdQuizResult.vue'
+import RdQuizScoreBoard from './RdQuizScoreBoard.vue'
 import scrollDirection from '~/components/helpers/mixins/scroll-direction'
 
 export default {
@@ -55,6 +67,7 @@ export default {
     RdQuizInfo,
     RdQuizArticle,
     RdQuizResult,
+    RdQuizScoreBoard,
   },
   mixins: [scrollDirection],
   props: {
@@ -73,6 +86,7 @@ export default {
       currentAnswerCollection: [],
       shouldShowQuizResult: false,
       numberZhtw: ['一', '二', '三'],
+      shouldShowQuizScoreBoard: false,
     }
   },
   computed: {
@@ -226,6 +240,9 @@ export default {
       this.shouldShowQuizResult = true
       window.scrollTo(0, 0)
     },
+    goToScoreBoard() {
+      this.shouldShowQuizScoreBoard = true
+    },
     goToNextQuiz() {
       this.currentQuizIndex += 1
       this.resetQuiz()
@@ -244,6 +261,12 @@ export default {
       window.scrollTo(0, 0)
     },
     handleAgain() {
+      this.resetQuiz()
+    },
+
+    handleScoreBoardQuizAgain() {
+      this.shouldShowQuizScoreBoard = false
+      this.currentQuizIndex = 0
       this.resetQuiz()
     },
   },
