@@ -19,27 +19,7 @@
       @goToArticle="handleNavigateToIndex(1)"
     />
     <RdQuiz v-show="shouldShowQuiz" :cmsData="cmsData" />
-    <section v-show="shouldShowArticle" class="article">
-      <div class="article__article-leading-description-wrapper">
-        <RdArticleLeadingDescription
-          :description="cmsData.contentApiData.articleLeadingDescription"
-        />
-      </div>
-      <RdReportArticle
-        :contents="cmsData.contentApiData.article.contents"
-        :slug="'china-popculture'"
-        @sendGaEvent="sendGaEvent"
-      />
-      <RdReportExtras
-        :contents="cmsData.contentApiData.extras.contents"
-        @sendGaEvent="sendGaEvent"
-      />
-      <div class="donate-button">
-        <readr-donate-button
-          @clickButton="sendGaClickEvent({ label: 'donate' })"
-        />
-      </div>
-    </section>
+    <RdArticle v-show="shouldShowArticle" :cmsData="cmsData" />
     <RdReportCredit
       :authors="cmsData.contentApiData.credit"
       :publishedAt="cmsData.contentApiData.publishedAt"
@@ -56,12 +36,10 @@ import LazyRenderer from 'vue-lazy-renderer'
 
 import RdSectionNav from './components/RdSectionNav.vue'
 import RdCover from './components/RdCover.vue'
-import RdArticleLeadingDescription from './components/RdArticleLeadingDescription.vue'
 import RdQuiz from './components/RdQuiz.vue'
+import RdArticle from './components/RdArticle.vue'
 
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
-import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
-import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
 import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
@@ -75,10 +53,8 @@ export default {
     RdSectionNav,
     RdCover,
     RdQuiz,
+    RdArticle,
 
-    RdArticleLeadingDescription,
-    RdReportArticle,
-    RdReportExtras,
     RdReportCredit,
   },
   mixins: [scrollDirection],
@@ -212,27 +188,6 @@ export default {
   background-color: #ebebeb !important;
 }
 
-a.sc-readr-donate-button {
-  &::before {
-    background-color: #111111;
-  }
-
-  div.sc-readr-donate-button {
-    background-color: #ff3f3f;
-    color: white;
-    border-color: white;
-
-    &:hover {
-      background-color: #111111;
-      color: white;
-    }
-
-    &:active {
-      color: white;
-    }
-  }
-}
-
 #default-footer {
   background-color: #ebebeb !important;
 }
@@ -282,22 +237,6 @@ a.sc-readr-donate-button {
   }
   @include media-breakpoint-up(md) {
     top: 84px;
-  }
-}
-
-.article {
-  padding: 118px 0 0 0;
-  @include media-breakpoint-up(md) {
-    padding: 135px 0 0 0;
-  }
-  &__article-leading-description-wrapper {
-    background-color: #f1f1f1;
-    padding: 48px 20px 0 20px;
-    display: flex;
-    justify-content: center;
-    @include media-breakpoint-up(xl) {
-      padding: 60px 0 0 0;
-    }
   }
 }
 
