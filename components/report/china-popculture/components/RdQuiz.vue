@@ -43,6 +43,7 @@
     <template v-else>
       <RdQuizScoreBoard
         :cmsData="cmsData"
+        :answerScore="answerScore"
         :textGoToArticle="cmsData.contentApiData.scoreBoard.textGoToArticle"
         :textQuizAgain="cmsData.contentApiData.scoreBoard.textQuizAgain"
         :textMethodology="cmsData.contentApiData.scoreBoard.textMethodology"
@@ -85,6 +86,7 @@ export default {
       currentQuizIndex: 0,
       currentAnswerClickCount: 0,
       currentAnswerCollection: [],
+      answerCollection: [],
       shouldShowQuizResult: false,
       numberZhtw: ['一', '二', '三'],
       shouldShowQuizScoreBoard: false,
@@ -205,6 +207,15 @@ export default {
           return []
       }
     },
+
+    answerCollectionCorrects() {
+      return this.answerCollection.filter(function typeAnswerCorrect(answer) {
+        return answer.type === 'answerCorrect'
+      })
+    },
+    answerScore() {
+      return this.answerCollectionCorrects.length * 5
+    },
   },
   beforeMount() {
     if (!getCookie(this.quizInfoCookieName)) {
@@ -238,6 +249,7 @@ export default {
       }
     },
     handleSubmit() {
+      this.answerCollection.push(...this.currentAnswerCollection)
       this.shouldShowQuizResult = true
       window.scrollTo(0, 0)
     },
@@ -258,6 +270,7 @@ export default {
     resetQuiz() {
       this.shouldShowQuizResult = false
       this.currentAnswerCollection = []
+      this.answerCollection = []
       this.currentAnswerClickCount = 0
       window.scrollTo(0, 0)
     },

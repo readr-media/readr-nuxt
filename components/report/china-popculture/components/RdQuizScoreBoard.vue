@@ -4,7 +4,7 @@
       <div class="score-board__card card">
         <div class="card__card-top card-top">
           <p class="card-text card-text--bold">你的總成績</p>
-          <p class="card-text card-text--red">90 分</p>
+          <p class="card-text card-text--red">{{ answerScore }} 分</p>
         </div>
         <div class="card__card-bottom card-bottom">
           <p class="card-text card-text--bold">你的成績是目前所有挑戰者中的</p>
@@ -14,7 +14,7 @@
       <div class="score-board__card card">
         <div class="card__card-top card-top">
           <p class="card-text card-text--bold">你總共找出了</p>
-          <p class="card-text card-text--red">18/20 個</p>
+          <p class="card-text card-text--red">{{ answerScore / 5 }}/20 個</p>
           <p class="card-text card-text--bold">中國流行語</p>
         </div>
         <div
@@ -131,6 +131,10 @@ export default {
       type: Object,
       required: true,
       default: () => ({}),
+    },
+    answerScore: {
+      type: Number,
+      default: 0,
     },
     textGoToArticle: {
       type: String,
