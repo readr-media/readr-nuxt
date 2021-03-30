@@ -28,7 +28,7 @@
         @submit="handleSubmit"
       />
       <RdQuizResult
-        v-show="shouldShowQuizResult"
+        v-else
         :textInfoCardTitle="textResultInfoCardTitle"
         :textInfoCardSubtitle="textResultInfoCardSubtitle"
         :textsInfoCardDescriptions="textResultInfoCardDescriptions"
