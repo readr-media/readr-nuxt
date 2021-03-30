@@ -292,6 +292,10 @@ function getCookie(cname) {
 
 <style lang="scss" scoped>
 .quiz {
+  padding: 118px 0 0 0;
+  @include media-breakpoint-up(md) {
+    padding: 135px 0 0 0;
+  }
   &__header {
     position: fixed;
     top: 117px;

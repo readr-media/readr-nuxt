@@ -240,10 +240,10 @@ a.sc-readr-donate-button {
 
 <style lang="scss" scoped>
 .cp {
-  padding: 118px 0 0 0;
-  @include media-breakpoint-up(md) {
-    padding: 135px 0 0 0;
-  }
+  //padding: 118px 0 0 0;
+  //@include media-breakpoint-up(md) {
+  //  padding: 135px 0 0 0;
+  //}
 }
 
 .header {
@@ -286,6 +286,10 @@ a.sc-readr-donate-button {
 }
 
 .article {
+  padding: 118px 0 0 0;
+  @include media-breakpoint-up(md) {
+    padding: 135px 0 0 0;
+  }
   &__article-leading-description-wrapper {
     background-color: #f1f1f1;
     padding: 48px 20px 0 20px;

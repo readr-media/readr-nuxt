@@ -81,7 +81,7 @@ export default {
 <style lang="scss" scoped>
 .cp {
   .cover {
-    padding: 48px 20px;
+    padding: 166px 20px;
     background-color: #f1f1f1;
     &__title {
       margin: 12px 0 0 0;
@@ -96,7 +96,7 @@ export default {
       margin: 24px 0 0 0;
     }
     @include media-breakpoint-up(md) {
-      padding: 60px 0;
+      padding: 195px 0;
     }
     &__navs {
       margin: 6px 0 0;
