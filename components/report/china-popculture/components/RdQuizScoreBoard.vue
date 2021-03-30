@@ -110,17 +110,27 @@
         </RdCollapsible>
       </div>
     </div>
+    <div class="article-in-score-board">
+      <RdArticle :cmsData="cmsData" />
+    </div>
   </section>
 </template>
 
 <script>
 import RdCollapsible from './RdCollapsible.vue'
+import RdArticle from './RdArticle.vue'
 
 export default {
   components: {
     RdCollapsible,
+    RdArticle,
   },
   props: {
+    cmsData: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
     textGoToArticle: {
       type: String,
       default: '',
@@ -388,6 +398,13 @@ export default {
   color: #111111;
   ::v-deep .dot {
     color: #d0cfcf;
+  }
+}
+
+.article-in-score-board {
+  .article {
+    // force to show the article
+    display: block !important;
   }
 }
 </style>

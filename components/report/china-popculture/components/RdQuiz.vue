@@ -42,6 +42,7 @@
     </template>
     <template v-else>
       <RdQuizScoreBoard
+        :cmsData="cmsData"
         :textGoToArticle="cmsData.contentApiData.scoreBoard.textGoToArticle"
         :textQuizAgain="cmsData.contentApiData.scoreBoard.textQuizAgain"
         :textMethodology="cmsData.contentApiData.scoreBoard.textMethodology"

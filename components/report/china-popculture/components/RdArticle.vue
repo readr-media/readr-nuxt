@@ -44,6 +44,12 @@ export default {
 </script>
 
 <style lang="scss">
+readr-donate-button {
+  width: 100%;
+  @include media-breakpoint-up(md) {
+    width: 476px;
+  }
+}
 a.sc-readr-donate-button {
   &::before {
     background-color: #111111;
@@ -83,14 +89,17 @@ a.sc-readr-donate-button {
 }
 
 .donate-button {
-  padding: 0 20px;
-  margin: 72px 0;
+  padding: 72px 20px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   @include media-breakpoint-up(md) {
-    max-width: 476px;
-    margin: 96px auto;
+    padding: 96px 0;
   }
   @include media-breakpoint-up(xl) {
-    margin: 120px auto;
+    padding: 120px 0;
   }
 }
 </style>
