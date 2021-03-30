@@ -76,7 +76,7 @@
       <div class="score-board__navs navs">
         <button
           class="navs__go-to-article-button go-to-article-button"
-          @click="$emit('goToArticle')"
+          @click="handleGoToArticle"
         >
           <div v-text="textGoToArticle" />
         </button>
@@ -117,6 +117,7 @@
 </template>
 
 <script>
+import scrollIntoView from 'scroll-into-view'
 import RdCollapsible from './RdCollapsible.vue'
 import RdArticle from './RdArticle.vue'
 
@@ -151,6 +152,9 @@ export default {
   methods: {
     processDescriptionDot(description) {
       return description.replaceAll('・', '<span class="dot">・</span>')
+    },
+    handleGoToArticle() {
+      scrollIntoView(document.querySelector('.article-in-score-board'))
     },
   },
 }
