@@ -44,6 +44,7 @@
       <RdQuizScoreBoard
         :cmsData="cmsData"
         :answerScore="answerScore"
+        :answerCollectionCorrects="answerCollectionCorrects"
         :textGoToArticle="cmsData.contentApiData.scoreBoard.textGoToArticle"
         :textQuizAgain="cmsData.contentApiData.scoreBoard.textQuizAgain"
         :textMethodology="cmsData.contentApiData.scoreBoard.textMethodology"
@@ -258,7 +259,11 @@ export default {
     },
     goToNextQuiz() {
       this.currentQuizIndex += 1
-      this.resetQuiz()
+      // this.resetQuiz()
+      this.shouldShowQuizResult = false
+      this.currentAnswerCollection = []
+      this.currentAnswerClickCount = 0
+      window.scrollTo(0, 0)
     },
     handleSubmitResult() {
       if (this.isCurrentQuizLast) {

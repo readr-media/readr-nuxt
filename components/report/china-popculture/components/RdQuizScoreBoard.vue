@@ -8,7 +8,9 @@
         </div>
         <div class="card__card-bottom card-bottom">
           <p class="card-text card-text--bold">你的成績是目前所有挑戰者中的</p>
-          <p class="card-text card-text--red">前 10％</p>
+          <p class="card-text card-text--red">
+            前 {{ currentScorePercentileRank }}％
+          </p>
         </div>
       </div>
       <div class="score-board__card card">
@@ -23,50 +25,45 @@
           <div class="quiz-global-record-list-wrapper">
             <h1 class="quiz-global-record-list-title">目前玩家圈選正確率</h1>
             <div class="quiz-global-record-list-column-wrapper">
-              <ol class="quiz-global-record-list">
-                <li class="quiz-global-record-list-item">
+              <ol
+                v-for="(globalRecordDataHalf, i) in globalRecordDataHalfDivide"
+                :key="i"
+                class="quiz-global-record-list"
+              >
+                <li
+                  v-for="(record, j) in globalRecordDataHalf"
+                  :key="`${i}-${j}`"
+                  class="quiz-global-record-list-item"
+                >
                   <span class="quiz-global-record-list-item-answer">
-                    <span>1. 閨蜜</span>
-                    <span class="miss">miss</span>
+                    <span>
+                      {{ i * globalRecordDataHalf.length + (j + 1) }}.
+                      {{
+                        (
+                          cmsDataAnswerCorrects[
+                            i * globalRecordDataHalf.length + j
+                          ] || {}
+                        ).value
+                      }}</span
+                    >
+                    <span
+                      v-if="
+                        isGlobalRecordMiss(
+                          (
+                            cmsDataAnswerCorrects[
+                              i * globalRecordDataHalf.length + j
+                            ] || {}
+                          ).value
+                        )
+                      "
+                      class="miss"
+                      v-text="'miss'"
+                    />
                   </span>
-                  <span class="quiz-global-record-list-item-ratio">95%</span>
-                </li>
-                <li class="quiz-global-record-list-item">
                   <span
-                    class="quiz-global-record-list-item-answer quiz-global-record-list-item-answer--bold"
-                    >2. 閨蜜</span
-                  >
-                  <span class="quiz-global-record-list-item-ratio">95%</span>
-                </li>
-                <li class="quiz-global-record-list-item">
-                  <span
-                    class="quiz-global-record-list-item-answer quiz-global-record-list-item-answer--bold"
-                    >3. 閨蜜</span
-                  >
-                  <span class="quiz-global-record-list-item-ratio">95%</span>
-                </li>
-              </ol>
-              <ol class="quiz-global-record-list">
-                <li class="quiz-global-record-list-item">
-                  <span class="quiz-global-record-list-item-answer">
-                    <span>1. 閨蜜</span>
-                    <span class="miss">miss</span>
-                  </span>
-                  <span class="quiz-global-record-list-item-ratio">95%</span>
-                </li>
-                <li class="quiz-global-record-list-item">
-                  <span
-                    class="quiz-global-record-list-item-answer quiz-global-record-list-item-answer--bold"
-                    >2. 閨蜜</span
-                  >
-                  <span class="quiz-global-record-list-item-ratio">95%</span>
-                </li>
-                <li class="quiz-global-record-list-item">
-                  <span
-                    class="quiz-global-record-list-item-answer quiz-global-record-list-item-answer--bold"
-                    >3. 閨蜜</span
-                  >
-                  <span class="quiz-global-record-list-item-ratio">95%</span>
+                    class="quiz-global-record-list-item-ratio"
+                    v-text="record.correctPercentage"
+                  />
                 </li>
               </ol>
             </div>
@@ -117,6 +114,7 @@
 </template>
 
 <script>
+import { get as axiosGet } from 'axios'
 import scrollIntoView from 'scroll-into-view'
 import RdCollapsible from './RdCollapsible.vue'
 import RdArticle from './RdArticle.vue'
@@ -136,6 +134,10 @@ export default {
       type: Number,
       default: 0,
     },
+    answerCollectionCorrects: {
+      type: Array,
+      default: () => [],
+    },
     textGoToArticle: {
       type: String,
       default: '',
@@ -153,12 +155,87 @@ export default {
       default: () => [{ title: '', description: '' }],
     },
   },
+  data() {
+    return {
+      globalAnswersData: [],
+    }
+  },
+  computed: {
+    globalScoresData() {
+      return this.globalAnswersData.map(function mapAnswersToScore(record) {
+        return record.answers.split(',').length * 5
+      })
+    },
+    currentScorePercentileRank() {
+      const winCount = this.globalScoresData.filter(
+        (score) => score < this.answerScore
+      ).length
+      return (winCount / this.globalAnswersData.length).toFixed(2) * 100 - 100
+    },
+    globalRecordData() {
+      const result = new Array(20).fill(undefined).map(() => ({
+        correctCount: 0,
+        correctPercentage: '0%',
+      }))
+      this.globalAnswersData.forEach((record) => {
+        const answers = record.answers.split(',')
+        answers.forEach((answer) => {
+          result[Number(answer)].correctCount += 1
+          result[Number(answer)].correctPercentage =
+            (
+              result[Number(answer)].correctCount /
+              this.globalAnswersData.length
+            ).toFixed(2) *
+              100 +
+            '%'
+        })
+      })
+      return result
+    },
+    globalRecordDataHalfDivide() {
+      return [
+        this.globalRecordData.slice(0, 10),
+        this.globalRecordData.slice(10, 20),
+      ]
+    },
+    cmsDataAnswerCorrects() {
+      return this.cmsData.contentApiData.quiz
+        .map((quiz) =>
+          quiz.contents.map((content) =>
+            content.texts.filter((text) => text.type === 'answerCorrect')
+          )
+        )
+        .flat(Infinity)
+    },
+  },
+  beforeMount() {
+    this.fetchGlobalScore()
+  },
   methods: {
-    processDescriptionDot(description) {
+    processDescriptionDot(description = '') {
       return description.replaceAll('・', '<span class="dot">・</span>')
     },
     handleGoToArticle() {
       scrollIntoView(document.querySelector('.article-in-score-board'))
+    },
+
+    async fetchGlobalScore() {
+      try {
+        const { data = [] } = await axiosGet(
+          'https://storage.googleapis.com/projects.readr.tw/china_popculture.json'
+        )
+        this.globalAnswersData.push(...data)
+      } catch (e) {
+        console.error(e)
+      }
+    },
+
+    isGlobalRecordMiss(value) {
+      return (
+        this.answerCollectionCorrects.findIndex(function compareValue(answer) {
+          return answer.value === value
+        }) === -1
+      )
     },
   },
 }
