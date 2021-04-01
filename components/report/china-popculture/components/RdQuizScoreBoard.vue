@@ -7,10 +7,15 @@
           <p class="card-text card-text--red">{{ answerScore }} 分</p>
         </div>
         <div class="card__card-bottom card-bottom">
-          <p class="card-text card-text--bold">你的成績是目前所有挑戰者中的</p>
+          <p class="card-text card-text--bold">你的成績目前贏過</p>
           <p class="card-text card-text--red">
-            前 {{ currentScorePercentileRank }}％
+            {{ currentScorePercentileRank }}％ 的人
           </p>
+          <p
+            v-if="currentScoreBadge"
+            class="card-text card-text--bold"
+            v-text="currentScoreBadge"
+          />
         </div>
       </div>
       <div class="score-board__card card">
@@ -170,7 +175,28 @@ export default {
       const winCount = this.globalScoresData.filter(
         (score) => score < this.answerScore
       ).length
-      return (winCount / this.globalAnswersData.length).toFixed(2) * 100 - 100
+      return (winCount / this.globalAnswersData.length).toFixed(2) * 100
+    },
+    currentScoreBadge() {
+      if (this.currentScorePercentileRank >= 99) {
+        return '辨識兩岸流行用語「真強者」'
+      } else if (this.currentScorePercentileRank >= 90) {
+        return '瞞不過你法眼的「敏銳者」　'
+      } else if (this.currentScorePercentileRank >= 80) {
+        return '只差一點點就全對的「能力者」'
+      } else if (this.currentScorePercentileRank >= 60) {
+        return '你需要被開發的「潛力者」'
+      } else if (this.currentScorePercentileRank >= 50) {
+        return '差一哩路就會辨識的「初階者」'
+      } else if (this.currentScorePercentileRank >= 30) {
+        return '中國流行語已快成為你的日常'
+      } else if (this.currentScorePercentileRank >= 20) {
+        return '中國流行語早已深入你生活'
+      } else if (this.currentScorePercentileRank >= 10) {
+        return '你是會行走的「中國流行語字典」'
+      } else {
+        return ''
+      }
     },
     globalRecordData() {
       const result = new Array(20).fill(undefined).map(() => ({
