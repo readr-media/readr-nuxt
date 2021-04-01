@@ -8,14 +8,27 @@
         </div>
         <div class="card__card-bottom card-bottom">
           <p class="card-text card-text--bold">你的成績目前贏過</p>
-          <p class="card-text card-text--red">
-            {{ currentScorePercentileRank }}％ 的人
-          </p>
-          <p
-            v-if="currentScoreBadge"
-            class="card-text card-text--bold"
-            v-text="currentScoreBadge"
-          />
+          <template v-if="!isFetchGlobalScoreError">
+            <p class="card-text card-text--red">
+              {{ currentScorePercentileRank }}％ 的人
+            </p>
+            <p
+              v-if="currentScoreBadge"
+              class="card-text card-text--bold"
+              v-text="currentScoreBadge"
+            />
+          </template>
+          <button
+            v-else
+            class="card-bottom__fetch-global-score-again-button fetch-global-score-again-button"
+            @click="fetchGlobalScore"
+          >
+            <span>按我揭曉</span>
+            <img
+              src="~/assets/report/china-popculture/cp-refresh-icon.svg"
+              alt="refresh-icon"
+            />
+          </button>
         </div>
       </div>
       <div class="score-board__card card">
@@ -28,7 +41,22 @@
           class="card__card-bottom card-bottom card__card-bottom--less-margin-top"
         >
           <div class="quiz-global-record-list-wrapper">
-            <h1 class="quiz-global-record-list-title">目前玩家圈選正確率</h1>
+            <h1 class="quiz-global-record-list-title">
+              <span>
+                目前玩家圈選正確率
+              </span>
+              <button
+                v-if="isFetchGlobalScoreError"
+                class="quiz-global-record-list-title__fetch-global-score-again-button fetch-global-score-again-button"
+                @click="fetchGlobalScore"
+              >
+                <span>按我揭曉</span>
+                <img
+                  src="~/assets/report/china-popculture/cp-refresh-icon.svg"
+                  alt="refresh-icon"
+                />
+              </button>
+            </h1>
             <div class="quiz-global-record-list-column-wrapper">
               <ol
                 v-for="(globalRecordDataHalf, i) in globalRecordDataHalfDivide"
@@ -67,7 +95,9 @@
                   </span>
                   <span
                     class="quiz-global-record-list-item-ratio"
-                    v-text="record.correctPercentage"
+                    v-text="
+                      !isFetchGlobalScoreError ? record.correctPercentage : '?%'
+                    "
                   />
                 </li>
               </ol>
@@ -163,6 +193,7 @@ export default {
   data() {
     return {
       globalAnswersData: [],
+      isFetchGlobalScoreError: false,
     }
   },
   computed: {
@@ -247,11 +278,14 @@ export default {
 
     async fetchGlobalScore() {
       try {
+        this.isFetchGlobalScoreError = false
         const { data = [] } = await axiosGet(
           'https://storage.googleapis.com/projects.readr.tw/china_popculture.json'
         )
+        this.globalAnswersData = []
         this.globalAnswersData.push(...data)
       } catch (e) {
+        this.isFetchGlobalScoreError = true
         console.error(e)
       }
     },
@@ -319,6 +353,14 @@ export default {
   border-bottom: 2px solid #111111;
   padding: 0 0 16px 0;
 }
+.card-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__fetch-global-score-again-button {
+    margin: 4px 0 0 0;
+  }
+}
 .card-text {
   & + & {
     margin: 4px 0 0 0;
@@ -346,6 +388,9 @@ export default {
   }
 }
 
+.quiz-global-record-list-wrapper {
+  width: 100%;
+}
 .quiz-global-record-list-title {
   border-bottom: 2px solid #111111;
   padding: 0 0 8px 0;
@@ -354,9 +399,16 @@ export default {
   line-height: 24px;
   text-align: center;
   color: #111111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   @include media-breakpoint-up(md) {
     font-size: 18px;
     line-height: 27px;
+  }
+
+  &__fetch-global-score-again-button {
+    margin: 4px 0 0 0;
   }
 }
 .quiz-global-record-list-column-wrapper {
@@ -516,6 +568,21 @@ export default {
   .article {
     // force to show the article
     display: block !important;
+  }
+}
+
+.fetch-global-score-again-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  text-align: center;
+  letter-spacing: 0.032em;
+  color: #f50e0e;
+  img {
+    margin: 0 0 0 4px;
   }
 }
 </style>
