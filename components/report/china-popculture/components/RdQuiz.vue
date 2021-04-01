@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { post as axiosPost } from 'axios'
 import RdQuizInfo from './RdQuizInfo.vue'
 import RdQuizHeader from './RdQuizHeader.vue'
 import RdQuizArticle from './RdQuizArticle.vue'
@@ -217,6 +218,15 @@ export default {
     answerScore() {
       return this.answerCollectionCorrects.length * 5
     },
+    cmsDataAnswerCorrects() {
+      return this.cmsData.contentApiData.quiz
+        .map((quiz) =>
+          quiz.contents.map((content) =>
+            content.texts.filter((text) => text.type === 'answerCorrect')
+          )
+        )
+        .flat(Infinity)
+    },
   },
   beforeMount() {
     if (!getCookie(this.quizInfoCookieName)) {
@@ -253,6 +263,34 @@ export default {
       this.answerCollection.push(...this.currentAnswerCollection)
       this.shouldShowQuizResult = true
       window.scrollTo(0, 0)
+
+      if (this.isCurrentQuizLast) {
+        this.postAnswerCollectionCorrects()
+      }
+    },
+    postAnswerCollectionCorrects() {
+      const answerCollectionCorrect = this.answerCollection.filter(
+        function filterAnswerCorrect(answer) {
+          return answer.type === 'answerCorrect'
+        }
+      )
+      const answers = answerCollectionCorrect
+        .map((answer) => {
+          return this.cmsDataAnswerCorrects.findIndex(function findWithValue(
+            cmsDataAnswer
+          ) {
+            return cmsDataAnswer.value === answer.value
+          })
+        })
+        .join(',')
+      axiosPost('/api/google-sheets/append', {
+        spreadsheetId: '1biBjkrWXzHFcL36G3MUjyMnAD8GxyZoDrNCjAvTBy_g',
+        range: 'A2:B',
+        valueInputOption: 'RAW',
+        resource: {
+          values: [['record', answers]],
+        },
+      })
     },
     goToScoreBoard() {
       this.shouldShowQuizScoreBoard = true

@@ -7,10 +7,10 @@
           <p class="card-text card-text--red">{{ answerScore }} 分</p>
         </div>
         <div class="card__card-bottom card-bottom">
-          <p class="card-text card-text--bold">你的成績目前贏過</p>
+          <p class="card-text card-text--bold">你的成績目前</p>
           <template v-if="!isFetchGlobalScoreError">
             <p class="card-text card-text--red">
-              {{ currentScorePercentileRank }}％ 的人
+              贏過 {{ currentScorePercentileRank }}％ 的人
             </p>
             <p
               v-if="currentScoreBadge"
