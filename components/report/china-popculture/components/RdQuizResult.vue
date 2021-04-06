@@ -1,5 +1,14 @@
 <template>
   <section class="quiz-result">
+    <button
+      class="quiz-result__to-top-button to-top-button"
+      @click="handleToTopButtonClick"
+    >
+      <img
+        src="~/assets/report/china-popculture/cp-to-top-icon.svg"
+        alt="to-top"
+      />
+    </button>
     <section class="quiz-result__info-basic info-basic">
       <RdQuizResultInfoCard
         :title="textInfoCardTitle"
@@ -42,6 +51,7 @@
 </template>
 
 <script>
+import scrollIntoView from 'scroll-into-view'
 import RdQuizResultInfoCard from './RdQuizResultInfoCard.vue'
 import RdSubmitButton from './RdSubmitButton.vue'
 import RdCollapsible from './RdCollapsible'
@@ -91,11 +101,38 @@ export default {
     handleAgainButtonClick() {
       this.$emit('again')
     },
+    handleToTopButtonClick() {
+      scrollIntoView(document.querySelector('.info-basic'))
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.quiz-result {
+  &__to-top-button {
+    position: fixed;
+    right: 16px;
+    bottom: 27px;
+  }
+}
+
+.to-top-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 100%;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14), 0 2px 1px -2px rgba(0, 0, 0, 0.12),
+    0px 1px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  @include media-breakpoint-up(md) {
+    display: none;
+  }
+}
+
 .info-basic {
   display: flex;
   flex-direction: column;
