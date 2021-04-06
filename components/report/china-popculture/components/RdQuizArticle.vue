@@ -128,8 +128,10 @@ export default {
     margin: 24px 0 0 0;
   }
   &__submit-button {
+    display: none !important;
     margin: 48px 0 0 0;
     @include media-breakpoint-up(md) {
+      display: flex !important;
       margin: 48px auto 0 auto;
       max-width: 280px;
     }

@@ -14,6 +14,9 @@
         :class="{ upper: shouldHideHeader }"
         :texts="headerTexts"
         :textHighlight="headerTextsCount"
+        :textSubmitButton="textSubmitButton"
+        :shouldDisableAnswerClick="shouldDisableAnswerClick"
+        @submit="handleSubmit"
       />
       <RdQuizArticle
         v-if="!shouldShowQuizResult"
@@ -22,7 +25,7 @@
         :title="currentQuiz.title"
         :info="currentQuiz.info"
         :contents="currentQuiz.contents"
-        :textSubmitButton="cmsData.contentApiData.quizCommon.textSubmit"
+        :textSubmitButton="textSubmitButton"
         :shouldDisableAnswerClick="shouldDisableAnswerClick"
         @answerClick="handleAnswerClick"
         @submit="handleSubmit"
@@ -228,6 +231,31 @@ export default {
         )
         .flat(Infinity)
     },
+
+    textSubmitButton() {
+      let state = 'init'
+      if (this.shouldDisableAnswerClick) {
+        state = 'submit'
+      } else if (this.currentAnswerClickCount <= 0) {
+        state = 'init'
+      } else {
+        state = 'progress'
+      }
+      switch (state) {
+        case 'init': {
+          return this.cmsData.contentApiData.quizCommon.textSubmitInit
+        }
+        case 'progress': {
+          return this.cmsData.contentApiData.quizCommon.textSubmitProgress
+        }
+        case 'submit': {
+          return this.cmsData.contentApiData.quizCommon.textSubmit
+        }
+        default: {
+          return ''
+        }
+      }
+    },
   },
   beforeMount() {
     if (!getCookie(this.quizInfoCookieName)) {
@@ -356,13 +384,12 @@ function getCookie(cname) {
   }
   &__header {
     position: fixed;
-    top: 117px;
+    bottom: 0;
     transition: transform 0.3s ease-out;
     @include media-breakpoint-up(md) {
       top: 134px;
     }
     &.upper {
-      transform: translateY(-67px);
       @include media-breakpoint-up(md) {
         transform: translateY(-84px);
       }
