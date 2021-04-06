@@ -1,6 +1,7 @@
 <template>
   <div class="solution">
     <p class="solution__paragraph paragraph">
+      <span v-if="isMiss" class="miss">miss</span>
       <template v-for="text in contents">
         <RdQuizArticleAnswerText
           v-if="isTextTypeAnswer(text)"
@@ -39,6 +40,10 @@ export default {
       type: String,
       default: '',
     },
+    isMiss: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     correctAnswer() {
@@ -69,6 +74,14 @@ export default {
   &__answer-text {
     margin: 0 1px;
   }
+}
+
+.miss {
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  color: #f50e0e;
+  vertical-align: top;
 }
 
 .description {

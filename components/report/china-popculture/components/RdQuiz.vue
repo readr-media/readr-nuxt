@@ -36,6 +36,7 @@
         :textAgainButton="cmsData.contentApiData.quizCommon.textQuizAgain"
         :textSolutionButton="cmsData.contentApiData.quizCommon.textSolution"
         :solutions="currentQuiz.solutions"
+        :currentAnswerCollection="currentAnswerCollection"
         @submit="handleSubmitResult"
         @again="handleAgain"
       />

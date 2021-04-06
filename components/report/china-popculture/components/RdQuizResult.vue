@@ -42,6 +42,7 @@
               :order="i + 1"
               :contents="solution.texts"
               :description="solution.description"
+              :isMiss="isAnswerMiss(solution)"
             />
           </li>
         </ol>
@@ -93,6 +94,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    currentAnswerCollection: {
+      type: Array,
+      default: () => [],
+    },
   },
   methods: {
     handleSubmitButtonClick() {
@@ -103,6 +108,18 @@ export default {
     },
     handleToTopButtonClick() {
       scrollIntoView(document.querySelector('.info-basic'))
+    },
+    isAnswerMiss(solution) {
+      const value = (solution?.texts ?? []).find(function findTypeAnswerCorrect(
+        text
+      ) {
+        return text.type === 'answerCorrect'
+      })?.value
+      return (
+        this.currentAnswerCollection.findIndex(function compareValue(answer) {
+          return answer.value === value
+        }) === -1
+      )
     },
   },
 }
