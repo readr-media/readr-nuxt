@@ -10,6 +10,21 @@
       :slug="'china-popculture'"
       @sendGaEvent="sendGaEvent"
     />
+    <div class="article__report-quiz-wrapper">
+      <RdReportQuiz
+        :quizDescription="cmsData.contentApiData.articleQuiz.description"
+        :quizOptions="cmsData.contentApiData.articleQuiz.options"
+        :quizDetailTitleCorrect="
+          cmsData.contentApiData.articleQuiz.answerDetailTitleCorrect
+        "
+        :quizDetailTitleWrong="
+          cmsData.contentApiData.articleQuiz.answerDetailTitleWrong
+        "
+        :quizDetailDescription="
+          cmsData.contentApiData.articleQuiz.answerDetailDescription
+        "
+      />
+    </div>
     <RdReportExtras
       :contents="cmsData.contentApiData.extras.contents"
       @sendGaEvent="sendGaEvent"
@@ -24,6 +39,7 @@
 
 <script>
 import RdArticleLeadingDescription from './RdArticleLeadingDescription.vue'
+import RdReportQuiz from './RdReportQuiz.vue'
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 
@@ -31,6 +47,7 @@ export default {
   components: {
     RdArticleLeadingDescription,
     RdReportArticle,
+    RdReportQuiz,
     RdReportExtras,
   },
   props: {
@@ -84,6 +101,14 @@ a.sc-readr-donate-button {
     justify-content: center;
     @include media-breakpoint-up(xl) {
       padding: 60px 0 0 0;
+    }
+  }
+  &__report-quiz-wrapper {
+    padding: 0 20px 48px 20px;
+    background-color: #f1f1f1;
+
+    @include media-breakpoint-up(xl) {
+      padding: 0 0 60px 0;
     }
   }
 }
