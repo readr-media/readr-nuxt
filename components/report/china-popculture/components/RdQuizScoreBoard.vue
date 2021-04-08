@@ -221,7 +221,7 @@ export default {
       const winCount = this.globalScoresData.filter(
         (score) => score < this.answerScore
       ).length
-      return (winCount / this.globalAnswersData.length).toFixed(2) * 100
+      return Math.round((winCount / this.globalAnswersData.length) * 100)
     },
     currentScoreBadge() {
       if (this.currentScorePercentileRank >= 99) {
@@ -254,12 +254,11 @@ export default {
         answers.forEach((answer) => {
           result[Number(answer)].correctCount += 1
           result[Number(answer)].correctPercentage =
-            (
-              result[Number(answer)].correctCount /
-              this.globalAnswersData.length
-            ).toFixed(2) *
-              100 +
-            '%'
+            Math.round(
+              (result[Number(answer)].correctCount /
+                this.globalAnswersData.length) *
+                100
+            ) + '%'
         })
       })
       return result
