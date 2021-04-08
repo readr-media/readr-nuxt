@@ -76,8 +76,17 @@ export default {
   color: #111111;
   display: flex;
   align-items: center;
+  transition: border 0.1s ease-out, font-weight 0.1s ease-out,
+    background-color 0.1s ease-out;
   &__text {
     margin: 0 0 0 8px;
+  }
+  &:hover {
+    border: 1px solid #111111;
+    font-weight: 500;
+  }
+  &:active {
+    background-color: rgba(0, 0, 0, 0.05);
   }
 }
 
