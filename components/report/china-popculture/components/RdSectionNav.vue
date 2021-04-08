@@ -3,7 +3,15 @@
     <button
       v-for="(nav, i) in navs"
       :key="nav"
-      :class="['button', { 'button--active': activeIndex === i }]"
+      :class="[
+        'button',
+        {
+          'button--active':
+            forceNavActiveAt !== -1
+              ? forceNavActiveAt === i
+              : activeIndex === i,
+        },
+      ]"
       @click="$emit('navigateToIndex', i)"
       v-text="nav"
     />
@@ -18,6 +26,10 @@ export default {
       default: () => [],
     },
     activeIndex: {
+      type: Number,
+      default: -1,
+    },
+    forceNavActiveAt: {
       type: Number,
       default: -1,
     },

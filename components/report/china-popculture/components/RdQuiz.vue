@@ -55,6 +55,8 @@
         :textMethodology="cmsData.contentApiData.scoreBoard.textMethodology"
         :methodologies="cmsData.contentApiData.scoreBoard.methodologies"
         @quizAgain="handleScoreBoardQuizAgain"
+        @articleVisible="$emit('articleVisible')"
+        @scoreboardVisible="$emit('scoreboardVisible')"
       />
     </template>
   </section>

@@ -1,145 +1,156 @@
 <template>
   <section class="score-board">
-    <div class="wrapper">
-      <div class="score-board__card card">
-        <div class="card__card-top card-top">
-          <p class="card-text card-text--bold">你的總成績</p>
-          <p class="card-text card-text--red">{{ answerScore }} 分</p>
+    <div
+      v-observe-visibility="
+        (isVisible) => {
+          $emit(!isVisible ? 'articleVisible' : 'scoreboardVisible')
+        }
+      "
+    >
+      <div class="wrapper">
+        <div class="score-board__card card">
+          <div class="card__card-top card-top">
+            <p class="card-text card-text--bold">你的總成績</p>
+            <p class="card-text card-text--red">{{ answerScore }} 分</p>
+          </div>
+          <div class="card__card-bottom card-bottom">
+            <p class="card-text card-text--bold">你的成績目前</p>
+            <template v-if="!isFetchGlobalScoreError">
+              <p class="card-text card-text--red">
+                贏過 {{ currentScorePercentileRank }}％ 的人
+              </p>
+              <p
+                v-if="currentScoreBadge"
+                class="card-text card-text--bold"
+                v-text="currentScoreBadge"
+              />
+            </template>
+            <button
+              v-else
+              class="card-bottom__fetch-global-score-again-button fetch-global-score-again-button"
+              @click="fetchGlobalScore"
+            >
+              <span>按我揭曉</span>
+              <img
+                src="~/assets/report/china-popculture/cp-refresh-icon.svg"
+                alt="refresh-icon"
+              />
+            </button>
+          </div>
         </div>
-        <div class="card__card-bottom card-bottom">
-          <p class="card-text card-text--bold">你的成績目前</p>
-          <template v-if="!isFetchGlobalScoreError">
-            <p class="card-text card-text--red">
-              贏過 {{ currentScorePercentileRank }}％ 的人
-            </p>
-            <p
-              v-if="currentScoreBadge"
-              class="card-text card-text--bold"
-              v-text="currentScoreBadge"
-            />
-          </template>
-          <button
-            v-else
-            class="card-bottom__fetch-global-score-again-button fetch-global-score-again-button"
-            @click="fetchGlobalScore"
+        <div class="score-board__card card">
+          <div class="card__card-top card-top">
+            <p class="card-text card-text--bold">你總共找出了</p>
+            <p class="card-text card-text--red">{{ answerScore / 5 }}/20 個</p>
+            <p class="card-text card-text--bold">中國流行語</p>
+          </div>
+          <div
+            class="card__card-bottom card-bottom card__card-bottom--less-margin-top"
           >
-            <span>按我揭曉</span>
-            <img
-              src="~/assets/report/china-popculture/cp-refresh-icon.svg"
-              alt="refresh-icon"
-            />
-          </button>
-        </div>
-      </div>
-      <div class="score-board__card card">
-        <div class="card__card-top card-top">
-          <p class="card-text card-text--bold">你總共找出了</p>
-          <p class="card-text card-text--red">{{ answerScore / 5 }}/20 個</p>
-          <p class="card-text card-text--bold">中國流行語</p>
-        </div>
-        <div
-          class="card__card-bottom card-bottom card__card-bottom--less-margin-top"
-        >
-          <div class="quiz-global-record-list-wrapper">
-            <h1 class="quiz-global-record-list-title">
-              <span>
-                目前玩家圈選正確率
-              </span>
-              <button
-                v-if="isFetchGlobalScoreError"
-                class="quiz-global-record-list-title__fetch-global-score-again-button fetch-global-score-again-button"
-                @click="fetchGlobalScore"
-              >
-                <span>按我揭曉</span>
-                <img
-                  src="~/assets/report/china-popculture/cp-refresh-icon.svg"
-                  alt="refresh-icon"
-                />
-              </button>
-            </h1>
-            <div class="quiz-global-record-list-column-wrapper">
-              <ol
-                v-for="(globalRecordDataHalf, i) in globalRecordDataHalfDivide"
-                :key="i"
-                class="quiz-global-record-list"
-              >
-                <li
-                  v-for="(record, j) in globalRecordDataHalf"
-                  :key="`${i}-${j}`"
-                  class="quiz-global-record-list-item"
+            <div class="quiz-global-record-list-wrapper">
+              <h1 class="quiz-global-record-list-title">
+                <span>
+                  目前玩家圈選正確率
+                </span>
+                <button
+                  v-if="isFetchGlobalScoreError"
+                  class="quiz-global-record-list-title__fetch-global-score-again-button fetch-global-score-again-button"
+                  @click="fetchGlobalScore"
                 >
-                  <span class="quiz-global-record-list-item-answer">
-                    <span>
-                      {{ i * globalRecordDataHalf.length + (j + 1) }}.
-                      {{
-                        (
-                          cmsDataAnswerCorrects[
-                            i * globalRecordDataHalf.length + j
-                          ] || {}
-                        ).value
-                      }}</span
-                    >
-                    <span
-                      v-if="
-                        isGlobalRecordMiss(
+                  <span>按我揭曉</span>
+                  <img
+                    src="~/assets/report/china-popculture/cp-refresh-icon.svg"
+                    alt="refresh-icon"
+                  />
+                </button>
+              </h1>
+              <div class="quiz-global-record-list-column-wrapper">
+                <ol
+                  v-for="(globalRecordDataHalf,
+                  i) in globalRecordDataHalfDivide"
+                  :key="i"
+                  class="quiz-global-record-list"
+                >
+                  <li
+                    v-for="(record, j) in globalRecordDataHalf"
+                    :key="`${i}-${j}`"
+                    class="quiz-global-record-list-item"
+                  >
+                    <span class="quiz-global-record-list-item-answer">
+                      <span>
+                        {{ i * globalRecordDataHalf.length + (j + 1) }}.
+                        {{
                           (
                             cmsDataAnswerCorrects[
                               i * globalRecordDataHalf.length + j
                             ] || {}
                           ).value
-                        )
+                        }}</span
+                      >
+                      <span
+                        v-if="
+                          isGlobalRecordMiss(
+                            (
+                              cmsDataAnswerCorrects[
+                                i * globalRecordDataHalf.length + j
+                              ] || {}
+                            ).value
+                          )
+                        "
+                        class="miss"
+                        v-text="'miss'"
+                      />
+                    </span>
+                    <span
+                      class="quiz-global-record-list-item-ratio"
+                      v-text="
+                        !isFetchGlobalScoreError
+                          ? record.correctPercentage
+                          : '?%'
                       "
-                      class="miss"
-                      v-text="'miss'"
                     />
-                  </span>
-                  <span
-                    class="quiz-global-record-list-item-ratio"
-                    v-text="
-                      !isFetchGlobalScoreError ? record.correctPercentage : '?%'
-                    "
-                  />
-                </li>
-              </ol>
+                  </li>
+                </ol>
+              </div>
             </div>
           </div>
         </div>
+        <div class="score-board__navs navs">
+          <button
+            class="navs__go-to-article-button go-to-article-button"
+            @click="handleGoToArticle"
+          >
+            <div v-text="textGoToArticle" />
+          </button>
+          <button
+            class="navs__quiz-again-button quiz-again-button"
+            @click="$emit('quizAgain')"
+            v-text="textQuizAgain"
+          />
+        </div>
       </div>
-      <div class="score-board__navs navs">
-        <button
-          class="navs__go-to-article-button go-to-article-button"
-          @click="handleGoToArticle"
-        >
-          <div v-text="textGoToArticle" />
-        </button>
-        <button
-          class="navs__quiz-again-button quiz-again-button"
-          @click="$emit('quizAgain')"
-          v-text="textQuizAgain"
-        />
-      </div>
-    </div>
-    <div class="methodology-wrapper">
-      <div class="wrapper">
-        <RdCollapsible :textButton="textMethodology">
-          <div class="methodology">
-            <article
-              v-for="(methodology, i) in methodologies"
-              :key="i"
-              class="methodology-article"
-            >
-              <h1
-                class="methodology-article-title"
-                v-text="methodology.title"
-              />
-              <!-- eslint-disable vue/no-v-html -->
-              <p
-                class="methodology-article-paragraph"
-                v-html="processDescriptionDot(methodology.description)"
-              />
-            </article>
-          </div>
-        </RdCollapsible>
+      <div class="methodology-wrapper">
+        <div class="wrapper">
+          <RdCollapsible :textButton="textMethodology">
+            <div class="methodology">
+              <article
+                v-for="(methodology, i) in methodologies"
+                :key="i"
+                class="methodology-article"
+              >
+                <h1
+                  class="methodology-article-title"
+                  v-text="methodology.title"
+                />
+                <!-- eslint-disable vue/no-v-html -->
+                <p
+                  class="methodology-article-paragraph"
+                  v-html="processDescriptionDot(methodology.description)"
+                />
+              </article>
+            </div>
+          </RdCollapsible>
+        </div>
       </div>
     </div>
     <div class="article-in-score-board">
@@ -151,6 +162,7 @@
 <script>
 import { get as axiosGet } from 'axios'
 import scrollIntoView from 'scroll-into-view'
+import { ObserveVisibility } from 'vue-observe-visibility'
 import RdCollapsible from './RdCollapsible.vue'
 import RdArticle from './RdArticle.vue'
 
@@ -158,6 +170,9 @@ export default {
   components: {
     RdCollapsible,
     RdArticle,
+  },
+  directives: {
+    'observe-visibility': ObserveVisibility,
   },
   props: {
     cmsData: {

@@ -6,6 +6,7 @@
       :class="{ upper: shouldHideHeader }"
       :navs="cmsData.contentApiData.sectionNav"
       :activeIndex="sectionIndex"
+      :forceNavActiveAt="forceSectionNavActiveIndex"
       @navigateToIndex="handleNavigateToIndex"
     />
     <RdCover
@@ -18,7 +19,12 @@
       @goToQuiz="handleNavigateToIndex(0)"
       @goToArticle="handleNavigateToIndex(1)"
     />
-    <RdQuiz v-show="shouldShowQuiz" :cmsData="cmsData" />
+    <RdQuiz
+      v-show="shouldShowQuiz"
+      :cmsData="cmsData"
+      @articleVisible="handleScoreArticleVisible"
+      @scoreboardVisible="handleScoreBoardVisible"
+    />
     <RdArticle v-show="shouldShowArticle" :cmsData="cmsData" />
     <RdReportCredit
       :authors="cmsData.contentApiData.credit"
@@ -72,6 +78,7 @@ export default {
       shouldShowArticle: false,
       shouldShowLatestCoverages: false,
       sectionIndex: -1,
+      forceSectionNavActiveIndex: -1,
     }
   },
   computed: {
@@ -137,6 +144,13 @@ export default {
     },
     handleNavigateToIndex(index) {
       this.sectionIndex = index
+    },
+
+    handleScoreArticleVisible() {
+      this.forceSectionNavActiveIndex = 1
+    },
+    handleScoreBoardVisible() {
+      this.forceSectionNavActiveIndex = 0
     },
   },
 }

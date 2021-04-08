@@ -43,13 +43,6 @@ import RdReportQuiz from './RdReportQuiz.vue'
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 
-// import intersect from '~/components/helpers/directives/intersect.js'
-//
-// import {
-//   setupIntersectionObserver,
-//   cleanupIntersectionObserver,
-// } from '~/components/helpers/index.js'
-
 export default {
   components: {
     RdArticleLeadingDescription,
@@ -57,9 +50,6 @@ export default {
     RdReportQuiz,
     RdReportExtras,
   },
-  // directives: {
-  //   intersect,
-  // },
   props: {
     cmsData: {
       type: Object,
@@ -67,28 +57,7 @@ export default {
       default: () => ({}),
     },
   },
-  // mounted() {
-  //   this.setupScrollDepthObserver()
-  // },
-  //
-  // beforeDestroy() {
-  //   cleanupIntersectionObserver(this, 'scrollDepthObserver')
-  // },
   methods: {
-    // async setupScrollDepthObserver() {
-    //   this.scrollDepthObserver = await setupIntersectionObserver((entries) => {
-    //     entries.forEach(({ isIntersecting, target }) => {
-    //       if (isIntersecting) {
-    //         const title = target.textContent
-    //         this.$emit('sendGaEvent', {
-    //           action: 'scroll',
-    //           label: `scroll to ${title}`,
-    //         })
-    //         this.scrollDepthObserver.unobserve(target)
-    //       }
-    //     })
-    //   })
-    // },
     sendGaEvent({ action, label, value }) {
       this.$ga.event('projects', action, label, value)
     },
