@@ -6,6 +6,7 @@
           $emit(!isVisible ? 'articleVisible' : 'scoreboardVisible')
         }
       "
+      class="score-board-wrapper"
     >
       <div class="wrapper">
         <div class="score-board__card card">

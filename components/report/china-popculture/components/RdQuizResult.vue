@@ -218,6 +218,7 @@ export default {
 
 .info-detail {
   padding: 32px 20px;
+  background-color: white;
   &__collapsible {
     @include media-breakpoint-up(md) {
       max-width: 560px;

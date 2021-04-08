@@ -1,5 +1,5 @@
 <template>
-  <section v-show="shouldShowArticle" class="article">
+  <section class="article">
     <div class="article__article-leading-description-wrapper">
       <RdArticleLeadingDescription
         :description="cmsData.contentApiData.articleLeadingDescription"
@@ -96,6 +96,7 @@ a.sc-readr-donate-button {
 <style lang="scss" scoped>
 .article {
   padding: 118px 0 0 0;
+  background-color: #f1f1f1;
   @include media-breakpoint-up(md) {
     padding: 135px 0 0 0;
   }

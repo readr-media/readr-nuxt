@@ -1,38 +1,40 @@
 <template>
   <article class="article">
-    <RdQuizArticleAuthorProfile
-      class="article__author-profile"
-      :authorId="authorProfileId"
-      :authorName="authorProfile.name"
-      :thumbnailText="authorProfileThumbnailText"
-    />
-    <h1 class="article__title title" v-text="title" />
-    <p class="article__info info">
-      <span v-text="info.category" />
-      <span>・</span>
-      <span v-text="info.time" />
-    </p>
-    <div class="article__contents contents">
-      <p v-for="(content, i) in contents" :key="i">
-        <template v-for="text in content.texts">
-          <RdQuizArticleAnswerText
-            v-if="isTextTypeAnswer(text)"
-            :key="text.value"
-            class="contents__answer-text"
-            :text="text.value"
-            :shouldDisableAnswerClick="shouldDisableAnswerClick"
-            @toggle="(isToggle) => handleTextToggle(isToggle, text)"
-          />
-          <span v-else :key="text.value" v-text="text.value" />
-        </template>
+    <div class="wrapper">
+      <RdQuizArticleAuthorProfile
+        class="article__author-profile"
+        :authorId="authorProfileId"
+        :authorName="authorProfile.name"
+        :thumbnailText="authorProfileThumbnailText"
+      />
+      <h1 class="article__title title" v-text="title" />
+      <p class="article__info info">
+        <span v-text="info.category" />
+        <span>・</span>
+        <span v-text="info.time" />
       </p>
+      <div class="article__contents contents">
+        <p v-for="(content, i) in contents" :key="i">
+          <template v-for="text in content.texts">
+            <RdQuizArticleAnswerText
+              v-if="isTextTypeAnswer(text)"
+              :key="text.value"
+              class="contents__answer-text"
+              :text="text.value"
+              :shouldDisableAnswerClick="shouldDisableAnswerClick"
+              @toggle="(isToggle) => handleTextToggle(isToggle, text)"
+            />
+            <span v-else :key="text.value" v-text="text.value" />
+          </template>
+        </p>
+      </div>
+      <RdSubmitButton
+        class="article__submit-button"
+        :state="!shouldDisableAnswerClick ? 'disable' : 'normal'"
+        :text="textSubmitButton"
+        @click.native="handleSubmitButtonClick"
+      />
     </div>
-    <RdSubmitButton
-      class="article__submit-button"
-      :state="!shouldDisableAnswerClick ? 'disable' : 'normal'"
-      :text="textSubmitButton"
-      @click.native="handleSubmitButtonClick"
-    />
   </article>
 </template>
 
@@ -107,16 +109,7 @@ export default {
 
 <style lang="scss" scoped>
 .article {
-  padding: 66px 20px 48px 20px;
-  @include media-breakpoint-up(md) {
-    padding: 100px 0 48px 0;
-    max-width: 568px;
-    margin: 0 auto;
-  }
-  @include media-breakpoint-up(xl) {
-    padding: 98px 0 60px 0;
-    max-width: 600px;
-  }
+  background-color: white;
   &__title,
   &__info {
     margin: 12px 0 0 0;
@@ -135,6 +128,19 @@ export default {
       margin: 48px auto 0 auto;
       max-width: 280px;
     }
+  }
+}
+
+.wrapper {
+  padding: 66px 20px 48px 20px;
+  @include media-breakpoint-up(md) {
+    padding: 100px 0 48px 0;
+    max-width: 568px;
+    margin: 0 auto;
+  }
+  @include media-breakpoint-up(xl) {
+    padding: 98px 0 60px 0;
+    max-width: 600px;
   }
 }
 
