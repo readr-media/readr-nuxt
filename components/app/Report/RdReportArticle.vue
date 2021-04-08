@@ -74,6 +74,12 @@ export default {
 
           return (
             <LazyRenderer tagName="picture" class="report-article__picture">
+              <div
+                style="visibility: hidden; height: 0"
+                vIntersect={this.scrollDepthObserver}
+              >
+                靜態圖 {id}
+              </div>
               <source
                 media={`(min-width: ${styleVariables['breakpoint-sm']})`}
                 srcset={require(`~/assets/report/${this.slug}/report-article-picture-${id}-sm.png`)}
@@ -108,6 +114,12 @@ export default {
           const { id = '', title = '', info = '' } = content.value
           return (
             <LazyRenderer class="report-article__flourish" preLoad={2}>
+              <div
+                style="visibility: hidden; height: 0"
+                vIntersect={this.scrollDepthObserver}
+              >
+                flourish {title}
+              </div>
               <RdFlourish chartId={id} title={title} info={info} />
             </LazyRenderer>
           )

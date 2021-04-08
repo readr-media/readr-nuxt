@@ -4,6 +4,7 @@
 
     <readr-footer
       id="default-footer"
+      v-intersect="gaEventObserver"
       @aboutLinkClick="sendGaClickFooterEvent('aboutus')"
       @contactLinkClick="sendGaClickFooterEvent('contact')"
       @privacyLinkClick="sendGaClickFooterEvent('privacy')"
@@ -21,6 +22,12 @@ import rafThrottle from 'raf-throttle'
 
 import RdGdpr from '~/components/shared/RdGdpr.vue'
 
+import intersect from '~/components/helpers/directives/intersect.js'
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/components/helpers/index.js'
+
 if (process.browser) {
   // eslint-disable-next-line no-var
   var {
@@ -30,6 +37,10 @@ if (process.browser) {
 }
 
 export default {
+  directives: {
+    intersect,
+  },
+
   components: {
     RdGdpr,
   },
@@ -38,6 +49,13 @@ export default {
     return {
       shouldOpenGdpr,
       closeGdpr,
+    }
+  },
+
+  data() {
+    return {
+      gaEventObserver: undefined,
+      canSendGaEventFooter: true,
     }
   },
 
@@ -51,10 +69,12 @@ export default {
       'visit',
       `readr ${isReadr2User.value ? '2.0' : '3.0'}`
     )
+    this.setupGaEventObserver()
   },
 
   beforeDestroy() {
     this.cleanupViewportListeners()
+    this.cleanupGaEventObserver()
   },
 
   methods: {
@@ -81,6 +101,25 @@ export default {
     },
     sendGaClickFooterEvent(label) {
       this.sendGaEvent('footer', 'click', label)
+    },
+
+    async setupGaEventObserver() {
+      this.gaEventObserver = await setupIntersectionObserver((entries) => {
+        if (!this.canSendGaEventFooter) {
+          return
+        }
+
+        entries.forEach(({ isIntersecting }) => {
+          if (isIntersecting) {
+            this.canSendGaEventFooter = false
+            this.$ga.event('projects', 'scroll', 'scroll to footer')
+            this.cleanupGaEventObserver()
+          }
+        })
+      })
+    },
+    cleanupGaEventObserver() {
+      cleanupIntersectionObserver(this, 'gaEventObserver')
     },
   },
 }
