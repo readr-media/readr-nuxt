@@ -12,6 +12,7 @@
     />
     <div class="article__report-quiz-wrapper">
       <RdReportQuiz
+        :quizTitle="cmsData.contentApiData.articleQuiz.title"
         :quizDescription="cmsData.contentApiData.articleQuiz.description"
         :quizOptions="cmsData.contentApiData.articleQuiz.options"
         :quizDetailTitleCorrect="

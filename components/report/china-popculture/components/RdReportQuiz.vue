@@ -1,5 +1,6 @@
 <template>
   <section class="report-quiz">
+    <h1 class="report-quiz__quiz-title quiz-title" v-text="quizTitle" />
     <p class="report-quiz__quiz-description" v-text="quizDescription" />
     <div class="report-quiz__quiz-options quiz-options">
       <RdReportQuizButton
@@ -37,6 +38,10 @@ export default {
     RdReportQuizButton,
   },
   props: {
+    quizTitle: {
+      type: String,
+      default: '',
+    },
     quizDescription: {
       type: String,
       default: '',
@@ -109,6 +114,9 @@ export default {
   line-height: 36px;
   letter-spacing: 0.01em;
   color: #111111;
+  &__quiz-description {
+    margin: 4px 0 0 0;
+  }
   &__quiz-options {
     margin: 20px 0 0 0;
     @include media-breakpoint-up(md) {
@@ -131,6 +139,15 @@ export default {
   @include media-breakpoint-up(xl) {
     max-width: 600px;
   }
+}
+
+.quiz-title {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: #111111;
 }
 
 .quiz-options {
