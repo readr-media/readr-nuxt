@@ -40,6 +40,7 @@
         :textSolutionButton="cmsData.contentApiData.quizCommon.textSolution"
         :solutions="currentQuiz.solutions"
         :currentAnswerCollection="currentAnswerCollection"
+        :currentQuizIndex="currentQuizIndex"
         @submit="handleSubmitResult"
         @again="handleAgain"
       />
@@ -296,6 +297,12 @@ export default {
       if (this.isCurrentQuizLast) {
         this.postAnswerCollectionCorrects()
       }
+
+      this.$ga.event(
+        'projects',
+        'click',
+        `送出看答案${this.currentQuizIndex + 1}`
+      )
     },
     postAnswerCollectionCorrects() {
       const answerCollectionCorrect = this.answerCollection.filter(
@@ -354,6 +361,7 @@ export default {
       this.shouldShowQuizScoreBoard = false
       this.currentQuizIndex = 0
       this.resetQuiz()
+      this.$ga.event('projects', 'click', '再挑戰一次All')
     },
   },
 }

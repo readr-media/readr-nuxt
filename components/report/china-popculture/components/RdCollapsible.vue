@@ -29,10 +29,15 @@ export default {
       type: String,
       default: '',
     },
+    currentQuizIndex: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
       isToggled: false,
+      hasToggledOnce: false,
     }
   },
   computed: {
@@ -44,6 +49,16 @@ export default {
   },
   methods: {
     handleToggleButtonClick() {
+      if (!this.hasToggledOnce) {
+        this.hasToggledOnce = true
+
+        this.$ga.event(
+          'projects',
+          'click',
+          this.textButton +
+            (this.textButton.includes('詳解') ? this.currentQuizIndex + 1 : '')
+        )
+      }
       this.isToggled = !this.isToggled
     },
   },

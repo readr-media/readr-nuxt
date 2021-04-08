@@ -21,13 +21,16 @@
       <div class="cover__navs navs">
         <button
           class="navs__to-to-quiz-button go-to-quiz-button"
-          @click="$emit('goToQuiz')"
+          @click="$emit('goToQuiz'), $ga.event('projects', 'click', '我要挑戰')"
         >
           <div v-text="textGoToQuiz" />
         </button>
         <button
           class="navs__go-to-article-button go-to-article-button"
-          @click="$emit('goToArticle')"
+          @click="
+            $emit('goToArticle'),
+              $ga.event('projects', 'click', '跳過遊戲看報導')
+          "
           v-text="textGoToArticle"
         />
       </div>

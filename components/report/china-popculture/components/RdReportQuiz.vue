@@ -9,7 +9,7 @@
         class="quiz-options__option"
         :text="option.text"
         :state="getQuizButtonState(option)"
-        @click.native="handleQuizButtonClick(option)"
+        @click.native="handleQuizButtonClick(option, i)"
       />
     </div>
     <div
@@ -70,9 +70,10 @@ export default {
     },
   },
   methods: {
-    handleQuizButtonClick(option) {
+    handleQuizButtonClick(option, i) {
       this.shouldShowAnswerDetail = true
       this.optionClicked = option
+      this.$ga.event('projects', 'click', `閱讀測驗${['A', 'B', 'C', 'D'][i]}`)
     },
     getQuizButtonState(option) {
       if (!this.shouldShowAnswerDetail) {

@@ -31,7 +31,7 @@
     />
     <div class="donate-button">
       <readr-donate-button
-        @clickButton="sendGaClickEvent({ label: 'donate' })"
+        @clickButton="$ga.event('projects', 'click', 'donate')"
       />
     </div>
   </section>

@@ -31,6 +31,7 @@
       <RdCollapsible
         class="info-detail__collapsible"
         :textButton="textSolutionButton"
+        :currentQuizIndex="currentQuizIndex"
       >
         <ol class="info-detail__solution-list solution-list">
           <li
@@ -98,13 +99,35 @@ export default {
       type: Array,
       default: () => [],
     },
+    currentQuizIndex: {
+      type: Number,
+      default: 0,
+    },
   },
   methods: {
     handleSubmitButtonClick() {
       this.$emit('submit')
+
+      if (this.currentQuizIndex !== 2) {
+        this.$ga.event(
+          'projects',
+          'click',
+          `挑戰下一關${this.currentQuizIndex + 1}`
+        )
+      } else {
+        this.$ga.event('projects', 'click', '看總成績')
+      }
     },
     handleAgainButtonClick() {
       this.$emit('again')
+
+      if (this.currentQuizIndex !== 2) {
+        this.$ga.event(
+          'projects',
+          'click',
+          `再挑戰一次${this.currentQuizIndex + 1}`
+        )
+      }
     },
     handleToTopButtonClick() {
       scrollIntoView(document.querySelector('.info-basic'))

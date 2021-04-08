@@ -274,6 +274,8 @@ export default {
     },
     handleGoToArticle() {
       scrollIntoView(document.querySelector('.article-in-score-board'))
+
+      this.$ga.event('projects', 'click', '看專題報導')
     },
 
     async fetchGlobalScore() {
