@@ -40,6 +40,7 @@
 <script>
 import LazyRenderer from 'vue-lazy-renderer'
 
+import scrollIntoView from 'scroll-into-view'
 import RdSectionNav from './components/RdSectionNav.vue'
 import RdCover from './components/RdCover.vue'
 import RdQuiz from './components/RdQuiz.vue'
@@ -143,6 +144,11 @@ export default {
       window.scrollTo(0, 0)
     },
     handleNavigateToIndex(index) {
+      if (this.sectionIndex === 0 && this.forceSectionNavActiveIndex === 1) {
+        scrollIntoView(document.querySelector('.score-board-wrapper'), {
+          align: { topOffset: 135 },
+        })
+      }
       this.sectionIndex = index
     },
 
