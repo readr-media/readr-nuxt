@@ -8,8 +8,8 @@
     />
     <p class="header__info">
       <span
-        v-for="text in texts"
-        :key="text"
+        v-for="(text, i) in texts"
+        :key="i"
         :class="{ highlight: isCurrentTextHighlighted(text) }"
         v-text="text"
       />
