@@ -320,7 +320,12 @@ export default {
 
 <style lang="scss" scoped>
 .score-board {
+  padding: 118px 0 0 0;
   background-color: #f1f1f1;
+  @include media-breakpoint-up(md) {
+    padding: 135px 0 0 0;
+  }
+
   &__card {
     & + & {
       margin: 16px 0 0 0;
