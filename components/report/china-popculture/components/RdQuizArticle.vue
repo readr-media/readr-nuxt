@@ -29,7 +29,7 @@
               class="contents__answer-text"
               :text="text.value"
               :shouldDisableAnswerClick="shouldDisableAnswerClick"
-              :shouldShowClickHint="isInTutorialMode && j === 1"
+              :shouldShowClickHint="isInTutorialMode && i === 0 && j === 1"
               @toggle="(isToggle) => handleTextToggle(isToggle, text)"
             />
             <span v-else :key="text.value" v-text="text.value" />
