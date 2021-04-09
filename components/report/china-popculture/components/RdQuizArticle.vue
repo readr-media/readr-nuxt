@@ -13,15 +13,23 @@
         <span>・</span>
         <span v-text="info.time" />
       </p>
-      <div class="article__contents contents">
-        <p v-for="(content, i) in contents" :key="i">
-          <template v-for="text in content.texts">
+      <div
+        class="article__contents contents"
+        :class="{ 'contents--dimmed': isInTutorialMode }"
+      >
+        <p
+          v-for="(content, i) in contents"
+          :key="i"
+          :class="{ highlight: isInTutorialMode && i === 0 }"
+        >
+          <template v-for="(text, j) in content.texts">
             <RdQuizArticleAnswerText
               v-if="isTextTypeAnswer(text)"
               :key="text.value"
               class="contents__answer-text"
               :text="text.value"
               :shouldDisableAnswerClick="shouldDisableAnswerClick"
+              :shouldShowClickHint="isInTutorialMode && j === 1"
               @toggle="(isToggle) => handleTextToggle(isToggle, text)"
             />
             <span v-else :key="text.value" v-text="text.value" />
@@ -81,6 +89,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isInTutorialMode: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     authorProfileId() {
@@ -95,6 +107,9 @@ export default {
       return (text?.type ?? '').startsWith('answer')
     },
     handleTextToggle(isToggle, text) {
+      if (this.isInTutorialMode) {
+        this.$emit('exitTutorialMode')
+      }
       this.$emit('answerClick', { text, isToggle })
     },
     handleSubmitButtonClick() {
@@ -170,6 +185,42 @@ export default {
   }
   &__answer-text {
     margin: 0 1px;
+  }
+
+  &--dimmed {
+    &:after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 99999999;
+      display: inline-block;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.87);
+    }
+  }
+
+  p.highlight {
+    z-index: 999999999;
+    background-color: white;
+    position: relative;
+    left: -20px;
+    width: 100vw;
+    padding: 0 20px;
+
+    @include media-breakpoint-up(md) {
+      left: calc((100vw - 568px) / 2 * -1);
+      padding: 0;
+      padding-left: calc((100vw - 568px) / 2);
+      padding-right: calc((100vw - 568px) / 2);
+    }
+    @include media-breakpoint-up(xl) {
+      left: calc((100vw - 600px) / 2 * -1);
+      padding: 0;
+      padding-left: calc((100vw - 600px) / 2);
+      padding-right: calc((100vw - 600px) / 2);
+    }
   }
 }
 </style>

@@ -27,8 +27,10 @@
         :contents="currentQuiz.contents"
         :textSubmitButton="textSubmitButton"
         :shouldDisableAnswerClick="shouldDisableAnswerClick"
+        :isInTutorialMode="isInTutorialMode"
         @answerClick="handleAnswerClick"
         @submit="handleSubmit"
+        @exitTutorialMode="handleExitTutorialMode"
       />
       <RdQuizResult
         v-else
@@ -99,6 +101,7 @@ export default {
       shouldShowQuizResult: false,
       numberZhtw: ['一', '二', '三'],
       shouldShowQuizScoreBoard: false,
+      isInTutorialMode: false,
     }
   },
   computed: {
@@ -136,9 +139,15 @@ export default {
       return this.currentAnswerClickCount === this.currentQuizAnswerCorrectCount
     },
     headerTextsCount() {
+      if (this.isInTutorialMode) {
+        return '點擊字詞'
+      }
       return `${this.currentAnswerClickCount} / ${this.currentQuizAnswerCorrectCount} 個`
     },
     headerTexts() {
+      if (this.isInTutorialMode) {
+        return ['點擊字詞', ' ', '來選擇或取消選擇']
+      }
       return [
         `第${this.numberZhtw[this.currentQuizIndex]}題：`,
         '已選擇',
@@ -263,6 +272,7 @@ export default {
   beforeMount() {
     if (!getCookie(this.quizInfoCookieName)) {
       this.showQuizInfo()
+      this.isInTutorialMode = true
     }
   },
   methods: {
@@ -364,6 +374,10 @@ export default {
       this.currentQuizIndex = 0
       this.resetQuiz()
       this.$ga.event('projects', 'click', '再挑戰一次All')
+    },
+
+    handleExitTutorialMode() {
+      this.isInTutorialMode = false
     },
   },
 }

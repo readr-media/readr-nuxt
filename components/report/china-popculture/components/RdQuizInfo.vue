@@ -50,7 +50,7 @@ export default {
 
 <style lang="scss" scoped>
 .section {
-  z-index: 99999999;
+  z-index: 9999999999;
   position: fixed;
   top: 0;
   left: 0;
