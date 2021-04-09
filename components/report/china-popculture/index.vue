@@ -12,6 +12,7 @@
     <RdCover
       v-show="shouldShowCover"
       :coverImgs="coverImgs"
+      :coverImgsAnimation="coverImgsAnimation"
       :title="cmsData.contentApiData.cover.title"
       :description="cmsData.contentApiData.cover.description"
       :textGoToArticle="cmsData.contentApiData.cover.textGoToArticle"
@@ -87,6 +88,12 @@ export default {
       return {
         large: require('~/assets/report/china-popculture/cp-cover-large.png'),
         small: require('~/assets/report/china-popculture/cp-cover-small.png'),
+      }
+    },
+    coverImgsAnimation() {
+      return {
+        large: require('~/assets/report/china-popculture/cp-cover-large-texts-animation.svg'),
+        small: require('~/assets/report/china-popculture/cp-cover-small-texts-animation.svg'),
       }
     },
     shouldHideHeader() {

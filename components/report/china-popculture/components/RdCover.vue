@@ -1,17 +1,30 @@
 <template>
   <section class="cover">
     <div class="wrapper">
-      <picture>
-        <source
-          :media="`(min-width: ${styleVariables['breakpoint-sm']})`"
-          :srcset="coverImgs.large"
-        />
-        <img
-          class="cover__cover-img cover-img"
-          :src="coverImgs.small"
-          alt="cover-img"
-        />
-      </picture>
+      <div class="picture-wrapper">
+        <picture>
+          <source
+            :media="`(min-width: ${styleVariables['breakpoint-sm']})`"
+            :srcset="coverImgs.large"
+          />
+          <img
+            class="cover__cover-img cover-img"
+            :src="coverImgs.small"
+            alt="cover-img"
+          />
+        </picture>
+        <picture>
+          <source
+            :media="`(min-width: ${styleVariables['breakpoint-sm']})`"
+            :srcset="coverImgsAnimation.large"
+          />
+          <img
+            class="cover__cover-img cover-img"
+            :src="coverImgsAnimation.small"
+            alt="cover-img"
+          />
+        </picture>
+      </div>
       <h1 class="cover__title title">
         <!-- eslint-disable-next-line vue/no-v-html -->
         <span v-html="titleHtml" />
@@ -45,6 +58,10 @@ import { newline2br } from '~/components/helpers/index.js'
 export default {
   props: {
     coverImgs: {
+      type: Object,
+      default: () => ({}),
+    },
+    coverImgsAnimation: {
       type: Object,
       default: () => ({}),
     },
@@ -122,8 +139,21 @@ export default {
     }
   }
 
+  .picture-wrapper {
+    position: relative;
+    height: calc((100vw - 40px) * 0.9);
+    @include media-breakpoint-up(md) {
+      height: calc(568px * 0.48);
+    }
+    @include media-breakpoint-up(xl) {
+      height: calc(600px * 0.48);
+    }
+  }
   .cover-img {
     width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   .title {

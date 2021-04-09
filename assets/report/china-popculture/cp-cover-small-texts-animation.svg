@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 720">
+  <defs>
+    <style>
+      @keyframes bounceIn {
+      from,
+      20%,
+      40%,
+      60%,
+      80%,
+      to {
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      }
+
+      0% {
+      opacity: 0;
+      transform: scale3d(0.3, 0.3, 0.3);
+      }
+
+      5% {
+      transform: scale3d(1.1, 1.1, 1.1);
+      }
+
+      10% {
+      transform: scale3d(0.9, 0.9, 0.9);
+      }
+
+      15% {
+      opacity: 1;
+      transform: scale3d(1.03, 1.03, 1.03);
+      }
+
+      20% {
+      transform: scale3d(1, 1, 1);
+      }
+
+      95% {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+      }
+
+      to {
+      opacity: 0;
+      transform: scale3d(0.3, 0.3, 0.3);
+      }
+      }
+      .text-box {
+      fill:#fff;
+      stroke:#111;
+      stroke-miterlimit:10;
+      stroke-width:3px;
+      transform-origin: center bottom;
+      }
+      .text-box-1 {
+      animation: bounceIn 5s infinite;
+      }
+      .text-box-2 {
+      animation: bounceIn 5s infinite 0.25s
+      }
+      .text-box-3 {
+      animation: bounceIn 5s infinite 0.5s
+      }
+      .text-box-4 {
+      animation: bounceIn 5s infinite 0.75s
+      }
+      .text-box-5 {
+      animation: bounceIn 5s infinite 1s
+      }
+      .text-box-6 {
+      animation: bounceIn 5s infinite 1.25s
+      }
+    </style>
+  </defs>
+  <g id="圖層_6" data-name="圖層 6">
+    <path class="text-box text-box-1"
+          d="M171.36,89.66H339.19a28,28,0,0,0,28-28h0a28,28,0,0,0-28-28H143.39v28A28,28,0,0,0,171.36,89.66Z">
+    </path>
+    <path class="text-box text-box-2"
+          d="M693.14,581H525.32a28,28,0,0,0-28,28h0a28,28,0,0,0,28,28H721.11V609A28,28,0,0,0,693.14,581Z"/>
+    <path class="text-box text-box-3"
+          d="M654.91,455.33H487.09a28,28,0,0,1-28-28h0a28,28,0,0,1,28-28H682.88v28A28,28,0,0,1,654.91,455.33Z"/>
+    <path class="text-box text-box-4"
+          d="M224.83,529.3H392.65a28,28,0,0,1,28,28h0a28,28,0,0,1-28,28H196.86v-28A28,28,0,0,1,224.83,529.3Z"/>
+    <path class="text-box text-box-5"
+          d="M524.38,124.21H692.2a28,28,0,0,1,28,28h0a28,28,0,0,1-28,28H496.41v-28A28,28,0,0,1,524.38,124.21Z"/>
+    <path class="text-box text-box-6"
+          d="M227.38,295.28H59.55a28,28,0,0,1-28-28h0a28,28,0,0,1,28-28h195.8v28A28,28,0,0,1,227.38,295.28Z"/>
+  </g>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 720">
+    <defs>
+      <style>.cls-1{fill:#d0cfcf; transform-origin: center bottom;}</style>
+    </defs>
+    <g id="圖層_6" data-name="圖層 6">
+      <rect class="cls-1 text-box-2" x="530.91" y="612.71" width="156.63" height="11.19"/>
+      <rect class="cls-1 text-box-3" x="495.48" y="431.09" width="96.96" height="11.19"/>
+      <rect class="cls-1 text-box-3" x="495.48" y="412.44" width="151.04" height="11.19"/>
+      <rect class="cls-1 text-box-4" x="234.15" y="542.35" width="115.61" height="11.19"/>
+      <rect class="cls-1 text-box-6" x="68.88" y="271.04" width="78.32" height="11.19"/>
+      <rect class="cls-1 text-box-1" x="176.96" y="46.78" width="156.63" height="11.19"/>
+      <rect class="cls-1 text-box-1" x="176.96" y="65.42" width="111.88" height="11.19"/>
+      <rect class="cls-1 text-box-4" x="234.15" y="561" width="149.17" height="11.19"/>
+      <rect class="cls-1 text-box-2" x="530.91" y="594.07" width="111.88" height="11.19"/>
+      <rect class="cls-1 text-box-6" x="68.88" y="252.39" width="149.17" height="11.19"/>
+      <rect class="cls-1 text-box-5" x="529.98" y="137.27" width="134.26" height="11.19"/>
+      <rect class="cls-1 text-box-5" x="529.98" y="155.91" width="156.63" height="11.19"/>
+    </g>
+  </svg>
+  <defs>
+    <style>
+      .text-red {
+      fill:#ff3f3f;
+      transform-origin: center bottom;
+      }
+
+    </style>
+  </defs>
+  <g id="圖層_7" data-name="圖層 7">
+    <rect class="text-red text-box-1" x="199.34" y="46.78" width="55.94" height="11.19">
+      <animate attributeName="x" to="299.34" dur="2s" repeatCount="indefinite"></animate>
+    </rect>
+    <rect class="text-red text-box-5" x="529.98" y="137.27" width="18.65" height="11.19">
+      <animate attributeName="x" to="629.98" dur="1s" repeatCount="indefinite"></animate>
+    </rect>
+    <rect class="text-red text-box-5" x="571" y="155.91" width="37.29" height="11.19">
+      <animate attributeName="x" to="601" dur="1.5s" repeatCount="indefinite"></animate>
+    </rect>
+    <rect class="text-red text-box-3" x="609.23" y="412.44" width="37.29" height="11.19">
+      <animate attributeName="x" to="629.23" dur="1.4s" repeatCount="indefinite"></animate>
+    </rect>
+    <rect class="text-red text-box-3" x="495.48" y="431.09" width="74.59" height="11.19">
+      <animate attributeName="x" to="585.48" dur="2s" repeatCount="indefinite"></animate>
+    </rect>
+    <rect class="text-red text-box-4" x="275.17" y="542.35" width="74.59" height="11.19">
+      <animate attributeName="x" to="305.17" dur="3s" repeatCount="indefinite"></animate>
+    </rect>
+    <rect class="text-red text-box-2" x="609.23" y="612.71" width="55.94" height="11.19">
+      <animate attributeName="x" to="659.23" dur="2.4s" repeatCount="indefinite"></animate>
+    </rect>
+    <rect class="text-red text-box-6" x="91.25" y="271.04" width="55.94" height="11.19">
+      <animate attributeName="x" to="131.25" dur="0.5s" repeatCount="indefinite"></animate>
+    </rect>
+  </g>
+</svg>
