@@ -124,7 +124,12 @@ export default {
 
 <style lang="scss" scoped>
 .article {
+  padding: 118px 0 0 0;
   background-color: white;
+  @include media-breakpoint-up(md) {
+    padding: 135px 0 0 0;
+  }
+
   &__title,
   &__info {
     margin: 12px 0 0 0;

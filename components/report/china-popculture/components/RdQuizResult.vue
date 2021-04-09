@@ -150,6 +150,10 @@ export default {
 
 <style lang="scss" scoped>
 .quiz-result {
+  padding: 118px 0 0 0;
+  @include media-breakpoint-up(md) {
+    padding: 135px 0 0 0;
+  }
   &__to-top-button {
     position: fixed;
     right: 16px;
