@@ -6,7 +6,7 @@ query databases($first: Int! = 3, $skip: Int, $hasMeta: Boolean! = false) {
     where: { state: published }
   ) {
     id
-    title
+    title: name
     link
     relatedGallery(
       sortBy: [createdAt_DESC],

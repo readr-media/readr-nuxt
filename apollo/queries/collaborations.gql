@@ -1,7 +1,7 @@
 query allCollaborations {
   allCollaborations(sortBy: [publishTime_DESC], first: 10, where: {state: published}) {
     id
-    title
+    title: name
     description
     heroImage {
       urlMobileSized
