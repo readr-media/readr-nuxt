@@ -64,6 +64,7 @@ export default {
         meta: {
           count: 0,
         },
+        pageSize: 25,
         isLoading: false,
       },
     }
@@ -72,14 +73,17 @@ export default {
   apollo: {
     latestList: {
       query: latestPosts,
-      variables: {
-        first: 25,
-        shouldQueryMeta: true,
+      variables() {
+        return {
+          first: this.latestList.pageSize,
+          shouldQueryMeta: true,
+        }
       },
       update(result) {
         const { items, meta } = result
 
         return {
+          ...this.latestList,
           items: items.map(function transformContent(post) {
             const {
               id = '',
@@ -104,7 +108,6 @@ export default {
             }
           }),
           meta,
-          isLoading: this.latestList.isLoading,
         }
       },
     },
@@ -129,7 +132,7 @@ export default {
       try {
         await this.$apollo.queries.latestList.fetchMore({
           variables: {
-            first: 25,
+            first: this.latestList.pageSize,
             skip: this.totalLatestItems,
             shouldQueryMeta: false,
           },
