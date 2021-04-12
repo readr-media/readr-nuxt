@@ -32,18 +32,18 @@
       <img
         ref="bag"
         :class="{ shown: bagState === 'open' }"
-        src="~/assets/report/how-to-choose-a-kindergarten/bag-open.png"
+        src="~/assets/imgs/report/how-to-choose-a-kindergarten/bag-open.png"
         alt=""
         @animationend="handleAnimationend"
       />
       <img
         :class="{ shown: bagState === 'mid' }"
-        src="~/assets/report/how-to-choose-a-kindergarten/bag-mid.png"
+        src="~/assets/imgs/report/how-to-choose-a-kindergarten/bag-mid.png"
         alt=""
       />
       <img
         :class="{ shown: bagState === 'close' }"
-        src="~/assets/report/how-to-choose-a-kindergarten/bag-close.png"
+        src="~/assets/imgs/report/how-to-choose-a-kindergarten/bag-close.png"
         alt=""
       />
     </div>

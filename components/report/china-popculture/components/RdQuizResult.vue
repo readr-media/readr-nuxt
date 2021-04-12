@@ -5,7 +5,7 @@
       @click="handleToTopButtonClick"
     >
       <img
-        src="~/assets/report/china-popculture/cp-to-top-icon.svg"
+        src="~/assets/imgs/report/china-popculture/cp-to-top-icon.svg"
         alt="to-top"
       />
     </button>

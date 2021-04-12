@@ -33,7 +33,7 @@
             >
               <span>按我揭曉</span>
               <img
-                src="~/assets/report/china-popculture/cp-refresh-icon.svg"
+                src="~/assets/imgs/report/china-popculture/cp-refresh-icon.svg"
                 alt="refresh-icon"
               />
             </button>
@@ -60,7 +60,7 @@
                 >
                   <span>按我揭曉</span>
                   <img
-                    src="~/assets/report/china-popculture/cp-refresh-icon.svg"
+                    src="~/assets/imgs/report/china-popculture/cp-refresh-icon.svg"
                     alt="refresh-icon"
                   />
                 </button>

@@ -3,12 +3,12 @@
     <div class="core-values__landing landing">
       <picture>
         <source
-          srcset="~/assets/about/基本價值-web.svg"
+          srcset="~/assets/imgs/about/基本價值-web.svg"
           media="(min-width: 768px)"
         />
         <img
           class="landing__img"
-          src="~/assets/about/基本價值-mobile.svg"
+          src="~/assets/imgs/about/基本價值-mobile.svg"
           alt="intro"
         />
       </picture>

@@ -19,7 +19,7 @@
 <script>
 import { ref, reactive } from '@nuxtjs/composition-api'
 
-import SvgStarIcon from '~/assets/star-icon.svg?inline'
+import SvgStarIcon from '~/assets/imgs/star-icon.svg?inline'
 
 export default {
   name: 'RdStarRating',

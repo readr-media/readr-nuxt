@@ -1,6 +1,6 @@
 <template>
   <figure :class="['figure', `figure--${order}`]">
-    <img :src="require(`~/assets/about/d${order}.svg`)" alt="" />
+    <img :src="require(`~/assets/imgs/about/d${order}.svg`)" alt="" />
 
     <figcaption class="figure__figcaption figcaption">
       <div class="figcaption__wrapper">

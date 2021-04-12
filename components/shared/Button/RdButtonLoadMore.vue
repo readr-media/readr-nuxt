@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import SvgMoreIcon from '~/assets/more-icon.svg?inline'
+import SvgMoreIcon from '~/assets/imgs/more-icon.svg?inline'
 
 export default {
   name: 'RdButtonLoadMore',

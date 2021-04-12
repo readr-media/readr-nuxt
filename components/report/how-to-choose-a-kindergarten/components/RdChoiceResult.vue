@@ -7,7 +7,7 @@
         width="96"
         height="96"
         :src="
-          require(`~/assets/report/how-to-choose-a-kindergarten/${result.imgName}.png`)
+          require(`~/assets/imgs/report/how-to-choose-a-kindergarten/${result.imgName}.png`)
         "
         alt=""
       />

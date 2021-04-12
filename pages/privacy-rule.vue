@@ -3,7 +3,7 @@
     <RdHeader />
 
     <div class="container">
-      <img src="~/assets/privacy-rule.svg" alt="隱私政策" />
+      <img src="~/assets/imgs/privacy-rule.svg" alt="隱私政策" />
 
       <article>
         <p>

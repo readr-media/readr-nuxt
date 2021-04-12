@@ -4,7 +4,7 @@
       <img
         width="100"
         height="100"
-        src="~/assets/report/how-to-choose-a-kindergarten/bag-close.png"
+        src="~/assets/imgs/report/how-to-choose-a-kindergarten/bag-close.png"
         alt=""
       />
     </div>

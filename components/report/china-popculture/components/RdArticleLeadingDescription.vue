@@ -4,12 +4,12 @@
       <source
         :media="`(min-width: ${styleVariables['breakpoint-sm']})`"
         srcset="
-          ~/assets/report/china-popculture/cp-article-leading-description-large.png
+          ~/assets/imgs/report/china-popculture/cp-article-leading-description-large.png
         "
       />
       <img
         class="article-leading-description__img img"
-        src="~/assets/report/china-popculture/cp-article-leading-description-small.png"
+        src="~/assets/imgs/report/china-popculture/cp-article-leading-description-small.png"
         alt="article-leading-description-img"
       />
     </picture>

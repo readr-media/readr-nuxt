@@ -101,7 +101,7 @@ export default {
                 src:
                   heroImage?.urlTabletSized ||
                   ogImage?.urlTabletSized ||
-                  require('~/assets/default/post.svg'),
+                  require('~/assets/imgs/default/post.svg'),
               },
               date: formatDate(publishTime),
             }

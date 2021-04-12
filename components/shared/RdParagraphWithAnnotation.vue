@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SvgArrowToggle from '~/assets/arrow-toggle.svg?inline'
+import SvgArrowToggle from '~/assets/imgs/arrow-toggle.svg?inline'
 
 export default {
   name: 'RdParagraphWithAnnotation',

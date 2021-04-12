@@ -3,12 +3,12 @@
     <div class="intro__landing landing">
       <picture>
         <source
-          srcset="~/assets/about/關於我們-web.svg"
+          srcset="~/assets/imgs/about/關於我們-web.svg"
           media="(min-width: 768px)"
         />
         <img
           class="landing__img"
-          src="~/assets/about/關於我們-mobile.svg"
+          src="~/assets/imgs/about/關於我們-mobile.svg"
           alt="intro"
         />
       </picture>

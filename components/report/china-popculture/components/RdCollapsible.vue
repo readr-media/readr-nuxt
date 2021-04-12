@@ -43,8 +43,8 @@ export default {
   computed: {
     buttonIconImg() {
       return this.isToggled
-        ? require('~/assets/report/china-popculture/cp-collaspiable-fold.svg')
-        : require('~/assets/report/china-popculture/cp-collaspiable-expand.svg')
+        ? require('~/assets/imgs/report/china-popculture/cp-collaspiable-fold.svg')
+        : require('~/assets/imgs/report/china-popculture/cp-collaspiable-expand.svg')
     },
   },
   methods: {

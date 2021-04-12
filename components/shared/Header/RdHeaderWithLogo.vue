@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import SvgReadrLogo from '~/assets/readr-logo.svg?inline'
+import SvgReadrLogo from '~/assets/imgs/readr-logo.svg?inline'
 
 export default {
   name: 'RdHeaderWithLogo',

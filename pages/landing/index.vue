@@ -71,7 +71,7 @@
 import { post as axiosPost } from 'axios'
 import dayjs from 'dayjs'
 
-import SvgReadrLogoYellow from '~/assets/readr-logo-yellow.svg?inline'
+import SvgReadrLogoYellow from '~/assets/imgs/readr-logo-yellow.svg?inline'
 
 export default {
   name: 'Landing',
@@ -164,7 +164,7 @@ header {
   left: 0;
   width: 100%;
   height: 60.38vh;
-  background-image: url(~assets/taipei-city.jpg);
+  background-image: url(~assets/imgs/taipei-city.jpg);
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;

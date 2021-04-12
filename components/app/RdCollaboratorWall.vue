@@ -19,7 +19,7 @@
 <script>
 import { ref } from '@nuxtjs/composition-api'
 
-import SvgUnfoldIcon from '~/assets/unfold-icon.svg?inline'
+import SvgUnfoldIcon from '~/assets/imgs/unfold-icon.svg?inline'
 
 export default {
   name: 'RdCollaboratorWall',

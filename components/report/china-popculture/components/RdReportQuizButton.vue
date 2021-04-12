@@ -44,18 +44,18 @@ export default {
     reportQuizButtonIconImgSrc() {
       if (this.state === 'normal') {
         const orderToAlphabet = ['A', 'B', 'C', 'D']
-        return require(`~/assets/report/china-popculture/${
+        return require(`~/assets/imgs/report/china-popculture/${
           orderToAlphabet[this.order]
         }.svg`)
       }
 
       if (this.state.includes('Wrong')) {
-        return require('~/assets/report/china-popculture/wrong.svg')
+        return require('~/assets/imgs/report/china-popculture/wrong.svg')
       } else if (this.state.includes('Correct')) {
-        return require('~/assets/report/china-popculture/correct.svg')
+        return require('~/assets/imgs/report/china-popculture/correct.svg')
       }
 
-      return require('~/assets/report/china-popculture/cross.svg')
+      return require('~/assets/imgs/report/china-popculture/cross.svg')
     },
   },
 }

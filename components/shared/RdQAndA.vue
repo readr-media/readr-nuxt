@@ -1,7 +1,7 @@
 <script>
 import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnotation.vue'
-import SvgOpen from '~/assets/open.svg?inline'
-import SvgClose from '~/assets/close.svg?inline'
+import SvgOpen from '~/assets/imgs/open.svg?inline'
+import SvgClose from '~/assets/imgs/close.svg?inline'
 
 export default {
   name: 'RdQAndA',

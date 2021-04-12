@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import SvgDialogBox from '~/assets/dialog-box.svg?inline'
-import SvgArrowPrev from '~/assets/arrow-prev.svg?inline'
-import SvgArrowNext from '~/assets/arrow-next.svg?inline'
-import defaultImgPost from '~/assets/default/post.svg'
+import SvgDialogBox from '~/assets/imgs/dialog-box.svg?inline'
+import SvgArrowPrev from '~/assets/imgs/arrow-prev.svg?inline'
+import SvgArrowNext from '~/assets/imgs/arrow-next.svg?inline'
+import defaultImgPost from '~/assets/imgs/default/post.svg'
 
 export default {
   name: 'RdCarousel',

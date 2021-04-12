@@ -83,10 +83,10 @@ export default {
               </div>
               <source
                 media={`(min-width: ${styleVariables['breakpoint-sm']})`}
-                srcset={require(`~/assets/report/${this.slug}/report-article-picture-${id}-sm.png`)}
+                srcset={require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}-sm.png`)}
               />
               <img
-                src={require(`~/assets/report/${this.slug}/report-article-picture-${id}.png`)}
+                src={require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}.png`)}
                 alt=""
               />
             </LazyRenderer>

@@ -5,7 +5,7 @@
         <img
           v-lazy="{
             src: heroImg,
-            error: require('~/assets/default/collaboration.svg'),
+            error: require('~/assets/imgs/default/collaboration.svg'),
           }"
           alt=""
         />

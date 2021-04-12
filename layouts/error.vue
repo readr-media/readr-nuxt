@@ -42,8 +42,8 @@ export default {
     RdFeedbackButton,
     RdListJoined: () => import('~/components/shared/List/RdListJoined.vue'),
 
-    Svg404: () => import('~/assets/error/404.svg?inline'),
-    Svg500: () => import('~/assets/error/500.svg?inline'),
+    Svg404: () => import('~/assets/imgs/404.svg?inline'),
+    Svg500: () => import('~/assets/imgs/500.svg?inline'),
   },
   props: {
     error: {
@@ -82,7 +82,7 @@ export default {
               src:
                 heroImage?.urlMobileSized ||
                 ogImage?.urlMobileSized ||
-                require('~/assets/default/post.svg'),
+                require('~/assets/imgs/default/post.svg'),
             },
           }
         })

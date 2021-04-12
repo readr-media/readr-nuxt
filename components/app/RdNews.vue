@@ -206,7 +206,7 @@ export default {
               src:
                 heroImage?.urlTabletSized ||
                 ogImage?.urlTabletSized ||
-                require('~/assets/default/post.svg'),
+                require('~/assets/imgs/default/post.svg'),
             },
             date: formatDate(publishTime),
           }
@@ -397,7 +397,7 @@ h1 {
       }
 
       &::before {
-        content: url(~assets/quotation-mark.svg);
+        content: url(~assets/imgs/quotation-mark.svg);
         display: block;
         text-align: center;
         margin-bottom: 11px; /* 11 = 30 - 19 */

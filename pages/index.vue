@@ -143,7 +143,7 @@ import {
 import styleVariables from '~/assets/css/variables.module.scss'
 import { getHref, formatDate } from '~/helpers/index.js'
 
-import SvgArrowMore from '~/assets/arrow-more.svg?inline'
+import SvgArrowMore from '~/assets/imgs/arrow-more.svg?inline'
 
 export default {
   name: 'Home',
@@ -194,7 +194,7 @@ export default {
               src:
                 heroImage?.urlTabletSized ||
                 ogImage?.urlTabletSized ||
-                require('~/assets/default/post.svg'),
+                require('~/assets/imgs/default/post.svg'),
             },
             date: formatDate(publishTime),
           }
@@ -364,7 +364,7 @@ export default {
             href: link,
             img:
               heroImage?.urlTinySized ||
-              require('~/assets/default/database.svg'),
+              require('~/assets/imgs/default/database.svg'),
           }
         }),
       }
@@ -444,7 +444,7 @@ export default {
                   src:
                     heroImage?.urlMobileSized ||
                     ogImage?.urlMobileSized ||
-                    require('~/assets/default/post.svg'),
+                    require('~/assets/imgs/default/post.svg'),
                 },
                 date: formatDate(publishTime),
               }

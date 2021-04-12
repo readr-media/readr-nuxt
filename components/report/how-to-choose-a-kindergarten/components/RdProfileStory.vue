@@ -10,7 +10,7 @@
       <div class="header" @click="toggleBody(storyIdx)">
         <img
           :src="
-            require(`~/assets/report/how-to-choose-a-kindergarten/profile${
+            require(`~/assets/imgs/report/how-to-choose-a-kindergarten/profile${
               storyIdx + 1
             }.png`)
           "
@@ -40,7 +40,7 @@
             >
               <img
                 :src="
-                  require(`~/assets/report/how-to-choose-a-kindergarten/num${
+                  require(`~/assets/imgs/report/how-to-choose-a-kindergarten/num${
                     idx + 1
                   }.png`)
                 "
@@ -64,7 +64,7 @@
 <script>
 import RdMainTitle from './RdMainTitle.vue'
 
-import SvgArrow from '~/assets/report/how-to-choose-a-kindergarten/arrow.svg?inline'
+import SvgArrow from '~/assets/imgs/report/how-to-choose-a-kindergarten/arrow.svg?inline'
 
 export default {
   name: 'RdProfileStory',
