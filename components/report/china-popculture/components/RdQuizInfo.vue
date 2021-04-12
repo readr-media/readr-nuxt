@@ -1,5 +1,9 @@
 <template>
-  <section class="section" @click.self="handleClose">
+  <section
+    class="section"
+    :style="{ height: $store.state.viewport.height + 'px' }"
+    @click.self="handleClose"
+  >
     <div class="wrapper">
       <h1 class="section__title title" v-text="title" />
       <!-- eslint-disable-next-line vue/no-v-html -->
