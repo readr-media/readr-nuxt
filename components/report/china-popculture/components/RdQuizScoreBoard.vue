@@ -254,13 +254,19 @@ export default {
         const answers = record.answers.split(',')
         answers.forEach((answer) => {
           result[Number(answer)].correctCount += 1
-          result[Number(answer)].correctPercentage =
-            Math.round(
-              (result[Number(answer)].correctCount /
-                this.globalAnswersData.length) *
-                100
-            ) + '%'
+          // result[Number(answer)].correctPercentage =
+          //   Math.round(
+          //     (result[Number(answer)].correctCount /
+          //       this.globalAnswersData.length) *
+          //       100
+          //   ) + '%'
         })
+      })
+      result.forEach((category) => {
+        category.correctPercentage =
+          Math.round(
+            (category.correctCount / this.globalAnswersData.length) * 100
+          ) + '%'
       })
       return result
     },
