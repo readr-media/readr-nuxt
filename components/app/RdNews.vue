@@ -28,9 +28,8 @@
             @userGiveRating="setRating"
           />
 
-          <RdButtonPrimary
+          <RdFeedbackButton
             v-if="hasRating"
-            subtype="feedback"
             :text="starRatingBtnText"
             class="post-feedback__btn"
             @click.native="handleClickRatingBtn"
@@ -46,9 +45,8 @@
 
           <RdFeedbackForm @userGiveFeedback="setOpinion" />
 
-          <RdButtonPrimary
+          <RdFeedbackButton
             v-if="hasOpinionContent"
-            subtype="feedback"
             text="傳送給 READr"
             class="post-feedback__btn"
             @click.native="handleClickOpinionBtn"
@@ -80,7 +78,7 @@ import { post as axiosPost } from 'axios'
 import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
 import RdFeedbackForm from '~/components/shared/Feedback/RdFeedbackForm.vue'
 import RdFeedbackThanks from '~/components/shared/Feedback/RdFeedbackThanks.vue'
-import RdButtonPrimary from '~/components/shared/Button/RdButtonPrimary.vue'
+import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
 import RdStarRating from '~/components/shared/RdStarRating.vue'
 import RdList from '~/components/shared/List/RdList.vue'
 
@@ -96,7 +94,7 @@ export default {
     RdHeaderProgress,
     RdFeedbackForm,
     RdFeedbackThanks,
-    RdButtonPrimary,
+    RdFeedbackButton,
     RdStarRating,
     RdList,
   },

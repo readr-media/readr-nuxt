@@ -9,10 +9,9 @@
           <Svg500 v-else class="code" />
           <div class="message">{{ errorMessage }}</div>
         </div>
-        <RdButtonPrimary
+        <RdFeedbackButton
           class="home-btn"
           text="回首頁"
-          subtype="feedback"
           @click.native="backToHome"
         />
       </section>
@@ -30,7 +29,7 @@
 import { computed } from '@nuxtjs/composition-api'
 
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
-import RdButtonPrimary from '~/components/shared/Button/RdButtonPrimary.vue'
+import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
 
 import { latestPostsInErrorPage } from '~/apollo/queries/posts.gql'
 
@@ -40,7 +39,7 @@ export default {
   name: 'Error',
   components: {
     RdHeader,
-    RdButtonPrimary,
+    RdFeedbackButton,
     RdListJoined: () => import('~/components/shared/List/RdListJoined.vue'),
 
     Svg404: () => import('~/assets/error/404.svg?inline'),
