@@ -186,7 +186,7 @@ export default {
   letter-spacing: 1px;
   color: #111111;
   p + p {
-    margin: 48px 0 0 0;
+    margin: 24px 0 0 0;
   }
   &__answer-text {
     margin: 0 1px;
