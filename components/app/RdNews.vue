@@ -85,7 +85,7 @@ import RdList from '~/components/shared/List/RdList.vue'
 import { latestPosts } from '~/apollo/queries/posts.gql'
 
 import { getHref, formatDate } from '~/helpers/index.js'
-import styleVariables from '~/scss/_variables.module.scss'
+import styleVariables from '~/assets/css/variables.module.scss'
 
 export default {
   name: 'RdNews',

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import styleVariables from '~/scss/_variables.module.scss'
+import styleVariables from '~/assets/css/variables.module.scss'
 
 export default {
   props: {

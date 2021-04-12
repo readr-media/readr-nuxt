@@ -12,7 +12,7 @@ import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
 } from '~/components/helpers/index.js'
-import styleVariables from '~/scss/_variables.module.scss'
+import styleVariables from '~/assets/css/variables.module.scss'
 
 export default {
   name: 'RdReportArticle',

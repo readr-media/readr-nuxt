@@ -109,7 +109,7 @@ Object.assign(module.exports, {
   /*
    ** Global CSS
    */
-  css: ['~/css/base.css', '~/css/readr.scss'],
+  css: ['~/assets/css/_base.css'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -171,7 +171,7 @@ Object.assign(module.exports, {
   },
 
   styleResources: {
-    scss: '~/scss/**/*.scss',
+    scss: ['~/assets/css/**/*.scss'],
   },
   /*
    ** Build configuration
