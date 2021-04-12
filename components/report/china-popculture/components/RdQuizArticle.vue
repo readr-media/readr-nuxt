@@ -204,7 +204,7 @@ export default {
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 99999999;
+      z-index: 9999999;
       display: inline-block;
       width: 100vw;
       height: 100vh;
