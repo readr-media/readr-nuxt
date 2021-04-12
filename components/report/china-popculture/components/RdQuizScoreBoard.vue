@@ -222,7 +222,10 @@ export default {
       const winCount = this.globalScoresData.filter(
         (score) => score < this.answerScore
       ).length
-      return Math.round((winCount / this.globalAnswersData.length) * 100)
+      const result = Math.round(
+        (winCount / this.globalAnswersData.length) * 100
+      )
+      return isNaN(result) ? '讀取中' : result
     },
     currentScoreBadge() {
       if (this.currentScorePercentileRank >= 99) {
