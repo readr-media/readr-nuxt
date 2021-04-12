@@ -1,6 +1,6 @@
 <template>
   <figure class="figure">
-    <img :src="require(`~/assets/about/${name}.png`)" :alt="name" />
+    <img :src="require(`~/assets/about/${name}.png`)" alt="" />
     <figcaption v-text="title" />
   </figure>
 </template>

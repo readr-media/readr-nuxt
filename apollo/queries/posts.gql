@@ -14,11 +14,9 @@ query latestPosts(
     name
     style
     heroImage {
-      name
       urlTabletSized
     }
     ogImage {
-      name
       urlTabletSized
     }
     publishTime
@@ -40,11 +38,9 @@ query latestPostsInErrorPage {
     name
     style
     heroImage {
-      name
       urlMobileSized
     }
     ogImage {
-      name
       urlMobileSized
     }
   }
@@ -60,11 +56,9 @@ query categoryPosts($first: Int! = 3, $categorySlug: String!) {
     name
     style
     heroImage {
-      name
       urlMobileSized
     }
     ogImage {
-      name
       urlMobileSized
     }
     publishTime

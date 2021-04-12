@@ -11,7 +11,7 @@
             :media="`(min-width: ${breakpointSm})`"
             :srcset="heroImg.src.sm"
           />
-          <img :src="heroImg.src.xs" :alt="heroImg.alt" />
+          <img :src="heroImg.src.xs" alt="" />
         </picture>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div class="content" v-html="transformedNews.contentHtml" />
@@ -209,7 +209,6 @@ export default {
                 heroImage?.urlTabletSized ||
                 ogImage?.urlTabletSized ||
                 require('~/assets/default/post.svg'),
-              alt: heroImage?.name || ogImage?.name || '',
             },
             date: formatDate(publishTime),
           }
@@ -241,7 +240,6 @@ export default {
             xs: heroImage?.urlMobileSized,
             sm: heroImage?.urlDesktopSized,
           },
-          alt: heroImage?.name || '',
         },
         date: formatDate(publishTime),
         contentHtml,

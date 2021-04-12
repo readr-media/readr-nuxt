@@ -195,7 +195,6 @@ export default {
                 heroImage?.urlTabletSized ||
                 ogImage?.urlTabletSized ||
                 require('~/assets/default/post.svg'),
-              alt: heroImage?.name || ogImage?.name || '',
             },
             date: formatDate(publishTime),
           }
@@ -446,7 +445,6 @@ export default {
                     heroImage?.urlMobileSized ||
                     ogImage?.urlMobileSized ||
                     require('~/assets/default/post.svg'),
-                  alt: heroImage?.name || ogImage?.name || '',
                 },
                 date: formatDate(publishTime),
               }

@@ -84,7 +84,6 @@ export default {
                 heroImage?.urlMobileSized ||
                 ogImage?.urlMobileSized ||
                 require('~/assets/default/post.svg'),
-              alt: heroImage?.name || ogImage?.name || '',
             },
           }
         })
