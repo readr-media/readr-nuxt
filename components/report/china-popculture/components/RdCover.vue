@@ -1,45 +1,67 @@
 <template>
   <section class="cover">
-    <picture>
-      <source
-        :media="`(min-width: ${styleVariables['breakpoint-sm']})`"
-        :srcset="coverImgs.large"
-      />
-      <img
-        class="cover__cover-img cover-img"
-        :src="coverImgs.small"
-        alt="cover-img"
-      />
-    </picture>
-    <h1 class="cover__title title">
+    <div class="wrapper">
+      <div class="picture-wrapper">
+        <picture>
+          <source
+            :media="`(min-width: ${styleVariables['breakpoint-sm']})`"
+            :srcset="coverImgs.large"
+          />
+          <img
+            class="cover__cover-img cover-img"
+            :src="coverImgs.small"
+            alt="cover-img"
+          />
+        </picture>
+        <picture>
+          <source
+            :media="`(min-width: ${styleVariables['breakpoint-sm']})`"
+            :srcset="coverImgsAnimation.large"
+          />
+          <img
+            class="cover__cover-img cover-img"
+            :src="coverImgsAnimation.small"
+            alt="cover-img"
+          />
+        </picture>
+      </div>
+      <h1 class="cover__title title">
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <span v-html="titleHtml" />
+      </h1>
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <span v-html="titleHtml" />
-    </h1>
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <p class="cover__description description" v-html="descriptionHtml"></p>
-    <div class="cover__navs navs">
-      <button
-        class="navs__to-to-quiz-button go-to-quiz-button"
-        @click="$emit('goToQuiz')"
-      >
-        <div v-text="textGoToQuiz" />
-      </button>
-      <button
-        class="navs__go-to-article-button go-to-article-button"
-        @click="$emit('goToArticle')"
-        v-text="textGoToArticle"
-      />
+      <p class="cover__description description" v-html="descriptionHtml"></p>
+      <div class="cover__navs navs">
+        <button
+          class="navs__to-to-quiz-button go-to-quiz-button"
+          @click="$emit('goToQuiz'), $ga.event('projects', 'click', '我要挑戰')"
+        >
+          <div v-text="textGoToQuiz" />
+        </button>
+        <button
+          class="navs__go-to-article-button go-to-article-button"
+          @click="
+            $emit('goToArticle'),
+              $ga.event('projects', 'click', '跳過遊戲看報導')
+          "
+          v-text="textGoToArticle"
+        />
+      </div>
     </div>
   </section>
 </template>
 
 <script>
-import styleVariables from '~/scss/_variables.scss'
+import styleVariables from '~/scss/_variables.module.scss'
 import { newline2br } from '~/components/helpers/index.js'
 
 export default {
   props: {
     coverImgs: {
+      type: Object,
+      default: () => ({}),
+    },
+    coverImgsAnimation: {
       type: Object,
       default: () => ({}),
     },
@@ -79,7 +101,8 @@ export default {
 <style lang="scss" scoped>
 .cp {
   .cover {
-    padding: 48px 20px;
+    padding: 166px 20px 48px 20px;
+    background-color: #f1f1f1;
     &__title {
       margin: 12px 0 0 0;
       @include media-breakpoint-up(md) {
@@ -93,12 +116,7 @@ export default {
       margin: 24px 0 0 0;
     }
     @include media-breakpoint-up(md) {
-      padding: 60px 0;
-      max-width: 568px;
-      margin: 0 auto;
-    }
-    @include media-breakpoint-up(xl) {
-      max-width: 600px;
+      padding: 195px 0 60px 0;
     }
     &__navs {
       margin: 6px 0 0;
@@ -111,8 +129,31 @@ export default {
     }
   }
 
+  .wrapper {
+    @include media-breakpoint-up(md) {
+      max-width: 568px;
+      margin: 0 auto;
+    }
+    @include media-breakpoint-up(xl) {
+      max-width: 600px;
+    }
+  }
+
+  .picture-wrapper {
+    position: relative;
+    height: calc((100vw - 40px) * 0.9);
+    @include media-breakpoint-up(md) {
+      height: calc(568px * 0.48);
+    }
+    @include media-breakpoint-up(xl) {
+      height: calc(600px * 0.48);
+    }
+  }
   .cover-img {
     width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   .title {
@@ -127,7 +168,8 @@ export default {
       line-height: 44px;
     }
     span {
-      box-shadow: inset 0 -0.175em white, inset 0 -0.55em rgba(255, 63, 63, 0.8);
+      box-shadow: inset 0 -0.175em #f1f1f1,
+        inset 0 -0.55em rgba(255, 63, 63, 0.8);
     }
   }
 

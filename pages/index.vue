@@ -135,7 +135,7 @@ import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
 } from '~/components/helpers/index.js'
-import styleVariables from '~/scss/_variables.scss'
+import styleVariables from '~/scss/_variables.module.scss'
 import { isProdEnv, getHref, getImg, formatDate } from '~/helpers/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'

@@ -6,11 +6,13 @@
       :class="{ upper: shouldHideHeader }"
       :navs="cmsData.contentApiData.sectionNav"
       :activeIndex="sectionIndex"
+      :forceNavActiveAt="forceSectionNavActiveIndex"
       @navigateToIndex="handleNavigateToIndex"
     />
     <RdCover
       v-show="shouldShowCover"
       :coverImgs="coverImgs"
+      :coverImgsAnimation="coverImgsAnimation"
       :title="cmsData.contentApiData.cover.title"
       :description="cmsData.contentApiData.cover.description"
       :textGoToArticle="cmsData.contentApiData.cover.textGoToArticle"
@@ -18,32 +20,17 @@
       @goToQuiz="handleNavigateToIndex(0)"
       @goToArticle="handleNavigateToIndex(1)"
     />
-    <RdQuizInfo
-      v-show="shouldShowQuizInfo"
-      :title="cmsData.contentApiData.quizInfo.title"
-      :description="cmsData.contentApiData.quizInfo.description"
-      :textSubmit="cmsData.contentApiData.quizInfo.textSubmit"
-      @close="hideQuizInfoAndMemoize"
+    <RdQuiz
+      v-if="shouldShowQuiz"
+      :cmsData="cmsData"
+      @articleVisible="handleScoreArticleVisible"
+      @scoreboardVisible="handleScoreBoardVisible"
     />
-    <section v-show="shouldShowArticle" class="article">
-      <RdReportArticle
-        :contents="cmsData.contentApiData.article.contents"
-        @sendGaEvent="sendGaEvent"
-      />
-      <RdReportExtras
-        :contents="cmsData.contentApiData.extras.contents"
-        @sendGaEvent="sendGaEvent"
-      />
-      <div class="donate-button">
-        <readr-donate-button
-          @clickButton="sendGaClickEvent({ label: 'donate' })"
-        />
-      </div>
-    </section>
+    <RdArticle v-if="shouldShowArticle" :cmsData="cmsData" />
     <RdReportCredit
       :authors="cmsData.contentApiData.credit"
       :publishedAt="cmsData.contentApiData.publishedAt"
-      :canSendGaEvent="cmsData.canSendCreditGaEvent"
+      :canSendGaEvent="shouldShowArticle || forceSectionNavActiveIndex === 1"
     />
     <LazyRenderer v-show="shouldShowLatestCoverages" class="latest-coverages">
       <readr-latest-coverages />
@@ -54,13 +41,13 @@
 <script>
 import LazyRenderer from 'vue-lazy-renderer'
 
+import scrollIntoView from 'scroll-into-view'
 import RdSectionNav from './components/RdSectionNav.vue'
 import RdCover from './components/RdCover.vue'
-import RdQuizInfo from './components/RdQuizInfo.vue'
-import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
+import RdQuiz from './components/RdQuiz.vue'
+import RdArticle from './components/RdArticle.vue'
 
-import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
-import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
+import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
 import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
@@ -73,10 +60,9 @@ export default {
 
     RdSectionNav,
     RdCover,
-    RdQuizInfo,
+    RdQuiz,
+    RdArticle,
 
-    RdReportArticle,
-    RdReportExtras,
     RdReportCredit,
   },
   mixins: [scrollDirection],
@@ -90,18 +76,24 @@ export default {
   data() {
     return {
       shouldShowCover: true,
-      shouldShowQuizInfo: false,
+      shouldShowQuiz: false,
       shouldShowArticle: false,
       shouldShowLatestCoverages: false,
-      quizInfoCookieName: 'chinaPopcultureReadQuizInfo',
       sectionIndex: -1,
+      forceSectionNavActiveIndex: -1,
     }
   },
   computed: {
     coverImgs() {
       return {
-        large: this.getImageSrcByType('cp-cover-large'),
-        small: this.getImageSrcByType('cp-cover-small'),
+        large: require('~/assets/report/china-popculture/cp-cover-large.png'),
+        small: require('~/assets/report/china-popculture/cp-cover-small.png'),
+      }
+    },
+    coverImgsAnimation() {
+      return {
+        large: require('~/assets/report/china-popculture/cp-cover-large-texts-animation.svg'),
+        small: require('~/assets/report/china-popculture/cp-cover-small-texts-animation.svg'),
       }
     },
     shouldHideHeader() {
@@ -127,15 +119,11 @@ export default {
     hideCover() {
       this.shouldShowCover = false
     },
-    showQuizInfo() {
-      this.shouldShowQuizInfo = true
+    showQuiz() {
+      this.shouldShowQuiz = true
     },
-    hideQuizInfo() {
-      this.shouldShowQuizInfo = false
-    },
-    hideQuizInfoAndMemoize() {
-      this.hideQuizInfo()
-      document.cookie = `${this.quizInfoCookieName}=true`
+    hideQuiz() {
+      this.shouldShowQuiz = false
     },
     showLatestCoverages() {
       this.shouldShowLatestCoverages = true
@@ -143,46 +131,19 @@ export default {
     hideLatestCoverages() {
       this.shouldShowLatestCoverages = false
     },
-
-    getImageSrcByType(type) {
-      return (this.cmsData?.contentApiData?.images ?? []).find(
-        function findObjectByType(object) {
-          return object.type === type
-        }
-      )?.value?.urlMobileSized
-    },
     handleGoToQuiz() {
       this.hideCover()
 
       this.hideArticle()
       this.hideLatestCoverages()
 
-      if (!getCookie(this.quizInfoCookieName)) {
-        this.showQuizInfo()
-      }
+      this.showQuiz()
       window.scrollTo(0, 0)
-
-      function getCookie(cname) {
-        const name = cname + '='
-        const ca = document.cookie.split(';')
-        for (let i = 0; i < ca.length; i++) {
-          let c = ca[i]
-          // eslint-disable-next-line eqeqeq
-          while (c.charAt(0) == ' ') {
-            c = c.substring(1)
-          }
-          // eslint-disable-next-line eqeqeq
-          if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length)
-          }
-        }
-        return ''
-      }
     },
     handleGoToArticle() {
       this.hideCover()
 
-      this.hideQuizInfo()
+      this.hideQuiz()
 
       this.showArticle()
       // this.observeCredit()
@@ -190,13 +151,61 @@ export default {
       window.scrollTo(0, 0)
     },
     handleNavigateToIndex(index) {
+      if (this.sectionIndex === 0 && this.forceSectionNavActiveIndex === 1) {
+        scrollIntoView(document.querySelector('.score-board-wrapper'), {
+          align: { topOffset: 135 },
+        })
+      }
       this.sectionIndex = index
+    },
+
+    handleScoreArticleVisible() {
+      this.forceSectionNavActiveIndex = 1
+    },
+    handleScoreBoardVisible() {
+      this.forceSectionNavActiveIndex = 0
     },
   },
 }
 </script>
 
 <style lang="scss">
+.report-article {
+  background-color: #f1f1f1 !important;
+  .report-article__title {
+    &:first-child {
+      font-size: 28px;
+      span {
+        box-shadow: inset 0 -0.175em #f1f1f1,
+          inset 0 -0.55em rgba(255, 63, 63, 0.8);
+      }
+      @include media-breakpoint-up(md) {
+        font-size: 32px;
+      }
+    }
+    font-size: 24px;
+    @include media-breakpoint-up(md) {
+      font-size: 28px;
+    }
+  }
+
+  .toggle {
+    border: 1px solid #ff3f3f !important;
+    background-color: white !important;
+    svg path {
+      fill: #ff3f3f !important;
+    }
+  }
+
+  .annotation {
+    background-color: #ffeded !important;
+  }
+}
+
+.report-article__flourish {
+  margin: -30px 0 !important;
+}
+
 .report-extras {
   background-color: white !important;
 }
@@ -206,52 +215,17 @@ export default {
   background-color: #ebebeb !important;
 }
 
-a.sc-readr-donate-button {
-  &::before {
-    background-color: #111111;
-  }
-
-  div.sc-readr-donate-button {
-    background-color: #ff3f3f;
-    color: white;
-    border-color: white;
-
-    &:hover {
-      background-color: #111111;
-      color: white;
-    }
-
-    &:active {
-      color: white;
-    }
-  }
-}
-
-.default__footer {
+#default-footer {
   background-color: #ebebeb !important;
-  position: relative;
-  &:before {
-    display: none;
-    @include media-breakpoint-up(xl) {
-      z-index: -1;
-      position: absolute;
-      left: calc((100vw - 1096px) / 2 * -1);
-      display: block;
-      content: '';
-      width: 100vw;
-      height: 100%;
-      background-color: #ebebeb !important;
-    }
-  }
 }
 </style>
 
 <style lang="scss" scoped>
 .cp {
-  padding: 118px 0 0 0;
-  @include media-breakpoint-up(md) {
-    padding: 135px 0 0 0;
-  }
+  //padding: 118px 0 0 0;
+  //@include media-breakpoint-up(md) {
+  //  padding: 135px 0 0 0;
+  //}
 }
 
 .header {
@@ -277,19 +251,19 @@ a.sc-readr-donate-button {
 
 .section-nav {
   position: fixed;
-  top: 68px;
+  top: 67px;
   left: 0;
   width: 100%;
-  z-index: 999;
+  z-index: 998;
   transition: transform 0.3s ease-out;
   &.upper {
-    transform: translateY(-68px);
+    transform: translateY(-67px);
     @include media-breakpoint-up(md) {
-      transform: translateY(-85px);
+      transform: translateY(-84px);
     }
   }
   @include media-breakpoint-up(md) {
-    top: 85px;
+    top: 84px;
   }
 }
 

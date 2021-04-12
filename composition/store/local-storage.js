@@ -1,7 +1,8 @@
 const { reactive, watchEffect, toRefs } = require('@nuxtjs/composition-api')
+const { get: jscookieGet } = require('js-cookie')
 const { v4: createUuid } = require('uuid')
 
-const readr2UserUuId = getCookieValue('readrid')
+const readr2UserUuId = jscookieGet('readrid')
 const isReadr2User = readr2UserUuId !== undefined
 const userUuid = isReadr2User ? readr2UserUuId : createUuid()
 
@@ -22,19 +23,6 @@ watchEffect(() => {
 
 function closeGdpr() {
   state.shouldOpenGdpr = false
-}
-
-function getCookieValue(name) {
-  const cookie = decodeURIComponent(document.cookie)
-    .split(';')
-    .map(function trim(str) {
-      return str.trim()
-    })
-    .find(function byName(cookie) {
-      return cookie.startsWith(`${name}=`)
-    })
-
-  return cookie !== undefined ? cookie.replace(`${name}=`, '') : undefined
 }
 
 const stateAsRef = toRefs(state)

@@ -154,14 +154,6 @@ Object.assign(module.exports, {
         },
       },
     ],
-    // Doc: https://github.com/daliborgogic/nuxt-vitals
-    [
-      'nuxt-vitals',
-      {
-        trackingID: 'UA-83609754-1',
-        disabled: inDevEnv,
-      },
-    ],
   ],
   /*
    ** Nuxt.js modules
