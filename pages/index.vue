@@ -43,9 +43,9 @@
         <h2>開放資料庫</h2>
       </div>
       <RdDatabaseList
-        :list="databases.all"
-        :loadMore="loadMoreDatabases"
-        :shouldLoadMore="shouldLoadMoreDatabases"
+        :list="databaseList.items"
+        :loadMore="loadMoreDatabaseItems"
+        :shouldLoadMore="shouldLoadMoreDatabaseItems"
         class="home__database-list"
         @sendGaEvent:database="sendGaClickEvent('open database github')"
         @sendGaEvent:portfolio="sendGaClickEvent('open database portfolio')"
@@ -145,8 +145,6 @@ import { getHref, formatDate } from '~/helpers/index.js'
 
 import SvgArrowMore from '~/assets/arrow-more.svg?inline'
 
-const DATABASES_PAGE_SIZE = 3
-
 export default {
   name: 'Home',
   components: {
@@ -207,9 +205,20 @@ export default {
     allCollaborations: {
       query: allCollaborations,
     },
-    databases: {
+    databaseList: {
       query: databases,
-      update: (data) => data,
+      variables: {
+        shouldQueryMeta: true,
+      },
+      update(result) {
+        const { items, meta } = result
+
+        return {
+          ...this.databaseList,
+          items,
+          meta,
+        }
+      },
     },
     quotes: {
       query: quotes,
@@ -238,11 +247,13 @@ export default {
       latestPosts: [],
       allCollaborations: [],
 
-      databases: {
-        all: [],
-        meta: {},
+      databaseList: {
+        items: [],
+        meta: {
+          count: 0,
+        },
+        isLoading: false,
       },
-      databasesPage: 0,
 
       collaboratorWall: {
         count: 0,
@@ -281,20 +292,11 @@ export default {
       return this.latestPosts.slice(1)
     },
 
-    prevNumOfDatabases() {
-      return DATABASES_PAGE_SIZE * this.databasesPage
+    shouldLoadMoreDatabaseItems() {
+      return this.databaseList.meta.count > 3 && this.totalDatabaseItems < 9
     },
-    currentNumOfDatabases() {
-      return this.prevNumOfDatabases + DATABASES_PAGE_SIZE
-    },
-    shouldLoadMoreDatabases() {
-      return (
-        (this.databases.meta.count > 3 && this.currentNumOfDatabases < 9) ||
-        this.isDatabasesLoading
-      )
-    },
-    isDatabasesLoading() {
-      return this.$apollo.queries.databases.loading
+    totalDatabaseItems() {
+      return this.databaseList.items.length
     },
 
     countOfCollaboratorWall: {
@@ -465,23 +467,31 @@ export default {
       return item.posts.length > 0
     },
 
-    loadMoreDatabases() {
-      if (this.isDatabasesLoading) {
+    async loadMoreDatabaseItems() {
+      if (this.databaseList.isLoading) {
         return
       }
+      this.databaseList.isLoading = true
 
-      this.databasesPage += 1
-      this.$apollo.queries.databases.fetchMore({
-        variables: {
-          first: DATABASES_PAGE_SIZE,
-          skip: this.prevNumOfDatabases,
-          hasMeta: true,
-        },
-        updateQuery: (prevResult, { fetchMoreResult }) => ({
-          all: [...prevResult.all, ...fetchMoreResult.all],
-          meta: this.databases.meta,
-        }),
-      })
+      try {
+        await this.$apollo.queries.databaseList.fetchMore({
+          variables: {
+            skip: this.totalDatabaseItems,
+            shouldQueryMeta: false,
+          },
+          updateQuery: (prevResult, { fetchMoreResult }) => {
+            return {
+              items: [...prevResult.items, ...fetchMoreResult.items],
+              meta: this.databaseList.meta,
+            }
+          },
+        })
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
+      } finally {
+        this.databaseList.isLoading = false
+      }
     },
 
     scrollTo(hash) {
