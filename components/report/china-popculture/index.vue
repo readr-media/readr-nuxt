@@ -30,7 +30,7 @@
     <RdReportCredit
       :authors="cmsData.contentApiData.credit"
       :publishedAt="cmsData.contentApiData.publishedAt"
-      :canSendGaEvent="cmsData.canSendCreditGaEvent"
+      :canSendGaEvent="shouldShowArticle || forceSectionNavActiveIndex === 1"
     />
     <LazyRenderer v-show="shouldShowLatestCoverages" class="latest-coverages">
       <readr-latest-coverages />
