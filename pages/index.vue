@@ -43,7 +43,7 @@
         <h2>開放資料庫</h2>
       </div>
       <RdDatabaseList
-        :list="databaseList.items"
+        :items="databaseList.items"
         :loadMore="loadMoreDatabaseItems"
         :shouldLoadMore="shouldLoadMoreDatabaseItems"
         class="home__database-list"
@@ -217,7 +217,7 @@ export default {
 
         return {
           ...this.databaseList,
-          items,
+          items: items.map(this.transformDatabaseItem),
           meta,
         }
       },
@@ -345,6 +345,32 @@ export default {
   },
 
   methods: {
+    transformDatabaseItem(item) {
+      const { id = '', title = '', link = '', relatedGallery: galleries = [] } =
+        item || {}
+      const names = galleries?.[0]?.writers?.map(function getName(writer) {
+        return writer.name
+      })
+
+      return {
+        id,
+        title,
+        href: link,
+        writerName: names?.[0],
+        galleries: galleries?.map(function transformContent(gallery) {
+          const { id = '', link = '', heroImage = {} } = gallery || {}
+
+          return {
+            id,
+            href: link,
+            img:
+              heroImage?.urlTinySized ||
+              require('~/assets/default/database.svg'),
+          }
+        }),
+      }
+    },
+
     async loadCollaboratorsCount() {
       try {
         const response =

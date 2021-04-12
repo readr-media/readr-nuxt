@@ -9,32 +9,33 @@
       <span>資料列表</span>
       <span>資料怎麼用</span>
     </div>
+
     <ul>
-      <li v-for="item in list" :key="item.id">
+      <li v-for="item in items" :key="item.id">
         <article>
           <a
             class="database-title"
-            :href="item.link"
+            :href="item.href"
             target="_blank"
             rel="noopener noreferrer"
             @click="$emit('sendGaEvent:database')"
           >
             <h1>{{ item.title }}</h1>
           </a>
+
           <div class="gallery">
-            <span v-if="firstGallery(item)"
-              >{{ firstWriterName(firstGallery(item)) }}這樣用</span
-            >
+            <span v-if="item.writerName">{{ item.writerName }}這樣用</span>
             <span v-else>分享你怎麼用</span>
+
             <a
-              v-for="gallery in item.relatedGallery"
+              v-for="gallery in item.galleries"
               :key="gallery.id"
-              :href="gallery.link"
+              :href="gallery.href"
               target="_blank"
               rel="noopener noreferrer"
               @click="$emit('sendGaEvent:portfolio')"
             >
-              <img v-lazy="getImage(gallery)" alt="" />
+              <img v-lazy="gallery.img" alt="" />
             </a>
 
             <a
@@ -63,8 +64,6 @@
 import RdPlusIcon from '~/components/shared/RdPlusIcon.vue'
 import RdButtonLoadMore from '~/components/shared/Button/RdButtonLoadMore.vue'
 
-import defaultImgDatabase from '~/assets/default/database.svg'
-
 export default {
   name: 'RdDatabaseList',
 
@@ -74,7 +73,7 @@ export default {
   },
 
   props: {
-    list: {
+    items: {
       type: Array,
       required: true,
       default: () => [],
@@ -87,22 +86,6 @@ export default {
       type: Boolean,
       required: true,
       default: false,
-    },
-  },
-  methods: {
-    getImage({ heroImage }) {
-      return heroImage?.urlTinySized || defaultImgDatabase
-    },
-    firstGallery({ relatedGallery = [] }) {
-      return relatedGallery[0]
-    },
-    firstWriterName(gallery) {
-      if (!gallery) {
-        return
-      }
-
-      const names = gallery.writers.map((writer) => writer.name)
-      return names[0]
     },
   },
 }
