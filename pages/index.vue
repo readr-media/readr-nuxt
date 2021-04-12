@@ -147,8 +147,6 @@ import SvgArrowMore from '~/assets/arrow-more.svg?inline'
 
 const DATABASES_PAGE_SIZE = 3
 
-const NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH = 80
-
 export default {
   name: 'Home',
   components: {
@@ -367,14 +365,14 @@ export default {
         (await this.fetchNamesOfCollaboratorWall()) || ''
     },
     async fetchNamesOfCollaboratorWall() {
-      const theEndRowNum = this.countOfCollaboratorWall + 1
-      const theBeginningRowNum =
-        theEndRowNum - NUM_OF_COLLABORATOR_NAMES_SHOULD_FETCH + 1
+      const endRow = this.countOfCollaboratorWall + 1
+      const numOfCollaboratorNamesShouldFetch = 80
+      const beginningRow = endRow - numOfCollaboratorNamesShouldFetch + 1
       try {
         const response = await axiosGet('/api/google-sheets', {
           params: {
             spreadsheetId: '1vEuoCAAXR8NMoh6qiOnj6kNdLv0lc-CaInLnWUuvySo',
-            range: `名稱列表!B${theBeginningRowNum}:B${theEndRowNum}`,
+            range: `名稱列表!B${beginningRow}:B${endRow}`,
             majorDimension: 'COLUMNS',
           },
         })
