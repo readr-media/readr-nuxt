@@ -233,7 +233,7 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 999;
+  z-index: 100000000;
   transition: transform 0.3s ease-out;
   visibility: visible;
   background-color: #ebebeb;
