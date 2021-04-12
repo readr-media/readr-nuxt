@@ -204,12 +204,14 @@ export default {
     },
     allCollaborations: {
       query: allCollaborations,
+      prefetch: false,
     },
     databaseList: {
       query: databases,
       variables: {
         shouldQueryMeta: true,
       },
+      prefetch: false,
       update(result) {
         const { items, meta } = result
 
@@ -222,6 +224,7 @@ export default {
     },
     quotes: {
       query: quotes,
+      prefetch: false,
     },
     categories: {
       query: categories,
