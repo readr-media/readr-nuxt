@@ -21,12 +21,12 @@
       @goToArticle="handleNavigateToIndex(1)"
     />
     <RdQuiz
-      v-show="shouldShowQuiz"
+      v-if="shouldShowQuiz"
       :cmsData="cmsData"
       @articleVisible="handleScoreArticleVisible"
       @scoreboardVisible="handleScoreBoardVisible"
     />
-    <RdArticle v-show="shouldShowArticle" :cmsData="cmsData" />
+    <RdArticle v-if="shouldShowArticle" :cmsData="cmsData" />
     <RdReportCredit
       :authors="cmsData.contentApiData.credit"
       :publishedAt="cmsData.contentApiData.publishedAt"

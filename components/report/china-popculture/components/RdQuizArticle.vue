@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import scrollIntoView from 'scroll-into-view'
 import RdQuizArticleAuthorProfile from './RdQuizArticleAuthorProfile.vue'
 import RdQuizArticleAnswerText from './RdQuizArticleAnswerText.vue'
 import RdSubmitButton from './RdSubmitButton.vue'
@@ -101,6 +102,11 @@ export default {
     authorProfileThumbnailText() {
       return this.authorProfile.id[0]
     },
+  },
+  mounted() {
+    if (this.isInTutorialMode) {
+      scrollIntoView(document.querySelector('.article__contents .highlight'))
+    }
   },
   methods: {
     isTextTypeAnswer(text) {
