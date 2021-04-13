@@ -44,18 +44,18 @@ export default {
     reportQuizButtonIconImgSrc() {
       if (this.state === 'normal') {
         const orderToAlphabet = ['A', 'B', 'C', 'D']
-        return require(`~/assets/article-quiz-icon-${
+        return require(`~/assets/imgs/article-quiz-icon-${
           orderToAlphabet[this.order]
         }.svg`)
       }
 
       if (this.state.includes('Wrong')) {
-        return require('~/assets/article-quiz-icon-wrong.svg')
+        return require('~/assets/imgs/article-quiz-icon-wrong.svg')
       } else if (this.state.includes('Correct')) {
-        return require('~/assets/article-quiz-icon-correct.svg')
+        return require('~/assets/imgs/article-quiz-icon-correct.svg')
       }
 
-      return require('~/assets/article-quiz-icon-cross.svg')
+      return require('~/assets/imgs/article-quiz-icon-cross.svg')
     },
   },
 }
