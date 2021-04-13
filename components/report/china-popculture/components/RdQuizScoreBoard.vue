@@ -244,6 +244,8 @@ export default {
         return '中國流行語早已深入你生活'
       } else if (this.currentScorePercentileRank >= 10) {
         return '你是會行走的「中國流行語字典」'
+      } else if (this.currentScorePercentileRank >= 5) {
+        return '中國流行語快成為你母語了'
       } else {
         return ''
       }
