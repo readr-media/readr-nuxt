@@ -26,8 +26,6 @@
 </template>
 
 <script>
-import { computed } from '@nuxtjs/composition-api'
-
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
 
@@ -50,20 +48,6 @@ export default {
       type: Object,
       default: undefined,
     },
-  },
-  setup(props) {
-    const { statusCode } = props.error
-    const is404 = computed(() => statusCode === 404)
-    const errorMessage = computed(() =>
-      is404.value ? '抱歉，找不到這個網址' : '系統忙碌中，請稍後再試'
-    )
-
-    return {
-      is404,
-      errorMessage,
-
-      backToHome,
-    }
   },
 
   apollo: {
@@ -96,6 +80,21 @@ export default {
     }
   },
 
+  computed: {
+    errorMessage() {
+      return this.is404 ? '抱歉，找不到這個網址' : '系統忙碌中，請稍後再試'
+    },
+    is404() {
+      return this.error.statusCode === 404
+    },
+  },
+
+  methods: {
+    backToHome() {
+      window.open('/', '_blank')
+    },
+  },
+
   head() {
     const metaTitle = `頁面不存在 - ${SITE_TITLE}`
 
@@ -104,10 +103,6 @@ export default {
       meta: [{ hid: 'og:title', property: 'og:title', content: metaTitle }],
     }
   },
-}
-
-function backToHome() {
-  window.open('/', '_blank')
 }
 </script>
 
