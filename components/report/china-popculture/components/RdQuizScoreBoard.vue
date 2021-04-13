@@ -268,10 +268,10 @@ export default {
         })
       })
       result.forEach((category) => {
-        category.correctPercentage =
-          Math.round(
-            (category.correctCount / this.globalAnswersData.length) * 100
-          ) + '%'
+        const result = Math.round(
+          (category.correctCount / this.globalAnswersData.length) * 100
+        )
+        category.correctPercentage = (isNaN(result) ? '?' : result) + '%'
       })
       return result
     },
@@ -311,7 +311,10 @@ export default {
           'https://storage.googleapis.com/projects.readr.tw/china_popculture.json'
         )
         this.globalAnswersData = []
-        this.globalAnswersData.push(...data)
+        data.forEach((item) => {
+          this.globalAnswersData.push(item)
+        })
+        // this.globalAnswersData.push(...data)
       } catch (e) {
         this.isFetchGlobalScoreError = true
         console.error(e)
