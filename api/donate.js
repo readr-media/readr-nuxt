@@ -9,8 +9,8 @@ const {
   POINT_OBJECT_TYPE,
   CMS_ENDPOINT_DEPRECATED,
 } = require('../configs/config')
-const { genInvoice } = require('./middle/invoice')
-const { handleExpressCors: handleCors } = require('./middle/cors.js')
+const { genInvoice } = require('./middleware/invoice')
+const { handleExpressCors: handleCors } = require('./middleware/cors.js')
 
 const apiHost = CMS_ENDPOINT_DEPRECATED
 

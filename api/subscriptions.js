@@ -16,7 +16,7 @@ const isEmail = require('validator/lib/isEmail')
 const { decamelizeKeys } = require('humps')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
 const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config')
-const { handleExpressCors: handleCors } = require('./middle/cors.js')
+const { handleExpressCors: handleCors } = require('./middleware/cors.js')
 
 const apiHost = CMS_ENDPOINT_DEPRECATED
 

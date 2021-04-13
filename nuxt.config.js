@@ -119,7 +119,7 @@ Object.assign(module.exports, {
   ],
 
   serverMiddleware: [
-    '~/server/middle/header.js',
+    '~/server/middleware/header.js',
     { path: '/api/public', handler: '~/api/public.js' },
     { path: '/api/cms', handler: '~/api/cms.js' },
     { path: '/api/google-sheets', handler: '~/api/google-sheets.js' },

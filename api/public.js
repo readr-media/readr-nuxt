@@ -4,7 +4,7 @@ const { create: axiosCreate } = require('axios')
 
 const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config.js')
 const { getErrorName } = require('../helpers/index.js')
-const { handleKoaCors: handleCors } = require('./middle/cors.js')
+const { handleKoaCors: handleCors } = require('./middleware/cors.js')
 
 const app = new Koa()
 const router = new Router()
