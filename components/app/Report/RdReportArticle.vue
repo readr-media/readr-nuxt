@@ -4,6 +4,7 @@ import RdTitle from '~/components/shared/RdTitle.vue'
 import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnotation.vue'
 import RdInfogram from '~/components/shared/RdInfogram.vue'
 import RdFlourish from '~/components/shared/RdFlourish.vue'
+import RdReportQuiz from '~/components/shared/RdReportQuiz.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
@@ -121,6 +122,39 @@ export default {
                 flourish {title}
               </div>
               <RdFlourish chartId={id} title={title} info={info} />
+            </LazyRenderer>
+          )
+        }
+
+        case 'articleQuiz': {
+          const {
+            title = '',
+            description = '',
+            options = [
+              { text: '', type: 'optionWrong' },
+              { text: '', type: 'optionCorrect' },
+            ],
+            answerDetailTitleCorrect = '',
+            answerDetailTitleWrong = '',
+            answerDetailDescription = '',
+          } = content.value
+
+          return (
+            <LazyRenderer class="report-article__article-quiz" preLoad={2}>
+              <div
+                style="visibility: hidden; height: 0"
+                vIntersect={this.scrollDepthObserver}
+              >
+                article quiz {title}
+              </div>
+              <RdReportQuiz
+                quizTitle={title}
+                quizDescription={description}
+                quizOptions={options}
+                quizDetailTitleCorrect={answerDetailTitleCorrect}
+                quizDetailTitleWrong={answerDetailTitleWrong}
+                quizDetailDescription={answerDetailDescription}
+              />
             </LazyRenderer>
           )
         }
