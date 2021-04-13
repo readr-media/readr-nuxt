@@ -136,8 +136,6 @@ Object.assign(module.exports, {
     '@nuxtjs/stylelint-module',
     // Doc: https://github.com/nuxt-community/style-resources-module
     '@nuxtjs/style-resources',
-
-    '@nuxtjs/composition-api',
     // Doc: https://github.com/nuxt-community/analytics-module
     [
       '@nuxtjs/google-analytics',
