@@ -10,6 +10,7 @@
         @click="handleUnfold"
       />協作者
     </div>
+
     <div v-if="shouldOpenNameList" class="name-list">
       {{ names }}
     </div>
@@ -17,15 +18,15 @@
 </template>
 
 <script>
-import { ref } from '@nuxtjs/composition-api'
-
 import SvgUnfoldIcon from '~/assets/imgs/unfold-icon.svg?inline'
 
 export default {
   name: 'RdCollaboratorWall',
+
   components: {
     SvgUnfoldIcon,
   },
+
   props: {
     count: {
       type: Number,
@@ -41,31 +42,28 @@ export default {
       default: undefined,
     },
   },
-  setup(props, { emit }) {
-    const shouldOpenNameList = ref(false)
-    function handleUnfold() {
-      shouldOpenNameList.value = !shouldOpenNameList.value
 
-      if (props.loadNames) {
-        props.loadNames()
-      }
-
-      emit('sendGaEvent', shouldOpenNameList.value)
-    }
-
+  data() {
     const today = new Date()
-    const year = today.getFullYear()
-    const month = today.getMonth() + 1
-    const date = today.getDate()
 
     return {
-      shouldOpenNameList,
-      handleUnfold,
+      year: today.getFullYear(),
+      month: today.getMonth() + 1,
+      date: today.getDate(),
 
-      year,
-      month,
-      date,
+      shouldOpenNameList: false,
     }
+  },
+
+  methods: {
+    handleUnfold() {
+      if (this.loadNames) {
+        this.loadNames()
+      }
+
+      this.shouldOpenNameList = !this.shouldOpenNameList
+      this.$emit('sendGaEvent', this.shouldOpenNameList)
+    },
   },
 }
 </script>
