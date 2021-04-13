@@ -19,24 +19,26 @@
 </template>
 
 <script>
-import { reactive, watch } from '@nuxtjs/composition-api'
-
 export default {
   name: 'RdFeedbackForm',
-  setup(props, { emit }) {
-    const feedback = reactive({
-      nickname: '',
-      email: '',
-      content: '',
-    })
 
-    watch(feedback, (val) => {
-      emit('userGiveFeedback', val)
-    })
-
+  data() {
     return {
-      feedback,
+      feedback: {
+        nickname: '',
+        email: '',
+        content: '',
+      },
     }
+  },
+
+  watch: {
+    feedback: {
+      deep: true,
+      handler(values) {
+        this.$emit('userGiveFeedback', values)
+      },
+    },
   },
 }
 </script>
