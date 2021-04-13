@@ -12,10 +12,11 @@ const router = new Router()
 app.use(bodyParser()).use(router.routes())
 
 router.post('/', async function requestGraphqlApi(ctx) {
-  const requestBody = ctx.request.body
-
   try {
-    const { data, status = 200 } = await axiosPost(CMS_ENDPOINT, requestBody)
+    const { data, status = 200 } = await axiosPost(
+      CMS_ENDPOINT,
+      ctx.request.body
+    )
 
     ctx.status = status
     ctx.body = data
