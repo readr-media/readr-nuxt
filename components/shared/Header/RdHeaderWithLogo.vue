@@ -1,8 +1,8 @@
 <template>
   <h1>
-    <nuxt-link to="/" @click.native="$ga.event('header', 'click', 'logo')">
+    <NuxtLink to="/" @click.native="$ga.event('header', 'click', 'logo')">
       <SvgReadrLogo />
-    </nuxt-link>
+    </NuxtLink>
   </h1>
 </template>
 

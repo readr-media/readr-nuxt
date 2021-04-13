@@ -1,9 +1,9 @@
 <template>
   <div class="section-heading" :style="{ color }">
     <h2 v-if="!linkHref">{{ title }}</h2>
-    <nuxt-link v-else :to="linkHref">
+    <NuxtLink v-else :to="linkHref">
       <h2>{{ title }}</h2>
-    </nuxt-link>
+    </NuxtLink>
 
     <svg
       fill="none"

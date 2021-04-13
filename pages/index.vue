@@ -4,10 +4,10 @@
 
     <section class="marquee-container">
       <RdMarquee class="home__marquee" />
-      <nuxt-link to="/landing" @click.native="sendGaClickEvent('landing')">
+      <NuxtLink to="/landing" @click.native="sendGaClickEvent('landing')">
         <span>了解更多</span>
         <SvgArrowMore />
-      </nuxt-link>
+      </NuxtLink>
     </section>
 
     <section>

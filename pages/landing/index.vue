@@ -1,9 +1,9 @@
 <template>
   <div>
     <header>
-      <nuxt-link to="/" @click.native="sendGaClickEvent('logo')">
+      <NuxtLink to="/" @click.native="sendGaClickEvent('logo')">
         <SvgReadrLogoYellow />
-      </nuxt-link>
+      </NuxtLink>
     </header>
 
     <div class="landing-page">
@@ -22,18 +22,18 @@
             </p>
 
             <div class="actions">
-              <nuxt-link
+              <NuxtLink
                 to="/#collaboration"
                 @click.native="sendGaClickEvent('collaboration')"
               >
                 <button type="button">參與協作</button>
-              </nuxt-link>
-              <nuxt-link
+              </NuxtLink>
+              <NuxtLink
                 to="/#latest"
                 @click.native="sendGaClickEvent('latest articles')"
               >
                 <button type="button">閱讀文章</button>
-              </nuxt-link>
+              </NuxtLink>
               <a
                 href="/donate"
                 target="_blank"
