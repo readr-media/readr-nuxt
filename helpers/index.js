@@ -10,4 +10,6 @@ export { setLocalStorage, getLocalStorage } from './local-storage.js'
 
 export { SITE_TITLE, SITE_URL } from './meta.js'
 
+export { POINT_OBJECT_TYPE } from './point-object-type.js'
+
 export { getHref, formatDate } from './post.js'

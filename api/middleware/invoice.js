@@ -12,34 +12,33 @@ const createInvoice = (data) =>
   new Promise((resolve, reject) => {
     const payload = {
       RespondType: 'JSON',
-      Version: EZPAY?.VERSION ?? '1.4',
+      Version: '1.4',
       TimeStamp: Math.round(Date.now() / 1000),
       MerchantOrderNo:
         data?.transaction_id ?? `${Math.round(Date.now() / 1000)}`,
-      Status: EZPAY?.TYPE ?? '0',
+      Status: '1',
       Category: data?.category === 1 ? 'B2C' : 'B2B',
       CarrierType: data?.carrierType,
       BuyerName: data?.member_name,
       BuyerEmail: data?.member_mail ?? '-',
       PrintFlag: data?.printFlag ?? 'N',
-      TaxType: EZPAY?.TAX_TYPE ?? '1',
+      TaxType: '1', // Couldn't be "9" at this moment. Not offering this tax type yet.
       ItemName: (data?.items ?? []).map((item) => item?.name ?? '').join('|'),
       ItemCount: (data?.items ?? []).map((item) => item?.count ?? '').join('|'),
-      ItemUnit: data?.item_unit || (EZPAY?.UNIT ?? 'Unit'),
+      ItemUnit: data?.item_unit || 'Unit',
     }
     let message = `Paid by credit card: ****-****-****-${
       data?.lastFourNum ?? ''
     }.`
 
     if (payload.Status === '3') {
-      payload.CreateStatusTime = new Date(
-        Date.now() + EZPAY?.SCHEDULE ?? 60 * 1000
-      ).toISOString()
+      // Issue invoice in 1 min
+      payload.CreateStatusTime = new Date(Date.now() + 60 * 1000).toISOString()
     }
 
     switch (payload.TaxType) {
       case '2':
-        payload.CustomsClearance = EZPAY?.CUSTOMS_CLEARANCE ?? '1'
+        payload.CustomsClearance = '1'
         payload.TaxRate = 0
         payload.TaxAmt = 0
         payload.Amt = data?.amtSales ?? 0
@@ -52,10 +51,8 @@ const createInvoice = (data) =>
         payload.TotalAmt = data?.amtSales ?? 0
         break
       default:
-        payload.TaxRate = EZPAY?.TAX_RATE ?? 5
-        payload.TaxAmt = Math.round(
-          (data?.amtSales ?? 0) * ((EZPAY?.TAX_RATE ?? 5) / 100)
-        )
+        payload.TaxRate = 5
+        payload.TaxAmt = Math.round((data?.amtSales ?? 0) * (5 / 100))
         if (payload.TaxType === '9') {
           payload.Amt =
             data?.amtSales ??

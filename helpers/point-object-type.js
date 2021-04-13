@@ -1,0 +1,9 @@
+const POINT_OBJECT_TYPE = {
+  PROJECT: 1,
+  PROJECT_MEMO: 2,
+  CLEARUP: 3,
+  GIFT: 4,
+  DONATE: 5,
+}
+
+export { POINT_OBJECT_TYPE }
