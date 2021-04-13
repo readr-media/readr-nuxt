@@ -154,6 +154,9 @@ export default {
                 quizDetailTitleCorrect={answerDetailTitleCorrect}
                 quizDetailTitleWrong={answerDetailTitleWrong}
                 quizDetailDescription={answerDetailDescription}
+                onQuizButtonClick={(context) =>
+                  this.$emit('quizButtonClick', context)
+                }
               />
             </LazyRenderer>
           )
