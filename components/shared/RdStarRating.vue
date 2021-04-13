@@ -1,11 +1,11 @@
 <template>
   <div class="star-rating">
     <div
-      v-for="(val, idx) in total"
-      :key="val"
+      v-for="(value, idx) in totalRating"
+      :key="value"
       class="star"
-      :class="{ selected: rating >= val }"
-      @click="handleClickStar(val, idx)"
+      :class="{ selected: currentRating >= value }"
+      @click="handleClickStar(value, idx)"
     >
       <SvgStarIcon class="star-icon" />
 
@@ -17,47 +17,40 @@
 </template>
 
 <script>
-import { ref, reactive } from '@nuxtjs/composition-api'
-
 import SvgStarIcon from '~/assets/imgs/star-icon.svg?inline'
 
 export default {
   name: 'RdStarRating',
+
   components: {
     SvgStarIcon,
   },
-  setup(props, { emit }) {
-    const total = 5
-    const rating = ref(0)
 
-    const shouldShowPulsedStars = reactive(new Array(total).fill(false))
-
-    function handleClickStar(val, idx) {
-      setRating(val, idx)
-      PulseStar(idx)
-    }
-
-    function setRating(val, idx) {
-      rating.value = val
-
-      emit('userGiveRating', rating.value)
-    }
-
-    function PulseStar(idx) {
-      shouldShowPulsedStars.splice(idx, 1, true)
-    }
-    function hidePulsedStar(idx) {
-      shouldShowPulsedStars.splice(idx, 1, false)
-    }
+  data() {
+    const totalRating = 5
 
     return {
-      total,
-      rating,
-      handleClickStar,
-
-      shouldShowPulsedStars,
-      hidePulsedStar,
+      totalRating,
+      currentRating: 0,
+      shouldShowPulsedStars: new Array(totalRating).fill(false),
     }
+  },
+
+  methods: {
+    handleClickStar(value, idx) {
+      this.setRating(value)
+      this.PulseStar(idx)
+    },
+    setRating(value) {
+      this.currentRating = value
+      this.$emit('userGiveRating', this.currentRating)
+    },
+    PulseStar(idx) {
+      this.shouldShowPulsedStars.splice(idx, 1, true)
+    },
+    hidePulsedStar(idx) {
+      this.shouldShowPulsedStars.splice(idx, 1, false)
+    },
   },
 }
 </script>
