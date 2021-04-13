@@ -91,7 +91,7 @@ export default {
 
   methods: {
     backToHome() {
-      window.open('/', '_blank')
+      this.$router.replace('/')
     },
   },
 
