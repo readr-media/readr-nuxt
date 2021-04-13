@@ -1,4 +1,3 @@
-const bodyParser = require('body-parser')
 // use express rather than koa because of donate is migrate from readr-web-api legacy
 const express = require('express')
 const router = express()
@@ -49,7 +48,7 @@ const validateDonator = (req, res, next) => {
   }
 }
 
-router.use(bodyParser.json())
+router.use(express.json())
 
 // For CORS non-simple requests
 router.options('/*', handleCors, (res) => {
