@@ -20,7 +20,7 @@
 
     <ClientOnly>
       <section class="post-feedback container">
-        <div v-if="postFeedbackStep === 'rating'" class="post-feedback__step">
+        <div v-if="postFeedback.step === 'rating'" class="post-feedback__step">
           <div class="post-feedback__title">這篇報導如何？</div>
 
           <RdStarRating
@@ -29,8 +29,8 @@
           />
 
           <RdFeedbackButton
-            v-if="hasRating"
-            :text="starRatingBtnText"
+            v-if="doesHaveRating"
+            :text="ratingBtnText"
             class="post-feedback__btn"
             @click.native="handleClickRatingBtn"
             @sendGaEvent="sendGaClickEvent('rate')"
@@ -38,7 +38,7 @@
         </div>
 
         <div
-          v-else-if="postFeedbackStep === 'opinion'"
+          v-else-if="postFeedback.step === 'opinion'"
           class="post-feedback__step"
         >
           <div class="post-feedback__title">可以的話，給我們一些回饋吧</div>
@@ -46,7 +46,7 @@
           <RdFeedbackForm @userGiveFeedback="setOpinion" />
 
           <RdFeedbackButton
-            v-if="hasOpinionContent"
+            v-if="doesHaveOpinionContent"
             text="傳送給 READr"
             class="post-feedback__btn"
             @click.native="handleClickOpinionBtn"
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { ref, reactive, computed, useContext } from '@nuxtjs/composition-api'
+import { mapState } from 'vuex'
 import { post as axiosPost } from 'axios'
 
 import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
@@ -105,83 +105,6 @@ export default {
       required: true,
       default: () => ({}),
     },
-  },
-
-  setup() {
-    const { route, store } = useContext()
-    const postId = route.value.params.id
-    const userUuid = store.state.user.uuid
-
-    const postFeedback = reactive({
-      rating: 0,
-      opinion: {
-        nickname: '',
-        email: '',
-        content: '',
-      },
-    })
-
-    const hasRating = computed(() => postFeedback.rating > 0)
-    function setRating(val) {
-      postFeedback.rating = val
-    }
-    const starRatingBtnText = computed(() =>
-      hasRating.value ? `確定給 ${postFeedback.rating} 顆星` : '傳送給 READr'
-    )
-    function handleClickRatingBtn() {
-      sendRatingToGoogleSheet()
-      goToPostFeedbackStep('opinion')
-    }
-    function sendRatingToGoogleSheet() {
-      axiosPost('/api/google-sheets/append', {
-        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-        range: '評分!A2:D',
-        valueInputOption: 'RAW',
-        resource: {
-          values: [[Date.now(), userUuid, postId, postFeedback.rating]],
-        },
-      })
-    }
-
-    const hasOpinionContent = computed(
-      () => postFeedback.opinion.content !== ''
-    )
-    function setOpinion(val) {
-      postFeedback.opinion = val
-    }
-    function handleClickOpinionBtn() {
-      sendOpinionToGoogleSheet()
-      goToPostFeedbackStep('thanks')
-    }
-    function sendOpinionToGoogleSheet() {
-      const { nickname, email, content } = postFeedback.opinion
-      axiosPost('/api/google-sheets/append', {
-        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-        range: '回饋!A2:F',
-        valueInputOption: 'RAW',
-        resource: {
-          values: [[Date.now(), userUuid, postId, nickname, email, content]],
-        },
-      })
-    }
-
-    const postFeedbackStep = ref('rating')
-    function goToPostFeedbackStep(name) {
-      postFeedbackStep.value = name
-    }
-
-    return {
-      hasRating,
-      starRatingBtnText,
-      setRating,
-      handleClickRatingBtn,
-
-      hasOpinionContent,
-      setOpinion,
-      handleClickOpinionBtn,
-
-      postFeedbackStep,
-    }
   },
 
   apollo: {
@@ -217,12 +140,31 @@ export default {
 
   data() {
     return {
+      postFeedback: {
+        step: 'rating',
+
+        rating: 0,
+        opinion: {
+          nickname: '',
+          email: '',
+          content: '',
+        },
+      },
+
       latestPosts: [],
+
       breakpointSm: styleVariables['breakpoint-sm'],
     }
   },
 
   computed: {
+    ...mapState({
+      userUuid: (state) => state.user.uuid,
+    }),
+    postId() {
+      return this.$route.params.id
+    },
+
     transformedNews() {
       const {
         title = '',
@@ -246,9 +188,72 @@ export default {
     heroImg() {
       return this.transformedNews.heroImg
     },
+
+    feedbackRanting: {
+      get() {
+        return this.postFeedback.rating
+      },
+      set(value) {
+        this.postFeedback.rating = value
+      },
+    },
+    ratingBtnText() {
+      return `確定給 ${this.feedbackRanting} 顆星`
+    },
+    doesHaveRating() {
+      return this.feedbackRanting > 0
+    },
+
+    doesHaveOpinionContent() {
+      return this.postFeedback.opinion.content !== ''
+    },
   },
 
   methods: {
+    setRating(value) {
+      this.feedbackRanting = value
+    },
+    handleClickRatingBtn() {
+      this.sendRatingToGoogleSheet()
+      this.gotoFeedbackStep('opinion')
+    },
+    sendRatingToGoogleSheet() {
+      axiosPost('/api/google-sheets/append', {
+        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
+        range: '評分!A2:D',
+        valueInputOption: 'RAW',
+        resource: {
+          values: [
+            [Date.now(), this.userUuid, this.postId, this.feedbackRanting],
+          ],
+        },
+      })
+    },
+    gotoFeedbackStep(name) {
+      this.postFeedback.step = name
+    },
+
+    setOpinion(value) {
+      this.postFeedback.opinion = value
+    },
+    handleClickOpinionBtn() {
+      this.sendOpinionToGoogleSheet()
+      this.gotoFeedbackStep('thanks')
+    },
+    sendOpinionToGoogleSheet() {
+      const { nickname, email, content } = this.postFeedback.opinion
+      axiosPost('/api/google-sheets/append', {
+        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
+        range: '回饋!A2:F',
+        valueInputOption: 'RAW',
+        resource: {
+          values: [
+            [Date.now(), this.userUuid, this.postId, nickname, email, content],
+          ],
+        },
+      })
+    },
+
     sendGaClickEvent(label, value) {
       this.sendGaEvent('click', label, value)
     },
