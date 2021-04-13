@@ -71,12 +71,12 @@ export default {
       query: latestPostsInErrorPage,
       update(result) {
         return result.items.map(function transformContent(post) {
-          const { id = '', name = '', heroImage = {}, ogImage = {} } =
+          const { id = '', title = '', heroImage = {}, ogImage = {} } =
             post || {}
 
           return {
             id,
-            title: name,
+            title,
             href: getHref(post),
             img: {
               src:

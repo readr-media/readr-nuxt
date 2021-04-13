@@ -180,7 +180,7 @@ export default {
         return result.items.map(function transformContent(post) {
           const {
             id = '',
-            name = '',
+            title = '',
             heroImage = {},
             ogImage = {},
             publishTime = '',
@@ -188,7 +188,7 @@ export default {
 
           return {
             id,
-            title: name,
+            title,
             href: getHref(post),
             img: {
               src:
@@ -430,7 +430,7 @@ export default {
             data?.items.map(function transformContent(post) {
               const {
                 id = '',
-                name = '',
+                title = '',
                 heroImage = {},
                 ogImage = {},
                 publishTime = '',
@@ -438,7 +438,7 @@ export default {
 
               return {
                 id,
-                title: name,
+                title,
                 href: getHref(post),
                 img: {
                   src:

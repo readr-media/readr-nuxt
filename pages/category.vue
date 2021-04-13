@@ -87,7 +87,7 @@ export default {
           items: items.map(function transformContent(post) {
             const {
               id = '',
-              name = '',
+              title = '',
               heroImage = {},
               ogImage = {},
               publishTime = '',
@@ -95,7 +95,7 @@ export default {
 
             return {
               id,
-              title: name,
+              title,
               href: getHref(post),
               img: {
                 src:

@@ -11,7 +11,7 @@ query latestPosts(
   ) {
     id
     slug
-    name
+    title: name
     style
     heroImage {
       urlTabletSized
@@ -35,7 +35,7 @@ query latestPostsInErrorPage {
   ) {
     id
     slug
-    name
+    title: name
     style
     heroImage {
       urlMobileSized
@@ -53,7 +53,7 @@ query categoryPosts($first: Int! = 3, $categorySlug: String!) {
     sortBy: [publishTime_DESC]
   ) {
     id
-    name
+    title: name
     style
     heroImage {
       urlMobileSized
