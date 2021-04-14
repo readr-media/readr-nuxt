@@ -129,8 +129,8 @@ import RdListCategory from '~/components/shared/List/RdListCategory.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
-import { allEditorChoices } from '~/apollo/queries/editor-choices.gql'
-import { latestPosts, categoryPosts } from '~/apollo/queries/posts.gql'
+import { homePageOnServer } from '~/apollo/queries/home.gql'
+import { categoryPosts } from '~/apollo/queries/posts.gql'
 import { allCollaborations } from '~/apollo/queries/collaborations.gql'
 import { databases } from '~/apollo/queries/data.gql'
 import { quotes } from '~/apollo/queries/quotes.gql'
@@ -168,37 +168,37 @@ export default {
   },
 
   apollo: {
-    allEditorChoices: {
-      query: allEditorChoices,
-    },
-    latestPosts: {
-      query: latestPosts,
-      variables: {
-        first: 5,
-      },
-      update(result) {
-        return result.items.map(function transformContent(post) {
-          const {
-            id = '',
-            title = '',
-            heroImage = {},
-            ogImage = {},
-            publishTime = '',
-          } = post || {}
+    homePageOnServer: {
+      query: homePageOnServer,
+      manual: true,
+      result({ data, loading }) {
+        if (!loading) {
+          this.allEditorChoices = data.editorChoices
+          this.latestPosts = data.latestPosts.map(function transformContent(
+            post
+          ) {
+            const {
+              id = '',
+              title = '',
+              heroImage = {},
+              ogImage = {},
+              publishTime = '',
+            } = post || {}
 
-          return {
-            id,
-            title,
-            href: getHref(post),
-            img: {
-              src:
-                heroImage?.urlTabletSized ||
-                ogImage?.urlTabletSized ||
-                require('~/assets/imgs/default/post.svg'),
-            },
-            date: formatDate(publishTime),
-          }
-        })
+            return {
+              id,
+              title,
+              href: getHref(post),
+              img: {
+                src:
+                  heroImage?.urlTabletSized ||
+                  ogImage?.urlTabletSized ||
+                  require('~/assets/imgs/default/post.svg'),
+              },
+              date: formatDate(publishTime),
+            }
+          })
+        }
       },
     },
     allCollaborations: {
