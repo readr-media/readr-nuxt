@@ -26,7 +26,7 @@
         </div>
       </template>
     </ul>
-    <ClientOnly>
+    <ClientOnly v-if="shouldMountInfiniteLoading">
       <InfiniteLoading @infinite="loadMoreLatestItems">
         <div slot="spinner" />
         <div slot="no-more" />
@@ -106,6 +106,9 @@ export default {
   },
 
   computed: {
+    shouldMountInfiniteLoading() {
+      return this.totalLatestItems > 0
+    },
     doesHaveAnyLatestItemsLeftToLoad() {
       return this.totalLatestItems < this.latestList.meta.count
     },
