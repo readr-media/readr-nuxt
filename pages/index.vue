@@ -233,7 +233,11 @@ export default {
       prefetch: false,
       manual: true,
       result: async function handleCategoryLists({ data, loading }) {
-        if (!loading && !this.doesHaveCategoryLists) {
+        if (
+          !loading &&
+          !this.isLoadingCategoryLists &&
+          !this.doesHaveCategoryLists
+        ) {
           await this.loadCategoryLists(data.categories)
 
           this.unwatchIsViewportWidthUpMd = this.$watch(
@@ -269,6 +273,7 @@ export default {
       },
 
       categoryLists: [],
+      isLoadingCategoryLists: false,
       isInitializingMacy: false,
       macyInstance: undefined,
       unwatchIsViewportWidthUpMd: undefined,
@@ -446,6 +451,8 @@ export default {
     },
 
     async loadCategoryLists(categories) {
+      this.isLoadingCategoryLists = true
+
       try {
         const { data = {} } =
           (await this.$apollo.query({
@@ -479,6 +486,8 @@ export default {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
+      } finally {
+        this.isLoadingCategoryLists = false
       }
     },
     pushCategoryList(data = {}, category = {}) {
