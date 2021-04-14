@@ -80,7 +80,7 @@
       </div>
       <RdCollaborativeList
         class="home__collaborative-list"
-        :items="allCollaborations"
+        :items="collaborations"
         @sendGaEvent="sendGaClickEvent('collaboration')"
       />
     </section>
@@ -133,7 +133,7 @@ import {
   homePageOnServer,
   databaseList,
   quotes,
-  allCollaborations,
+  collaborations,
   categories,
   categoryPosts,
 } from '~/apollo/queries/home.gql'
@@ -203,8 +203,8 @@ export default {
         }
       },
     },
-    allCollaborations: {
-      query: allCollaborations,
+    collaborations: {
+      query: collaborations,
       prefetch: false,
     },
     databaseList: {
@@ -249,7 +249,7 @@ export default {
     return {
       editorChoices: [],
       latestPosts: [],
-      allCollaborations: [],
+      collaborations: [],
 
       databaseList: {
         items: [],

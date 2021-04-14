@@ -71,8 +71,8 @@ query quotes {
   }
 }
 
-query allCollaborations {
-  allCollaborations(
+query collaborations {
+  collaborations: allCollaborations(
     sortBy: [publishTime_DESC]
     first: 10
     where: { state: published }
