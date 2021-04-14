@@ -530,7 +530,11 @@ export default {
         scrollIntoView(ele, {
           time: 300,
           align: { top: 0 },
-          ease: (t) => t * t * t,
+
+          // The ease function was copied from https://gist.github.com/gre/1650294
+          ease: function easeInCubic(t) {
+            return t * t * t
+          },
         })
       }
     },
