@@ -1,0 +1,19 @@
+query latestPosts {
+  latestPosts: allPosts(
+    first: 3
+    where: { state: published, style_in: [news, report] }
+    sortBy: [publishTime_DESC]
+  ) {
+    id
+    slug
+    title: name
+    style
+    heroImage {
+      urlTabletSized
+    }
+    ogImage {
+      urlTabletSized
+    }
+    publishTime
+  }
+}

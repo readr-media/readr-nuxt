@@ -1,0 +1,24 @@
+query latestList($skip: Int, $shouldQueryMeta: Boolean! = false) {
+  items: allPosts(
+    first: 25
+    skip: $skip
+    where: { state: published, style_in: [news, report] }
+    sortBy: [publishTime_DESC]
+  ) {
+    id
+    slug
+    title: name
+    style
+    heroImage {
+      urlTabletSized
+    }
+    ogImage {
+      urlTabletSized
+    }
+    publishTime
+  }
+
+  meta: _allPostsMeta @include(if: $shouldQueryMeta) {
+    count
+  }
+}

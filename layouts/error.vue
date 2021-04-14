@@ -29,7 +29,7 @@
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
 
-import { latestPostsInErrorPage } from '~/apollo/queries/posts.gql'
+import { latestPosts } from '~/apollo/queries/error.gql'
 
 import { getHref, SITE_TITLE } from '~/helpers/index.js'
 
@@ -52,9 +52,9 @@ export default {
 
   apollo: {
     latestPosts: {
-      query: latestPostsInErrorPage,
+      query: latestPosts,
       update(result) {
-        return result.items.map(function transformContent(post) {
+        return result.latestPosts.map(function transformContent(post) {
           const { id = '', title = '', heroImage = {}, ogImage = {} } =
             post || {}
 

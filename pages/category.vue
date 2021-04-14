@@ -43,7 +43,7 @@ import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
 import RdListItemCategory from '~/components/shared/List/RdListItemCategory.vue'
 
-import { latestPosts } from '~/apollo/queries/posts.gql'
+import { latestList } from '~/apollo/queries/category.gql'
 
 import { getHref, formatDate } from '~/helpers/index.js'
 
@@ -64,7 +64,6 @@ export default {
         meta: {
           count: 0,
         },
-        pageSize: 25,
         isLoading: false,
       },
     }
@@ -72,12 +71,9 @@ export default {
 
   apollo: {
     latestList: {
-      query: latestPosts,
-      variables() {
-        return {
-          first: this.latestList.pageSize,
-          shouldQueryMeta: true,
-        }
+      query: latestList,
+      variables: {
+        shouldQueryMeta: true,
       },
       update(result) {
         const { items, meta } = result
@@ -131,7 +127,6 @@ export default {
       try {
         await this.$apollo.queries.latestList.fetchMore({
           variables: {
-            first: this.latestList.pageSize,
             skip: this.totalLatestItems,
             shouldQueryMeta: false,
           },

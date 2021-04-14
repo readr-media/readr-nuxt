@@ -82,7 +82,7 @@ import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
 import RdStarRating from '~/components/shared/RdStarRating.vue'
 import RdList from '~/components/shared/List/RdList.vue'
 
-import { latestPosts } from '~/apollo/queries/posts.gql'
+import { latestPosts } from '~/apollo/queries/news.gql'
 
 import { getHref, formatDate } from '~/helpers/index.js'
 import styleVariables from '~/assets/css/variables.module.scss'
@@ -112,7 +112,7 @@ export default {
       query: latestPosts,
       prefetch: false,
       update(result) {
-        return result.items.map(function transformContent(post) {
+        return result.latestPosts.map(function transformContent(post) {
           const {
             id = '',
             title = '',
