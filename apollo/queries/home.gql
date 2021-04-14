@@ -101,22 +101,3 @@ query categories {
     name
   }
 }
-
-query categoryPosts($categorySlug: String!) {
-  items: allPosts(
-    first: 3
-    where: { categories_some: { slug: $categorySlug } }
-    sortBy: [publishTime_DESC]
-  ) {
-    id
-    title: name
-    style
-    heroImage {
-      urlMobileSized
-    }
-    ogImage {
-      urlMobileSized
-    }
-    publishTime
-  }
-}

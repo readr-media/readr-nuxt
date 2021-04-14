@@ -114,6 +114,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { get as axiosGet } from 'axios'
+import gql from 'graphql-tag'
 
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import RdMarquee from '~/components/shared/RdMarquee.vue'
@@ -136,7 +137,6 @@ import {
   quotes,
   collaborations,
   categories,
-  categoryPosts,
 } from '~/apollo/queries/home.gql'
 
 import {
@@ -233,7 +233,7 @@ export default {
       manual: true,
       result: async function handleCategoryLists({ data, loading }) {
         if (!loading && !this.doesHaveCategoryLists) {
-          await Promise.allSettled(data.categories.map(this.loadCategoryList))
+          await this.loadCategoryLists(data.categories)
 
           this.unwatchIsViewportWidthUpMd = this.$watch(
             'isViewportWidthUpMd',
@@ -444,46 +444,70 @@ export default {
       }
     },
 
-    async loadCategoryList(category, idx) {
+    async loadCategoryLists(categories) {
       try {
         const { data = {} } =
           (await this.$apollo.query({
-            query: categoryPosts,
-            variables: {
-              categorySlug: category.slug,
-            },
-            prefetch: false,
+            query: gql`{
+            ${categories.map(function buildField(category) {
+              const { slug } = category
+              return `${slug}: allPosts(
+                first: 3
+                where: { categories_some: { slug: "${slug}" } }
+                sortBy: [publishTime_DESC]
+              ) {
+                id
+                title: name
+                style
+                heroImage {
+                  urlMobileSized
+                }
+                ogImage {
+                  urlMobileSized
+                }
+                publishTime
+              }`
+            })}
+          }`,
           })) || {}
-        this.$set(this.categoryLists, idx, {
-          name: category.name,
-          items:
-            data?.items.map(function transformContent(post) {
-              const {
-                id = '',
-                title = '',
-                heroImage = {},
-                ogImage = {},
-                publishTime = '',
-              } = post || {}
 
-              return {
-                id,
-                title,
-                href: getHref(post),
-                img: {
-                  src:
-                    heroImage?.urlMobileSized ||
-                    ogImage?.urlMobileSized ||
-                    require('~/assets/imgs/default/post.svg'),
-                },
-                date: formatDate(publishTime),
-              }
-            }) || [],
+        categories.forEach((category) => {
+          // to ensure the order of the categoryLists
+          this.pushCategoryList(data, category)
         })
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
       }
+    },
+    pushCategoryList(data = {}, category = {}) {
+      const { slug, name } = category
+      const items = data[slug] || []
+      this.categoryLists.push({
+        name,
+        items: items.map(function transformContent(post) {
+          const {
+            id = '',
+            title = '',
+            heroImage = {},
+            ogImage = {},
+            publishTime = '',
+          } = post || {}
+
+          return {
+            id,
+            title,
+            href: getHref(post),
+            img: {
+              src:
+                heroImage?.urlMobileSized ||
+                ogImage?.urlMobileSized ||
+                require('~/assets/imgs/default/post.svg'),
+            },
+            date: formatDate(publishTime),
+          }
+        }),
+      })
     },
     async handleCategorySectionLayout(isViewportWidthUpMd) {
       if (this.macyInstance) {
