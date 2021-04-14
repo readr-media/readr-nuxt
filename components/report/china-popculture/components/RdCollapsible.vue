@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      isToggled: false,
+      isToggled: true,
       hasToggledOnce: false,
     }
   },
