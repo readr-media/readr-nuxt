@@ -29,7 +29,7 @@
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
 
-import { latestPosts } from '~/apollo/queries/error.gql'
+import { latestPostsInErrorPage as latestPosts } from '~/apollo/queries/posts.js'
 
 import { getHref, SITE_TITLE } from '~/helpers/index.js'
 

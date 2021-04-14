@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { news, report } from '~/apollo/queries/post.gql'
+import { news, report } from '~/apollo/queries/post.js'
 
 import { SITE_TITLE, SITE_URL } from '~/helpers/index.js'
 

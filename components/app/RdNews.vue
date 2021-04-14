@@ -82,7 +82,7 @@ import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
 import RdStarRating from '~/components/shared/RdStarRating.vue'
 import RdList from '~/components/shared/List/RdList.vue'
 
-import { latestPosts } from '~/apollo/queries/news.gql'
+import { latestPosts } from '~/apollo/queries/posts.js'
 
 import { getHref, formatDate } from '~/helpers/index.js'
 import styleVariables from '~/assets/css/variables.module.scss'

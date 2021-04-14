@@ -115,6 +115,7 @@
 import { mapGetters } from 'vuex'
 import { get as axiosGet } from 'axios'
 import gql from 'graphql-tag'
+import gqlCombineQuery from 'graphql-combine-query'
 
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
 import RdMarquee from '~/components/shared/RdMarquee.vue'
@@ -131,13 +132,12 @@ import SvgArrowMore from '~/assets/imgs/arrow-more.svg?inline'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
-import {
-  homePageOnServer,
-  databaseList,
-  quotes,
-  collaborations,
-  categories,
-} from '~/apollo/queries/home.gql'
+import { editorChoices } from '~/apollo/queries/editor-choices.js'
+import { latestPosts } from '~/apollo/queries/posts.js'
+import { databaseList } from '~/apollo/queries/data.js'
+import { quotes } from '~/apollo/queries/quotes.js'
+import { collaborations } from '~/apollo/queries/collaborations.js'
+import { categories } from '~/apollo/queries/categories.js'
 
 import {
   setupIntersectionObserver,
@@ -170,7 +170,12 @@ export default {
 
   apollo: {
     homePageOnServer: {
-      query: homePageOnServer,
+      query: gqlCombineQuery('homePageOnServer')
+        .add(editorChoices)
+        .add(latestPosts).document,
+      variables: {
+        first: 5,
+      },
       manual: true,
       result({ data, loading }) {
         if (!loading) {
@@ -202,15 +207,8 @@ export default {
       },
     },
 
-    collaborations: {
-      query: collaborations,
-      prefetch: false,
-    },
     databaseList: {
       query: databaseList,
-      variables: {
-        shouldQueryMeta: true,
-      },
       prefetch: false,
       update(result) {
         const { items, meta } = result
@@ -224,6 +222,10 @@ export default {
     },
     quotes: {
       query: quotes,
+      prefetch: false,
+    },
+    collaborations: {
+      query: collaborations,
       prefetch: false,
     },
     categories: {
@@ -447,7 +449,7 @@ export default {
       try {
         const { data = {} } =
           (await this.$apollo.query({
-            query: gql`{
+            query: gql`query {
             ${categories.map(function buildField(category) {
               const { slug } = category
               return `${slug}: allPosts(
