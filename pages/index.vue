@@ -126,6 +126,7 @@ import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
 import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
 import RdListCategory from '~/components/shared/List/RdListCategory.vue'
+import SvgArrowMore from '~/assets/imgs/arrow-more.svg?inline'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
@@ -144,8 +145,6 @@ import {
 } from '~/components/helpers/index.js'
 import styleVariables from '~/assets/css/variables.module.scss'
 import { getHref, formatDate } from '~/helpers/index.js'
-
-import SvgArrowMore from '~/assets/imgs/arrow-more.svg?inline'
 
 export default {
   name: 'Home',
@@ -203,6 +202,7 @@ export default {
         }
       },
     },
+
     collaborations: {
       query: collaborations,
       prefetch: false,
@@ -248,8 +248,8 @@ export default {
   data() {
     return {
       editorChoices: [],
+
       latestPosts: [],
-      collaborations: [],
 
       databaseList: {
         items: [],
@@ -259,11 +259,13 @@ export default {
         isLoading: false,
       },
 
+      quotes: [],
+
+      collaborations: [],
       collaboratorWall: {
         count: 0,
         names: '',
       },
-      quotes: [],
 
       categoryLists: [],
       isInitializingMacy: false,
@@ -369,6 +371,32 @@ export default {
               require('~/assets/imgs/default/database.svg'),
           }
         }),
+      }
+    },
+    async loadMoreDatabaseItems() {
+      if (this.databaseList.isLoading) {
+        return
+      }
+      this.databaseList.isLoading = true
+
+      try {
+        await this.$apollo.queries.databaseList.fetchMore({
+          variables: {
+            skip: this.totalDatabaseItems,
+            shouldQueryMeta: false,
+          },
+          updateQuery: (prevResult, { fetchMoreResult }) => {
+            return {
+              items: [...prevResult.items, ...fetchMoreResult.items],
+              meta: this.databaseList.meta,
+            }
+          },
+        })
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
+      } finally {
+        this.databaseList.isLoading = false
       }
     },
 
@@ -496,33 +524,6 @@ export default {
       return item.posts.length > 0
     },
 
-    async loadMoreDatabaseItems() {
-      if (this.databaseList.isLoading) {
-        return
-      }
-      this.databaseList.isLoading = true
-
-      try {
-        await this.$apollo.queries.databaseList.fetchMore({
-          variables: {
-            skip: this.totalDatabaseItems,
-            shouldQueryMeta: false,
-          },
-          updateQuery: (prevResult, { fetchMoreResult }) => {
-            return {
-              items: [...prevResult.items, ...fetchMoreResult.items],
-              meta: this.databaseList.meta,
-            }
-          },
-        })
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err)
-      } finally {
-        this.databaseList.isLoading = false
-      }
-    },
-
     scrollTo(hash) {
       if (hash) {
         const scrollIntoView = require('scroll-into-view')
@@ -535,19 +536,6 @@ export default {
           ease: (t) => t * t * t,
         })
       }
-    },
-
-    sendGaEventForCollaboratorWall(doesUnfold) {
-      this.sendGaClickEvent(`credit-${doesUnfold ? 'open' : 'close'}`)
-    },
-    sendGaClickEvent(label, value) {
-      this.sendGaEvent('click', label, value)
-    },
-    sendGaScrollEvent(label, value) {
-      this.sendGaEvent('scroll', label, value)
-    },
-    sendGaEvent(action, label, value) {
-      this.$ga.event('Home', action, label, value)
     },
 
     async setupScrollDepthObserver() {
@@ -566,6 +554,18 @@ export default {
         })
       })
       this.scrollDepthObserver.observe(document.getElementById(footerId))
+    },
+    sendGaEventForCollaboratorWall(doesUnfold) {
+      this.sendGaClickEvent(`credit-${doesUnfold ? 'open' : 'close'}`)
+    },
+    sendGaClickEvent(label, value) {
+      this.sendGaEvent('click', label, value)
+    },
+    sendGaScrollEvent(label, value) {
+      this.sendGaEvent('scroll', label, value)
+    },
+    sendGaEvent(action, label, value) {
+      this.$ga.event('Home', action, label, value)
     },
   },
 }
