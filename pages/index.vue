@@ -13,7 +13,7 @@
     <section>
       <RdCarousel
         v-if="shouldOpenEditorChoices"
-        :posts="allEditorChoices"
+        :posts="editorChoices"
         class="home__carousel"
         @sendGaEvent="sendGaClickEvent('editor choices')"
       >
@@ -173,7 +173,7 @@ export default {
       manual: true,
       result({ data, loading }) {
         if (!loading) {
-          this.allEditorChoices = data.editorChoices
+          this.editorChoices = data.editorChoices
           this.latestPosts = data.latestPosts.map(function transformContent(
             post
           ) {
@@ -245,7 +245,7 @@ export default {
 
   data() {
     return {
-      allEditorChoices: [],
+      editorChoices: [],
       latestPosts: [],
       allCollaborations: [],
 
@@ -281,7 +281,7 @@ export default {
       return parseInt(styleVariables['breakpoint-md'], 10)
     },
     shouldOpenEditorChoices() {
-      return this.allEditorChoices && this.allEditorChoices.length > 0
+      return this.editorChoices && this.editorChoices.length > 0
     },
 
     shouldOpenLatestList() {
