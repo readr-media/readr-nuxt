@@ -520,9 +520,6 @@ export default {
         this.isInitializingMacy = false
       }
     },
-    doesHavePosts(item) {
-      return item.posts.length > 0
-    },
 
     scrollTo(hash) {
       if (hash) {
