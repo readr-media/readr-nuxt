@@ -129,12 +129,14 @@ import RdListCategory from '~/components/shared/List/RdListCategory.vue'
 
 import intersect from '~/components/helpers/directives/intersect.js'
 
-import { homePageOnServer } from '~/apollo/queries/home.gql'
-import { categoryPosts } from '~/apollo/queries/posts.gql'
-import { allCollaborations } from '~/apollo/queries/collaborations.gql'
-import { databases } from '~/apollo/queries/data.gql'
-import { quotes } from '~/apollo/queries/quotes.gql'
-import { categories } from '~/apollo/queries/categories.gql'
+import {
+  homePageOnServer,
+  databaseList,
+  quotes,
+  allCollaborations,
+  categories,
+  categoryPosts,
+} from '~/apollo/queries/home.gql'
 
 import {
   setupIntersectionObserver,
@@ -206,7 +208,7 @@ export default {
       prefetch: false,
     },
     databaseList: {
-      query: databases,
+      query: databaseList,
       variables: {
         shouldQueryMeta: true,
       },
