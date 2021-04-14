@@ -174,31 +174,30 @@ export default {
       manual: true,
       result({ data, loading }) {
         if (!loading) {
-          this.editorChoices = data.editorChoices
-          this.latestPosts = data.latestPosts.map(function transformContent(
-            post
-          ) {
-            const {
-              id = '',
-              title = '',
-              heroImage = {},
-              ogImage = {},
-              publishTime = '',
-            } = post || {}
+          this.editorChoices = data.editorChoices || []
+          this.latestPosts =
+            data.latestPosts?.map(function transformContent(post) {
+              const {
+                id = '',
+                title = '',
+                heroImage = {},
+                ogImage = {},
+                publishTime = '',
+              } = post || {}
 
-            return {
-              id,
-              title,
-              href: getHref(post),
-              img: {
-                src:
-                  heroImage?.urlTabletSized ||
-                  ogImage?.urlTabletSized ||
-                  require('~/assets/imgs/default/post.svg'),
-              },
-              date: formatDate(publishTime),
-            }
-          })
+              return {
+                id,
+                title,
+                href: getHref(post),
+                img: {
+                  src:
+                    heroImage?.urlTabletSized ||
+                    ogImage?.urlTabletSized ||
+                    require('~/assets/imgs/default/post.svg'),
+                },
+                date: formatDate(publishTime),
+              }
+            }) || []
         }
       },
     },
