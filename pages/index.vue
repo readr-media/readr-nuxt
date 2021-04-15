@@ -134,7 +134,7 @@ import intersect from '~/components/helpers/directives/intersect.js'
 
 import { editorChoices } from '~/apollo/queries/editor-choices.js'
 import { latestPosts } from '~/apollo/queries/posts.js'
-import { databaseList } from '~/apollo/queries/data.js'
+import { databaseList } from '~/apollo/queries/datas.js'
 import { quotes } from '~/apollo/queries/quotes.js'
 import { collaborations } from '~/apollo/queries/collaborations.js'
 import { categories } from '~/apollo/queries/categories.js'
