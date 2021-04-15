@@ -5,10 +5,16 @@ const { post: axiosPost } = require('axios')
 const isEmail = require('validator/lib/isEmail')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
 const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config')
-const { POINT_OBJECT_TYPE } = require('../helpers/index.js')
 const { genInvoice } = require('./middleware/invoice')
 const { handleExpressCors: handleCors } = require('./middleware/cors.js')
 
+const POINT_OBJECT_TYPE = {
+  PROJECT: 1,
+  PROJECT_MEMO: 2,
+  CLEARUP: 3,
+  GIFT: 4,
+  DONATE: 5,
+}
 const apiHost = CMS_ENDPOINT_DEPRECATED
 
 const validateObjectType = (req, res, next) => {
