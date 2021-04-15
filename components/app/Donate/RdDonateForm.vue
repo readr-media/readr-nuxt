@@ -246,10 +246,10 @@
 <script>
 import dayjs from 'dayjs'
 
+import RdDonateRadioItem from './RdDonateRadioItem.vue'
+
 import { postDonate, postSubscribe } from './utils.js'
 import { TAPPAY as configTappay } from '~/configs/config'
-
-import RdDonateRadioItem from '~/components/shared/Donate/RdDonateRadioItem.vue'
 
 const CARRIER_TYPE_NUM = {
   carrierEmail: '2',

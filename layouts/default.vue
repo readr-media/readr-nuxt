@@ -17,7 +17,7 @@
 import { mapState, mapMutations } from 'vuex'
 import rafThrottle from 'raf-throttle'
 
-import RdGdpr from '~/components/shared/RdGdpr.vue'
+import RdGdpr from '~/components/app/RdGdpr.vue'
 
 export default {
   components: {

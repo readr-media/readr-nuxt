@@ -11,10 +11,10 @@
 
 <script>
 import RdHeader from '~/components/shared/Header/RdHeader.vue'
-import RdAboutIntro from '~/components/shared/About/RdAboutIntro.vue'
-import RdAboutCoreValues from '~/components/shared/About/RdAboutCoreValues.vue'
-import RdAboutTeamMembers from '~/components/shared/About/RdAboutTeamMembers.vue'
-import RdAboutTimeline from '~/components/shared/About/RdAboutTimeline.vue'
+import RdAboutIntro from '~/components/app/About/RdAboutIntro.vue'
+import RdAboutCoreValues from '~/components/app/About/RdAboutCoreValues.vue'
+import RdAboutTeamMembers from '~/components/app/About/RdAboutTeamMembers.vue'
+import RdAboutTimeline from '~/components/app/About/RdAboutTimeline.vue'
 
 import { SITE_TITLE } from '~/helpers/index.js'
 
