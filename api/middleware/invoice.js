@@ -263,6 +263,5 @@ const genInvoice = (req) => {
 }
 
 module.exports = {
-  createInvoice,
   genInvoice,
 }
