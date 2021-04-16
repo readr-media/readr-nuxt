@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 const CryptoJS = require('crypto-js')
 const rawurlencode = require('locutus/php/url/rawurlencode')
 const { post: axiosPost } = require('axios')
@@ -10,6 +8,7 @@ const CARRIER_TYPE = { PHONE: '0', NATURAL: '1', EXPAY: '2' }
 
 const createInvoice = (data) =>
   new Promise((resolve, reject) => {
+    /* eslint-disable camelcase */
     const payload = {
       RespondType: 'JSON',
       Version: '1.4',
@@ -27,6 +26,7 @@ const createInvoice = (data) =>
       ItemCount: (data?.items ?? []).map((item) => item?.count ?? '').join('|'),
       ItemUnit: data?.item_unit || 'Unit',
     }
+    /* eslint-enable camelcase */
     let message = `Paid by credit card: ****-****-****-${
       data?.lastFourNum ?? ''
     }.`
@@ -162,11 +162,13 @@ const createInvoice = (data) =>
           case '2':
             payload.CarrierNum = (
               data?.carrierNum ??
+              // eslint-disable-next-line camelcase
               data?.member_mail ??
               '-'
             ).trim()
             payload.BuyerEmail = (
               data?.carrierNum ??
+              // eslint-disable-next-line camelcase
               data?.member_mail ??
               '-'
             ).trim()
@@ -256,6 +258,7 @@ const genInvoice = (req) => {
         `Error occurred when gen inv for member-transaction:`,
         req?.user?.email ?? '',
         '-',
+        // eslint-disable-next-line camelcase
         data?.transaction_id ?? ''
       )
       console.error(error.message)
