@@ -10,8 +10,6 @@ const TOKEN = require('../../../configs/token.json')
 
 const auth = authorize(CREDENTIALS)
 
-module.exports = auth
-
 function authorize(credentials) {
   const {
     client_id: clientId,
@@ -27,3 +25,5 @@ function authorize(credentials) {
 
   return oAuth2Client
 }
+
+module.exports = auth
