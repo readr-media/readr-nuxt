@@ -1,4 +1,8 @@
-/* Copy from https://unpkg.com/browse/tailwindcss@1.4.6/dist/base.css */
+/**
+ * Copy from https://unpkg.com/browse/tailwindcss@1.4.6/dist/base.css
+ * 不要動它！任何想新增的全局基底樣式，請都放進 _readr.scss
+ */
+
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
 /* Document

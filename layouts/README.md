@@ -1,7 +1,3 @@
-# LAYOUTS
+# Layouts
 
-**This directory is not required, you can delete it if you don't want to use it.**
-
-This directory contains your Application Layouts.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/views#layouts).
+**[Nuxt 創建的資料夾，有特殊功能](https://nuxtjs.org/docs/2.x/directory-structure/layouts)，專門放可複用的頁面布局 Vue 元件。**

@@ -1,3 +1,8 @@
+/**
+ * 向外暴露的 API，讓其它專案可以使用，比如專題底下的「更多專題」區塊：https://github.com/readr-media/readr-ui/blob/web-components/src/components/readr-latest-coverages/readr-latest-coverages.tsx#L13
+ * 應限制使用者能查詢的資料
+ */
+
 const Koa = require('koa')
 const Router = require('koa-router')
 const { create: axiosCreate } = require('axios')

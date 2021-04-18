@@ -1,11 +1,5 @@
-# STATIC
+# Static
 
-**This directory is not required, you can delete it if you don't want to use it.**
+**[Nuxt 創建的資料夾，有特殊功能](https://nuxtjs.org/docs/2.x/directory-structure/static)，專門放不需經 webpack 編譯的靜態資源。**
 
-This directory contains your static files.
-Each file inside this directory is mapped to `/`.
-Thus you'd want to delete this README.md before deploying to production.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/assets#static).
+其檔案會直接對應到網址的根目錄。

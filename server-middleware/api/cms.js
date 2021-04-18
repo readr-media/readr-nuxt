@@ -1,3 +1,8 @@
+/**
+ * 主要處理與 CMS API 相關的邏輯
+ * CMS API 採用 GraphQL 查詢
+ */
+
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
 const Router = require('koa-router')

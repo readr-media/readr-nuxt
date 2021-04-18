@@ -1,4 +1,4 @@
-// use express rather than koa because of donate is migrate from readr-web-api legacy
+// Use Express rather than Koa because the donate is migrated from readr-web-api legacy
 const express = require('express')
 const { post: axiosPost } = require('axios')
 const isEmail = require('validator/lib/isEmail')

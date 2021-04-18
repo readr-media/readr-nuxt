@@ -1,8 +1,5 @@
-# MIDDLEWARE
+# Middleware
 
-**This directory is not required, you can delete it if you don't want to use it.**
+**[Nuxt 創建的資料夾，有特殊功能](https://nuxtjs.org/docs/2.x/directory-structure/middleware)，專門放可給 [router](https://nuxtjs.org/docs/2.x/directory-structure/middleware#router-middleware)、[layouts 或 pages](https://nuxtjs.org/docs/2.x/directory-structure/middleware#named-middleware) 複用的中介軟體。**
 
-This directory contains your application middleware.
-Middleware let you define custom functions that can be run before rendering either a page or a group of pages.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/routing#middleware).
+此資料夾與 [server-middleware](../server-middleware/) 的差別，可見[文件](https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-servermiddleware#servermiddleware-vs-middleware)。

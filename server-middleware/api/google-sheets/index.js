@@ -1,4 +1,7 @@
 /**
+ * 主要處理與 Google Sheets API 相關的邏輯
+ * Google Sheets API 需要認證，認證檔案是機密資料，因此必須透過 Nuxt 伺服器去打
+ *
  * References:
  * https://developers.google.com/sheets/api/reference/rest
  */

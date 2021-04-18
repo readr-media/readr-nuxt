@@ -1,11 +1,11 @@
-/*
-  Document:
-  1. Subscription API（後端）: https://github.com/readr-media/readr-restful/wiki/Subscription
-  2. TapPay SDK（付款）: https://docs.tappaysdk.com/tutorial/zh/home.html
-  3. ezPay API（發票）: https://inv.ezpay.com.tw/dw_files/info_api/ezPay_EZP_INVI_1_1_9.pdf
-*/
+/**
+ * Documents:
+ * 1. Subscription API（後端）: https://github.com/readr-media/readr-restful/wiki/Subscription
+ * 2. TapPay SDK（付款）: https://docs.tappaysdk.com/tutorial/zh/home.html
+ * 3. ezPay API（發票）: https://inv.ezpay.com.tw/dw_files/info_api/ezPay_EZP_INVI_1_1_9.pdf
+ */
 
-// use express rather than koa because of donate is migrate from readr-web-api legacy
+// Use Express rather than Koa because the subscriptions is migrated from readr-web-api legacy
 const express = require('express')
 const { post: axiosPost } = require('axios')
 const { decamelizeKeys } = require('humps')

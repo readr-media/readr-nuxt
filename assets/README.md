@@ -1,7 +1,21 @@
-# ASSETS
+# Assets
 
-**This directory is not required, you can delete it if you don't want to use it.**
+**[Nuxt 創建的資料夾，有特殊功能](https://nuxtjs.org/docs/2.x/directory-structure/assets)，專門放需經 webpack 編譯的資源，比如圖片、樣式或字體。**
 
-This directory contains your un-compiled assets such as LESS, SASS, or JavaScript.
+## 資料夾結構
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/assets#webpacked).
+```
+├── css/
+└── imgs/
+    └── report/
+```
+
+依資源類型拆分出子資料夾，樣式放 css、圖片放 imgs。
+
+## css 資料夾
+
+請見 [assets/css/README.md](./css/README.md)。
+
+## imgs 資料夾
+
+請見 [assets/imgs/README.md](./imgs/README.md)。
