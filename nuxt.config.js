@@ -120,16 +120,19 @@ Object.assign(module.exports, {
 
   serverMiddleware: [
     '~/server-middleware/header.js',
-    { path: '/api/public', handler: '~/server-middleware/api/public.js' },
-    { path: '/api/cms', handler: '~/server-middleware/api/cms.js' },
+    { path: '/api/public', handler: '~/server-middleware/apis/public.js' },
+    { path: '/api/cms', handler: '~/server-middleware/apis/cms.js' },
     {
       path: '/api/google-sheets',
-      handler: '~/server-middleware/api/google-sheets/index.js',
+      handler: '~/server-middleware/apis/google-sheets/index.js',
     },
-    { path: '/api/donate', handler: '~/server-middleware/api/donate/index.js' },
+    {
+      path: '/api/donate',
+      handler: '~/server-middleware/apis/donate/index.js',
+    },
     {
       path: '/api/subscriptions',
-      handler: '~/server-middleware/api/subscriptions.js',
+      handler: '~/server-middleware/apis/subscriptions.js',
     },
   ],
   /*

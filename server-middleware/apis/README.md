@@ -1,4 +1,4 @@
-# Server-middleware/Api
+# Server-middleware/Apis
 
 **專門放與伺服器的 HTTP 請求（request）相關的程式碼。**
 

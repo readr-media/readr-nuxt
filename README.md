@@ -40,7 +40,7 @@
 │   └── vue-plugins/
 ├── server/
 ├── server-middleware/
-│   └── api/
+│   └── apis/
 ├── static/
 └── store/
 ```
