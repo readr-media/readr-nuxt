@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import intersect from '~/helpers/vue/directives/intersect.js'
+import { intersect } from '~/helpers/vue/directives/index.js'
 
 import {
   setupIntersectionObserver,

@@ -49,7 +49,7 @@ import RdMainTitle from './RdMainTitle.vue'
 import RdButton from './RdButton.vue'
 import RdButtonUnderline from './RdButtonUnderline.vue'
 
-import intersect from '~/helpers/vue/directives/intersect.js'
+import { intersect } from '~/helpers/vue/directives/index.js'
 
 import {
   setupIntersectionObserver,

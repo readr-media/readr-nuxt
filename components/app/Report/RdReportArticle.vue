@@ -6,7 +6,7 @@ import RdInfogram from '~/components/shared/RdInfogram.vue'
 import RdFlourish from '~/components/shared/RdFlourish.vue'
 import RdReportQuiz from '~/components/shared/RdReportQuiz.vue'
 
-import intersect from '~/helpers/vue/directives/intersect.js'
+import { intersect } from '~/helpers/vue/directives/index.js'
 
 import {
   setupIntersectionObserver,

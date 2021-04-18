@@ -71,7 +71,7 @@ import RdQuizHeader from './RdQuizHeader.vue'
 import RdQuizArticle from './RdQuizArticle.vue'
 import RdQuizResult from './RdQuizResult.vue'
 import RdQuizScoreBoard from './RdQuizScoreBoard.vue'
-import scrollDirection from '~/components/helpers/vue/mixins/scroll-direction'
+import { scrollDirection } from '~/components/helpers/vue/mixins/index.js'
 
 export default {
   name: 'RdQuiz',

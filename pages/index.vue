@@ -130,7 +130,7 @@ import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
 import RdListCategory from '~/components/shared/List/RdListCategory.vue'
 import SvgArrowMore from '~/assets/imgs/arrow-more.svg?inline'
 
-import intersect from '~/helpers/vue/directives/intersect.js'
+import { intersect } from '~/helpers/vue/directives/index.js'
 
 import { editorChoices } from '~/apollo/queries/editor-choices.js'
 import { latestPosts } from '~/apollo/queries/posts.js'
