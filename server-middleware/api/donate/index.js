@@ -4,9 +4,9 @@ const router = express()
 const { post: axiosPost } = require('axios')
 const isEmail = require('validator/lib/isEmail')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
-const { CMS_ENDPOINT_DEPRECATED } = require('../configs/config')
-const { genInvoice } = require('./middleware/invoice')
-const { handleExpressCors: handleCors } = require('./middleware/cors.js')
+const { CMS_ENDPOINT_DEPRECATED } = require('../../../configs/config.js')
+const { handleExpressCors: handleCors } = require('../helpers/cors.js')
+const { genInvoice } = require('./invoice.js')
 
 const POINT_OBJECT_TYPE = {
   PROJECT: 1,

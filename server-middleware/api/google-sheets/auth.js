@@ -5,8 +5,8 @@
 
 const { google } = require('googleapis')
 
-const CREDENTIALS = require('../../configs/credentials.json')
-const TOKEN = require('../../configs/token.json')
+const CREDENTIALS = require('../../../configs/credentials.json')
+const TOKEN = require('../../../configs/token.json')
 
 const auth = authorize(CREDENTIALS)
 

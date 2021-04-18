@@ -3,8 +3,8 @@ const bodyParser = require('koa-bodyparser')
 const Router = require('koa-router')
 const { post: axiosPost } = require('axios')
 
-const { CMS_ENDPOINT } = require('../configs/config.js')
-const { reportApiErrorFromKoa } = require('../helpers/index.js')
+const { CMS_ENDPOINT } = require('../../configs/config.js')
+const { reportApiErrorFromKoa } = require('../../helpers/index.js')
 
 const app = new Koa()
 const router = new Router()

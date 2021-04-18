@@ -1,4 +1,4 @@
-const { isProdEnv } = require('../../helpers/index.js')
+const { isProdEnv } = require('../helpers/index.js')
 
 module.exports = setHeader
 

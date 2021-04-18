@@ -119,12 +119,18 @@ Object.assign(module.exports, {
   ],
 
   serverMiddleware: [
-    '~/server/middleware/header.js',
-    { path: '/api/public', handler: '~/api/public.js' },
-    { path: '/api/cms', handler: '~/api/cms.js' },
-    { path: '/api/google-sheets', handler: '~/api/google-sheets.js' },
-    { path: '/api/donate', handler: '~/api/donate.js' },
-    { path: '/api/subscriptions', handler: '~/api/subscriptions.js' },
+    '~/server-middleware/header.js',
+    { path: '/api/public', handler: '~/server-middleware/api/public.js' },
+    { path: '/api/cms', handler: '~/server-middleware/api/cms.js' },
+    {
+      path: '/api/google-sheets',
+      handler: '~/server-middleware/api/google-sheets/index.js',
+    },
+    { path: '/api/donate', handler: '~/server-middleware/api/donate/index.js' },
+    {
+      path: '/api/subscriptions',
+      handler: '~/server-middleware/api/subscriptions.js',
+    },
   ],
   /*
    ** Nuxt.js dev-modules
