@@ -1,4 +1,4 @@
-import { isIntersectionObserver } from '../index.js'
+import { isIntersectionObserver } from '~/helpers/index.js'
 
 const intersect = {
   inserted(el, { value }) {

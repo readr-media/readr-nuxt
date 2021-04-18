@@ -6,12 +6,12 @@ import RdInfogram from '~/components/shared/RdInfogram.vue'
 import RdFlourish from '~/components/shared/RdFlourish.vue'
 import RdReportQuiz from '~/components/shared/RdReportQuiz.vue'
 
-import intersect from '~/components/helpers/directives/intersect.js'
+import intersect from '~/helpers/vue/directives/intersect.js'
 
 import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
-} from '~/components/helpers/index.js'
+} from '~/helpers/index.js'
 import styleVariables from '~/assets/css/variables.module.scss'
 
 export default {

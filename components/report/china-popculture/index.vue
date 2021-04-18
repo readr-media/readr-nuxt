@@ -50,7 +50,7 @@ import RdArticle from './components/RdArticle.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
-import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
+import scrollDirection from '~/components/helpers/vue/mixins/scroll-direction.js'
 
 export default {
   components: {

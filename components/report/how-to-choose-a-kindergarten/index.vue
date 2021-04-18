@@ -93,13 +93,13 @@ import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
-import intersect from '~/components/helpers/directives/intersect.js'
-import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
+import intersect from '~/helpers/vue/directives/intersect.js'
+import scrollDirection from '~/components/helpers/vue/mixins/scroll-direction.js'
 
 import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
-} from '~/components/helpers/index.js'
+} from '~/helpers/index.js'
 
 const NAV_ITEMS_IDS = ['game', 'profile-story', 'report-article']
 const HEADER_HEIGHT_MD = 141

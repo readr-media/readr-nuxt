@@ -130,7 +130,7 @@ import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
 import RdListCategory from '~/components/shared/List/RdListCategory.vue'
 import SvgArrowMore from '~/assets/imgs/arrow-more.svg?inline'
 
-import intersect from '~/components/helpers/directives/intersect.js'
+import intersect from '~/helpers/vue/directives/intersect.js'
 
 import { editorChoices } from '~/apollo/queries/editor-choices.js'
 import { latestPosts } from '~/apollo/queries/posts.js'
@@ -139,12 +139,13 @@ import { quotes } from '~/apollo/queries/quotes.js'
 import { collaborations } from '~/apollo/queries/collaborations.js'
 import { categories } from '~/apollo/queries/categories.js'
 
+import styleVariables from '~/assets/css/variables.module.scss'
 import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
-} from '~/components/helpers/index.js'
-import styleVariables from '~/assets/css/variables.module.scss'
-import { getHref, formatDate } from '~/helpers/index.js'
+  getHref,
+  formatDate,
+} from '~/helpers/index.js'
 
 export default {
   name: 'Home',

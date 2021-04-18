@@ -3,12 +3,12 @@ import RdTitle from '~/components/shared/RdTitle.vue'
 import RdUnorderedList from '~/components/shared/RdUnorderedList.vue'
 import RdQAndA from '~/components/shared/RdQAndA.vue'
 
-import intersect from '~/components/helpers/directives/intersect.js'
+import intersect from '~/helpers/vue/directives/intersect.js'
 
 import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
-} from '~/components/helpers/index.js'
+} from '~/helpers/index.js'
 
 export default {
   name: 'RdReportExtras',

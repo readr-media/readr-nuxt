@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import intersect from '~/components/helpers/directives/intersect.js'
+import intersect from '~/helpers/vue/directives/intersect.js'
 
 import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
-} from '~/components/helpers/index.js'
+} from '~/helpers/index.js'
 
 export default {
   name: 'RdReportCredit',

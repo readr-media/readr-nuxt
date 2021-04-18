@@ -49,12 +49,12 @@ import RdMainTitle from './RdMainTitle.vue'
 import RdButton from './RdButton.vue'
 import RdButtonUnderline from './RdButtonUnderline.vue'
 
-import intersect from '~/components/helpers/directives/intersect.js'
+import intersect from '~/helpers/vue/directives/intersect.js'
 
 import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
-} from '~/components/helpers/index.js'
+} from '~/helpers/index.js'
 
 export default {
   name: 'RdChoiceResult',
