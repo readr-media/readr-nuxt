@@ -7,13 +7,11 @@
 
 // use express rather than koa because of donate is migrate from readr-web-api legacy
 const express = require('express')
-const router = express()
 const { post: axiosPost } = require('axios')
-
-const isEmail = require('validator/lib/isEmail')
-
 const { decamelizeKeys } = require('humps')
+const isEmail = require('validator/lib/isEmail')
 const { default: isMobilePhone } = require('validator/lib/isMobilePhone')
+
 const { CMS_ENDPOINT_DEPRECATED } = require('../../configs/config.js')
 const { handleExpressCors: handleCors } = require('./helpers/cors.js')
 
@@ -70,6 +68,7 @@ const setCommonValue = (req, res, next) => {
   next()
 }
 
+const router = express()
 router.use(express.json())
 
 // For CORS non-simple requests
