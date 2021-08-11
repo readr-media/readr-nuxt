@@ -28,7 +28,7 @@
     "@nuxtjs/apollo": "^4.0.1-rc.1",
     "@nuxtjs/composition-api": "^0.18.1",
     "@readr-media/old-news-project-slugs": "^1.1.1",
-    "@readr-media/web-components": "^2.1.0",
+    "@readr-media/web-components": "^2.2.0",
     "archieml": "^0.4.2",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
