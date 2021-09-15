@@ -71,25 +71,35 @@ export default {
           )
 
         case 'picture': {
-          const { id } = content.value
+          const { id, description } = content.value
+          let sm, origin
+          try {
+            sm = require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}-sm.png`)
+            origin = require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}.png`)
+          } catch (e) {
+            console.log(e)
+            sm = origin = require(`~/assets/imgs/report/default.png`)
+          }
 
           return (
-            <LazyRenderer tagName="picture" class="report-article__picture">
-              <div
-                style="visibility: hidden; height: 0"
-                vIntersect={this.scrollDepthObserver}
-              >
-                靜態圖 {id}
-              </div>
-              <source
-                media={`(min-width: ${styleVariables['breakpoint-sm']})`}
-                srcset={require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}-sm.png`)}
-              />
-              <img
-                src={require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}.png`)}
-                alt=""
-              />
-            </LazyRenderer>
+            <div>
+              <LazyRenderer tagName="picture" class="report-article__picture">
+                <div
+                  style="visibility: hidden; height: 0"
+                  vIntersect={this.scrollDepthObserver}
+                >
+                  靜態圖 {id}
+                </div>
+                <source
+                  media={`(min-width: ${styleVariables['breakpoint-sm']})`}
+                  srcset={sm}
+                />
+                <img src={origin} alt="" />
+                <div class="report-article__picture_description">
+                  {description}
+                </div>
+              </LazyRenderer>
+            </div>
           )
         }
 
@@ -242,8 +252,18 @@ export default {
     }
   }
 
-  &__picture img {
-    width: 100%;
+  &__picture {
+    img {
+      width: 100%;
+    }
+    &_description {
+      margin-top: 16px;
+      font-size: 16px;
+      line-height: 23px;
+      text-align: justify;
+      letter-spacing: 0.01em;
+      color: #2b2b2b;
+    }
   }
 
   &__picture,
