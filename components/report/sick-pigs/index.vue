@@ -2,6 +2,7 @@
   <div class="sick-pigs">
     <RdReportHeader class="header" />
 
+    <RdCover :contents="cmsData.contentApiData.cover" />
     <RdReportExtras
       :contents="cmsData.contentApiData.extras.contents"
       @sendGaEvent="sendGaEvent"
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+import RdCover from './components/RdCover.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
@@ -28,6 +30,7 @@ export default {
     RdReportHeader,
     RdReportCredit,
     RdReportExtras,
+    RdCover,
   },
   props: {
     cmsData: {
@@ -80,6 +83,9 @@ export default {
   }
 
   &::v-deep {
+    readr-header {
+      visibility: inherit;
+    }
     .report-extras {
       background: #dddddd;
     }
