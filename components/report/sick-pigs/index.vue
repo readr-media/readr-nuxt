@@ -3,6 +3,26 @@
     <RdReportHeader class="header" />
 
     <RdCover :contents="cmsData.contentApiData.cover" />
+    <RdAnimation />
+    <RdReportArticle
+      :contents="cmsData.contentApiData.article"
+      :slug="'sick-pigs'"
+      @sendGaEvent="sendGaEvent"
+    />
+    <RdQuiz
+      :quizTitle="cmsData.contentApiData.articleQuiz.title"
+      :quizDescription="cmsData.contentApiData.articleQuiz.description"
+      :quizOptions="cmsData.contentApiData.articleQuiz.options"
+      :quizDetailTitleCorrect="
+        cmsData.contentApiData.articleQuiz.answerDetailTitleCorrect
+      "
+      :quizDetailTitleWrong="
+        cmsData.contentApiData.articleQuiz.answerDetailTitleWrong
+      "
+      :quizDetailDescription="
+        cmsData.contentApiData.articleQuiz.answerDetailDescription
+      "
+    />
     <RdReportExtras
       :contents="cmsData.contentApiData.extras.contents"
       @sendGaEvent="sendGaEvent"
@@ -22,6 +42,9 @@
 
 <script>
 import RdCover from './components/RdCover.vue'
+import RdAnimation from './components/RdAnimation.vue'
+import RdQuiz from './components/RdQuiz.vue'
+import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
@@ -31,6 +54,9 @@ export default {
     RdReportCredit,
     RdReportExtras,
     RdCover,
+    RdAnimation,
+    RdQuiz,
+    RdReportArticle,
   },
   props: {
     cmsData: {
@@ -101,6 +127,19 @@ export default {
       }
       &:active {
         font-weight: normal !important;
+      }
+    }
+    .report-article {
+      background: #dddddd;
+      .toggle {
+        background: rgba(191, 109, 40, 1);
+        path {
+          fill: #ffffff;
+        }
+      }
+      .annotation {
+        background: rgba(191, 109, 40, 1);
+        color: #ffffff;
       }
     }
   }
