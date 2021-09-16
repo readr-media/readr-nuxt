@@ -50,13 +50,11 @@ export default {
 
   methods: {
     requirePicture(url) {
-      let img
       try {
-        img = require(url)
+        return require(url)
       } catch {
-        img = require(`~/assets/imgs/report/${this.slug}/report-article-picture-1.png`)
+        return require(`~/assets/imgs/report/default.png`)
       }
-      return img
     },
     buildContent(content) {
       switch (content.type) {
@@ -96,10 +94,6 @@ export default {
                   srcset={this.requirePicture(
                     `~/assets/imgs/report/${this.slug}/report-article-picture-${id}-sm.png`
                   )}
-                />
-                <img
-                  src={require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}.png`)}
-                  alt=""
                 />
                 <img
                   src={this.requirePicture(
