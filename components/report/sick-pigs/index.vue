@@ -4,6 +4,7 @@
 
     <RdCover :contents="cmsData.contentApiData.cover" />
     <RdAnimation />
+    <RdFlashNews :flashNewsList="news" />
     <RdReportArticle
       :contents="cmsData.contentApiData.article"
       :slug="'sick-pigs'"
@@ -41,9 +42,11 @@
 </template>
 
 <script>
+import axios from 'axios'
 import RdCover from './components/RdCover.vue'
 import RdAnimation from './components/RdAnimation.vue'
 import RdQuiz from './components/RdQuiz.vue'
+import RdFlashNews from './components/RdFlashNews.vue'
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
@@ -57,6 +60,7 @@ export default {
     RdAnimation,
     RdQuiz,
     RdReportArticle,
+    RdFlashNews,
   },
   props: {
     cmsData: {
@@ -64,6 +68,21 @@ export default {
       required: true,
       default: () => ({}),
     },
+  },
+  data() {
+    return {
+      news: [],
+    }
+  },
+  mounted() {
+    axios
+      .get('https://storage.googleapis.com/projects.readr.tw/dashboard.json')
+      .then((res) => {
+        const { news } = res.data
+        this.news = news
+        console.log(news)
+        this.isLoadingData = false
+      })
   },
 }
 </script>
