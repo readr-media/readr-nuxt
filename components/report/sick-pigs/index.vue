@@ -2,7 +2,7 @@
   <div class="sick-pigs">
     <RdReportHeader class="header" />
 
-    <RdCover :contents="cmsData.contentApiData.cover" />
+    <RdCover :contents="cmsData.contentApiData.cover" :latestNews="news[0]" />
     <RdAnimation />
     <RdFlashNews :flashNewsList="news" />
     <RdReportArticle
