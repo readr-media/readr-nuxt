@@ -95,6 +95,7 @@ export default {
     display: flex;
     justify-content: center;
     padding: 24px 0 28px 0;
+    font-weight: bold;
     background: #dddddd;
     @include media-breakpoint-up(md) {
       padding: 60px 0;

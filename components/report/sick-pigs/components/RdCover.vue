@@ -14,7 +14,7 @@
 
 <script>
 import RdUiBookmart from './RdUiBookmart'
-import RdCoverNews from './RdCoverNews'
+import RdCoverNews from './RdCoverNews.vue'
 export default {
   components: {
     RdUiBookmart,

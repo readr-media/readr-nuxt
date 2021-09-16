@@ -3,7 +3,7 @@
     <div class="cover-news__subtitle">{{ contents.subtitle }}</div>
     <div class="cover-news__title">{{ contents.title }}</div>
     <RdUiContinueUpdate />
-    <div class="cover-news__news">
+    <div v-if="latestNews" class="cover-news__news">
       <div class="cover-news__news_date">
         最後更新：{{ latestNews.update_time }}
       </div>

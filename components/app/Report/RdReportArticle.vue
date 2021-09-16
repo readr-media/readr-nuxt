@@ -54,7 +54,7 @@ export default {
       try {
         img = require(url)
       } catch {
-        img = ''
+        img = require(`~/assets/imgs/report/${this.slug}/report-article-picture-1.png`)
       }
       return img
     },
