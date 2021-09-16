@@ -49,13 +49,6 @@ export default {
   },
 
   methods: {
-    requirePicture(url) {
-      try {
-        return require(url)
-      } catch {
-        return require(`~/assets/imgs/report/default.png`)
-      }
-    },
     buildContent(content) {
       switch (content.type) {
         case 'title':
@@ -79,6 +72,14 @@ export default {
 
         case 'picture': {
           const { id, description } = content.value
+          let sm, origin
+          try {
+            sm = require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}-sm.png`)
+            origin = require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}.png`)
+          } catch (e) {
+            console.log(e)
+            sm = origin = require(`~/assets/imgs/report/default.png`)
+          }
 
           return (
             <div>
@@ -91,16 +92,9 @@ export default {
                 </div>
                 <source
                   media={`(min-width: ${styleVariables['breakpoint-sm']})`}
-                  srcset={this.requirePicture(
-                    `~/assets/imgs/report/${this.slug}/report-article-picture-${id}-sm.png`
-                  )}
+                  srcset={sm}
                 />
-                <img
-                  src={this.requirePicture(
-                    `~/assets/imgs/report/${this.slug}/report-article-picture-${id}.png`
-                  )}
-                  alt=""
-                />
+                <img src={origin} alt="" />
                 <div class="report-article__picture_description">
                   {description}
                 </div>

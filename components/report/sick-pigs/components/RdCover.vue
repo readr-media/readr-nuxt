@@ -54,7 +54,7 @@ export default {
     color: #000928;
     @include media-breakpoint-up(md) {
       color: #333333;
-      padding: 0;
+      padding: 0 16px;
       margin-top: 24px;
     }
   }

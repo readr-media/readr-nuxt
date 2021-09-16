@@ -8,7 +8,7 @@ export default {
     return {
       script: [
         {
-          hid: 'animation-1',
+          hid: 'animation1',
           async: true,
           innerHTML: `
             (function() {
@@ -30,7 +30,7 @@ export default {
           `,
         },
         {
-          hid: 'animation-2',
+          hid: 'animation2',
           id: 'animation2',
           type: 'text/javascript',
           async: true,
@@ -41,7 +41,7 @@ export default {
         },
       ],
       __dangerouslyDisableSanitizersByTagID: {
-        animation2: ['innerHTML'],
+        animation1: ['innerHTML'],
       },
     }
   },
