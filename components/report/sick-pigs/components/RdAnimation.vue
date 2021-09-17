@@ -1,9 +1,36 @@
 <template>
-  <div id="b55dd62a-e932-436f-8447-2e85856f137c"></div>
+  <div>
+    <div id="b55dd62a-e932-436f-8447-2e85856f137c"></div>
+    <div v-intersect="gaEventObserver" />
+  </div>
 </template>
 
 <script>
+import { intersect } from '~/helpers/vue/directives/index.js'
+
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/helpers/index.js'
+
 export default {
+  directives: {
+    intersect,
+  },
+  data() {
+    return {
+      flashCount: 3,
+      gaEventObserver: undefined,
+    }
+  },
+
+  mounted() {
+    this.setupGaEventObserver()
+  },
+
+  beforeDestroy() {
+    this.cleanupGaEventObserver()
+  },
   head() {
     return {
       script: [
@@ -44,6 +71,30 @@ export default {
         animation1: ['innerHTML'],
       },
     }
+  },
+  methods: {
+    expandHandler() {
+      const newFlashCount =
+        this.flashCount + 3 > this.flashNewsList.length
+          ? this.flashNewsList.length
+          : this.flashCount + 3
+
+      this.flashCount = newFlashCount
+      this.$ga.event('projects', 'click', '展開更多快訊')
+    },
+    async setupGaEventObserver() {
+      this.gaEventObserver = await setupIntersectionObserver((entries) => {
+        entries.forEach(({ intersectionRatio }) => {
+          if (intersectionRatio > 0) {
+            this.$ga.event('projects', 'scroll', '滑到動畫結束')
+            this.cleanupGaEventObserver()
+          }
+        })
+      })
+    },
+    cleanupGaEventObserver() {
+      cleanupIntersectionObserver(this, 'gaEventObserver')
+    },
   },
 }
 </script>
