@@ -31,6 +31,10 @@ export default {
   padding: 8px 16px;
   width: 120px;
   height: 42px;
+  margin: 0 0 32px 0;
+  @include media-breakpoint-up(md) {
+    margin: 0 0 48px 0;
+  }
 
   &__dot {
     width: 8px;

@@ -2,43 +2,7 @@
   <div class="sick-pigs">
     <RdReportHeader class="header" />
 
-    <RdCover
-      :contents="cmsData.contentApiData.cover"
-      :latestNews="news[0]"
-      :bookmarts="bookmarts"
-    />
-    <div ref="bookmarts" class="bookmarts">
-      <div v-for="bookmart in bookmarts" :key="bookmart.slug">
-        <RdUiBookmart :bookmart="bookmart" />
-      </div>
-    </div>
-    <div id="animation">
-      <RdAnimation />
-    </div>
-    <div id="news">
-      <RdFlashNews :flashNewsList="news" />
-    </div>
-    <div id="report">
-      <RdReportArticle
-        :contents="cmsData.contentApiData.article"
-        :slug="'sick-pigs'"
-        @sendGaEvent="sendGaEvent"
-      />
-    </div>
-    <RdQuiz
-      :quizTitle="cmsData.contentApiData.articleQuiz.title"
-      :quizDescription="cmsData.contentApiData.articleQuiz.description"
-      :quizOptions="cmsData.contentApiData.articleQuiz.options"
-      :quizDetailTitleCorrect="
-        cmsData.contentApiData.articleQuiz.answerDetailTitleCorrect
-      "
-      :quizDetailTitleWrong="
-        cmsData.contentApiData.articleQuiz.answerDetailTitleWrong
-      "
-      :quizDetailDescription="
-        cmsData.contentApiData.articleQuiz.answerDetailDescription
-      "
-    />
+    <RdCover :contents="cmsData.contentApiData.cover" />
     <RdReportExtras
       :contents="cmsData.contentApiData.extras.contents"
       @sendGaEvent="sendGaEvent"
@@ -57,13 +21,7 @@
 </template>
 
 <script>
-import axios from 'axios'
 import RdCover from './components/RdCover.vue'
-import RdAnimation from './components/RdAnimation.vue'
-import RdQuiz from './components/RdQuiz.vue'
-import RdFlashNews from './components/RdFlashNews.vue'
-import RdUiBookmart from './components/RdUiBookmart.vue'
-import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
@@ -73,11 +31,6 @@ export default {
     RdReportCredit,
     RdReportExtras,
     RdCover,
-    RdAnimation,
-    RdQuiz,
-    RdReportArticle,
-    RdFlashNews,
-    RdUiBookmart,
   },
   props: {
     cmsData: {
@@ -85,25 +38,6 @@ export default {
       required: true,
       default: () => ({}),
     },
-  },
-  data() {
-    return {
-      news: [],
-      bookmarts: [
-        { name: '豬瘟如何入侵', slug: 'animation' },
-        { name: '最新消息', slug: 'news' },
-        { name: '專題報導', slug: 'report' },
-      ],
-    }
-  },
-  mounted() {
-    axios
-      .get('https://storage.googleapis.com/projects.readr.tw/dashboard.json')
-      .then((res) => {
-        const { news } = res.data
-        this.news = news.filter((item) => item.category === '疫情')
-        this.isLoadingData = false
-      })
   },
 }
 </script>
@@ -116,7 +50,6 @@ export default {
     display: flex;
     justify-content: center;
     padding: 24px 0 28px 0;
-    font-weight: bold;
     background: #dddddd;
     @include media-breakpoint-up(md) {
       padding: 60px 0;
@@ -170,38 +103,6 @@ export default {
         font-weight: normal !important;
       }
     }
-    .report-article {
-      background: #dddddd;
-      .toggle {
-        background: rgba(191, 109, 40, 1);
-        path {
-          fill: #ffffff;
-        }
-      }
-      .annotation {
-        background: rgba(191, 109, 40, 1);
-        color: #ffffff;
-      }
-    }
-  }
-  .bookmarts {
-    padding: 24px 14px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    z-index: 2;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0px;
-    bottom: 0px;
-    background: #dddddd;
-  }
-
-  #animation {
-    z-index: 999;
-    background: #dddddd;
-    position: relative;
   }
 }
 </style>

@@ -1,9 +1,11 @@
 <template>
-  <a :href="`#${bookmart.slug}`">
-    <div class="bookmart" :class="{ active: isActive }">
-      {{ bookmart.name }}
-    </div>
-  </a>
+  <div class="bookmart">
+    <a :href="`#${bookmart.slug}`">
+      <div class="container" :class="{ active: isActive }">
+        {{ bookmart.name }}
+      </div>
+    </a>
+  </div>
 </template>
 
 <script>
@@ -23,7 +25,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.bookmart {
+.container {
   padding: 8px 16px;
   background: rgba(191, 109, 40, 0.6);
   border-radius: 4px;
@@ -31,13 +33,6 @@ export default {
   font-size: 18px;
   line-height: 26px;
   color: #ffffff;
-  width: fit-content;
-  font-size: 14px;
-  line-height: 20px;
-  @include media-breakpoint-up(md) {
-    font-size: 18px;
-    line-height: 26px;
-  }
   &:hover {
     background: #bf6d28;
     color: #dddddd;
