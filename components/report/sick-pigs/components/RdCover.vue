@@ -3,21 +3,14 @@
     <div class="cover__wrapper">
       <RdCoverNews :contents="contents" :latestNews="latestNews" />
       <div class="cover__description">{{ contents.description }}</div>
-      <div class="cover__bookmarts">
-        <div v-for="bookmart in contents.bookmarts" :key="bookmart.slug">
-          <RdUiBookmart :bookmart="bookmart" />
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import RdUiBookmart from './RdUiBookmart'
 import RdCoverNews from './RdCoverNews.vue'
 export default {
   components: {
-    RdUiBookmart,
     RdCoverNews,
   },
   props: {
@@ -29,15 +22,19 @@ export default {
       type: Object,
       default: () => {},
     },
+    bookmarts: {
+      type: Array,
+      default: () => [],
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
 .cover {
-  padding: 24px 0;
+  padding: 24px 0 0 0;
   @include media-breakpoint-up(md) {
-    padding: 60px 0;
+    padding: 60px 0 16px 0;
   }
   &__wrapper {
     max-width: 1120px;
@@ -56,16 +53,6 @@ export default {
       color: #333333;
       padding: 0 16px;
       margin-top: 24px;
-    }
-  }
-  &__bookmarts {
-    padding: 28px 36px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    @include media-breakpoint-up(md) {
-      flex-direction: row;
-      padding: 36px 0;
     }
   }
 }

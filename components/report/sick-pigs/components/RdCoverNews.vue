@@ -7,8 +7,10 @@
       <div class="cover-news__news_date">
         最後更新：{{ latestNews.update_time }}
       </div>
-      <div class="cover-news__news_title">{{ latestNews.title }}</div>
-      <div class="cover-news__news_content" v-html="latestNews.content"></div>
+      <div @click="linkToNews" class="news-wrapper">
+        <div class="cover-news__news_title">{{ latestNews.title }}</div>
+        <div class="cover-news__news_content" v-html="latestNews.content"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -27,6 +29,11 @@ export default {
     latestNews: {
       type: Object,
       default: () => {},
+    },
+  },
+  methods: {
+    linkToNews() {
+      window.location.hash = '#news'
     },
   },
 }
@@ -101,5 +108,9 @@ export default {
       text-overflow: ellipsis;
     }
   }
+}
+
+.news-wrapper {
+  cursor: pointer;
 }
 </style>

@@ -2,14 +2,29 @@
   <div class="sick-pigs">
     <RdReportHeader class="header" />
 
-    <RdCover :contents="cmsData.contentApiData.cover" :latestNews="news[0]" />
-    <RdAnimation />
-    <RdFlashNews :flashNewsList="news" />
-    <RdReportArticle
-      :contents="cmsData.contentApiData.article"
-      :slug="'sick-pigs'"
-      @sendGaEvent="sendGaEvent"
+    <RdCover
+      :contents="cmsData.contentApiData.cover"
+      :latestNews="news[0]"
+      :bookmarts="bookmarts"
     />
+    <div ref="bookmarts" class="bookmarts">
+      <div v-for="bookmart in bookmarts" :key="bookmart.slug">
+        <RdUiBookmart :bookmart="bookmart" />
+      </div>
+    </div>
+    <div id="animation">
+      <RdAnimation />
+    </div>
+    <div id="news">
+      <RdFlashNews :flashNewsList="news" />
+    </div>
+    <div id="report">
+      <RdReportArticle
+        :contents="cmsData.contentApiData.article"
+        :slug="'sick-pigs'"
+        @sendGaEvent="sendGaEvent"
+      />
+    </div>
     <RdQuiz
       :quizTitle="cmsData.contentApiData.articleQuiz.title"
       :quizDescription="cmsData.contentApiData.articleQuiz.description"
@@ -47,6 +62,7 @@ import RdCover from './components/RdCover.vue'
 import RdAnimation from './components/RdAnimation.vue'
 import RdQuiz from './components/RdQuiz.vue'
 import RdFlashNews from './components/RdFlashNews.vue'
+import RdUiBookmart from './components/RdUiBookmart.vue'
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
@@ -61,6 +77,7 @@ export default {
     RdQuiz,
     RdReportArticle,
     RdFlashNews,
+    RdUiBookmart,
   },
   props: {
     cmsData: {
@@ -72,6 +89,11 @@ export default {
   data() {
     return {
       news: [],
+      bookmarts: [
+        { name: '豬瘟如何入侵', slug: 'animation' },
+        { name: '最新消息', slug: 'news' },
+        { name: '專題報導', slug: 'report' },
+      ],
     }
   },
   mounted() {
@@ -80,7 +102,6 @@ export default {
       .then((res) => {
         const { news } = res.data
         this.news = news
-        console.log(news)
         this.isLoadingData = false
       })
   },
@@ -162,6 +183,25 @@ export default {
         color: #ffffff;
       }
     }
+  }
+  .bookmarts {
+    padding: 24px 14px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    z-index: 2;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+    bottom: 0px;
+    background: #dddddd;
+  }
+
+  #animation {
+    z-index: 999;
+    background: #dddddd;
+    position: relative;
   }
 }
 </style>
