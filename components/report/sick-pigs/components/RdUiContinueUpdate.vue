@@ -27,7 +27,7 @@ export default {
   font-weight: bold;
   font-size: 18px;
   line-height: 26px;
-  color: #dddddd;
+  color: #fff;
   padding: 8px 16px;
   width: 120px;
   height: 42px;
@@ -36,7 +36,7 @@ export default {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #dddddd;
+    background: #fff;
     margin-right: 8px;
     animation-name: blink;
     animation-duration: 2s;
