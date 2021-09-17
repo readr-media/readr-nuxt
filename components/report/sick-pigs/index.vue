@@ -76,7 +76,6 @@ import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
 } from '~/helpers/index.js'
-
 export default {
   directives: {
     intersect,
