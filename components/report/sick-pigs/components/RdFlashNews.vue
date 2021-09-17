@@ -1,5 +1,5 @@
 <template>
-  <div class="flash-news">
+  <div v-intersect="gaEventObserver" class="flash-news">
     <h1 class="flash-news__title">最新重點消息</h1>
     <div class="flash-news__container">
       <RdFlashNewsCard
@@ -21,7 +21,17 @@
 import RdFlashNewsCard from './RdFlashNewsCard.vue'
 import RdUiReadmoreButton from './RdUiReadmoreButton.vue'
 
+import { intersect } from '~/helpers/vue/directives/index.js'
+
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/helpers/index.js'
+
 export default {
+  directives: {
+    intersect,
+  },
   components: { RdFlashNewsCard, RdUiReadmoreButton },
   props: {
     flashNewsList: {
@@ -35,7 +45,16 @@ export default {
   data() {
     return {
       flashCount: 3,
+      gaEventObserver: undefined,
     }
+  },
+
+  mounted() {
+    this.setupGaEventObserver()
+  },
+
+  beforeDestroy() {
+    this.cleanupGaEventObserver()
   },
 
   computed: {
@@ -59,6 +78,19 @@ export default {
 
       this.flashCount = newFlashCount
       this.$ga.event('projects', 'click', '展開更多快訊')
+    },
+    async setupGaEventObserver() {
+      this.gaEventObserver = await setupIntersectionObserver((entries) => {
+        entries.forEach(({ intersectionRatio }) => {
+          if (intersectionRatio > 0) {
+            this.$ga.event('projects', 'scroll', '滑到首三篇快訊')
+            this.cleanupGaEventObserver()
+          }
+        })
+      })
+    },
+    cleanupGaEventObserver() {
+      cleanupIntersectionObserver(this, 'gaEventObserver')
     },
   },
 }

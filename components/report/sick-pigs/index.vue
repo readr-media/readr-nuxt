@@ -2,11 +2,7 @@
   <div class="sick-pigs">
     <RdReportHeader class="header" />
 
-    <RdCover
-      :contents="cmsData.contentApiData.cover"
-      :latestNews="news[0]"
-      :bookmarts="bookmarts"
-    />
+    <RdCover :contents="cmsData.contentApiData.cover" :latestNews="news[0]" />
     <div ref="bookmarts" class="bookmarts">
       <div v-for="bookmart in bookmarts" :key="bookmart.slug">
         <RdUiBookmart
@@ -28,6 +24,7 @@
         :slug="'sick-pigs'"
         @sendGaEvent="sendGaEvent"
       />
+      <div v-intersect="gaEventObserver" />
     </div>
     <RdQuiz
       :quizTitle="cmsData.contentApiData.articleQuiz.title"
@@ -72,7 +69,18 @@ import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 import { scrollDirection } from '~/components/helpers/vue/mixins/index.js'
+
+import { intersect } from '~/helpers/vue/directives/index.js'
+
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/helpers/index.js'
+
 export default {
+  directives: {
+    intersect,
+  },
   components: {
     RdReportHeader,
     RdReportCredit,
@@ -99,6 +107,7 @@ export default {
         { name: '最新消息', slug: 'news' },
         { name: '專題報導', slug: 'report' },
       ],
+      gaEventObserver: undefined,
     }
   },
   mounted() {
@@ -106,6 +115,11 @@ export default {
       this.news = res.data
       this.isLoadingData = false
     })
+    this.setupGaEventObserver()
+    this.$ga.event('projects', 'scroll', '滑到第一屏')
+  },
+  beforeDestroy() {
+    this.cleanupGaEventObserver()
   },
   mixins: [scrollDirection],
   methods: {
@@ -123,6 +137,19 @@ export default {
     },
     sendGaEvent({ action, label }) {
       this.$ga.event('projects', action, label)
+    },
+    async setupGaEventObserver() {
+      this.gaEventObserver = await setupIntersectionObserver((entries) => {
+        entries.forEach(({ intersectionRatio }) => {
+          if (intersectionRatio > 0) {
+            this.$ga.event('projects', 'scroll', '滑到文章內文結尾')
+            this.cleanupGaEventObserver()
+          }
+        })
+      })
+    },
+    cleanupGaEventObserver() {
+      cleanupIntersectionObserver(this, 'gaEventObserver')
     },
   },
 }
@@ -209,13 +236,15 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
     z-index: 2;
     position: -webkit-sticky;
     position: sticky;
     top: 0px;
     bottom: 0px;
     background: #dddddd;
+    div + div {
+      margin-left: 8px;
+    }
   }
 
   #animation {

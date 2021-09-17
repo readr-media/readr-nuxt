@@ -25,7 +25,8 @@ export default {
 <style lang="scss" scoped>
 .bookmart {
   padding: 8px 16px;
-  background: rgba(191, 109, 40, 0.6);
+  // background: rgba(191, 109, 40, 0.6);
+  background: #bf6d28;
   border-radius: 4px;
   font-weight: bold;
   font-size: 18px;
