@@ -101,7 +101,7 @@ export default {
       .get('https://storage.googleapis.com/projects.readr.tw/dashboard.json')
       .then((res) => {
         const { news } = res.data
-        this.news = news
+        this.news = news.filter((item) => item.category === '疫情')
         this.isLoadingData = false
       })
   },

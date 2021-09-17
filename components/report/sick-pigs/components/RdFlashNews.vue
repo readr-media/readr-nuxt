@@ -5,7 +5,7 @@
       <RdFlashNewsCard
         v-for="index in showedFlashNewsCount"
         :key="index - 1"
-        :flashNews="sortedFlashNews[index - 1]"
+        :flashNews="flashNewsList[index - 1]"
       />
     </div>
 
@@ -39,28 +39,22 @@ export default {
   },
 
   computed: {
-    sortedFlashNews() {
-      // console.log(this.flashNewsList)
-      return this.flashNewsList
-    },
-
     showReadMore() {
-      return this.flashCount < this.sortedFlashNews.length
+      return this.flashCount < this.flashNewsList.length
     },
 
     showedFlashNewsCount() {
-      return this.flashCount > this.sortedFlashNews.length
-        ? this.sortedFlashNews.length
+      return this.flashCount > this.flashNewsList.length
+        ? this.flashNewsList.length
         : this.flashCount
     },
   },
 
   methods: {
     expandHandler() {
-      console.log(12333)
       const newFlashCount =
-        this.flashCount + 3 > this.sortedFlashNews.length
-          ? this.sortedFlashNews.length
+        this.flashCount + 3 > this.flashNewsList.length
+          ? this.flashNewsList.length
           : this.flashCount + 3
 
       this.flashCount = newFlashCount
