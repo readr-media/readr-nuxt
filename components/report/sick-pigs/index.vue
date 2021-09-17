@@ -9,12 +9,16 @@
     />
     <div ref="bookmarts" class="bookmarts">
       <div v-for="bookmart in bookmarts" :key="bookmart.slug">
-        <RdUiBookmart :bookmart="bookmart" />
+        <RdUiBookmart
+          :bookmart="bookmart"
+          @click.native="clickBookmart(bookmart.slug)"
+        />
       </div>
     </div>
     <div id="animation">
       <RdAnimation />
     </div>
+
     <div id="news">
       <RdFlashNews :flashNewsList="news" />
     </div>
@@ -46,7 +50,7 @@
     <RdReportCredit
       :authors="cmsData.contentApiData.credit"
       :publishedAt="cmsData.contentApiData.publishedAt"
-      :canSendGaEvent="shouldShowArticle || forceSectionNavActiveIndex === 1"
+      :canSendGaEvent="true"
     />
     <div class="donate-button">
       <readr-donate-button
@@ -67,6 +71,7 @@ import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
+import { scrollDirection } from '~/components/helpers/vue/mixins/index.js'
 export default {
   components: {
     RdReportHeader,
@@ -97,13 +102,28 @@ export default {
     }
   },
   mounted() {
-    axios
-      .get('https://storage.googleapis.com/projects.readr.tw/dashboard.json')
-      .then((res) => {
-        const { news } = res.data
-        this.news = news.filter((item) => item.category === '疫情')
-        this.isLoadingData = false
-      })
+    axios.get('https://projects.readr.tw/deadpig.json').then((res) => {
+      this.news = res.data
+      this.isLoadingData = false
+    })
+  },
+  mixins: [scrollDirection],
+  methods: {
+    clickBookmart(slug) {
+      switch (slug) {
+        case 'animation':
+          this.$ga.event('projects', 'click', '區塊索引一')
+          break
+        case 'news':
+          this.$ga.event('projects', 'click', '區塊索引二')
+          break
+        default:
+          this.$ga.event('projects', 'click', '區塊索引三')
+      }
+    },
+    sendGaEvent({ action, label }) {
+      this.$ga.event('projects', action, label)
+    },
   },
 }
 </script>

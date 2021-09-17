@@ -9,7 +9,17 @@
 
 <script>
 import RdCoverNews from './RdCoverNews.vue'
+import { intersect } from '~/helpers/vue/directives/index.js'
+
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/helpers/index.js'
+
 export default {
+  directives: {
+    intersect,
+  },
   components: {
     RdCoverNews,
   },
@@ -25,6 +35,36 @@ export default {
     bookmarts: {
       type: Array,
       default: () => [],
+    },
+  },
+  data() {
+    return {
+      gaEventObserver: undefined,
+    }
+  },
+  mounted() {
+    this.setupGaEventObserver()
+  },
+  beforeDestroy() {
+    this.cleanupGaEventObserver()
+  },
+  methods: {
+    async setupGaEventObserver() {
+      this.gaEventObserver = await setupIntersectionObserver((entries) => {
+        if (!this.canSendGaEvent) {
+          return
+        }
+
+        entries.forEach(({ isIntersecting }) => {
+          if (isIntersecting) {
+            this.$ga.event('projects', 'scroll', '滑到第一屏')
+            this.cleanupGaEventObserver()
+          }
+        })
+      })
+    },
+    cleanupGaEventObserver() {
+      cleanupIntersectionObserver(this, 'gaEventObserver')
     },
   },
 }

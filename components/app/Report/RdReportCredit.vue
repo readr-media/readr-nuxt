@@ -65,12 +65,8 @@ export default {
 
     async setupGaEventObserver() {
       this.gaEventObserver = await setupIntersectionObserver((entries) => {
-        if (!this.canSendGaEvent) {
-          return
-        }
-
-        entries.forEach(({ isIntersecting }) => {
-          if (isIntersecting) {
+        entries.forEach(({ intersectionRatio }) => {
+          if (intersectionRatio > 0) {
             this.$ga.event('projects', 'scroll', 'scroll to credit')
             this.cleanupGaEventObserver()
           }

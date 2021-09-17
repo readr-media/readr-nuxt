@@ -11,7 +11,7 @@
 
     <RdUiReadmoreButton
       v-if="showReadMore"
-      title="展開所有快訊"
+      title="更多最新消息"
       @click.native="expandHandler"
     />
   </div>
@@ -58,7 +58,7 @@ export default {
           : this.flashCount + 3
 
       this.flashCount = newFlashCount
-      // this.gaClickHandler('看更多消息')
+      this.$ga.event('projects', 'click', '展開更多快訊')
     },
   },
 }
