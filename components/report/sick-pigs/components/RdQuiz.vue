@@ -93,7 +93,20 @@ export default {
   methods: {
     handleQuizButtonClick() {
       this.shouldShowAnswerDetail = true
-      // this.$ga.event('projects', 'click', `閱讀測驗${['A', 'B', 'C', 'D'][i]}`)
+      this.$ga.event('projects', 'click', '送出看答案')
+      switch (this.optionClicked.value) {
+        case this.quizOptions[0].value:
+          this.$ga.event('projects', 'click', '豬瘟選項A')
+          break
+        case this.quizOptions[1].value:
+          this.$ga.event('projects', 'click', '豬瘟選項B')
+          break
+        case this.quizOptions[2].value:
+          this.$ga.event('projects', 'click', '豬瘟選項C')
+          break
+        default:
+          this.$ga.event('projects', 'click', '豬瘟選項D')
+      }
     },
     getQuizButtonState(option) {
       if (!this.shouldShowAnswerDetail) {

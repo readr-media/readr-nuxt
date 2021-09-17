@@ -34,6 +34,7 @@ export default {
   methods: {
     linkToNews() {
       window.location.hash = '#news'
+      this.$ga.event('projects', 'click', '首屏快訊')
     },
   },
 }
