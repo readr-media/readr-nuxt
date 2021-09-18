@@ -1,6 +1,15 @@
 <template>
   <div>
     <div id="b55dd62a-e932-436f-8447-2e85856f137c"></div>
+    <script
+      data-hid="animation"
+      id="animation"
+      type="text/javascript"
+      async=""
+      crossorigin="true"
+      data-body="true"
+      src="https://unpkg.com/@twreporter/scrollable-video@1.0.0-rc.3/dist/main.142ef5f0d6d2dfdb8b8d.bundle.js"
+    ></script>
     <div v-intersect="gaEventObserver" />
   </div>
 </template>
