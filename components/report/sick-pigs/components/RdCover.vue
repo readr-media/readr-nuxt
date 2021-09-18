@@ -9,12 +9,13 @@
 
 <script>
 import RdCoverNews from './RdCoverNews.vue'
-import { intersect } from '~/helpers/vue/directives/index.js'
+
+import intersect from '~/components/helpers/directives/intersect.js'
 
 import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
-} from '~/helpers/index.js'
+} from '~/components/helpers/index.js'
 
 export default {
   directives: {

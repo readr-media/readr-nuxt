@@ -68,14 +68,15 @@ import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
-import { scrollDirection } from '~/components/helpers/vue/mixins/index.js'
+import scrollDirection from '~/components/helpers/mixins/scroll-direction.js'
 
-import { intersect } from '~/helpers/vue/directives/index.js'
+import intersect from '~/components/helpers/directives/intersect.js'
 
 import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
-} from '~/helpers/index.js'
+} from '~/components/helpers/index.js'
+
 export default {
   directives: {
     intersect,

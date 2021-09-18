@@ -74,11 +74,11 @@ export default {
           const { id, description } = content.value
           let sm, origin
           try {
-            sm = require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}-sm.png`)
-            origin = require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}.png`)
+            sm = require(`~/assets/report/${this.slug}/report-article-picture-${id}-sm.png`)
+            origin = require(`~/assets/report/${this.slug}/report-article-picture-${id}.png`)
           } catch (e) {
             console.log(e)
-            sm = origin = require(`~/assets/imgs/report/default.png`)
+            sm = origin = require(`~/assets/report/default.png`)
           }
 
           return (
