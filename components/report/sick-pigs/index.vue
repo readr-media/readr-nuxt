@@ -111,10 +111,12 @@ export default {
     }
   },
   mounted() {
-    axios.get('https://projects.readr.tw/deadpig.json').then((res) => {
-      this.news = res.data
-      this.isLoadingData = false
-    })
+    axios
+      .get('https://storage.googleapis.com/projects.readr.tw/deadpig.json')
+      .then((res) => {
+        this.news = res.data
+        this.isLoadingData = false
+      })
     this.setupGaEventObserver()
     this.$ga.event('projects', 'scroll', '滑到第一屏')
   },
