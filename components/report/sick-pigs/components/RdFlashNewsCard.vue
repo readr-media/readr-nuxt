@@ -5,10 +5,12 @@
     <div class="flash-news-card__info">
       <div class="flash-news-card__info_left">
         <div class="flash-news-card__publish_time Body2">{{ updateTime }}</div>
-        <div class="flash-news-card__author Body2">記者/{{ author }}</div>
+        <div class="flash-news-card__journalist Body2">
+          記者/{{ journalist }}
+        </div>
       </div>
 
-      <div class="flash-news-card__category">{{ category }}</div>
+      <div class="flash-news-card__tag">{{ tag }}</div>
     </div>
 
     <RdHtmlContent :content="content" />
@@ -39,11 +41,11 @@ export default {
     updateTime() {
       return this.flashNews.update_time
     },
-    author() {
-      return this.flashNews.author
+    journalist() {
+      return this.flashNews.journalist
     },
-    category() {
-      switch (this.flashNews.category) {
+    tag() {
+      switch (this.flashNews.tag) {
         case '疫情':
           return '疫情'
 
@@ -105,13 +107,13 @@ export default {
     opacity: 0.3;
   }
 
-  &__author {
+  &__journalist {
     opacity: 0.66;
     font-size: 16px;
     line-height: 23px;
   }
 
-  &__category {
+  &__tag {
     background: #fff;
     opacity: 0.3;
     border: 1px solid #bf6d28;
