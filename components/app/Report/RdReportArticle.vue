@@ -76,9 +76,13 @@ export default {
           try {
             sm = require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}-sm.png`)
             origin = require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}.png`)
-          } catch (e) {
-            console.log(e)
-            sm = origin = require(`~/assets/imgs/report/default.png`)
+          } catch {
+            try {
+              sm = require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}-sm.jpg`)
+              origin = require(`~/assets/imgs/report/${this.slug}/report-article-picture-${id}.jpg`)
+            } catch {
+              sm = origin = require(`~/assets/imgs/report/default.png`)
+            }
           }
 
           return (
