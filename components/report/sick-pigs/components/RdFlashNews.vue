@@ -1,5 +1,5 @@
 <template>
-  <div v-intersect="gaEventObserver" class="flash-news">
+  <div v-intersect="gaEventObserver" class="flash-news" id="news">
     <h1 class="flash-news__title">最新重點消息</h1>
     <div class="flash-news__container">
       <RdFlashNewsCard

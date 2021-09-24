@@ -15,9 +15,7 @@
       <RdAnimation />
     </div>
 
-    <div id="news">
-      <RdFlashNews :flashNewsList="news" />
-    </div>
+    <RdFlashNews :flashNewsList="news" />
     <div id="report">
       <RdReportArticle
         :contents="cmsData.contentApiData.article"
