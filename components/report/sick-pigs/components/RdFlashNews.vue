@@ -1,5 +1,5 @@
 <template>
-  <div v-intersect="gaEventObserver" class="flash-news">
+  <div v-intersect="gaEventObserver" class="flash-news" id="news">
     <h1 class="flash-news__title">最新重點消息</h1>
     <div class="flash-news__container">
       <RdFlashNewsCard
@@ -46,11 +46,13 @@ export default {
     return {
       flashCount: 3,
       gaEventObserver: undefined,
+      hasSendGa: false,
     }
   },
 
   mounted() {
     this.setupGaEventObserver()
+    // window.scroll(0, 90, { behavior: 'smooth' })
   },
 
   beforeDestroy() {
@@ -80,14 +82,29 @@ export default {
       this.$ga.event('projects', 'click', '展開更多快訊')
     },
     async setupGaEventObserver() {
-      this.gaEventObserver = await setupIntersectionObserver((entries) => {
-        entries.forEach(({ intersectionRatio }) => {
-          if (intersectionRatio > 0) {
-            this.$ga.event('projects', 'scroll', '滑到首三篇快訊')
-            this.cleanupGaEventObserver()
-          }
-        })
-      })
+      const elHeight = this.$el.getBoundingClientRect().height
+      const threshold = 0.5
+      let th = threshold
+
+      // The element is too tall to ever hit the threshold - change threshold
+      if (elHeight > window.innerHeight * threshold) {
+        th = ((window.innerHeight * threshold) / elHeight) * threshold
+      }
+
+      this.gaEventObserver = await setupIntersectionObserver(
+        (entries) => {
+          entries.forEach(({ intersectionRatio }) => {
+            if (intersectionRatio > 0 && !this.hasSendGa) {
+              this.$ga.event('projects', 'scroll', '滑到首三篇快訊')
+              this.hasSendGa = true
+            }
+            intersectionRatio > th
+              ? this.$emit('enterSection', 'news')
+              : this.$emit('leaveSection', 'news')
+          })
+        },
+        { threshold: th }
+      )
     },
     cleanupGaEventObserver() {
       cleanupIntersectionObserver(this, 'gaEventObserver')

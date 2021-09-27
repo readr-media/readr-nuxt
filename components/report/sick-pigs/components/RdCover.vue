@@ -1,7 +1,11 @@
 <template>
   <div class="cover">
     <div class="cover__wrapper">
-      <RdCoverNews :contents="contents" :latestNews="latestNews" />
+      <RdCoverNews
+        :contents="contents"
+        :latestNews="latestNews"
+        @to-news="handleToNews"
+      />
       <div class="cover__description">{{ contents.description }}</div>
     </div>
   </div>
@@ -50,18 +54,20 @@ export default {
     this.cleanupGaEventObserver()
   },
   methods: {
+    handleToNews() {
+      this.$emit('to-news')
+    },
     async setupGaEventObserver() {
       this.gaEventObserver = await setupIntersectionObserver((entries) => {
-        if (!this.canSendGaEvent) {
-          return
-        }
-
-        entries.forEach(({ isIntersecting }) => {
-          if (isIntersecting) {
-            this.$ga.event('projects', 'scroll', '滑到第一屏')
-            this.cleanupGaEventObserver()
-          }
-        })
+        entries.forEach(
+          ({ intersectionRatio }) => {
+            if (intersectionRatio) {
+              this.$ga.event('projects', 'scroll', '滑到第一屏')
+              this.cleanupGaEventObserver()
+            }
+          },
+          { threshold: [0, 0.5, 1] }
+        )
       })
     },
     cleanupGaEventObserver() {
