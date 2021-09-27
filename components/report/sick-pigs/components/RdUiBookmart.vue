@@ -1,9 +1,7 @@
 <template>
-  <a :href="`#${bookmart.slug}`">
-    <div class="bookmart" :class="{ active: isActive }">
-      {{ bookmart.name }}
-    </div>
-  </a>
+  <div class="bookmart" :class="{ active: isActive }">
+    {{ bookmart.name }}
+  </div>
 </template>
 
 <script>
@@ -13,10 +11,9 @@ export default {
       type: Object,
       default: () => {},
     },
-  },
-  computed: {
-    isActive() {
-      return '#' + this.bookmart.slug === this.$route.hash
+    isActive: {
+      type: Boolean,
+      default: false,
     },
   },
 }
@@ -25,8 +22,7 @@ export default {
 <style lang="scss" scoped>
 .bookmart {
   padding: 8px 16px;
-  // background: rgba(191, 109, 40, 0.6);
-  background: #bf6d28;
+  background: rgba(191, 109, 40, 0.6);
   border-radius: 4px;
   font-weight: bold;
   font-size: 18px;
