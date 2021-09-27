@@ -2,27 +2,33 @@
   <div class="sick-pigs">
     <RdReportHeader class="header" />
 
-    <RdCover :contents="cmsData.contentApiData.cover" :latestNews="news[0]" />
+    <RdCover
+      :contents="cmsData.contentApiData.cover"
+      :latestNews="news[0]"
+      @to-news="clickBookmart('news')"
+    />
     <div ref="bookmarts" class="bookmarts">
       <div v-for="bookmart in bookmarts" :key="bookmart.slug">
         <RdUiBookmart
           :bookmart="bookmart"
+          :isActive="isBookmartActive(bookmart.slug)"
           @click.native="clickBookmart(bookmart.slug)"
         />
       </div>
     </div>
-    <div id="animation">
-      <RdAnimation />
-    </div>
+    <RdAnimation />
 
-    <RdFlashNews :flashNewsList="news" />
-    <div id="report">
+    <RdFlashNews
+      :flashNewsList="news"
+      @enterSection="enterSection"
+      @leaveSection="leaveSection"
+    />
+    <div id="report" v-intersect="gaEventObserver" ref="article">
       <RdReportArticle
         :contents="cmsData.contentApiData.article"
         :slug="'sick-pigs'"
         @sendGaEvent="sendGaEvent"
       />
-      <div v-intersect="gaEventObserver" />
     </div>
     <RdQuiz
       :quizTitle="cmsData.contentApiData.articleQuiz.title"
@@ -105,6 +111,9 @@ export default {
         { name: '專題報導', slug: 'report' },
       ],
       gaEventObserver: undefined,
+      animationLoaded: false,
+      nowId: [],
+      hasSendArticleGa: false,
     }
   },
   mounted() {
@@ -114,6 +123,10 @@ export default {
         this.news = res.data
         this.isLoadingData = false
       })
+      .then(async () => {
+        await this.$nextTick()
+        this.adjustScroll()
+      })
     this.setupGaEventObserver()
     this.$ga.event('projects', 'scroll', '滑到第一屏')
   },
@@ -122,7 +135,15 @@ export default {
   },
   mixins: [scrollDirection],
   methods: {
+    adjustScroll() {
+      const headerHeight = this.$refs.bookmarts.clientHeight * -1
+      window.scrollBy(0, headerHeight)
+    },
     clickBookmart(slug) {
+      const newPath = this.$route.path + '#' + slug
+      history.replaceState({}, '', newPath)
+      document.getElementById(slug).scrollIntoView()
+      this.adjustScroll()
       switch (slug) {
         case 'animation':
           this.$ga.event('projects', 'click', '區塊索引一')
@@ -134,21 +155,48 @@ export default {
           this.$ga.event('projects', 'click', '區塊索引三')
       }
     },
+    isBookmartActive(slug) {
+      return slug === this.nowId[0]
+    },
     sendGaEvent({ action, label }) {
       this.$ga.event('projects', action, label)
     },
     async setupGaEventObserver() {
-      this.gaEventObserver = await setupIntersectionObserver((entries) => {
-        entries.forEach(({ intersectionRatio }) => {
-          if (intersectionRatio > 0) {
-            this.$ga.event('projects', 'scroll', '滑到文章內文結尾')
-            this.cleanupGaEventObserver()
-          }
-        })
-      })
+      const elHeight = this.$refs.article.getBoundingClientRect().height
+      const threshold = 0.5
+      let th = threshold
+      // The element is too tall to ever hit the threshold - change threshold
+      if (elHeight > window.innerHeight * threshold) {
+        th = ((window.innerHeight * threshold) / elHeight) * threshold
+      }
+      this.gaEventObserver = await setupIntersectionObserver(
+        (entries) => {
+          entries.forEach(({ intersectionRatio, boundingClientRect }) => {
+            if (intersectionRatio >= th) {
+              this.enterSection('report')
+            } else {
+              this.leaveSection('report')
+              if (
+                !this.hasSendArticleGa &&
+                boundingClientRect.bottom < elHeight * th + 100
+              ) {
+                this.$ga.event('projects', 'scroll', '滑到文章內文結尾')
+                this.hasSendArticleGa = true
+              }
+            }
+          })
+        },
+        { threshold: [th] }
+      )
     },
     cleanupGaEventObserver() {
       cleanupIntersectionObserver(this, 'gaEventObserver')
+    },
+    enterSection(tag) {
+      this.nowId.push(tag)
+    },
+    leaveSection(tag) {
+      this.nowId = this.nowId.filter((id) => id !== tag)
     },
   },
 }
@@ -157,6 +205,7 @@ export default {
 <style lang="scss" scoped>
 .sick-pigs {
   background: #dddddd;
+  scroll-behavior: smooth;
 
   .donate-button::v-deep {
     display: flex;

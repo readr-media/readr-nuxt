@@ -1,11 +1,15 @@
 <template>
-  <div>
-    <div id="b55dd62a-e932-436f-8447-2e85856f137c"></div>
-    <div v-intersect="gaEventObserver" />
+  <div v-intersect="animationEventObserver" id="animation" ref="animation">
+    <div
+      v-show="shouldShowAnimation"
+      id="b55dd62a-e932-436f-8447-2e85856f137c"
+    ></div>
+    <div v-intersect="gaEventObserver" v-show="shouldShowAnimation" />
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { intersect } from '~/helpers/vue/directives/index.js'
 
 import {
@@ -19,18 +23,27 @@ export default {
   },
   data() {
     return {
-      flashCount: 3,
+      startLoaded: false,
+      animationEventObserver: undefined,
       gaEventObserver: undefined,
+      isLoaded: false,
+      shouldShowAnimation: false,
+      hasSendGa: false,
+      prevScroll: 0,
+      isScrollDown: false,
     }
   },
 
   mounted() {
+    this.setupAnimationEventObserver()
     this.setupGaEventObserver()
+    window.addEventListener('scroll', this.handleScroll)
   },
 
   beforeDestroy() {
-    this.cleanupGaEventObserver()
+    this.cleanupObserver()
   },
+
   head() {
     return {
       script: [
@@ -56,45 +69,74 @@ export default {
             })()
           `,
         },
-        {
-          hid: 'animation2',
-          id: 'animation2',
-          type: 'text/javascript',
-          async: true,
-          crossOrigin: true,
-          body: true,
-          src:
-            'https://unpkg.com/@twreporter/scrollable-video@1.0.0-rc.3/dist/main.142ef5f0d6d2dfdb8b8d.bundle.js',
-        },
       ],
       __dangerouslyDisableSanitizersByTagID: {
         animation1: ['innerHTML'],
       },
     }
   },
+  computed: {
+    ...mapGetters('viewport', ['viewportHeight']),
+  },
   methods: {
-    expandHandler() {
-      const newFlashCount =
-        this.flashCount + 3 > this.flashNewsList.length
-          ? this.flashNewsList.length
-          : this.flashCount + 3
-
-      this.flashCount = newFlashCount
-      this.$ga.event('projects', 'click', '展開更多快訊')
+    async setupAnimationEventObserver() {
+      this.animationEventObserver = await setupIntersectionObserver(
+        (entries) => {
+          entries.forEach(({ intersectionRatio }) => {
+            if (intersectionRatio >= 0.2) {
+              this.shouldShowAnimation = true
+            }
+            if (intersectionRatio && !this.startLoaded) {
+              const script = document.createElement('script')
+              script.src =
+                'https://unpkg.com/@twreporter/scrollable-video@1.0.0-rc.3/dist/main.142ef5f0d6d2dfdb8b8d.bundle.js'
+              document.body.appendChild(script)
+              this.startLoaded = true
+            }
+          })
+        },
+        { threshold: [0, 0.2, 1] }
+      )
     },
     async setupGaEventObserver() {
       this.gaEventObserver = await setupIntersectionObserver((entries) => {
         entries.forEach(({ intersectionRatio }) => {
-          if (intersectionRatio > 0) {
+          if (
+            intersectionRatio &&
+            this.isLoaded &&
+            !this.hasSendGa &&
+            this.isScrollDown
+          ) {
             this.$ga.event('projects', 'scroll', '滑到動畫結束')
-            this.cleanupGaEventObserver()
+            this.hasSendGa = true
           }
         })
       })
     },
-    cleanupGaEventObserver() {
+    cleanupObserver() {
+      cleanupIntersectionObserver(this, 'animationEventObserver')
       cleanupIntersectionObserver(this, 'gaEventObserver')
+    },
+    handleScroll() {
+      this.isScrollDown = window.scrollY > this.prevScroll
+      this.prevScroll = window.scrollY
+      if (this.isLoaded) return
+      const elHeight = this.$el.getBoundingClientRect().height
+      this.isLoaded = elHeight > 2000
+      window.scroll(0, this.prevScroll)
     },
   },
 }
 </script>
+
+<style lang="scss" scoped>
+#animation {
+  min-height: 100vh;
+  background-color: rgb(0 0 0 / 18%);
+  z-index: 200;
+
+  #b55dd62a-e932-436f-8447-2e85856f137c {
+    z-index: 3000;
+  }
+}
+</style>
