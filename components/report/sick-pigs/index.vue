@@ -20,6 +20,7 @@
 
     <RdFlashNews
       :flashNewsList="news"
+      :bookmartHeight="bookmartHeight"
       @enterSection="enterSection"
       @leaveSection="leaveSection"
     />
@@ -115,6 +116,7 @@ export default {
       animationLoaded: false,
       nowId: [],
       hasSendArticleGa: false,
+      bookmartHeight: 0,
     }
   },
   mounted() {
@@ -130,6 +132,7 @@ export default {
       })
     this.setupGaEventObserver()
     this.$ga.event('projects', 'scroll', '滑到第一屏')
+    this.bookmartHeight = this.$refs.bookmarts.clientHeight
   },
   beforeDestroy() {
     this.cleanupGaEventObserver()
@@ -137,8 +140,7 @@ export default {
   mixins: [scrollDirection],
   methods: {
     adjustScroll() {
-      const headerHeight = this.$refs.bookmarts.clientHeight * -1
-      window.scrollBy(0, headerHeight)
+      window.scrollBy(0, -this.bookmartHeight)
     },
     clickBookmart(slug) {
       const newPath = this.$route.path + '#' + slug
@@ -163,31 +165,27 @@ export default {
       this.$ga.event('projects', action, label)
     },
     async setupGaEventObserver() {
-      const elHeight = this.$refs.article.getBoundingClientRect().height
-      const threshold = 0.5
-      let th = threshold
-      // The element is too tall to ever hit the threshold - change threshold
-      if (elHeight > window.innerHeight * threshold) {
-        th = ((window.innerHeight * threshold) / elHeight) * threshold
-      }
+      const marginBottom = window.innerHeight - (this.bookmartHeight + 2)
+      const rootMargin = `${-this.bookmartHeight}px 0px ${-marginBottom}px 0px`
+
       this.gaEventObserver = await setupIntersectionObserver(
         (entries) => {
           entries.forEach(({ intersectionRatio, boundingClientRect }) => {
-            if (intersectionRatio >= th) {
-              this.enterSection('report')
-            } else {
-              this.leaveSection('report')
-              if (
-                !this.hasSendArticleGa &&
-                boundingClientRect.bottom < elHeight * th + 100
-              ) {
-                this.$ga.event('projects', 'scroll', '滑到文章內文結尾')
-                this.hasSendArticleGa = true
-              }
+            intersectionRatio
+              ? this.enterSection('report')
+              : this.leaveSection('report')
+            if (
+              !intersectionRatio &&
+              this.isScrollingDown &&
+              boundingClientRect.top < 0 &&
+              !this.hasSendArticleGa
+            ) {
+              this.$ga.event('projects', 'scroll', '滑到文章內文結尾')
+              this.hasSendArticleGa = true
             }
           })
         },
-        { threshold: [th] }
+        { rootMargin }
       )
     },
     cleanupGaEventObserver() {

@@ -41,6 +41,11 @@ export default {
         return []
       },
     },
+    bookmartHeight: {
+      type: Number,
+      isRequired: true,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -52,7 +57,6 @@ export default {
 
   mounted() {
     this.setupGaEventObserver()
-    // window.scroll(0, 90, { behavior: 'smooth' })
   },
 
   beforeDestroy() {
@@ -82,28 +86,22 @@ export default {
       this.$ga.event('projects', 'click', '展開更多快訊')
     },
     async setupGaEventObserver() {
-      const elHeight = this.$el.getBoundingClientRect().height
-      const threshold = 0.5
-      let th = threshold
-
-      // The element is too tall to ever hit the threshold - change threshold
-      if (elHeight > window.innerHeight * threshold) {
-        th = ((window.innerHeight * threshold) / elHeight) * threshold
-      }
+      const marginBottom = window.innerHeight - (this.bookmartHeight + 2)
+      const rootMargin = `${-this.bookmartHeight}px 0px ${-marginBottom}px 0px`
 
       this.gaEventObserver = await setupIntersectionObserver(
         (entries) => {
           entries.forEach(({ intersectionRatio }) => {
-            if (intersectionRatio > 0 && !this.hasSendGa) {
+            intersectionRatio
+              ? this.$emit('enterSection', 'news')
+              : this.$emit('leaveSection', 'news')
+            if (intersectionRatio && !this.hasSendArticleGa) {
               this.$ga.event('projects', 'scroll', '滑到首三篇快訊')
               this.hasSendGa = true
             }
-            intersectionRatio > th
-              ? this.$emit('enterSection', 'news')
-              : this.$emit('leaveSection', 'news')
           })
         },
-        { threshold: th }
+        { rootMargin }
       )
     },
     cleanupGaEventObserver() {
