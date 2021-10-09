@@ -10,7 +10,7 @@ steps:
     args:
       - cp
       - >-
-        ./dockerignore/kubernetes-configs/readr-nuxt/kubernetes-configs/readr-nuxt/overlays/${BRANCH_NAME}/configs/config.js
+        ./dockerignore/kubernetes-configs/readr-nuxt/overlays/${BRANCH_NAME}/configs/config.js
       - ./configs/config.js
   - name: gcr.io/cloud-builders/docker
     args:
