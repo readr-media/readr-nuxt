@@ -41,7 +41,7 @@ steps:
         # cd to (dev|staging) environment kustimzation root
 
         cd
-        /workspace/kubernetes-configs/readr-nuxt/overlays/${BRANCH_NAME}/base
+        /workspace/kubernetes-configs/readr-nuxt/overlays/${BRANCH_NAME}
 
 
         # update docker image
