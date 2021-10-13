@@ -28,11 +28,18 @@ export default {
   data() {
     return {
       scrollDepthObserver: undefined,
+      action: [],
+      source: [],
     }
   },
 
   mounted() {
     this.setupScrollDepthObserver()
+    let titleCount = 0
+    this.contents.forEach((content) => {
+      if (content.type === 'title') titleCount++
+      titleCount < 2 ? this.action.push(content) : this.source.push(content)
+    })
   },
 
   beforeDestroy() {
@@ -98,7 +105,16 @@ export default {
   render() {
     return (
       <div class="report-extras">
-        <div class="container">{this.contents.map(this.buildContent)}</div>
+        <div class="container">
+          <div class="container__action">
+            {this.action.map(this.buildContent)}
+          </div>
+        </div>
+        <div class="container">
+          <div class="container__source">
+            {this.source.map(this.buildContent)}
+          </div>
+        </div>
       </div>
     )
   },
@@ -109,21 +125,24 @@ export default {
 .report-extras {
   color: #161616;
   background-color: #fffcf5;
-  padding: 48px 20px;
-  @include media-breakpoint-up(md) {
-    padding: 48px 100px;
-  }
-  @include media-breakpoint-up(md) {
-    padding: 60px 100px;
+
+  .container {
+    padding: 48px 20px;
+    @include media-breakpoint-up(md) {
+      padding: 48px 100px;
+    }
+    @include media-breakpoint-up(md) {
+      padding: 60px 100px;
+    }
   }
 
   &__title {
-    margin: 96px 0 24px 0;
+    margin: 0px 0 24px 0;
     @include media-breakpoint-up(md) {
-      margin: 96px 0 32px 0;
+      margin: 0px 0 32px 0;
     }
     @include media-breakpoint-up(xl) {
-      margin: 120px 0 40px 0;
+      margin: 0px 0 40px 0;
     }
 
     + * {
@@ -159,13 +178,10 @@ export default {
   }
 }
 
-.container {
+.container__source,
+.container__action {
   max-width: 600px;
   margin: 0 auto;
-
-  > :first-child {
-    margin-top: 0 !important;
-  }
 
   > :last-child {
     margin-bottom: 0 !important;
