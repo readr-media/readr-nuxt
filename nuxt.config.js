@@ -160,11 +160,7 @@ Object.assign(module.exports, {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/apollo', '@nuxtjs/svg', 'nuxt-ssr-cache', 'ScrollMagic'],
-
-  externals: {
-    ScrollMagic: 'ScrollMagic',
-  },
+  modules: ['@nuxtjs/apollo', '@nuxtjs/svg', 'nuxt-ssr-cache'],
 
   cache: !inDevEnv && {
     pages: ['/'],
