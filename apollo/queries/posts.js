@@ -4,7 +4,7 @@ const latestPosts = gql`
   query($first: Int! = 3) {
     latestPosts: allPosts(
       first: $first
-      where: { state: published, style_in: [news, report] }
+      where: { state: published }
       sortBy: [publishTime_DESC]
     ) {
       id
@@ -26,7 +26,7 @@ const latestPostsInErrorPage = gql`
   query {
     latestPosts: allPosts(
       first: 4
-      where: { state: published, style_in: [news, report] }
+      where: { state: published }
       sortBy: [publishTime_DESC]
     ) {
       id
@@ -48,7 +48,7 @@ const latestList = gql`
     items: allPosts(
       first: 25
       skip: $skip
-      where: { state: published, style_in: [news, report] }
+      where: { state: published }
       sortBy: [publishTime_DESC]
     ) {
       id
