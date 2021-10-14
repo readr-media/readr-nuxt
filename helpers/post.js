@@ -11,7 +11,7 @@ function getHref({ style, id, slug } = {}) {
     case 'project3':
       return `/project/3/${slug}`
     default:
-      return undefined
+      return `/post/${id}`
   }
 }
 
