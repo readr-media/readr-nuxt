@@ -10,7 +10,7 @@ import { news, report } from '~/apollo/queries/post.js'
 
 import { SITE_TITLE, SITE_URL } from '~/helpers/index.js'
 
-const KEYSTONE_POST_IDS = [2749, 2834, 2836, 2840, 2842]
+const KEYSTONE_POST_IDS = [2749, 2834, 2836, 2840, 2841, 2842]
 
 export default {
   name: 'Post',

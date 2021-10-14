@@ -5,6 +5,7 @@ import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnota
 import RdInfogram from '~/components/shared/RdInfogram.vue'
 import RdFlourish from '~/components/shared/RdFlourish.vue'
 import RdReportQuiz from '~/components/shared/RdReportQuiz.vue'
+import RdSlideCard from '~/components/shared/RdSlideCard.vue'
 
 import { intersect } from '~/helpers/vue/directives/index.js'
 
@@ -37,18 +38,28 @@ export default {
   data() {
     return {
       scrollDepthObserver: undefined,
+      customObserver: undefined,
     }
   },
 
   mounted() {
     this.setupScrollDepthObserver()
+    this.setupCustomObserver()
   },
 
   beforeDestroy() {
     cleanupIntersectionObserver(this, 'scrollDepthObserver')
+    cleanupIntersectionObserver(this, 'customObserver')
   },
 
   methods: {
+    cardsCssProps(cards) {
+      const countCards = cards.length
+
+      return {
+        '--reserved-height': `${(countCards + 1) * 600 + 200}px`,
+      }
+    },
     buildContent(content) {
       switch (content.type) {
         case 'title':
@@ -176,6 +187,30 @@ export default {
           )
         }
 
+        case 'fullSlides': {
+          return (
+            <div>
+              <RdFullSlides cards={content.value} />
+            </div>
+          )
+        }
+
+        case 'cards': {
+          return (
+            <div
+              class="report-article__cards"
+              style={this.cardsCssProps(content.value)}
+            >
+              <RdSlideCard cards={content.value} />
+            </div>
+          )
+        }
+
+        case 'observer': {
+          const id = content.value
+          return <p vIntersect={this.customObserver} id={id}></p>
+        }
+
         default:
           return (
             <p
@@ -196,6 +231,16 @@ export default {
               label: `scroll to ${title}`,
             })
             this.scrollDepthObserver.unobserve(target)
+          }
+        })
+      })
+    },
+
+    async setupCustomObserver() {
+      this.customObserver = await setupIntersectionObserver((entries) => {
+        entries.forEach(({ isIntersecting, target }) => {
+          if (isIntersecting) {
+            this.$emit('observe', target)
           }
         })
       })
@@ -273,6 +318,17 @@ export default {
   &__picture,
   &__infogram {
     margin: 32px -20px;
+
+    &_description {
+      margin: 8px 0 0 0;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 23px;
+      color: #2b2b2b;
+      @include media-breakpoint-up(md) {
+        margin: 16px 0 0 0;
+      }
+    }
   }
 
   &__paragraph {
@@ -296,6 +352,12 @@ export default {
         font-weight: 500;
       }
     }
+  }
+
+  &__cards {
+    position: relative;
+    height: 3800px;
+    padding: 100px 0;
   }
 }
 
