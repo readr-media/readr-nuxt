@@ -1,16 +1,17 @@
 <template>
   <div>
     <RdNews v-if="shouldMountNews" :news="post" />
-    <RdReport v-else :report="post" />
+    <RdReport v-if="shouldMountEmbeddedReport" :report="post" />
   </div>
 </template>
 
 <script>
-import { news, report } from '~/apollo/queries/post.js'
+// import { news, report } from '~/apollo/queries/post.js'
+import { post } from '~/apollo/queries/post.js'
 
 import { SITE_TITLE, SITE_URL } from '~/helpers/index.js'
 
-const KEYSTONE_POST_IDS = [2749, 2834, 2836, 2840, 2841, 2842]
+// const KEYSTONE_POST_IDS = [2749, 2834, 2836, 2840, 2841, 2842]
 
 export default {
   name: 'Post',
@@ -23,7 +24,7 @@ export default {
   apollo: {
     post: {
       query() {
-        return this.shouldMountNews ? news : report
+        return post
       },
       variables() {
         return {
@@ -43,11 +44,27 @@ export default {
     postId() {
       return this.$route.params.id
     },
+    postSlug() {
+      return this.post?.slug ?? ''
+    },
+    postStyle() {
+      return this.post?.style ?? ''
+    },
     shouldMountNews() {
-      return !KEYSTONE_POST_IDS.includes(Number(this.postId))
+      return this.postStyle === 'news' || this.postStyle === ''
+    },
+    shouldMountEmbeddedReport() {
+      return this.postStyle === 'embedded'
     },
   },
-
+  mounted() {
+    if (this.postStyle === 'report' && window) {
+      window.location.href = `https://www.readr.tw/project/${this.postSlug}`
+    }
+    if (this.postStyle === 'project3' && window) {
+      window.location.href = `https://www.readr.tw/project/3/${this.postSlug}`
+    }
+  },
   head() {
     const {
       title,

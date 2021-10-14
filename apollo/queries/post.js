@@ -49,4 +49,33 @@ const news = gql`
   }
 `
 
-export { report, news }
+const post = gql`
+  query($id: ID!) {
+    post: Post(where: { id: $id }) {
+      slug
+      title: name
+      heroImage {
+        name
+        urlMobileSized
+        urlDesktopSized
+      }
+      contentHtml
+      contentApiData
+      ogTitle
+      ogDescription
+      ogImage {
+        name
+        urlMobileSized
+        urlDesktopSized
+      }
+      tags {
+        name
+      }
+      style
+      publishTime
+      updatedAt
+    }
+  }
+`
+
+export { report, news, post }
