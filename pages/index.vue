@@ -468,6 +468,7 @@ export default {
                 id
                 title: name
                 style
+                slug
                 heroImage {
                   urlMobileSized
                 }
