@@ -2,7 +2,7 @@
   <div class="slide-card" :style="cssProps">
     <div class="slide-card__pin">
       <div class="slide-container">
-        <section v-for="card in cards" :key="card" class="card">
+        <section v-for="card in cards" :key="card.pictureId" class="card">
           <img :src="getPictureUrl(card.pictureId)" />
         </section>
       </div>
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     scrollSlide() {
-      if (this.loadScriptTimes < 4) return
+      if (this.loadScriptTimes !== 4) return
       // 設定卡片斷點
       const allWidth = this.sideWidth + this.cards.length * 460 - 60
       const next = (460 / allWidth) * 100

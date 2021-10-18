@@ -5,6 +5,7 @@ import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnota
 import RdInfogram from '~/components/shared/RdInfogram.vue'
 import RdFlourish from '~/components/shared/RdFlourish.vue'
 import RdReportQuiz from '~/components/shared/RdReportQuiz.vue'
+import RdFullSlides from '~/components/shared/RdFullSlides.vue'
 import RdSlideCard from '~/components/shared/RdSlideCard.vue'
 
 import { intersect } from '~/helpers/vue/directives/index.js'
@@ -190,7 +191,7 @@ export default {
         case 'fullSlides': {
           return (
             <div>
-              <RdFullSlides cards={content.value} />
+              <RdFullSlides slides={content.value} />
             </div>
           )
         }
