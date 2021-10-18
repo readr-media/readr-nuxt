@@ -24,7 +24,7 @@
       @enterSection="enterSection"
       @leaveSection="leaveSection"
     />
-    <div id="report" v-intersect="gaEventObserver" ref="article">
+    <div id="report" ref="article" v-intersect="gaEventObserver">
       <RdReportArticle
         :contents="cmsData.contentApiData.article"
         :slug="'sick-pigs'"
@@ -96,6 +96,7 @@ export default {
     RdFlashNews,
     RdUiBookmart,
   },
+  mixins: [scrollDirection],
   props: {
     cmsData: {
       type: Object,
@@ -136,7 +137,6 @@ export default {
   beforeDestroy() {
     this.cleanupGaEventObserver()
   },
-  mixins: [scrollDirection],
   methods: {
     adjustScroll() {
       window.scrollBy(0, -this.bookmartHeight)

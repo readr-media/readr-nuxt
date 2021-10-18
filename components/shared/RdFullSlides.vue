@@ -2,10 +2,10 @@
   <div class="full-slide" :style="cssProps">
     <div
       v-for="slide in slides"
-      :key="slide.id"
       :id="slide.id"
-      class="slide"
+      :key="slide.id"
       v-intersect="slidesObserver"
+      class="slide"
     >
       <img :src="getPictureUrl(slide.pictureId)" />
       {{ slide.description }}
@@ -53,23 +53,22 @@ export default {
       nowId: 0,
     }
   },
-  mounted() {
-    this.setupSlidesObserver()
-  },
-  beforeDestroy() {
-    cleanupIntersectionObserver(this, 'slidesObserver')
-  },
   computed: {
     ...mapGetters('viewport', ['viewportWidth']),
     slidesLength() {
       return this.slides?.length
     },
     cssProps() {
-      console.log(this.slides)
       return {
         '--count-slide': this.slidesLength,
       }
     },
+  },
+  mounted() {
+    this.setupSlidesObserver()
+  },
+  beforeDestroy() {
+    cleanupIntersectionObserver(this, 'slidesObserver')
   },
   methods: {
     getPictureUrl(id) {
@@ -77,7 +76,7 @@ export default {
         const img = require(`~/assets/imgs/report/follow-rule/${id}.png`)
         return img
       } catch (e) {
-        console.log(e)
+        return ''
       }
     },
     async setupSlidesObserver() {

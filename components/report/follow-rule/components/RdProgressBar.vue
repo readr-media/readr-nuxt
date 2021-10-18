@@ -50,9 +50,7 @@ export default {
       default: 1,
     },
   },
-  mounted() {
-    window.addEventListener('scroll', this.handleScroll)
-  },
+
   data() {
     return {
       trackedLocation: 77,
@@ -84,6 +82,29 @@ export default {
     },
   },
 
+  watch: {
+    nowTagId(id) {
+      const newLocation = 77 + (parseInt(id) - 1) * (this.spacing + 18)
+      this.trackedMove(newLocation, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
+        this.stalkerForword()
+      })
+    },
+    distance(d) {
+      if (d <= 77 && this.trackedStatus === 'stand') {
+        this.trackedStatus = 'afraid'
+      }
+      if (d === 78) {
+        if (this.trackedStatus !== 'move') this.trackedStatus = 'stand'
+      }
+      if (d < 77) {
+        this.handleScroll()
+      }
+    },
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
   methods: {
     isArrived(id) {
       return this.trackedLocation > 77 + (id - 1) * (this.spacing + 18) - 9
@@ -130,26 +151,6 @@ export default {
         this.stalkerStatus = 'stand'
         this.stalkerForword()
       })
-    },
-  },
-  watch: {
-    nowTagId(id) {
-      const newLocation = 77 + (parseInt(id) - 1) * (this.spacing + 18)
-      this.trackedMove(newLocation, 'moving', 10, () => {
-        this.trackedStatus = 'stand'
-        this.stalkerForword()
-      })
-    },
-    distance(d) {
-      if (d <= 77 && this.trackedStatus === 'stand') {
-        this.trackedStatus = 'afraid'
-      }
-      if (d === 78) {
-        if (this.trackedStatus !== 'move') this.trackedStatus = 'stand'
-      }
-      if (d < 77) {
-        this.handleScroll()
-      }
     },
   },
 }

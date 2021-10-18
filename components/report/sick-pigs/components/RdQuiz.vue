@@ -11,10 +11,10 @@
         >
           <label
             ><input
+              v-model="optionClicked"
               type="radio"
               name="size"
               :disabled="shouldShowAnswerDetail"
-              v-model="optionClicked"
               :value="option"
             />
             <div class="radio-button"></div>
@@ -23,8 +23,8 @@
         </div>
         <button
           class="report-quiz__quiz-options_button"
-          @click="handleQuizButtonClick"
           :disabled="shouldShowAnswerDetail || !optionClicked.type"
+          @click="handleQuizButtonClick"
         >
           看答案
         </button>
