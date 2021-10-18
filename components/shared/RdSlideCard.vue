@@ -26,6 +26,62 @@ export default {
       loadScriptTimes: 0,
     }
   },
+  computed: {
+    viweportWidth() {
+      return this.$store.getters['viewport/viewportWidth']
+    },
+    viweportHeight() {
+      return this.$store.getters['viewport/viewportHeight']
+    },
+    sideWidth() {
+      return (this.viweportWidth - 600) / 2 > 0
+        ? (this.viweportWidth - 600) / 2
+        : 0
+    },
+    cssProps() {
+      const countCard = this.cards.length
+      return {
+        '--side-width': `${this.sideWidth}px`,
+        '--count-card': countCard,
+        '--all-width': `${this.sideWidth + this.cards.length * 460 - 60}px`,
+      }
+    },
+  },
+  methods: {
+    scrollSlide() {
+      if (this.loadScriptTimes !== 4) return
+      // 設定卡片斷點
+      const allWidth = this.sideWidth + this.cards.length * 460 - 60
+      const next = (460 / allWidth) * 100
+      const controller = new ScrollMagic.Controller()
+
+      // define movement of panels
+      let wipeAnimation = new TimelineMax()
+
+      for (let i = 1; i < this.cards.length; i++) {
+        wipeAnimation = wipeAnimation.to('.slide-container', 1, {
+          x: `-${next * i}%`,
+          delay: 1,
+        })
+      }
+
+      // create scene to pin and link animation
+      new ScrollMagic.Scene({
+        triggerElement: '.slide-card__pin',
+        triggerHook: 0,
+        duration: `370%`,
+        offset: -(this.viweportHeight - 620),
+      })
+        .setPin('.slide-card__pin')
+        .setTween(wipeAnimation)
+        .addIndicators() // add indicators (requires plugin)
+        .addTo(controller)
+    },
+    getPictureUrl(id) {
+      const img = require(`~/assets/imgs/report/follow-rule/report-slide-${id}.png`)
+      return img
+    },
+  },
   head() {
     return {
       script: [
@@ -67,62 +123,6 @@ export default {
         },
       ],
     }
-  },
-  methods: {
-    scrollSlide() {
-      if (this.loadScriptTimes !== 4) return
-      // 設定卡片斷點
-      const allWidth = this.sideWidth + this.cards.length * 460 - 60
-      const next = (460 / allWidth) * 100
-      const controller = new ScrollMagic.Controller()
-
-      // define movement of panels
-      let wipeAnimation = new TimelineMax()
-
-      for (let i = 1; i < this.cards.length; i++) {
-        wipeAnimation = wipeAnimation.to('.slide-container', 1, {
-          x: `-${next * i}%`,
-          delay: 1,
-        })
-      }
-
-      // create scene to pin and link animation
-      new ScrollMagic.Scene({
-        triggerElement: '.slide-card__pin',
-        triggerHook: 0,
-        duration: `370%`,
-        offset: -(this.viweportHeight - 620),
-      })
-        .setPin('.slide-card__pin')
-        .setTween(wipeAnimation)
-        .addIndicators() // add indicators (requires plugin)
-        .addTo(controller)
-    },
-    getPictureUrl(id) {
-      const img = require(`~/assets/imgs/report/follow-rule/report-slide-${id}.png`)
-      return img
-    },
-  },
-  computed: {
-    viweportWidth() {
-      return this.$store.getters['viewport/viewportWidth']
-    },
-    viweportHeight() {
-      return this.$store.getters['viewport/viewportHeight']
-    },
-    sideWidth() {
-      return (this.viweportWidth - 600) / 2 > 0
-        ? (this.viweportWidth - 600) / 2
-        : 0
-    },
-    cssProps() {
-      const countCard = this.cards.length
-      return {
-        '--side-width': `${this.sideWidth}px`,
-        '--count-card': countCard,
-        '--all-width': `${this.sideWidth + this.cards.length * 460 - 60}px`,
-      }
-    },
   },
 }
 </script>
