@@ -1,0 +1,80 @@
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - source
+      - repos
+      - clone
+      - github_mirror-media_kubernetes-configs
+      - ./dockerignore/kubernetes-configs
+  - name: bash
+    args:
+      - cp
+      - >-
+        ./dockerignore/kubernetes-configs/readr-nuxt/overlays/${BRANCH_NAME}/configs/config.js
+      - ./configs/config.js
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - '-t'
+      - 'gcr.io/${PROJECT_ID}/readr-nuxt:${BRANCH_NAME}_${SHORT_SHA}'
+      - .
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - gcr.io/$PROJECT_ID/readr-nuxt
+  - name: launcher.gcr.io/google/ubuntu1604
+    args:
+      - '-c'
+      - >
+        # install kustomize
+
+        curl -s
+        "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"
+        | bash
+
+
+        # mv kubernetes-configs folder
+
+        mv ./dockerignore/kubernetes-configs /workspace/kubernetes-configs
+
+
+        # cd to (dev|staging) environment kustimzation root
+
+        cd
+        /workspace/kubernetes-configs/readr-nuxt/overlays/${BRANCH_NAME}
+
+
+        # update docker image
+
+        /workspace/kustomize edit set image
+        readr-nuxt=gcr.io/${PROJECT_ID}/readr-nuxt:${BRANCH_NAME}_${SHORT_SHA}
+
+
+        # back to kubernetes-configs root
+
+        cd /workspace/kubernetes-configs
+
+
+        /workspace/kustomize build
+        "./readr-nuxt/overlays/${BRANCH_NAME}" >>
+        $_FILE_TO_DEPLOY
+
+        # print out configs
+
+        cat $_FILE_TO_DEPLOY
+    entrypoint: bash
+  - name: gcr.io/cloud-builders/kubectl
+    env:
+      - CLOUDSDK_COMPUTE_REGION=asia-east1
+      - CLOUDSDK_CONTAINER_CLUSTER=readr-prod-v2
+    args:
+      - apply
+      - '-f'
+      - $_FILE_TO_DEPLOY
+      - '--validate=true'
+timeout: 900s
+images:
+  - gcr.io/$PROJECT_ID/readr-nuxt
+substitutions:
+  _FILE_TO_DEPLOY: /workspace/config-to-deploy.txt
+
