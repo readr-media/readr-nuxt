@@ -54,13 +54,6 @@ export default {
   },
 
   methods: {
-    cardsCssProps(cards) {
-      const countCards = cards.length
-
-      return {
-        '--reserved-height': `${(countCards + 1) * 600 + 200}px`,
-      }
-    },
     buildContent(content) {
       switch (content.type) {
         case 'title':
@@ -197,14 +190,7 @@ export default {
         }
 
         case 'cards': {
-          return (
-            <div
-              class="report-article__cards"
-              style={this.cardsCssProps(content.value)}
-            >
-              <RdSlideCard cards={content.value} />
-            </div>
-          )
+          return <RdSlideCard cards={content.value} />
         }
 
         case 'observer': {
@@ -353,12 +339,6 @@ export default {
         font-weight: 500;
       }
     }
-  }
-
-  &__cards {
-    position: relative;
-    height: 3800px;
-    padding: 100px 0;
   }
 }
 

@@ -82,6 +82,13 @@ export default {
     ...mapGetters('viewport', ['viewportWidth']),
   },
 
+  watch: {
+    viewportWidth(width) {
+      this.isMobile = true
+      this.isMobile = width < 768
+    },
+  },
+
   mounted() {
     if (this.viewportWidth > 768) this.isMobile = false
   },

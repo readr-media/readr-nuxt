@@ -80,7 +80,7 @@ export default {
         this.trackedStatus = 'afraid'
       }
       if (d === 78) {
-        if (this.trackedStatus !== 'move') this.trackedStatus = 'stand'
+        if (this.trackedStatus !== 'moving') this.trackedStatus = 'stand'
       }
       if (d < 77) {
         this.handleScroll()
@@ -89,6 +89,7 @@ export default {
   },
 
   mounted() {
+    this.handleScroll()
     window.addEventListener('scroll', this.handleScroll)
   },
 
