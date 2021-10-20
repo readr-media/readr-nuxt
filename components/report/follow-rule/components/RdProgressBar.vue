@@ -85,6 +85,7 @@ export default {
   watch: {
     nowTagId(id) {
       const newLocation = 77 + (parseInt(id) - 1) * (this.spacing + 18)
+      console.log(id)
       this.trackedMove(newLocation, 'moving', 10, () => {
         this.trackedStatus = 'stand'
         this.stalkerForword()
@@ -95,7 +96,7 @@ export default {
         this.trackedStatus = 'afraid'
       }
       if (d === 78) {
-        if (this.trackedStatus !== 'move') this.trackedStatus = 'stand'
+        if (this.trackedStatus !== 'moving') this.trackedStatus = 'stand'
       }
       if (d < 77) {
         this.handleScroll()
@@ -103,6 +104,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.nowTagId)
     window.addEventListener('scroll', this.handleScroll)
   },
   methods: {
