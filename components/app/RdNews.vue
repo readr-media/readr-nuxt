@@ -2,21 +2,29 @@
   <div class="news">
     <RdHeaderProgress @sendGaEvent="sendGaScrollEvent('end')" />
 
-    <article id="post">
-      <div class="date">{{ transformedNews.date }}</div>
-      <h1>{{ transformedNews.title }}</h1>
-      <div class="container container--post">
-        <picture v-if="heroImg.src.xs" class="hero-img">
-          <source
-            :media="`(min-width: ${breakpointSm})`"
-            :srcset="heroImg.src.sm"
-          />
-          <img :src="heroImg.src.xs" alt="" />
-        </picture>
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="content" v-html="transformedNews.contentHtml" />
-      </div>
-    </article>
+    <RdCoverImage
+      :imgSrc="heroImg.src"
+      :imgCap="'測試圖說'"
+      class="news__cover"
+    />
+
+    <section class="news__content">
+      <RdArticleHeading
+        :title="transformedNews.title"
+        :date="transformedNews.date"
+        :readTime="transformedNews.readTime"
+        :category="transformedNews.category"
+        :creditList="creditList"
+        class="news__heading"
+      />
+
+      <article id="post" class="news__article">
+        <div class="container container--post">
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div class="content" v-html="transformedNews.contentHtml" />
+        </div>
+      </article>
+    </section>
 
     <ClientOnly>
       <section class="post-feedback container">
@@ -74,18 +82,20 @@
 <script>
 import { mapState } from 'vuex'
 import { post as axiosPost } from 'axios'
+import dayjs from 'dayjs'
 
 import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
 import RdFeedbackForm from '~/components/shared/Feedback/RdFeedbackForm.vue'
 import RdFeedbackThanks from '~/components/shared/Feedback/RdFeedbackThanks.vue'
 import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
 import RdStarRating from '~/components/shared/RdStarRating.vue'
+import RdCoverImage from '~/components/shared/RdCoverImage.vue'
+import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
 import RdList from '~/components/shared/List/RdList.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.js'
 
 import { getHref, formatDate } from '~/helpers/index.js'
-import styleVariables from '~/assets/css/variables.module.scss'
 
 export default {
   name: 'RdNews',
@@ -96,6 +106,8 @@ export default {
     RdFeedbackThanks,
     RdFeedbackButton,
     RdStarRating,
+    RdCoverImage,
+    RdArticleHeading,
     RdList,
   },
 
@@ -152,8 +164,16 @@ export default {
       },
 
       latestPosts: [],
-
-      breakpointSm: styleVariables['breakpoint-sm'],
+      creditList: [
+        {
+          title: '記者',
+          names: ['小明', '張三'],
+        },
+        {
+          title: '設計',
+          names: ['小玉'],
+        },
+      ],
     }
   },
 
@@ -169,7 +189,17 @@ export default {
       const {
         title = '',
         heroImage = {},
+        heroCaption = '',
+        categories = [],
+        // writers = [],
+        // photographers = [],
+        // cameraOperators = [],
+        // designers = [],
+        // engineers = [],
+        // dataAnalysts = [],
+        // otherByline = '',
         contentHtml = '',
+        wordCount = 0,
         publishTime = '',
       } = this.news
 
@@ -181,12 +211,18 @@ export default {
             sm: heroImage?.urlDesktopSized,
           },
         },
-        date: formatDate(publishTime),
+        heroCap: heroCaption,
+        category: categories?.[0]?.name,
+        readTime: wordCount * 0.6,
+        date: this.formatHeadingDate(publishTime),
         contentHtml,
       }
     },
     heroImg() {
       return this.transformedNews.heroImg
+    },
+    heroCap() {
+      return this.transformedNews.heroCap
     },
 
     feedbackRanting: {
@@ -216,6 +252,9 @@ export default {
     handleClickRatingBtn() {
       this.sendRatingToGoogleSheet()
       this.gotoFeedbackStep('opinion')
+    },
+    formatHeadingDate(datetime) {
+      return dayjs(datetime).format('M/DD')
     },
     sendRatingToGoogleSheet() {
       axiosPost('/api/google-sheets/append', {
@@ -269,8 +308,34 @@ export default {
 
 <style lang="scss" scoped>
 .news {
-  padding-top: 68.63px;
+  padding: 68.63px 0 0;
   overflow: hidden;
+  &__cover {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto 24px;
+    @include media-breakpoint-up(xl) {
+      margin: 0 auto 60px;
+    }
+  }
+  &__content {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    @include media-breakpoint-up(md) {
+      width: 568px;
+      padding: 0;
+    }
+    @include media-breakpoint-up(xl) {
+      width: 600px;
+    }
+  }
+  &__heading {
+    margin: 0 0 24px;
+    @include media-breakpoint-up(xl) {
+      margin: 0 0 48px;
+    }
+  }
 }
 
 article {
@@ -286,48 +351,6 @@ article {
   @include media-breakpoint-up(md) {
     font-size: 15px;
     margin-bottom: 20px;
-  }
-}
-
-h1 {
-  font-weight: 900;
-  font-size: 30px;
-  line-height: 1.47;
-  padding-left: 20px;
-  padding-right: 20px;
-  color: #000928;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px;
-  @include media-breakpoint-up(md) {
-    text-align: center;
-    font-size: 36px;
-    line-height: 1.33;
-    margin-bottom: 30px;
-  }
-  @media (min-width: 840px) {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-
-.hero-img {
-  position: relative;
-  padding-top: 50%;
-  background-color: #d8d8d8;
-  @include media-breakpoint-up(md) {
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 }
 

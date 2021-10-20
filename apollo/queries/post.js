@@ -59,6 +59,29 @@ const post = gql`
         urlMobileSized
         urlDesktopSized
       }
+      categories {
+        name
+      }
+      writers {
+        name
+      }
+      photographers {
+        name
+      }
+      cameraOperators {
+        name
+      }
+      designers {
+        name
+      }
+      engineers {
+        name
+      }
+      dataAnalysts {
+        name
+      }
+      otherByline
+      heroCaption
       contentHtml
       contentApiData
       ogTitle
@@ -72,6 +95,7 @@ const post = gql`
         name
       }
       style
+      wordCount
       publishTime
       updatedAt
     }
