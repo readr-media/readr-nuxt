@@ -1,10 +1,12 @@
 <template>
   <div class="credit-list">
     <ul>
-      <li v-for="item in list" :key="item.title">
-        <span class="title">{{ item.title }}</span>
+      <li v-for="item in formatedList" :key="item.key">
+        <span class="title">{{ item.key }}</span>
         <div class="names">
-          <span v-for="name in item.names" :key="name">{{ name }}</span>
+          <span v-for="(person, i) in item.data" :key="i">
+            {{ person.name }}
+          </span>
         </div>
       </li>
     </ul>
@@ -12,6 +14,16 @@
 </template>
 
 <script>
+const CONTACT_MAPPING = {
+  writers: '記者',
+  photographers: '攝影',
+  cameraOperators: '影音',
+  designers: '設計',
+  engineers: '工程',
+  dataAnalysts: '數據分析',
+  otherByline: '協同製作',
+}
+
 export default {
   name: 'RdArticleCreditList',
 
@@ -19,6 +31,21 @@ export default {
     list: {
       type: Array,
       default: () => [],
+    },
+  },
+  computed: {
+    formatedList() {
+      return this.list?.map((item) => {
+        return item.key === 'otherByline'
+          ? {
+              key: CONTACT_MAPPING[item.key],
+              data: [item.data],
+            }
+          : {
+              key: CONTACT_MAPPING[item.key],
+              data: item.data,
+            }
+      })
     },
   },
 }

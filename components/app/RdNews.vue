@@ -14,7 +14,7 @@
         :date="transformedNews.date"
         :readTime="transformedNews.readTime"
         :category="transformedNews.category"
-        :creditList="creditList"
+        :creditList="credits"
         class="news__heading"
       />
 
@@ -97,6 +97,16 @@ import { latestPosts } from '~/apollo/queries/posts.js'
 
 import { getHref, formatDate } from '~/helpers/index.js'
 
+const CREDIT_KEYS = [
+  'writers',
+  'photographers',
+  'cameraOperators',
+  'designers',
+  'engineers',
+  'dataAnalysts',
+  'otherByline',
+]
+
 export default {
   name: 'RdNews',
 
@@ -164,16 +174,6 @@ export default {
       },
 
       latestPosts: [],
-      creditList: [
-        {
-          title: '記者',
-          names: ['小明', '張三'],
-        },
-        {
-          title: '設計',
-          names: ['小玉'],
-        },
-      ],
     }
   },
 
@@ -191,13 +191,6 @@ export default {
         heroImage = {},
         heroCaption = '',
         categories = [],
-        // writers = [],
-        // photographers = [],
-        // cameraOperators = [],
-        // designers = [],
-        // engineers = [],
-        // dataAnalysts = [],
-        // otherByline = '',
         contentHtml = '',
         wordCount = 0,
         publishTime = '',
@@ -217,6 +210,13 @@ export default {
         date: this.formatHeadingDate(publishTime),
         contentHtml,
       }
+    },
+    credits() {
+      return Object.keys(this.news || {})
+        .filter(
+          (key) => CREDIT_KEYS.includes(key) && this.news?.[key]?.length > 0
+        )
+        .map((key) => ({ key, data: this.news[key] }))
     },
     heroImg() {
       return this.transformedNews.heroImg
