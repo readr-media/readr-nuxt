@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'UiEmbeddedCode',
+  name: 'RdEmbeddedCode',
   props: {
     content: {
       type: Object,
@@ -16,6 +16,9 @@ export default {
     },
   },
   computed: {
+    caption() {
+      return this.content?.caption ?? ''
+    },
     scripts() {
       return this.content?.scripts ?? []
     },
@@ -24,18 +27,41 @@ export default {
     },
   },
   mounted() {
-    this.insertScriptsInBody(this.scripts)
+    this.insertScriptsInBody()
   },
   methods: {
-    insertScriptsInBody(scripts) {
+    insertScriptsInBody() {
       if (process.browser) {
-        scripts.forEach((item) => {
-          const src = item.attribs?.src ?? ''
-          const s = document.createElement('script')
-          s.setAttribute('src', src)
-          document.body.appendChild(s)
-        })
+        if (this.caption === 'reporter-scroll-video') {
+          this.handleReporterScrollVideoScripts()
+        } else {
+          this.handleScripts()
+        }
       }
+    },
+    handleReporterScrollVideoScripts() {
+      const src1 = this.scripts?.[0]?.text ?? ''
+      const src2 = this.scripts?.[0]?.attribs?.src ?? ''
+      const s1 = document.createElement('script')
+      s1.type = 'text/javascript'
+      s1.async = true
+      s1.appendChild(document.createTextNode(src1))
+      document.head.appendChild(s1)
+      // t.text = src2
+      // document.head.appendChild(t)
+      const s2 = document.createElement('script')
+      s2.type = 'text/javascript'
+      s2.crossorigin = true
+      s2.src = src2
+      document.body.appendChild(s2)
+    },
+    handleScripts() {
+      this.scripts?.forEach((item) => {
+        const src = item.attribs?.src ?? ''
+        const s = document.createElement('script')
+        s.setAttribute('src', src)
+        document.body.appendChild(s)
+      })
     },
   },
 }

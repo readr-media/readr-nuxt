@@ -60,7 +60,7 @@ export default {
         &::after {
           content: '';
           position: absolute;
-          top: 11px;
+          top: 12px;
           right: 3px;
           width: 20px;
           height: 1px;
@@ -79,7 +79,7 @@ export default {
             content: '';
             position: absolute;
             top: 8px;
-            left: 9px;
+            left: 8px;
             width: 4px;
             height: 4px;
             border-radius: 50%;

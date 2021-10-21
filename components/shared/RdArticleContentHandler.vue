@@ -137,9 +137,7 @@ export default {
     }
   }
   &-embedded-code {
-    iframe {
-      width: 100%;
-    }
+    max-width: 100%;
   }
   &-paragraph,
   &-quote-by,

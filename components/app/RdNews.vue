@@ -287,6 +287,9 @@ export default {
       return this.postFeedback.opinion.content !== ''
     },
   },
+  mounted() {
+    console.log('js', this.content)
+  },
   methods: {
     setRating(value) {
       this.feedbackRanting = value
@@ -362,6 +365,7 @@ export default {
   }
   &__content {
     width: 100%;
+    max-width: 568px;
     margin: 0 auto;
     padding: 0 20px;
     @include media-breakpoint-up(md) {
@@ -370,6 +374,7 @@ export default {
     }
     @include media-breakpoint-up(xl) {
       width: 600px;
+      max-width: 600px;
     }
   }
   &__heading {
