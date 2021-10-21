@@ -84,6 +84,7 @@ const post = gql`
       heroCaption
       contentHtml
       contentApiData
+      summaryApiData
       ogTitle
       ogDescription
       ogImage {

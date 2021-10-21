@@ -1,0 +1,153 @@
+<script>
+import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnotation.vue'
+import RdArticleImage from '~/components/shared/RdArticleImage.vue'
+import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
+import RdEmbeddedCode from '~/components/shared/RdEmbeddedCode.vue'
+
+export default {
+  name: 'RdArticleContentHandler',
+
+  functional: true,
+  components: {
+    RdParagraphWithAnnotation,
+    RdArticleImage,
+    RdArticleVideo,
+    RdEmbeddedCode,
+  },
+  props: {
+    paragraph: {
+      type: Object,
+      reqired: true,
+      default: undefined,
+    },
+  },
+  render(h, { props }) {
+    const content = props.paragraph.content?.[0]
+    const type = props.paragraph?.type
+    switch (type) {
+      case 'header-one':
+      case 'header-two': {
+        const tag = type === 'header-one' ? 'h1' : 'h2'
+        return <tag class="g-article-heading" domPropsInnerHTML={content} />
+      }
+      case 'ordered-list-item':
+        // 由於 ordered-list 資料結構有誤，目前暫時先以此寫法(而非取 content[0])
+        if (typeof props.paragraph.content === 'string') {
+          return (
+            <ol class="g-article-list order-list">
+              <li domPropsInnerHTML={props.paragraph.content} />
+            </ol>
+          )
+        } else {
+          return (
+            <ol class="g-article-list order-list">
+              {props.paragraph.content.map((item) => {
+                return <li domPropsInnerHTML={item} />
+              })}
+            </ol>
+          )
+        }
+      case 'unordered-list-item':
+        if (typeof content === 'string') {
+          return (
+            <ul class="g-article-list unorder-list">
+              <li domPropsInnerHTML={content} />
+            </ul>
+          )
+        } else {
+          return (
+            <ul class="g-article-list unorder-list">
+              {content.map((item) => {
+                return <li domPropsInnerHTML={item} />
+              })}
+            </ul>
+          )
+        }
+      case 'embeddedcode':
+        return (
+          <RdEmbeddedCode class="g-article-embedded-code" content={content} />
+        )
+      case 'annotation':
+        return (
+          <div class="g-article-annotation">
+            <RdParagraphWithAnnotation content={content} />
+          </div>
+        )
+      case 'video':
+        return <RdArticleVideo video={content} />
+      case 'image':
+        return <RdArticleImage image={content} />
+      case 'unstyled':
+        return <p class="g-article-paragraph" domPropsInnerHTML={content} />
+      default:
+        return undefined
+    }
+  },
+}
+</script>
+<style lang="scss" scoped>
+.g-article {
+  &-heading {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: 0.032em;
+    color: #000928;
+    @include media-breakpoint-up(md) {
+      font-size: 28px;
+    }
+  }
+  &-paragraph {
+    font-size: 16px;
+    line-height: 1.75;
+    text-align: justify;
+    color: rgba(0, 9, 40, 0.87);
+    > * {
+      max-width: 100%;
+    }
+  }
+  &-annotation {
+    text-align: justify;
+    line-height: 1.75;
+  }
+  &-embedded-code {
+    iframe {
+      width: 100%;
+    }
+  }
+  &-paragraph,
+  &-quote-by,
+  &-annotation {
+    &::v-deep {
+      a {
+        color: #04295e;
+        font-weight: 500;
+        text-decoration: underline;
+      }
+    }
+  }
+  &-list {
+    margin-top: 0;
+    padding-left: 1.2rem;
+    &.order-list {
+      list-style-type: decimal;
+    }
+    &.unorder-list {
+      list-style-type: disc;
+    }
+    li {
+      color: #000;
+      font-size: 16px;
+      line-height: 1.75;
+      text-align: justify;
+      &::v-deep {
+        a {
+          color: #04295e;
+          font-weight: 500;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+</style>

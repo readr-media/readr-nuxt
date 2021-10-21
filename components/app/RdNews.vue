@@ -3,8 +3,8 @@
     <RdHeaderProgress @sendGaEvent="sendGaScrollEvent('end')" />
 
     <RdCoverImage
-      :imgSrc="heroImg.src"
-      :imgCap="'測試圖說'"
+      :imgSrc="transformedNews.heroImg.src"
+      :imgCap="transformedNews.heroCap"
       class="news__cover"
     />
 
@@ -17,12 +17,19 @@
         :creditList="credits"
         class="news__heading"
       />
+      <RdArticleSummary :summary="summary" class="news__summary" />
 
       <article id="post" class="news__article">
-        <div class="container container--post">
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div class="content" v-html="transformedNews.contentHtml" />
-        </div>
+        <template v-if="isContentString">
+          {{ content }}
+        </template>
+        <template v-else>
+          <RdArticleContentHandler
+            v-for="paragraph in content"
+            :key="paragraph.id"
+            :paragraph="paragraph"
+          />
+        </template>
       </article>
     </section>
 
@@ -91,11 +98,13 @@ import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
 import RdStarRating from '~/components/shared/RdStarRating.vue'
 import RdCoverImage from '~/components/shared/RdCoverImage.vue'
 import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
+import RdArticleSummary from '~/components/shared/RdArticleSummary.vue'
+import RdArticleContentHandler from '~/components/shared/RdArticleContentHandler.vue'
 import RdList from '~/components/shared/List/RdList.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.js'
 
-import { getHref, formatDate } from '~/helpers/index.js'
+import { getHref, formatDate, handleApiData } from '~/helpers/index.js'
 
 const CREDIT_KEYS = [
   'writers',
@@ -118,6 +127,8 @@ export default {
     RdStarRating,
     RdCoverImage,
     RdArticleHeading,
+    RdArticleSummary,
+    RdArticleContentHandler,
     RdList,
   },
 
@@ -218,11 +229,17 @@ export default {
         )
         .map((key) => ({ key, data: this.news[key] }))
     },
-    heroImg() {
-      return this.transformedNews.heroImg
+
+    content() {
+      const data = this.news?.contentApiData ?? ''
+      return data ? handleApiData(data) : []
     },
-    heroCap() {
-      return this.transformedNews.heroCap
+    summary() {
+      const data = this.news?.summaryApiData ?? ''
+      return data ? handleApiData(data) : []
+    },
+    isContentString() {
+      return typeof this.content === 'string'
     },
 
     feedbackRanting: {
@@ -315,7 +332,7 @@ export default {
     max-width: 960px;
     margin: 0 auto 24px;
     @include media-breakpoint-up(xl) {
-      margin: 0 auto 60px;
+      margin: 24px auto 60px;
     }
   }
   &__content {
@@ -334,6 +351,20 @@ export default {
     margin: 0 0 24px;
     @include media-breakpoint-up(xl) {
       margin: 0 0 48px;
+    }
+  }
+  &__summary {
+    margin: 0 0 24px;
+    @include media-breakpoint-up(xl) {
+      margin: 0 0 32px;
+    }
+  }
+  &__article {
+    margin: 0 0 32px;
+    ::v-deep {
+      > * + * {
+        margin: 32px 0 0;
+      }
     }
   }
 }
