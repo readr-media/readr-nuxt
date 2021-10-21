@@ -4,7 +4,7 @@
     <h1>{{ title }}</h1>
     <RdDateWithReadTime
       :date="date"
-      :readTime="readTime"
+      :readTimeText="readTimeText"
       class="heading__time"
     />
     <div class="heading__credit">
@@ -38,9 +38,9 @@ export default {
       type: String,
       default: '',
     },
-    readTime: {
-      type: Number,
-      default: 0,
+    readTimeText: {
+      type: String,
+      default: '',
     },
     category: {
       type: String,
@@ -85,6 +85,7 @@ export default {
     &-list {
       margin: 0 0 16px;
       @include media-breakpoint-up(md) {
+        max-width: 360px;
         margin: 0;
       }
     }

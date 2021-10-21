@@ -12,12 +12,16 @@
       <RdArticleHeading
         :title="transformedNews.title"
         :date="transformedNews.date"
-        :readTime="transformedNews.readTime"
         :category="transformedNews.category"
+        :readTimeText="readTime"
         :creditList="credits"
         class="news__heading"
       />
-      <RdArticleSummary :summary="summary" class="news__summary" />
+      <RdArticleSummary
+        v-if="doesHaveSummary"
+        :summary="summary"
+        class="news__summary"
+      />
 
       <article id="post" class="news__article">
         <template v-if="isContentString">
@@ -204,7 +208,6 @@ export default {
         heroCaption = '',
         categories = [],
         contentHtml = '',
-        wordCount = 0,
         publishTime = '',
       } = this.news
 
@@ -218,7 +221,6 @@ export default {
         },
         heroCap: heroCaption,
         category: categories?.[0]?.name,
-        readTime: wordCount * 0.6,
         date: this.formatHeadingDate(publishTime),
         contentHtml,
       }
@@ -228,7 +230,17 @@ export default {
         .filter(
           (key) => CREDIT_KEYS.includes(key) && this.news?.[key]?.length > 0
         )
-        .map((key) => ({ key, data: this.news[key] }))
+        .map((key) => {
+          return key === 'otherByline' && typeof this.news[key] === 'string'
+            ? {
+                key,
+                data: this.news[key].split('、').map((d) => ({ name: d })),
+              }
+            : {
+                key,
+                data: this.news[key],
+              }
+        })
     },
 
     content() {
@@ -243,6 +255,17 @@ export default {
       return typeof this.content === 'string'
     },
 
+    imageCount() {
+      const images =
+        this.content?.filter((item) => item?.type === 'image') ?? []
+      return images.length
+    },
+    readTime() {
+      const wordCount = this.news?.wordCount ?? 0
+      const min = Math.round((wordCount / 8 + this.imageCount * 10) / 60)
+      return min ? `閱讀時間 ${min} 分鐘` : ''
+    },
+
     feedbackRanting: {
       get() {
         return this.postFeedback.rating
@@ -254,10 +277,12 @@ export default {
     ratingBtnText() {
       return `確定給 ${this.feedbackRanting} 顆星`
     },
+    doesHaveSummary() {
+      return this.summary?.length > 0
+    },
     doesHaveRating() {
       return this.feedbackRanting > 0
     },
-
     doesHaveOpinionContent() {
       return this.postFeedback.opinion.content !== ''
     },

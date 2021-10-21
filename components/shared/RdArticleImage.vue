@@ -33,9 +33,9 @@ export default {
     width: 100%;
     font-size: 14px;
     line-height: 21px;
-    text-align: left;
+    text-align: justify;
     color: rgba(0, 9, 40, 0.5);
-    padding: 0 0 0 20px;
+    padding: 0 20px;
     margin: 8px 0 0;
     @include media-breakpoint-up(xl) {
       font-size: 16px;

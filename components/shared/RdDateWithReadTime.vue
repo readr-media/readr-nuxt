@@ -1,7 +1,7 @@
 <template>
   <div class="time">
-    <span class="date">{{ date }}</span>
-    <span class="read">{{ readTimeText }}</span>
+    <span v-if="date" class="date">{{ date }}</span>
+    <span v-if="readTimeText" class="read">{{ readTimeText }}</span>
   </div>
 </template>
 
@@ -14,15 +14,9 @@ export default {
       type: String,
       default: '',
     },
-    readTime: {
-      type: Number,
-      default: 0,
-    },
-  },
-  computed: {
-    readTimeText() {
-      const min = Math.round(this.readTime / 60)
-      return `閱讀時間 ${min} 分鐘`
+    readTimeText: {
+      type: String,
+      default: '',
     },
   },
 }
@@ -36,24 +30,24 @@ export default {
   @include media-breakpoint-up(md) {
     font-size: 16px;
   }
-  .date {
+  .read {
     position: relative;
-    padding: 0 14px 0 0;
+    padding: 0 0 0 14px;
     @include media-breakpoint-up(md) {
-      padding: 0 20px 0 0;
+      padding: 0 0 0 20px;
     }
-    &::after {
+    &::before {
       content: '';
       position: absolute;
       top: 9px;
-      right: 3px;
+      left: 4px;
       width: 4px;
       height: 4px;
       border-radius: 50%;
       background-color: rgba(0, 9, 40, 0.2);
       @include media-breakpoint-up(md) {
         top: 11px;
-        right: 5px;
+        left: 8px;
       }
     }
   }

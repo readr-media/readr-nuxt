@@ -21,7 +21,7 @@ const CONTACT_MAPPING = {
   designers: '設計',
   engineers: '工程',
   dataAnalysts: '數據分析',
-  otherByline: '協同製作',
+  otherByline: '共同製作',
 }
 
 export default {
@@ -35,17 +35,10 @@ export default {
   },
   computed: {
     formatedList() {
-      return this.list?.map((item) => {
-        return item.key === 'otherByline'
-          ? {
-              key: CONTACT_MAPPING[item.key],
-              data: [item.data],
-            }
-          : {
-              key: CONTACT_MAPPING[item.key],
-              data: item.data,
-            }
-      })
+      return this.list?.map((item) => ({
+        key: CONTACT_MAPPING[item.key],
+        data: item.data,
+      }))
     },
   },
 }
@@ -75,8 +68,7 @@ export default {
         }
       }
       .names {
-        display: inline-flex;
-        align-items: center;
+        display: inline;
         color: #000928;
         span {
           position: relative;
