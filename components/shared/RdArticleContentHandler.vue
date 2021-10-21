@@ -20,6 +20,10 @@ export default {
       reqired: true,
       default: undefined,
     },
+    isSummary: {
+      type: Boolean,
+      default: false,
+    },
   },
   render(h, { props }) {
     const content = props.paragraph.content?.[0]
@@ -30,23 +34,25 @@ export default {
         const tag = type === 'header-one' ? 'h1' : 'h2'
         return <tag class="g-article-heading" domPropsInnerHTML={content} />
       }
-      case 'ordered-list-item':
-        // 由於 ordered-list 資料結構有誤，目前暫時先以此寫法(而非取 content[0])
-        if (typeof props.paragraph.content === 'string') {
+      case 'ordered-list-item': {
+        // 由於 summary 的 ordered-list 資料結構有誤，暫時先以此寫法
+        const data = props.isSummary ? props.paragraph.content : content
+        if (typeof data === 'string') {
           return (
             <ol class="g-article-list order-list">
-              <li domPropsInnerHTML={props.paragraph.content} />
+              <li domPropsInnerHTML={data} />
             </ol>
           )
         } else {
           return (
             <ol class="g-article-list order-list">
-              {props.paragraph.content.map((item) => {
+              {data.map((item) => {
                 return <li domPropsInnerHTML={item} />
               })}
             </ol>
           )
         }
+      }
       case 'unordered-list-item':
         if (typeof content === 'string') {
           return (
@@ -74,9 +80,9 @@ export default {
           </div>
         )
       case 'video':
-        return <RdArticleVideo video={content} />
+        return <RdArticleVideo class="g-article-video" video={content} />
       case 'image':
-        return <RdArticleImage image={content} />
+        return <RdArticleImage class="g-article-image" image={content} />
       case 'unstyled':
         return <p class="g-article-paragraph" domPropsInnerHTML={content} />
       default:
@@ -98,8 +104,9 @@ export default {
     }
   }
   &-paragraph {
-    font-size: 16px;
-    line-height: 1.75;
+    font-size: 18px;
+    line-height: 2;
+    letter-spacing: 0.01em;
     text-align: justify;
     color: rgba(0, 9, 40, 0.87);
     > * {
@@ -109,6 +116,25 @@ export default {
   &-annotation {
     text-align: justify;
     line-height: 1.75;
+    letter-spacing: 0.01em;
+    color: rgba(0, 9, 40, 0.87);
+    &::v-deep {
+      .paragraph-with-annotation {
+        font-size: 18px;
+        line-height: 2;
+      }
+      .toggle {
+        background-color: #f6f6fb;
+      }
+      .annotation {
+        border-radius: 2px;
+        background-color: #f6f6fb;
+        padding: 12px 24px;
+        @include media-breakpoint-up(md) {
+          padding: 16px 32px;
+        }
+      }
+    }
   }
   &-embedded-code {
     iframe {
@@ -137,9 +163,11 @@ export default {
     }
     li {
       color: #000;
-      font-size: 16px;
-      line-height: 1.75;
+      font-size: 18px;
+      line-height: 2;
+      letter-spacing: 0.01em;
       text-align: justify;
+      color: rgba(0, 9, 40, 0.87);
       &::v-deep {
         a {
           color: #04295e;
@@ -147,6 +175,9 @@ export default {
           text-decoration: underline;
         }
       }
+    }
+    li + li {
+      margin: 4px 0 0;
     }
   }
 }

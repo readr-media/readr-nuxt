@@ -30,15 +30,17 @@ export default {
     }
   }
   &__info {
-    margin-top: 8px;
     width: 100%;
-    height: 30px;
-    font-style: normal;
-    font-weight: normal;
     font-size: 14px;
-    line-height: 20px;
+    line-height: 21px;
     text-align: left;
-    color: #4a4a4a;
+    color: rgba(0, 9, 40, 0.5);
+    padding: 0 0 0 20px;
+    margin: 8px 0 0;
+    @include media-breakpoint-up(xl) {
+      font-size: 16px;
+      line-height: 24px;
+    }
   }
 }
 </style>

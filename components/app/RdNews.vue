@@ -28,6 +28,7 @@
             v-for="paragraph in content"
             :key="paragraph.id"
             :paragraph="paragraph"
+            :isSummary="false"
           />
         </template>
       </article>
@@ -261,7 +262,6 @@ export default {
       return this.postFeedback.opinion.content !== ''
     },
   },
-
   methods: {
     setRating(value) {
       this.feedbackRanting = value
@@ -362,6 +362,12 @@ export default {
   &__article {
     margin: 0 0 32px;
     ::v-deep {
+      .g-article {
+        &-image {
+          width: calc(100% + 40px);
+          transform: translateX(-20px);
+        }
+      }
       > * + * {
         margin: 32px 0 0;
       }

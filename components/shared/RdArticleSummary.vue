@@ -8,6 +8,7 @@
           v-for="paragraph in summary"
           :key="paragraph.id"
           :paragraph="paragraph"
+          :isSummary="true"
         />
       </div>
     </div>
@@ -37,6 +38,7 @@ export default {
   .deco {
     height: 16px;
     background-color: #04295e;
+    border: 2px 2px 0 0;
   }
   &__main {
     border: 2px solid #04295e;
@@ -57,15 +59,11 @@ export default {
           &-paragraph {
             font-size: 16px;
             line-height: 1.6;
-            color: rgba(0, 9, 40, 0.87);
           }
           &-list {
             li {
-              color: rgba(0, 9, 40, 0.87);
+              font-size: 16px;
               line-height: 1.6;
-            }
-            li + li {
-              margin: 4px 0 0;
             }
           }
         }
