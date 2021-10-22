@@ -48,6 +48,8 @@
       </article>
     </section>
 
+    <RdButtonDonate class="news__donate" />
+
     <!-- <ClientOnly>
       <section class="post-feedback container">
         <div v-if="postFeedback.step === 'rating'" class="post-feedback__step">
@@ -107,6 +109,7 @@ import { post as axiosPost } from 'axios'
 import dayjs from 'dayjs'
 
 import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
+import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
 // import RdFeedbackForm from '~/components/shared/Feedback/RdFeedbackForm.vue'
 // import RdFeedbackThanks from '~/components/shared/Feedback/RdFeedbackThanks.vue'
 // import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
@@ -137,6 +140,7 @@ export default {
 
   components: {
     RdHeaderProgress,
+    RdButtonDonate,
     // RdFeedbackForm,
     // RdFeedbackThanks,
     // RdFeedbackButton,
@@ -431,6 +435,13 @@ export default {
       > .g-article-heading + .g-article-paragraph {
         margin: 16px 0 0;
       }
+    }
+  }
+  &__donate {
+    margin: 48px 20px 52px;
+    max-width: 396px;
+    @media (min-width: 436px) {
+      margin: 60px auto 64px;
     }
   }
 }
