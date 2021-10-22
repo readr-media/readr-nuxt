@@ -1,10 +1,12 @@
 <template>
-  <div class="slide-card" :style="cssProps">
-    <div class="slide-card__pin">
-      <div class="slide-container">
-        <section v-for="card in cards" :key="card" class="card">
-          <img :src="getPictureUrl(card.pictureId)" />
-        </section>
+  <div ref="article" class="spacer" :style="cssProps">
+    <div class="slide-card">
+      <div class="slide-card__pin">
+        <div class="slide-container">
+          <section v-for="card in cards" :key="card.pictureId" class="card">
+            <img :src="getPictureUrl(card.pictureId)" />
+          </section>
+        </div>
       </div>
     </div>
   </div>
@@ -13,6 +15,7 @@
 <script>
 /* global ScrollMagic, TimelineMax */
 /* eslint no-undef: "error" */
+
 export default {
   props: {
     cards: {
@@ -24,7 +27,91 @@ export default {
   data() {
     return {
       loadScriptTimes: 0,
+      wrapperWidth: 600,
     }
+  },
+  computed: {
+    viewportWidth() {
+      return this.$store.getters['viewport/viewportWidth']
+    },
+    viewportHeight() {
+      return this.$store.getters['viewport/viewportHeight']
+    },
+    sideWidth() {
+      return this.viewportWidth > 600 ? (this.viewportWidth - 600) / 2 : 0
+    },
+    cssProps() {
+      const countCard = this.cards.length
+      const cardWithGap = this.cardWitdh + this.gap
+      return {
+        '--side-width': `${this.sideWidth}px`,
+        '--count-card': countCard,
+        '--all-width': `${
+          this.sideWidth + this.cards.length * cardWithGap - this.gap
+        }px`,
+        '--space-height': `${
+          this.sideWidth +
+          this.cards.length * cardWithGap -
+          this.gap +
+          this.cardHeight
+        }px`,
+        '--card-width': `${this.cardWitdh}px`,
+        '--card-height': `${this.cardHeight}px`,
+        '--gap': `${this.gap}px`,
+      }
+    },
+    cardWitdh() {
+      if (this.wrapperWidth > 400) return 400
+      return this.wrapperWidth
+    },
+    cardHeight() {
+      return this.cardWitdh * 1.5
+    },
+    gap() {
+      return this.cardWitdh * 0.15
+    },
+  },
+  mounted() {
+    this.wrapperWidth = this.$refs.article.clientWidth
+  },
+  methods: {
+    scrollSlide() {
+      if (this.loadScriptTimes !== 4) return
+      const cardWithGap = this.cardWitdh + this.gap
+      // 設定卡片斷點
+      const allWidth =
+        this.sideWidth + this.cards.length * cardWithGap - this.gap
+      // const next = (460 / allWidth) * 100
+      const controller = new ScrollMagic.Controller()
+      let wipeAnimation = new TimelineMax()
+
+      for (let i = 1; i < this.cards.length; i++) {
+        const x =
+          i === this.cards.length - 1
+            ? `-${cardWithGap * i - this.wrapperWidth + this.cardWitdh}px`
+            : `-${cardWithGap * i}px`
+        wipeAnimation = wipeAnimation.to('.slide-container', 1, {
+          x,
+          delay: 1,
+        })
+      }
+
+      // create scene to pin and link animation
+      new ScrollMagic.Scene({
+        triggerElement: '.slide-card__pin',
+        triggerHook: 0,
+        duration: `${allWidth}px`,
+        offset: -(this.viewportHeight - this.cardHeight - 10),
+      })
+        .setPin('.slide-card__pin')
+        .setTween(wipeAnimation)
+        .addIndicators() // add indicators (requires plugin)
+        .addTo(controller)
+    },
+    getPictureUrl(id) {
+      const img = require(`~/assets/imgs/report/follow-rule/report-slide-${id}.png`)
+      return img
+    },
   },
   head() {
     return {
@@ -68,66 +155,15 @@ export default {
       ],
     }
   },
-  methods: {
-    scrollSlide() {
-      if (this.loadScriptTimes < 4) return
-      // 設定卡片斷點
-      const allWidth = this.sideWidth + this.cards.length * 460 - 60
-      const next = (460 / allWidth) * 100
-      const controller = new ScrollMagic.Controller()
-
-      // define movement of panels
-      let wipeAnimation = new TimelineMax()
-
-      for (let i = 1; i < this.cards.length; i++) {
-        wipeAnimation = wipeAnimation.to('.slide-container', 1, {
-          x: `-${next * i}%`,
-          delay: 1,
-        })
-      }
-
-      // create scene to pin and link animation
-      new ScrollMagic.Scene({
-        triggerElement: '.slide-card__pin',
-        triggerHook: 0,
-        duration: `370%`,
-        offset: -(this.viweportHeight - 620),
-      })
-        .setPin('.slide-card__pin')
-        .setTween(wipeAnimation)
-        .addIndicators() // add indicators (requires plugin)
-        .addTo(controller)
-    },
-    getPictureUrl(id) {
-      const img = require(`~/assets/imgs/report/follow-rule/report-slide-${id}.png`)
-      return img
-    },
-  },
-  computed: {
-    viweportWidth() {
-      return this.$store.getters['viewport/viewportWidth']
-    },
-    viweportHeight() {
-      return this.$store.getters['viewport/viewportHeight']
-    },
-    sideWidth() {
-      return (this.viweportWidth - 600) / 2 > 0
-        ? (this.viweportWidth - 600) / 2
-        : 0
-    },
-    cssProps() {
-      const countCard = this.cards.length
-      return {
-        '--side-width': `${this.sideWidth}px`,
-        '--count-card': countCard,
-        '--all-width': `${this.sideWidth + this.cards.length * 460 - 60}px`,
-      }
-    },
-  },
 }
 </script>
 
 <style lang="scss" scoped>
+.spacer {
+  position: relative;
+  height: var(--space-height);
+  // padding: 50px 0;
+}
 .slide-card {
   width: 100vw;
   position: absolute;
@@ -144,15 +180,14 @@ export default {
 }
 .slide-container {
   width: var(--all-width);
-  height: 600px;
+  height: var(--card-height);
 }
 
 .card {
-  height: 600px;
-  width: 400px; /* relative to parent -> 25% of 400% = 100% of window width */
+  height: 100%;
+  height: var(--card-height);
+  width: var(--card-width);
   float: left;
-  min-width: 400px;
-  height: 600px;
   background: #ffffff;
   border: 0.5px solid #000000;
   padding: 24px;
@@ -162,7 +197,7 @@ export default {
     margin: 0 0 0 var(--side-width);
   }
   & + & {
-    margin: 0 0 0 60px;
+    margin: 0 0 0 var(--gap);
   }
 
   img {

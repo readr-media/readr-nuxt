@@ -19,4 +19,15 @@ function formatDate(datetime = '') {
   return dayjs(datetime).format('MMM D, YYYY')
 }
 
-export { getHref, formatDate }
+function handleApiData(apiData = '') {
+  try {
+    const rawString = apiData ?? ''
+    const content = JSON.parse(rawString)
+
+    return content?.filter((item) => item) || []
+  } catch {
+    return []
+  }
+}
+
+export { getHref, formatDate, handleApiData }

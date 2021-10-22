@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div class="cover-news">
     <div class="cover-news__subtitle">{{ contents.subtitle }}</div>
@@ -7,7 +8,7 @@
       <div class="cover-news__news_date">
         最後更新：{{ latestNews.update_time }}
       </div>
-      <div @click="linkToNews" class="news-wrapper">
+      <div class="news-wrapper" @click="linkToNews">
         <div class="cover-news__news_title">{{ latestNews.title }}</div>
         <div class="cover-news__news_content" v-html="latestNews.content"></div>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div v-intersect="gaEventObserver" class="flash-news" id="news">
+  <div id="news" v-intersect="gaEventObserver" class="flash-news">
     <h1 class="flash-news__title">最新重點消息</h1>
     <div class="flash-news__container">
       <RdFlashNewsCard
@@ -54,14 +54,6 @@ export default {
     }
   },
 
-  mounted() {
-    this.setupGaEventObserver()
-  },
-
-  beforeDestroy() {
-    this.cleanupGaEventObserver()
-  },
-
   computed: {
     showReadMore() {
       return this.flashCount < this.flashNewsList.length
@@ -72,6 +64,14 @@ export default {
         ? this.flashNewsList.length
         : this.flashCount
     },
+  },
+
+  mounted() {
+    this.setupGaEventObserver()
+  },
+
+  beforeDestroy() {
+    this.cleanupGaEventObserver()
   },
 
   methods: {

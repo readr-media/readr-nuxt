@@ -2,23 +2,55 @@
   <div class="news">
     <RdHeaderProgress @sendGaEvent="sendGaScrollEvent('end')" />
 
-    <article id="post">
-      <div class="date">{{ transformedNews.date }}</div>
-      <h1>{{ transformedNews.title }}</h1>
-      <div class="container container--post">
-        <picture v-if="heroImg.src.xs" class="hero-img">
-          <source
-            :media="`(min-width: ${breakpointSm})`"
-            :srcset="heroImg.src.sm"
-          />
-          <img :src="heroImg.src.xs" alt="" />
-        </picture>
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="content" v-html="transformedNews.contentHtml" />
-      </div>
-    </article>
+    <RdArticleVideo
+      v-if="doesHaveHeroVideo"
+      :videoSrc="transformedNews.heroVideo.src"
+      :videoCap="transformedNews.heroCaption"
+      :poster="videoPoster"
+      :shouldAutoPlay="false"
+      :shouldLoop="false"
+      class="news__cover"
+    />
+    <RdCoverImage
+      v-else
+      :imgSrc="transformedNews.heroImg.src"
+      :imgCap="transformedNews.heroCaption"
+      class="news__cover"
+    />
 
-    <ClientOnly>
+    <section class="news__content">
+      <RdArticleHeading
+        :title="transformedNews.title"
+        :date="transformedNews.date"
+        :category="transformedNews.category"
+        :readTimeText="readTime"
+        :creditList="credits"
+        class="news__heading"
+      />
+      <RdArticleSummary
+        v-if="doesHaveSummary"
+        :summary="summary"
+        class="news__summary"
+      />
+
+      <article id="post" class="news__article">
+        <template v-if="isContentString">
+          {{ content }}
+        </template>
+        <template v-else>
+          <RdArticleContentHandler
+            v-for="paragraph in content"
+            :key="paragraph.id"
+            :paragraph="paragraph"
+            :isSummary="false"
+          />
+        </template>
+      </article>
+    </section>
+
+    <RdButtonDonate class="news__donate" />
+
+    <!-- <ClientOnly>
       <section class="post-feedback container">
         <div v-if="postFeedback.step === 'rating'" class="post-feedback__step">
           <div class="post-feedback__title">這篇報導如何？</div>
@@ -55,7 +87,7 @@
 
         <RdFeedbackThanks v-else />
       </section>
-    </ClientOnly>
+    </ClientOnly> -->
 
     <ClientOnly>
       <section class="latest-posts container">
@@ -74,28 +106,50 @@
 <script>
 import { mapState } from 'vuex'
 import { post as axiosPost } from 'axios'
+import dayjs from 'dayjs'
 
 import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
-import RdFeedbackForm from '~/components/shared/Feedback/RdFeedbackForm.vue'
-import RdFeedbackThanks from '~/components/shared/Feedback/RdFeedbackThanks.vue'
-import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
-import RdStarRating from '~/components/shared/RdStarRating.vue'
+import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
+// import RdFeedbackForm from '~/components/shared/Feedback/RdFeedbackForm.vue'
+// import RdFeedbackThanks from '~/components/shared/Feedback/RdFeedbackThanks.vue'
+// import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
+// import RdStarRating from '~/components/shared/RdStarRating.vue'
+import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
+import RdCoverImage from '~/components/shared/RdCoverImage.vue'
+import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
+import RdArticleSummary from '~/components/shared/RdArticleSummary.vue'
+import RdArticleContentHandler from '~/components/shared/RdArticleContentHandler.vue'
 import RdList from '~/components/shared/List/RdList.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.js'
 
-import { getHref, formatDate } from '~/helpers/index.js'
-import styleVariables from '~/assets/css/variables.module.scss'
+import { getHref, formatDate, handleApiData } from '~/helpers/index.js'
+
+const CREDIT_KEYS = [
+  'writers',
+  'photographers',
+  'cameraOperators',
+  'designers',
+  'engineers',
+  'dataAnalysts',
+  'otherByline',
+]
 
 export default {
   name: 'RdNews',
 
   components: {
     RdHeaderProgress,
-    RdFeedbackForm,
-    RdFeedbackThanks,
-    RdFeedbackButton,
-    RdStarRating,
+    RdButtonDonate,
+    // RdFeedbackForm,
+    // RdFeedbackThanks,
+    // RdFeedbackButton,
+    // RdStarRating,
+    RdArticleVideo,
+    RdCoverImage,
+    RdArticleHeading,
+    RdArticleSummary,
+    RdArticleContentHandler,
     RdList,
   },
 
@@ -152,8 +206,6 @@ export default {
       },
 
       latestPosts: [],
-
-      breakpointSm: styleVariables['breakpoint-sm'],
     }
   },
 
@@ -168,25 +220,81 @@ export default {
     transformedNews() {
       const {
         title = '',
+        heroVideo = {},
         heroImage = {},
-        contentHtml = '',
+        heroCaption = '',
+        categories = [],
         publishTime = '',
       } = this.news
 
       return {
         title,
+        heroVideo: {
+          src: heroVideo?.url,
+          desc: heroVideo?.description,
+          coverPhoto: {
+            sm: heroVideo?.coverPhote?.urlMobileSized,
+            xl: heroVideo?.coverPhote?.urlDesktopSized,
+          },
+        },
         heroImg: {
           src: {
             xs: heroImage?.urlMobileSized,
             sm: heroImage?.urlDesktopSized,
           },
         },
-        date: formatDate(publishTime),
-        contentHtml,
+        heroCaption,
+        category: categories?.[0]?.name,
+        date: this.formatHeadingDate(publishTime),
       }
     },
-    heroImg() {
-      return this.transformedNews.heroImg
+    credits() {
+      return Object.keys(this.news || {})
+        .filter(
+          (key) => CREDIT_KEYS.includes(key) && this.news?.[key]?.length > 0
+        )
+        .map((key) => {
+          return key === 'otherByline' && typeof this.news[key] === 'string'
+            ? {
+                key,
+                data: this.news[key].split('、').map((d) => ({ name: d })),
+              }
+            : {
+                key,
+                data: this.news[key],
+              }
+        })
+    },
+
+    videoPoster() {
+      return (
+        this.transformedNews?.heroVideo?.coverPhoto?.sm ||
+        this.transformedNews?.heroImg?.src?.sm ||
+        require('~/assets/imgs/default/post.svg')
+      )
+    },
+
+    content() {
+      const data = this.news?.contentApiData ?? ''
+      return data ? handleApiData(data) : []
+    },
+    summary() {
+      const data = this.news?.summaryApiData ?? ''
+      return data ? handleApiData(data) : []
+    },
+    isContentString() {
+      return typeof this.content === 'string'
+    },
+
+    imageCount() {
+      const images =
+        this.content?.filter((item) => item?.type === 'image') ?? []
+      return images.length
+    },
+    readTime() {
+      const wordCount = this.news?.wordCount ?? 0
+      const min = Math.round((wordCount / 8 + this.imageCount * 10) / 60)
+      return min ? `閱讀時間 ${min} 分鐘` : ''
     },
 
     feedbackRanting: {
@@ -200,15 +308,19 @@ export default {
     ratingBtnText() {
       return `確定給 ${this.feedbackRanting} 顆星`
     },
+    doesHaveHeroVideo() {
+      return this.transformedNews?.heroVideo?.src
+    },
+    doesHaveSummary() {
+      return this.summary?.length > 0
+    },
     doesHaveRating() {
       return this.feedbackRanting > 0
     },
-
     doesHaveOpinionContent() {
       return this.postFeedback.opinion.content !== ''
     },
   },
-
   methods: {
     setRating(value) {
       this.feedbackRanting = value
@@ -216,6 +328,9 @@ export default {
     handleClickRatingBtn() {
       this.sendRatingToGoogleSheet()
       this.gotoFeedbackStep('opinion')
+    },
+    formatHeadingDate(datetime) {
+      return dayjs(datetime).format('M/DD')
     },
     sendRatingToGoogleSheet() {
       axiosPost('/api/google-sheets/append', {
@@ -269,8 +384,66 @@ export default {
 
 <style lang="scss" scoped>
 .news {
-  padding-top: 68.63px;
+  padding: 68.63px 0 0;
   overflow: hidden;
+  &__cover {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto 24px;
+    @include media-breakpoint-up(xl) {
+      margin: 24px auto 60px;
+    }
+  }
+  &__content {
+    width: 100%;
+    max-width: 568px;
+    margin: 0 auto;
+    padding: 0 20px;
+    @include media-breakpoint-up(md) {
+      width: 568px;
+      padding: 0;
+    }
+    @include media-breakpoint-up(xl) {
+      width: 600px;
+      max-width: 600px;
+    }
+  }
+  &__heading {
+    margin: 0 0 24px;
+    @include media-breakpoint-up(xl) {
+      margin: 0 0 48px;
+    }
+  }
+  &__summary {
+    margin: 0 0 24px;
+    @include media-breakpoint-up(xl) {
+      margin: 0 0 32px;
+    }
+  }
+  &__article {
+    margin: 0 0 32px;
+    ::v-deep {
+      .g-article {
+        &-image {
+          width: calc(100% + 40px);
+          transform: translateX(-20px);
+        }
+      }
+      > * + * {
+        margin: 32px 0 0;
+      }
+      > .g-article-heading + .g-article-paragraph {
+        margin: 16px 0 0;
+      }
+    }
+  }
+  &__donate {
+    margin: 48px 20px 52px;
+    max-width: 396px;
+    @media (min-width: 436px) {
+      margin: 60px auto 64px;
+    }
+  }
 }
 
 article {
@@ -286,48 +459,6 @@ article {
   @include media-breakpoint-up(md) {
     font-size: 15px;
     margin-bottom: 20px;
-  }
-}
-
-h1 {
-  font-weight: 900;
-  font-size: 30px;
-  line-height: 1.47;
-  padding-left: 20px;
-  padding-right: 20px;
-  color: #000928;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px;
-  @include media-breakpoint-up(md) {
-    text-align: center;
-    font-size: 36px;
-    line-height: 1.33;
-    margin-bottom: 30px;
-  }
-  @media (min-width: 840px) {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-
-.hero-img {
-  position: relative;
-  padding-top: 50%;
-  background-color: #d8d8d8;
-  @include media-breakpoint-up(md) {
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 }
 
