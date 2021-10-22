@@ -79,8 +79,16 @@ export default {
             <RdParagraphWithAnnotation content={content} />
           </div>
         )
-      case 'video':
-        return <RdArticleVideo class="g-article-video" video={content} />
+      case 'video': {
+        const poster = content?.coverPhote?.urlMobileSized ?? ''
+        return (
+          <RdArticleVideo
+            class="g-article-video"
+            videoSrc={content.url}
+            poster={poster}
+          />
+        )
+      }
       case 'image':
         return <RdArticleImage class="g-article-image" image={content} />
       case 'unstyled':

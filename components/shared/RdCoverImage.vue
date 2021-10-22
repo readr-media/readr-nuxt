@@ -38,11 +38,9 @@ export default {
     position: relative;
     padding-top: 50%;
     background-color: #d8d8d8;
-    margin: 0 0 8px;
     @include media-breakpoint-up(md) {
       border-radius: 2px;
       overflow: hidden;
-      margin: 0 0 12px;
     }
 
     img {
@@ -59,11 +57,12 @@ export default {
     line-height: 21px;
     color: rgba(0, 9, 40, 0.5);
     padding: 0 20px;
+    margin: 8px 0 0;
     @include media-breakpoint-up(md) {
       display: block;
       width: 568px;
       padding: 0;
-      margin: 0 auto;
+      margin: 12px auto 0;
     }
     @include media-breakpoint-up(xl) {
       width: 960px;

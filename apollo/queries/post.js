@@ -59,6 +59,15 @@ const post = gql`
         urlMobileSized
         urlDesktopSized
       }
+      heroVideo {
+        name
+        url
+        description
+        coverPhoto {
+          urlMobileSized
+          urlDesktopSized
+        }
+      }
       categories {
         name
       }
@@ -82,7 +91,6 @@ const post = gql`
       }
       otherByline
       heroCaption
-      contentHtml
       contentApiData
       summaryApiData
       ogTitle

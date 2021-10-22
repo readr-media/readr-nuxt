@@ -2,9 +2,19 @@
   <div class="news">
     <RdHeaderProgress @sendGaEvent="sendGaScrollEvent('end')" />
 
+    <RdArticleVideo
+      v-if="doesHaveHeroVideo"
+      :videoSrc="transformedNews.heroVideo.src"
+      :videoCap="transformedNews.heroCaption"
+      :poster="videoPoster"
+      :shouldAutoPlay="false"
+      :shouldLoop="false"
+      class="news__cover"
+    />
     <RdCoverImage
+      v-else
       :imgSrc="transformedNews.heroImg.src"
-      :imgCap="transformedNews.heroCap"
+      :imgCap="transformedNews.heroCaption"
       class="news__cover"
     />
 
@@ -101,6 +111,7 @@ import RdFeedbackForm from '~/components/shared/Feedback/RdFeedbackForm.vue'
 import RdFeedbackThanks from '~/components/shared/Feedback/RdFeedbackThanks.vue'
 import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
 import RdStarRating from '~/components/shared/RdStarRating.vue'
+import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
 import RdCoverImage from '~/components/shared/RdCoverImage.vue'
 import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
 import RdArticleSummary from '~/components/shared/RdArticleSummary.vue'
@@ -130,6 +141,7 @@ export default {
     RdFeedbackThanks,
     RdFeedbackButton,
     RdStarRating,
+    RdArticleVideo,
     RdCoverImage,
     RdArticleHeading,
     RdArticleSummary,
@@ -204,25 +216,32 @@ export default {
     transformedNews() {
       const {
         title = '',
+        heroVideo = {},
         heroImage = {},
         heroCaption = '',
         categories = [],
-        contentHtml = '',
         publishTime = '',
       } = this.news
 
       return {
         title,
+        heroVideo: {
+          src: heroVideo?.url,
+          desc: heroVideo?.description,
+          coverPhoto: {
+            sm: heroVideo?.coverPhote?.urlMobileSized,
+            xl: heroVideo?.coverPhote?.urlDesktopSized,
+          },
+        },
         heroImg: {
           src: {
             xs: heroImage?.urlMobileSized,
             sm: heroImage?.urlDesktopSized,
           },
         },
-        heroCap: heroCaption,
+        heroCaption,
         category: categories?.[0]?.name,
         date: this.formatHeadingDate(publishTime),
-        contentHtml,
       }
     },
     credits() {
@@ -241,6 +260,14 @@ export default {
                 data: this.news[key],
               }
         })
+    },
+
+    videoPoster() {
+      return (
+        this.transformedNews?.heroVideo?.coverPhoto?.sm ||
+        this.transformedNews?.heroImg?.src?.sm ||
+        require('~/assets/imgs/default/post.svg')
+      )
     },
 
     content() {
@@ -276,6 +303,9 @@ export default {
     },
     ratingBtnText() {
       return `確定給 ${this.feedbackRanting} 顆星`
+    },
+    doesHaveHeroVideo() {
+      return this.transformedNews?.heroVideo?.src
     },
     doesHaveSummary() {
       return this.summary?.length > 0
