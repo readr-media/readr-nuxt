@@ -2,7 +2,12 @@
   <div class="credit-list">
     <ul>
       <li v-for="item in formatedList" :key="item.key">
-        <span class="title">{{ item.key }}</span>
+        <div
+          class="title"
+          :class="{ extra: item.key === '數據分析' || item.key === '共同製作' }"
+        >
+          {{ item.key }}
+        </div>
         <div class="names">
           <span v-for="(person, i) in item.data" :key="i">
             {{ person.name }}
@@ -50,26 +55,25 @@ export default {
     li {
       font-size: 14px;
       line-height: 1.5;
+      display: flex;
       @include media-breakpoint-up(md) {
         font-size: 16px;
       }
       .title {
-        position: relative;
+        width: 32px;
+        min-width: 32px;
+        display: block;
         color: rgba(0, 9, 40, 0.66);
-        padding: 0 28px 0 0;
-        &::after {
-          content: '';
-          position: absolute;
-          top: 12px;
-          right: 3px;
-          width: 20px;
-          height: 1px;
-          background-color: rgba(0, 9, 40, 0.66);
+        &.extra {
+          width: 64px;
+          min-width: 64px;
         }
       }
       .names {
-        display: inline;
+        position: relative;
+        display: block;
         color: #000928;
+        padding: 0 0 0 28px;
         span {
           position: relative;
         }
@@ -78,8 +82,8 @@ export default {
           &::after {
             content: '';
             position: absolute;
-            top: 8px;
-            left: 8px;
+            top: 9px;
+            left: 7px;
             width: 4px;
             height: 4px;
             border-radius: 50%;
@@ -87,6 +91,19 @@ export default {
             @include media-breakpoint-up(md) {
               top: 11px;
             }
+          }
+        }
+        &::before {
+          content: '';
+          position: absolute;
+          top: 10px;
+          left: 3px;
+          width: 20px;
+          height: 1px;
+          background-color: rgba(0, 9, 40, 0.66);
+          @include media-breakpoint-up(md) {
+            top: 12px;
+            left: 4px;
           }
         }
       }

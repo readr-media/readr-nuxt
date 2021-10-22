@@ -48,7 +48,7 @@
       </article>
     </section>
 
-    <ClientOnly>
+    <!-- <ClientOnly>
       <section class="post-feedback container">
         <div v-if="postFeedback.step === 'rating'" class="post-feedback__step">
           <div class="post-feedback__title">這篇報導如何？</div>
@@ -85,7 +85,7 @@
 
         <RdFeedbackThanks v-else />
       </section>
-    </ClientOnly>
+    </ClientOnly> -->
 
     <ClientOnly>
       <section class="latest-posts container">
@@ -107,10 +107,10 @@ import { post as axiosPost } from 'axios'
 import dayjs from 'dayjs'
 
 import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
-import RdFeedbackForm from '~/components/shared/Feedback/RdFeedbackForm.vue'
-import RdFeedbackThanks from '~/components/shared/Feedback/RdFeedbackThanks.vue'
-import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
-import RdStarRating from '~/components/shared/RdStarRating.vue'
+// import RdFeedbackForm from '~/components/shared/Feedback/RdFeedbackForm.vue'
+// import RdFeedbackThanks from '~/components/shared/Feedback/RdFeedbackThanks.vue'
+// import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
+// import RdStarRating from '~/components/shared/RdStarRating.vue'
 import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
 import RdCoverImage from '~/components/shared/RdCoverImage.vue'
 import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
@@ -137,10 +137,10 @@ export default {
 
   components: {
     RdHeaderProgress,
-    RdFeedbackForm,
-    RdFeedbackThanks,
-    RdFeedbackButton,
-    RdStarRating,
+    // RdFeedbackForm,
+    // RdFeedbackThanks,
+    // RdFeedbackButton,
+    // RdStarRating,
     RdArticleVideo,
     RdCoverImage,
     RdArticleHeading,
@@ -317,9 +317,6 @@ export default {
       return this.postFeedback.opinion.content !== ''
     },
   },
-  mounted() {
-    console.log('js', this.content)
-  },
   methods: {
     setRating(value) {
       this.feedbackRanting = value
@@ -430,6 +427,9 @@ export default {
       }
       > * + * {
         margin: 32px 0 0;
+      }
+      > .g-article-heading + .g-article-paragraph {
+        margin: 16px 0 0;
       }
     }
   }
