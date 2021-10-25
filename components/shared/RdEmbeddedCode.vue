@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div
+    class="embedded"
+    :class="{ is__reporter__scroll: caption === 'reporter-scroll-video' }"
+  >
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="embeddedCodeWithoutScript" />
   </div>
@@ -66,3 +69,12 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.embedded {
+  position: relative;
+}
+.is__reporter__scroll {
+  z-index: 1000;
+}
+</style>
