@@ -151,9 +151,12 @@ $--secondary-color: rgb(133, 101, 93);
       }
     }
 
-    .report-article__title {
-      font-size: 24px;
-      line-height: 36px;
+    .report-article {
+      background: #feeade;
+      &__title {
+        font-size: 24px;
+        line-height: 36px;
+      }
     }
   }
 
