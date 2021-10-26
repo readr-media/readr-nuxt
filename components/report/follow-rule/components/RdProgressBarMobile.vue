@@ -43,9 +43,7 @@ export default {
       default: true,
     },
   },
-  mounted() {
-    window.addEventListener('scroll', this.handleScroll)
-  },
+
   data() {
     return {
       trackedLocation: 77,
@@ -74,6 +72,25 @@ export default {
     tagsGroup() {
       return [this.tagsArray.slice(0, 3), this.tagsArray.slice(3, 6)]
     },
+  },
+
+  watch: {
+    distance(d) {
+      if (d <= 77 && this.trackedStatus === 'stand') {
+        this.trackedStatus = 'afraid'
+      }
+      if (d === 78) {
+        if (this.trackedStatus !== 'moving') this.trackedStatus = 'stand'
+      }
+      if (d < 77) {
+        this.handleScroll()
+      }
+    },
+  },
+
+  mounted() {
+    this.handleScroll()
+    window.addEventListener('scroll', this.handleScroll)
   },
 
   methods: {
@@ -144,19 +161,6 @@ export default {
           this.stalkerForword()
         })
       })()
-    },
-  },
-  watch: {
-    distance(d) {
-      if (d <= 77 && this.trackedStatus === 'stand') {
-        this.trackedStatus = 'afraid'
-      }
-      if (d === 78) {
-        if (this.trackedStatus !== 'move') this.trackedStatus = 'stand'
-      }
-      if (d < 77) {
-        this.handleScroll()
-      }
     },
   },
 }

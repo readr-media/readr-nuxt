@@ -4,15 +4,15 @@
     <RdCover />
     <RdProgressBarMobile
       v-if="isMobile"
+      ref="processBar"
       :tagsArray="cmsData.contentApiData.tag"
       :isScrollingDown="isScrollingDown"
-      ref="processBar"
     />
     <RdProgressBar
       v-else
+      ref="processBar"
       :tagsArray="cmsData.contentApiData.tag"
       :nowTagId="nowTagId"
-      ref="processBar"
     />
 
     <RdArticle
@@ -62,6 +62,7 @@ export default {
     LazyRenderer,
     RdProgressBarMobile,
   },
+  mixins: [scrollDirection],
   props: {
     cmsData: {
       type: Object,
@@ -69,19 +70,29 @@ export default {
       default: () => ({}),
     },
   },
-  mixins: [scrollDirection],
-  mounted() {
-    if (this.viewportWidth > 768) this.isMobile = false
-  },
+
   data() {
     return {
       isMobile: true,
       nowTagId: 1,
     }
   },
+
   computed: {
     ...mapGetters('viewport', ['viewportWidth']),
   },
+
+  watch: {
+    viewportWidth(width) {
+      this.isMobile = true
+      this.isMobile = width < 768
+    },
+  },
+
+  mounted() {
+    if (this.viewportWidth > 768) this.isMobile = false
+  },
+
   methods: {
     handleSim() {
       this.nowTagId++
@@ -140,9 +151,12 @@ $--secondary-color: rgb(133, 101, 93);
       }
     }
 
-    .report-article__title {
-      font-size: 24px;
-      line-height: 36px;
+    .report-article {
+      background: #feeade;
+      &__title {
+        font-size: 24px;
+        line-height: 36px;
+      }
     }
   }
 
