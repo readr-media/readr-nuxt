@@ -2,6 +2,7 @@
 import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnotation.vue'
 import RdArticleImage from '~/components/shared/RdArticleImage.vue'
 import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
+import RdArticleBlockQuote from '~/components/shared/RdArticleBlockQuote.vue'
 import RdEmbeddedCode from '~/components/shared/RdEmbeddedCode.vue'
 
 export default {
@@ -12,6 +13,7 @@ export default {
     RdParagraphWithAnnotation,
     RdArticleImage,
     RdArticleVideo,
+    RdArticleBlockQuote,
     RdEmbeddedCode,
   },
   props: {
@@ -79,6 +81,8 @@ export default {
             <RdParagraphWithAnnotation content={content} />
           </div>
         )
+      case 'quoteby':
+        return <RdArticleBlockQuote class="g-quote-by" content={content} />
       case 'video': {
         const poster = content?.coverPhote?.urlMobileSized ?? ''
         return (
