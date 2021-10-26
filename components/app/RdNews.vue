@@ -312,7 +312,15 @@ export default {
       return this.transformedNews?.heroVideo?.src
     },
     doesHaveSummary() {
-      return this.summary?.length > 0
+      const validateArray = this.summary?.map((summaryContent) => {
+        return (
+          summaryContent?.content?.length > 1 ||
+          summaryContent?.content[0]?.length > 0
+        )
+      })
+      return validateArray.find((item) => {
+        return item
+      })
     },
     doesHaveRating() {
       return this.feedbackRanting > 0
