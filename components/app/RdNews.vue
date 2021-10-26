@@ -329,9 +329,6 @@ export default {
       return this.postFeedback.opinion.content !== ''
     },
   },
-  mounted() {
-    console.log('fff', this.summary)
-  },
   methods: {
     setRating(value) {
       this.feedbackRanting = value
