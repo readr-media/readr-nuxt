@@ -435,8 +435,11 @@ export default {
       > * + * {
         margin: 32px 0 0;
       }
-      > .g-article-heading + .g-article-paragraph {
+      > .g-article-heading + * {
         margin: 16px 0 0;
+      }
+      .g-quote-by {
+        margin: 40px auto 64px;
       }
     }
   }
