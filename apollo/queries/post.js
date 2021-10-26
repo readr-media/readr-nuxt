@@ -100,6 +100,10 @@ const post = gql`
         urlMobileSized
         urlDesktopSized
       }
+      relatedPosts {
+        id
+        name
+      }
       tags {
         name
       }

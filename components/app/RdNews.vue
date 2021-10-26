@@ -265,6 +265,24 @@ export default {
               }
         })
     },
+    relatedPosts() {
+      return (
+        this.news?.relatedPosts?.map((item) => {
+          const name = item?.name ?? ''
+          const id = item?.id ?? ''
+          return {
+            id,
+            type: 'recommend',
+            content: [
+              {
+                name,
+                href: `/post/${id}`,
+              },
+            ],
+          }
+        }) ?? []
+      )
+    },
 
     videoPoster() {
       return (
@@ -276,7 +294,25 @@ export default {
 
     content() {
       const data = this.news?.contentApiData ?? ''
-      return data ? handleApiData(data) : []
+      const formatedData = data ? handleApiData(data) : []
+      let i = 0
+      let count = 0
+      if (this.relatedPosts?.length && formatedData?.length) {
+        while (i < formatedData.length) {
+          if (
+            formatedData[i]?.type === 'unstyled' &&
+            formatedData[i]?.content?.[0]
+          ) {
+            count++
+            const item = this.relatedPosts[count / 5 - 1]
+            if (count % 5 === 0 && item) {
+              formatedData.splice(i + 1, 0, item)
+            }
+          }
+          i++
+        }
+      }
+      return formatedData
     },
     summary() {
       const data = this.news?.summaryApiData ?? ''
@@ -323,6 +359,7 @@ export default {
   },
   mounted() {
     console.log('ff', this.content)
+    console.log('rr', this.relatedPosts)
   },
   methods: {
     setRating(value) {

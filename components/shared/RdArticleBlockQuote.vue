@@ -3,7 +3,7 @@
     <div class="block-quote__icon">
       <SvgBlockQuoteIcon />
     </div>
-    <span v-if="quote" class="block-quote__quote">{{ quote }} </span>
+    <span class="block-quote__quote">{{ quote }} </span>
     <span v-if="quoteBy" class="block-quote__quote-by">{{ quoteBy }}</span>
   </div>
 </template>
@@ -68,7 +68,7 @@ export default {
     display: inline-block;
     font-size: 14px;
     line-height: 1.5;
-    text-align: left;
+    text-align: justify;
     color: rgba(0, 9, 40, 0.5);
     padding: 0 0 0 30px;
     @include media-breakpoint-up(md) {
@@ -84,7 +84,7 @@ export default {
       height: 1px;
       background-color: rgba(0, 9, 40, 0.5);
       @include media-breakpoint-up(md) {
-        top: 12px;
+        top: 13px;
         width: 30px;
       }
     }

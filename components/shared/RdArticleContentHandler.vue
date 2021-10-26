@@ -3,6 +3,7 @@ import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnota
 import RdArticleImage from '~/components/shared/RdArticleImage.vue'
 import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
 import RdArticleBlockQuote from '~/components/shared/RdArticleBlockQuote.vue'
+import RdArticleRecommend from '~/components/shared/RdArticleRecommend.vue'
 import RdEmbeddedCode from '~/components/shared/RdEmbeddedCode.vue'
 
 export default {
@@ -14,6 +15,7 @@ export default {
     RdArticleImage,
     RdArticleVideo,
     RdArticleBlockQuote,
+    RdArticleRecommend,
     RdEmbeddedCode,
   },
   props: {
@@ -28,7 +30,7 @@ export default {
     },
   },
   render(h, { props }) {
-    const content = props.paragraph.content?.[0]
+    const content = props.paragraph?.content?.[0]
     const type = props.paragraph?.type
     switch (type) {
       case 'header-one':
@@ -95,6 +97,10 @@ export default {
       }
       case 'image':
         return <RdArticleImage class="g-article-image" image={content} />
+      case 'recommend':
+        return (
+          <RdArticleRecommend class="g-article-recommend" content={content} />
+        )
       case 'unstyled':
         return <p class="g-article-paragraph" domPropsInnerHTML={content} />
       default:
