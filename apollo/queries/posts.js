@@ -12,11 +12,13 @@ const latestPosts = gql`
       title: name
       style
       heroImage {
+        urlMobileSized
         urlTabletSized
       }
       ogImage {
         urlTabletSized
       }
+      wordCount
       publishTime
     }
   }
