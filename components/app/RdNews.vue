@@ -260,24 +260,7 @@ export default {
     content() {
       const data = this.news?.contentApiData ?? ''
       const formatedData = data ? handleApiData(data) : []
-      let i = 0
-      let count = 0
-      if (this.doesHaveRelatedPosts && formatedData?.length) {
-        while (i < formatedData.length) {
-          if (
-            formatedData[i]?.type === 'unstyled' &&
-            formatedData[i]?.content?.[0]
-          ) {
-            count++
-            const item = this.transformedRelatedPosts[count / 5 - 1]
-            if (count % 5 === 0 && item) {
-              formatedData.splice(i + 1, 0, item)
-            }
-          }
-          i++
-        }
-      }
-      return formatedData
+      return this.insertRecommend(formatedData)
     },
     summary() {
       const data = this.news?.summaryApiData ?? ''
@@ -316,6 +299,26 @@ export default {
           ? 'MM/DD'
           : 'YYYY/MM/DD'
       return dayjs(datetime).format(formatStr)
+    },
+    insertRecommend(data) {
+      let i = 0
+      let count = 0
+      if (this.doesHaveRelatedPosts && data?.length) {
+        while (i < data.length) {
+          if (
+            (data[i]?.type === 'unstyled' || data[i]?.type === 'annotation') &&
+            data[i]?.content?.[0]
+          ) {
+            count++
+            const item = this.transformedRelatedPosts[count / 5 - 1]
+            if (count % 5 === 0 && item) {
+              data.splice(i + 1, 0, item)
+            }
+          }
+          i++
+        }
+      }
+      return data
     },
     sendGaClickEvent(label, value) {
       this.sendGaEvent('click', label, value)
