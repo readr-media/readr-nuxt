@@ -4,6 +4,7 @@ import RdArticleImage from '~/components/shared/RdArticleImage.vue'
 import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
 import RdArticleBlockQuote from '~/components/shared/RdArticleBlockQuote.vue'
 import RdArticleRecommend from '~/components/shared/RdArticleRecommend.vue'
+import RdYoutubeEmbedByIframeApi from '~/components/shared/RdYoutubeEmbedByIframeApi.vue'
 import RdEmbeddedCode from '~/components/shared/RdEmbeddedCode.vue'
 
 export default {
@@ -16,6 +17,7 @@ export default {
     RdArticleVideo,
     RdArticleBlockQuote,
     RdArticleRecommend,
+    RdYoutubeEmbedByIframeApi,
     RdEmbeddedCode,
   },
   props: {
@@ -94,6 +96,10 @@ export default {
             poster={poster}
           />
         )
+      }
+      case 'youtube': {
+        const id = content?.id ?? ''
+        return <RdYoutubeEmbedByIframeApi videoId={id} />
       }
       case 'image':
         return <RdArticleImage class="g-article-image" image={content} />

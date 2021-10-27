@@ -305,6 +305,9 @@ export default {
       return this.transformedLatestPosts?.length > 0
     },
   },
+  mounted() {
+    console.log('ss', this.content)
+  },
   methods: {
     formatReadTime(wordCount = 0, imageCount = 0) {
       const min = Math.round((wordCount / 8 + imageCount * 10) / 60)
