@@ -96,6 +96,9 @@ export default {
       @include media-breakpoint-up(md) {
         margin: 32px 0 0;
       }
+      @include media-breakpoint-up(xl) {
+        margin: 0;
+      }
     }
     li {
       width: 100%;

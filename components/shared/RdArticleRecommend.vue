@@ -55,6 +55,10 @@ export default {
       text-align: justify;
       color: rgba(0, 9, 40, 0.87);
       border-bottom: 2px solid #ebf02c;
+      &:hover {
+        color: #000928;
+        border-bottom: 2px solid #04295e;
+      }
     }
   }
   &::before {

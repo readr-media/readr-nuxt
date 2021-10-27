@@ -162,9 +162,12 @@ export default {
   &-annotation {
     &::v-deep {
       a {
-        color: #04295e;
-        font-weight: 500;
-        text-decoration: underline;
+        display: inline;
+        border-bottom: 2px solid #ebf02c;
+        &:hover {
+          color: #000928;
+          border-bottom: 2px solid #04295e;
+        }
       }
     }
   }
@@ -186,9 +189,12 @@ export default {
       color: rgba(0, 9, 40, 0.87);
       &::v-deep {
         a {
-          color: #04295e;
-          font-weight: 500;
-          text-decoration: underline;
+          display: inline;
+          border-bottom: 2px solid #ebf02c;
+          &:hover {
+            color: #000928;
+            border-bottom: 2px solid #04295e;
+          }
         }
       }
     }
