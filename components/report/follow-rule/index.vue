@@ -18,6 +18,7 @@
     <RdArticle
       :cmsData="cmsData"
       @chaneParagraph="(id) => chaneParagraph(id)"
+      :processBarHeight="processBarHeight"
     />
     <RdReportExtras
       :contents="cmsData.contentApiData.extras.contents"
@@ -75,6 +76,7 @@ export default {
     return {
       isMobile: true,
       nowTagId: 1,
+      processBarHeight: 0,
     }
   },
 
@@ -91,6 +93,7 @@ export default {
 
   mounted() {
     if (this.viewportWidth > 768) this.isMobile = false
+    this.processBarHeight = this.isMobile ? 90 : 217
   },
 
   methods: {

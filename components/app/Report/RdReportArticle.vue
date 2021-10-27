@@ -34,6 +34,10 @@ export default {
       required: true,
       default: undefined,
     },
+    processBarHeight: {
+      type: Number,
+      default: 0,
+    },
   },
 
   data() {
@@ -190,7 +194,12 @@ export default {
         }
 
         case 'cards': {
-          return <RdSlideCard cards={content.value} />
+          return (
+            <RdSlideCard
+              cards={content.value}
+              processBarHeight={this.processBarHeight}
+            />
+          )
         }
 
         case 'observer': {

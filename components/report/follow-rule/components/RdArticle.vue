@@ -2,7 +2,8 @@
   <div>
     <RdReportArticle
       :contents="splitUnderline(cmsData.contentApiData.article)"
-      :slug="'follow-rule'"
+      slug="follow-rule"
+      :processBarHeight="processBarHeight"
       @sendGaEvent="sendGaEvent"
       @observe="(target) => handleObserve(target)"
     />
@@ -38,6 +39,10 @@ export default {
     cmsData: {
       type: Object,
       default: () => {},
+    },
+    processBarHeight: {
+      type: Number,
+      default: 0,
     },
   },
   methods: {

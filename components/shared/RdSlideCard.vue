@@ -23,6 +23,10 @@ export default {
       default: () => {},
       require: true,
     },
+    processBarHeight: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -96,12 +100,26 @@ export default {
         })
       }
 
+      // const offset =
+      //   this.processBarHeight +
+      //   (this.viewportHeight - this.processBarHeight - this.cardHeight) / 2
+
+      // console.log(
+      //   this.processBarHeight,
+      //   this.viewportHeight,
+      //   this.cardHeight,
+      //   offset
+      // )
+
       // create scene to pin and link animation
+
+      console.log(this.processBarHeight)
+
       new ScrollMagic.Scene({
         triggerElement: '.slide-card__pin',
-        triggerHook: 0,
+        triggerHook: 0.5,
         duration: `${allWidth}px`,
-        offset: -(this.viewportHeight - this.cardHeight - 10),
+        offset: `${(this.cardHeight - this.processBarHeight) / 2}px`,
       })
         .setPin('.slide-card__pin')
         .setTween(wipeAnimation)
