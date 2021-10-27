@@ -6,7 +6,7 @@
       v-if="isMobile"
       ref="processBar"
       :tagsArray="cmsData.contentApiData.tag"
-      :isScrollingDown="isScrollingDown"
+      :isScrollingUp="isScrollingUp"
     />
     <RdProgressBar
       v-else
@@ -174,6 +174,7 @@ $--secondary-color: rgb(133, 101, 93);
       }
     }
     a.sc-readr-donate-button {
+      width: 95%;
       &::before {
         background-color: #111111;
       }

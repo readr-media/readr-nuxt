@@ -162,13 +162,14 @@ export default {
 .spacer {
   position: relative;
   height: var(--space-height);
+  overflow: hidden;
   // padding: 50px 0;
 }
 .slide-card {
   width: 100vw;
   position: absolute;
   left: calc(-1 * var(--side-width));
-  display: flex;
+  // display: flex;
 
   &__pin {
     width: 100vw;

@@ -1,6 +1,10 @@
 <template>
   <div class="progress-bar" :style="cssProps">
-    <div class="progress-bar__mobile mobile">
+    <div class="spacer"></div>
+    <div
+      class="progress-bar__mobile mobile"
+      :class="{ 'hide-title': !isScrollingUp }"
+    >
       <div class="animate">
         <RdStalkerAnimation
           :stalkerStatus="stalkerStatus"
@@ -11,7 +15,7 @@
           :location="trackedLocation"
         />
       </div>
-      <div v-show="isScrollingDown" class="mobile__title">
+      <div class="mobile__title">
         <div v-for="(row, i) in tagsGroup" :key="i" class="mobile__title_row">
           <div v-for="tag in row" :key="tag.id" class="mobile__title_row_item">
             {{ tag.title }}
@@ -38,7 +42,7 @@ export default {
       require: true,
       default: () => [],
     },
-    isScrollingDown: {
+    isScrollingUp: {
       type: Boolean,
       default: true,
     },
@@ -172,7 +176,6 @@ export default {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: #feeade;
   white-space: nowrap;
   &__wrapper {
     width: 712px;
@@ -180,25 +183,9 @@ export default {
   }
 }
 
-.animate {
-  display: flex;
-  position: relative;
-  height: 90px;
-  overflow: hidden;
-  & > div {
-    width: 52px;
-    height: 79px;
-    transform: translate(-50%, 0);
-  }
-
-  &::before {
-    content: '';
-    background: #28ddb1;
-    height: 100%;
-    width: var(--tracked-location);
-    position: absolute;
-  }
-}
+// .spacer {
+//   // height: 163px;
+// }
 
 .mobile {
   color: rgba(255, 233, 214, 1);
@@ -216,6 +203,33 @@ export default {
         margin-top: 11px;
       }
     }
+  }
+
+  .animate {
+    display: flex;
+    position: relative;
+    height: 90px;
+    overflow: hidden;
+    background: #feeade;
+    & > div {
+      width: 52px;
+      height: 79px;
+      transform: translate(-50%, 0);
+    }
+
+    &::before {
+      content: '';
+      background: #28ddb1;
+      height: 100%;
+      width: var(--tracked-location);
+      position: absolute;
+    }
+  }
+}
+
+.hide-title {
+  .mobile__title {
+    opacity: 0;
   }
 }
 </style>
