@@ -1,10 +1,12 @@
 <template>
   <a :href="href" target="_blank">
     <picture>
-      <img :src="img" :alt="title" />
+      <img v-lazy="img" :alt="title" />
     </picture>
     <div class="text">
-      <h4>{{ title }}</h4>
+      <h4>
+        <span>{{ title }}</span>
+      </h4>
       <RdDateWithReadTime
         :date="date"
         :readTimeText="readTimeText"
@@ -98,16 +100,25 @@ a {
   }
   .text {
     h4 {
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 24px;
-      letter-spacing: 0.03em;
-      color: #000928;
+      text-align: justify;
       margin: 0 0 4px;
       @include media-breakpoint-up(md) {
-        font-size: 18px;
-        line-height: 27px;
         margin: 0 0 8px;
+      }
+      span {
+        display: inline;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: 0.03em;
+        color: #000928;
+        @include media-breakpoint-up(md) {
+          font-size: 18px;
+          line-height: 27px;
+        }
+        &:hover {
+          border-bottom: 1.5px solid #000928;
+        }
       }
     }
   }
