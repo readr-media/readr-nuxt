@@ -52,6 +52,12 @@
 
     <RdArticleSocialList class="news__social-list" />
 
+    <RdArticleCitation
+      :infoList="mockCitation.infoList"
+      :linkList="mockCitation.linkList"
+      class="news__citation"
+    />
+
     <section class="news__tag-list-wrapper">
       <RdArticleTagList :tags="tags" class="tag" />
       <RdArticleSocialList class="social" />
@@ -84,6 +90,7 @@ import RdCoverImage from '~/components/shared/RdCoverImage.vue'
 import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
 import RdArticleSummary from '~/components/shared/RdArticleSummary.vue'
 import RdArticleContentHandler from '~/components/shared/RdArticleContentHandler.vue'
+import RdArticleCitation from '~/components/shared/RdArticleCitation.vue'
 import RdArticleTagList from '~/components/shared/RdArticleTagList.vue'
 import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
 import RdArticleList from '~/components/shared/RdArticleList.vue'
@@ -114,6 +121,7 @@ export default {
     RdArticleHeading,
     RdArticleSummary,
     RdArticleContentHandler,
+    RdArticleCitation,
     RdArticleTagList,
     RdArticleSocialList,
     RdArticleList,
@@ -143,6 +151,38 @@ export default {
     return {
       nowYear: new Date().getFullYear(),
       latestPosts: [],
+      mockCitation: {
+        infoList: [
+          {
+            id: 'asuid',
+            text:
+              '兼任教師薪資計算公式由高教工會提供，利用教育部公開資料大專院校課程表及大專院校教師專長彙整表，總計有 3,942,121 筆，再經過比較並排除無法辨識之資料，計算出預估薪資。',
+          },
+          {
+            id: 'asuisssd',
+            text:
+              '第二段測試，測試測試測試測試測試測試測試測試測試，測試測試測試測試，測試。',
+          },
+        ],
+        linkList: [
+          {
+            title: '雙北租屋資訊',
+            href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
+          },
+          {
+            title: '2020五一連假交通部1968人潮示警資料',
+            href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
+          },
+          {
+            title: '一般資料標題',
+            href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
+          },
+          {
+            title: '長資料標題，超過此長度就直接斷行',
+            href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
+          },
+        ],
+      },
     }
   },
 
@@ -425,6 +465,19 @@ export default {
     }
     @include media-breakpoint-up(md) {
       display: none;
+    }
+  }
+  &__citation {
+    width: 100%;
+    margin: 0 0 48px;
+    max-width: 568px;
+    @include media-breakpoint-up(md) {
+      width: 568px;
+      margin: 0 auto 48px;
+    }
+    @include media-breakpoint-up(xl) {
+      width: 600px;
+      max-width: 600px;
     }
   }
   &__tag-list-wrapper {
