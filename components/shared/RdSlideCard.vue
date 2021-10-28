@@ -100,21 +100,6 @@ export default {
         })
       }
 
-      // const offset =
-      //   this.processBarHeight +
-      //   (this.viewportHeight - this.processBarHeight - this.cardHeight) / 2
-
-      // console.log(
-      //   this.processBarHeight,
-      //   this.viewportHeight,
-      //   this.cardHeight,
-      //   offset
-      // )
-
-      // create scene to pin and link animation
-
-      console.log(this.processBarHeight)
-
       new ScrollMagic.Scene({
         triggerElement: '.slide-card__pin',
         triggerHook: 0.5,

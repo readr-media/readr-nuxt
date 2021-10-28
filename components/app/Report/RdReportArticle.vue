@@ -47,6 +47,12 @@ export default {
     }
   },
 
+  computed: {
+    viewportHeight() {
+      return this.$store.getters['viewport/viewportHeight']
+    },
+  },
+
   mounted() {
     this.setupScrollDepthObserver()
     this.setupCustomObserver()
@@ -233,13 +239,19 @@ export default {
     },
 
     async setupCustomObserver() {
-      this.customObserver = await setupIntersectionObserver((entries) => {
-        entries.forEach(({ isIntersecting, target }) => {
-          if (isIntersecting) {
-            this.$emit('observe', target)
-          }
-        })
-      })
+      const rootMove = this.viewportHeight - 350
+      this.customObserver = await setupIntersectionObserver(
+        (entries) => {
+          entries.forEach(({ isIntersecting, target }) => {
+            if (isIntersecting) {
+              this.$emit('observe', target)
+            }
+          })
+        },
+        {
+          rootMargin: `${rootMove}px 0px -${rootMove}px 0px`,
+        }
+      )
     },
   },
 
