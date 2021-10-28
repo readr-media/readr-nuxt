@@ -50,7 +50,14 @@
 
     <RdButtonDonate class="news__donate" />
 
-    <section class="news__list-wrapper">
+    <RdArticleSocialList class="news__social-list" />
+
+    <section class="news__tag-list-wrapper">
+      <RdArticleTagList :tags="tags" class="tag" />
+      <RdArticleSocialList class="social" />
+    </section>
+
+    <section class="news__related-list-wrapper">
       <RdArticleList
         v-if="doesHaveRelatedPosts"
         title="相關報導"
@@ -77,6 +84,8 @@ import RdCoverImage from '~/components/shared/RdCoverImage.vue'
 import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
 import RdArticleSummary from '~/components/shared/RdArticleSummary.vue'
 import RdArticleContentHandler from '~/components/shared/RdArticleContentHandler.vue'
+import RdArticleTagList from '~/components/shared/RdArticleTagList.vue'
+import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
 import RdArticleList from '~/components/shared/RdArticleList.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.js'
@@ -105,6 +114,8 @@ export default {
     RdArticleHeading,
     RdArticleSummary,
     RdArticleContentHandler,
+    RdArticleTagList,
+    RdArticleSocialList,
     RdArticleList,
   },
 
@@ -248,6 +259,9 @@ export default {
                 data: this.news[key],
               }
         })
+    },
+    tags() {
+      return this.news?.tags ?? []
     },
     videoPoster() {
       return (
@@ -398,7 +412,51 @@ export default {
       margin: 60px auto 64px;
     }
   }
-  &__list-wrapper {
+  &__social-list {
+    display: block;
+    width: 180px;
+    margin: 0 auto 48px;
+    ::v-deep {
+      ul {
+        li + li {
+          margin: 0 0 0 14px;
+        }
+      }
+    }
+    @include media-breakpoint-up(md) {
+      display: none;
+    }
+  }
+  &__tag-list-wrapper {
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto 40px;
+    @include media-breakpoint-up(md) {
+      width: 568px;
+      display: flex;
+      justify-content: space-between;
+      padding: 0;
+      margin: 0 auto 52px;
+    }
+    @include media-breakpoint-up(xl) {
+      width: 600px;
+    }
+    .tag {
+      width: 100%;
+      @include media-breakpoint-up(md) {
+        max-width: 336px;
+      }
+    }
+    .social {
+      display: none;
+      @include media-breakpoint-up(md) {
+        min-width: 192px;
+        max-width: 192px;
+        display: block;
+      }
+    }
+  }
+  &__related-list-wrapper {
     width: 100%;
     background-color: #ebf02c;
     padding: 48px 20px;
