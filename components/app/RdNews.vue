@@ -48,6 +48,8 @@
       </article>
     </section>
 
+    <RdArticleConcern :items="mockConcernList" class="news__concern" />
+
     <RdButtonDonate class="news__donate" />
 
     <RdArticleSocialList class="news__social-list" />
@@ -90,6 +92,7 @@ import RdCoverImage from '~/components/shared/RdCoverImage.vue'
 import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
 import RdArticleSummary from '~/components/shared/RdArticleSummary.vue'
 import RdArticleContentHandler from '~/components/shared/RdArticleContentHandler.vue'
+import RdArticleConcern from '~/components/shared/RdArticleConcern.vue'
 import RdArticleCitation from '~/components/shared/RdArticleCitation.vue'
 import RdArticleTagList from '~/components/shared/RdArticleTagList.vue'
 import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
@@ -121,6 +124,7 @@ export default {
     RdArticleHeading,
     RdArticleSummary,
     RdArticleContentHandler,
+    RdArticleConcern,
     RdArticleCitation,
     RdArticleTagList,
     RdArticleSocialList,
@@ -151,6 +155,11 @@ export default {
     return {
       nowYear: new Date().getFullYear(),
       latestPosts: [],
+      mockConcernList: [
+        '兼任教師薪資計算公式由<a href="https://www.ttsb.gov.tw/1133/1178/1179/30146/post" target="_blank" rel="noreferrer noopener">高教工會提供</a>，測試測試',
+        '兼任教師薪資計算公式由高教工會提供，利用教育部公，兼任教師薪資計算公式由高教工會提供',
+        '兼任教師薪資計算公式由高教工會提供，利用教育部公',
+      ],
       mockCitation: {
         infoList: [
           {
@@ -445,6 +454,16 @@ export default {
       }
     }
   }
+  &__concern {
+    width: 100%;
+    margin: 0 auto 48px;
+    max-width: 568px;
+    @include media-breakpoint-up(xl) {
+      width: 600px;
+      max-width: 600px;
+      margin: 0 auto 60px;
+    }
+  }
   &__donate {
     margin: 48px 20px 52px;
     max-width: 396px;
@@ -469,12 +488,8 @@ export default {
   }
   &__citation {
     width: 100%;
-    margin: 0 0 48px;
+    margin: 0 auto 48px;
     max-width: 568px;
-    @include media-breakpoint-up(md) {
-      width: 568px;
-      margin: 0 auto 48px;
-    }
     @include media-breakpoint-up(xl) {
       width: 600px;
       max-width: 600px;
