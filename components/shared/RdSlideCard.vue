@@ -27,6 +27,10 @@ export default {
       type: Number,
       default: 0,
     },
+    loadScrollMagicScriptTimes: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -42,6 +46,7 @@ export default {
       return this.$store.getters['viewport/viewportHeight']
     },
     sideWidth() {
+      console.log()
       return this.viewportWidth > 600 ? (this.viewportWidth - 600) / 2 : 0
     },
     cssProps() {
@@ -57,7 +62,8 @@ export default {
           this.sideWidth +
           this.cards.length * cardWithGap -
           this.gap +
-          this.cardHeight
+          0.5 * this.viewportHeight +
+          (this.cardHeight - this.processBarHeight) / 2
         }px`,
         '--card-width': `${this.cardWitdh}px`,
         '--card-height': `${this.cardHeight}px`,
@@ -79,10 +85,16 @@ export default {
     this.wrapperWidth = this.$refs.article.clientWidth
   },
   methods: {
-    scrollSlide() {
-      if (this.loadScriptTimes !== 4) return
+    getPictureUrl(id) {
+      const img = require(`~/assets/imgs/report/follow-rule/report-slide-${id}.png`)
+      return img
+    },
+  },
+
+  watch: {
+    loadScrollMagicScriptTimes(times) {
+      if (times !== 4) return
       const cardWithGap = this.cardWitdh + this.gap
-      // 設定卡片斷點
       const allWidth =
         this.sideWidth + this.cards.length * cardWithGap - this.gap
       // const next = (460 / allWidth) * 100
@@ -101,7 +113,7 @@ export default {
       }
 
       new ScrollMagic.Scene({
-        triggerElement: '.slide-card__pin',
+        triggerElement: '.slide-card',
         triggerHook: 0.5,
         duration: `${allWidth}px`,
         offset: `${(this.cardHeight - this.processBarHeight) / 2}px`,
@@ -111,52 +123,6 @@ export default {
         .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
     },
-    getPictureUrl(id) {
-      const img = require(`~/assets/imgs/report/follow-rule/report-slide-${id}.png`)
-      return img
-    },
-  },
-  head() {
-    return {
-      script: [
-        {
-          defer: true,
-          src:
-            'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/ScrollMagic.min.js',
-          callback: () => {
-            this.loadScriptTimes++
-            this.scrollSlide()
-          },
-        },
-        {
-          defer: true,
-          src:
-            'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/animation.gsap.min.js',
-          callback: () => {
-            this.loadScriptTimes++
-            this.scrollSlide()
-          },
-        },
-        {
-          defer: true,
-          src:
-            'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/debug.addIndicators.min.js',
-          callback: () => {
-            this.loadScriptTimes++
-            this.scrollSlide()
-          },
-        },
-        {
-          defer: true,
-          src:
-            'https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js',
-          callback: () => {
-            this.loadScriptTimes++
-            this.scrollSlide()
-          },
-        },
-      ],
-    }
   },
 }
 </script>
@@ -165,21 +131,23 @@ export default {
 .spacer {
   position: relative;
   height: var(--space-height);
-  overflow: hidden;
-  // padding: 50px 0;
+  padding-top: 32px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 .slide-card {
-  width: 100vw;
   position: absolute;
-  left: calc(-1 * var(--side-width));
+  width: 100vw;
   // display: flex;
-
+  @include media-breakpoint-up(md) {
+    left: calc(-1 * var(--side-width));
+  }
   &__pin {
     width: 100vw;
     height: 600px;
     overflow: hidden;
-    -webkit-perspective: 1000;
-    perspective: 1000;
+    // -webkit-perspective: 1000;
+    // perspective: 1000;
   }
 }
 .slide-container {

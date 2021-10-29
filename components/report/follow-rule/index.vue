@@ -7,19 +7,38 @@
       ref="processBar"
       :tagsArray="cmsData.contentApiData.tag"
       :isScrollingUp="isScrollingUp"
+      :isScrollEnd="isScrollEnd"
     />
     <RdProgressBar
       v-else
       ref="processBar"
       :tagsArray="cmsData.contentApiData.tag"
       :nowTagId="nowTagId"
+      :isScrollEnd="isScrollEnd"
     />
 
     <RdArticle
       :cmsData="cmsData"
       @chaneParagraph="(id) => chaneParagraph(id)"
       :processBarHeight="processBarHeight"
+      :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
     />
+    <div v-intersect="quizObserver" class="article__report-quiz-wrapper">
+      <RdReportQuiz
+        :quizTitle="cmsData.contentApiData.articleQuiz.title"
+        :quizDescription="cmsData.contentApiData.articleQuiz.description"
+        :quizOptions="cmsData.contentApiData.articleQuiz.options"
+        :quizDetailTitleCorrect="
+          cmsData.contentApiData.articleQuiz.answerDetailTitleCorrect
+        "
+        :quizDetailTitleWrong="
+          cmsData.contentApiData.articleQuiz.answerDetailTitleWrong
+        "
+        :quizDetailDescription="
+          cmsData.contentApiData.articleQuiz.answerDetailDescription
+        "
+      />
+    </div>
     <RdReportExtras
       :contents="cmsData.contentApiData.extras.contents"
       @sendGaEvent="sendGaEvent"
@@ -43,6 +62,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import LazyRenderer from 'vue-lazy-renderer'
+import RdReportQuiz from './components/RdReportQuiz.vue'
 import RdCover from './components/RdCover.vue'
 import RdProgressBarMobile from './components/RdProgressBarMobile.vue'
 import RdProgressBar from './components/RdProgressBar.vue'
@@ -51,8 +71,17 @@ import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 import { scrollDirection } from '~/components/helpers/vue/mixins/index.js'
+import { intersect } from '~/helpers/vue/directives/index.js'
+
+import {
+  setupIntersectionObserver,
+  cleanupIntersectionObserver,
+} from '~/helpers/index.js'
 
 export default {
+  directives: {
+    intersect,
+  },
   components: {
     RdReportHeader,
     RdCover,
@@ -62,6 +91,7 @@ export default {
     RdReportCredit,
     LazyRenderer,
     RdProgressBarMobile,
+    RdReportQuiz,
   },
   mixins: [scrollDirection],
   props: {
@@ -77,11 +107,24 @@ export default {
       isMobile: true,
       nowTagId: 1,
       processBarHeight: 0,
+      loadScrollMagicScriptTimes: 0,
+      quizObserver: undefined,
+      isScrollEnd: false,
     }
   },
 
   computed: {
-    ...mapGetters('viewport', ['viewportWidth']),
+    ...mapGetters('viewport', ['viewportWidth', 'viewportHeight']),
+  },
+
+  mounted() {
+    this.setupQuizObserver()
+    if (this.viewportWidth > 768) this.isMobile = false
+    this.processBarHeight = this.isMobile ? 90 : 217
+  },
+
+  beforeDestroy() {
+    cleanupIntersectionObserver(this, 'quizObserver')
   },
 
   watch: {
@@ -89,11 +132,6 @@ export default {
       this.isMobile = true
       this.isMobile = width < 768
     },
-  },
-
-  mounted() {
-    if (this.viewportWidth > 768) this.isMobile = false
-    this.processBarHeight = this.isMobile ? 90 : 217
   },
 
   methods: {
@@ -106,6 +144,64 @@ export default {
     chaneParagraph(id) {
       this.nowTagId = id
     },
+    async setupQuizObserver() {
+      const rootMove = this.viewportHeight - 350
+      this.quizObserver = await setupIntersectionObserver(
+        (entries) => {
+          entries.forEach(({ isIntersecting }) => {
+            if (isIntersecting) {
+              this.isScrollEnd = true
+            }
+          })
+        },
+        {
+          rootMargin: `${this.viewportHeight - 300}px 0px -${rootMove}px 0px`,
+        }
+      )
+    },
+  },
+
+  head() {
+    return {
+      script: [
+        {
+          defer: true,
+          src:
+            'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/ScrollMagic.min.js',
+          callback: () => {
+            this.loadScrollMagicScriptTimes++
+            this.scrollSlide()
+          },
+        },
+        {
+          defer: true,
+          src:
+            'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/animation.gsap.min.js',
+          callback: () => {
+            this.loadScrollMagicScriptTimes++
+            this.scrollSlide()
+          },
+        },
+        {
+          defer: true,
+          src:
+            'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/debug.addIndicators.min.js',
+          callback: () => {
+            this.loadScrollMagicScriptTimes++
+            this.scrollSlide()
+          },
+        },
+        {
+          defer: true,
+          src:
+            'https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js',
+          callback: () => {
+            this.loadScrollMagicScriptTimes++
+            this.scrollSlide()
+          },
+        },
+      ],
+    }
   },
 }
 </script>

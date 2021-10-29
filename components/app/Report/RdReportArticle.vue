@@ -5,8 +5,6 @@ import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnota
 import RdInfogram from '~/components/shared/RdInfogram.vue'
 import RdFlourish from '~/components/shared/RdFlourish.vue'
 import RdReportQuiz from '~/components/shared/RdReportQuiz.vue'
-import RdFullSlides from '~/components/shared/RdFullSlides.vue'
-import RdSlideCard from '~/components/shared/RdSlideCard.vue'
 
 import { intersect } from '~/helpers/vue/directives/index.js'
 
@@ -34,16 +32,15 @@ export default {
       required: true,
       default: undefined,
     },
-    processBarHeight: {
-      type: Number,
-      default: 0,
+    isPart: {
+      type: Boolean,
+      dsfault: false,
     },
   },
 
   data() {
     return {
       scrollDepthObserver: undefined,
-      customObserver: undefined,
     }
   },
 
@@ -55,12 +52,10 @@ export default {
 
   mounted() {
     this.setupScrollDepthObserver()
-    this.setupCustomObserver()
   },
 
   beforeDestroy() {
     cleanupIntersectionObserver(this, 'scrollDepthObserver')
-    cleanupIntersectionObserver(this, 'customObserver')
   },
 
   methods: {
@@ -191,28 +186,6 @@ export default {
           )
         }
 
-        case 'fullSlides': {
-          return (
-            <div>
-              <RdFullSlides slides={content.value} />
-            </div>
-          )
-        }
-
-        case 'cards': {
-          return (
-            <RdSlideCard
-              cards={content.value}
-              processBarHeight={this.processBarHeight}
-            />
-          )
-        }
-
-        case 'observer': {
-          const id = content.value
-          return <p vIntersect={this.customObserver} id={id}></p>
-        }
-
         default:
           return (
             <p
@@ -237,28 +210,14 @@ export default {
         })
       })
     },
-
-    async setupCustomObserver() {
-      const rootMove = this.viewportHeight - 350
-      this.customObserver = await setupIntersectionObserver(
-        (entries) => {
-          entries.forEach(({ isIntersecting, target }) => {
-            if (isIntersecting) {
-              this.$emit('observe', target)
-            }
-          })
-        },
-        {
-          rootMargin: `${rootMove}px 0px -${rootMove}px 0px`,
-        }
-      )
-    },
   },
 
   render() {
     return (
       <article class="report-article">
-        <div class="container">{this.contents.map(this.buildContent)}</div>
+        <div class={`${this.isPart ? '' : 'notPart'} container`}>
+          {this.contents.map(this.buildContent)}
+        </div>
       </article>
     )
   },
@@ -366,7 +325,9 @@ export default {
 .container {
   max-width: 600px;
   margin: 0 auto;
+}
 
+.notPart {
   > :first-child {
     margin-top: 0 !important;
   }

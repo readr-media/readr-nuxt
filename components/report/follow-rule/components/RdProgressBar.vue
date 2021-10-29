@@ -3,6 +3,7 @@
     <div class="progress-bar__wrapper">
       <div class="animate">
         <RdStalkerAnimation
+          v-if="nowTagId !== '1'"
           :stalkerStatus="stalkerStatus"
           :location="stalkerLocation"
         />
@@ -49,6 +50,10 @@ export default {
       type: Number,
       default: 1,
     },
+    isScrollEnd: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -61,6 +66,7 @@ export default {
       stalkerId: 1,
       stalkerMoveId: 0,
       trackedMoveId: 0,
+      isAnimateFinishTime: 0,
     }
   },
   computed: {
@@ -102,6 +108,9 @@ export default {
         this.handleScroll()
       }
     },
+    isScrollEnd() {
+      this.endAnimate()
+    },
   },
   mounted() {
     console.log(this.nowTagId)
@@ -112,6 +121,7 @@ export default {
       return this.trackedLocation > 77 + (id - 1) * (this.spacing + 18) - 9
     },
     stalkerMove(destination, status, time, cb) {
+      if (this.isAnimateFinishTime === 2) return
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
@@ -128,6 +138,7 @@ export default {
       }, time)
     },
     trackedMove(destination, status, time, cb) {
+      if (this.isAnimateFinishTime === 2) return
       this.trackedMoveId++
       const id = this.trackedMoveId
       this.trackedStatus = status
@@ -144,14 +155,27 @@ export default {
       }, time)
     },
     stalkerForword() {
-      this.stalkerMove(this.trackedLocation - 77, 'moving', 20, () => {
+      if (this.isAnimateFinishTime === 2) return
+      this.stalkerMove(this.trackedLocation - 77, 'moving', 100, () => {
         this.stalkerStatus = 'stand'
       })
     },
     handleScroll() {
+      if (this.isAnimateFinishTime === 2) return
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerStatus = 'stand'
         this.stalkerForword()
+      })
+    },
+    endAnimate() {
+      this.stalkerMove(-77, 'back', 10, () => {
+        console.log('hohohoho')
+        this.stalkerStatus = 'stand'
+        this.isAnimateFinishTime++
+      })
+      this.trackedMove(800, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
+        this.isAnimateFinishTime++
       })
     },
   },
@@ -177,6 +201,8 @@ export default {
   display: flex;
   position: relative;
   margin-bottom: 10px;
+  overflow: hidden;
+  height: 90px;
   & > div {
     width: 52px;
     height: 79px;
