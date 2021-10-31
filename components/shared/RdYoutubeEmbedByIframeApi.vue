@@ -8,6 +8,7 @@
         :ref="`player-${videoId}`"
         :videoId="videoId"
         :playerVars="playerVars"
+        :origin="originUrl"
         @ready="handlePlayerReady"
         @playing="handlePlayerPlaying"
         @ended="handlePlayerEnded"
@@ -33,6 +34,7 @@ export default {
   data() {
     return {
       hasSentPlayEvent: false,
+      originUrl: '',
       playerVars: {
         playsinline: 1,
       },
@@ -42,6 +44,11 @@ export default {
     player() {
       return this.$refs[`player-${this.videoId}`]?.player
     },
+  },
+  mounted() {
+    if (window) {
+      this.originUrl = window.origin.path
+    }
   },
   methods: {
     handlePlayerReady() {
