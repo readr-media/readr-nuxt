@@ -48,17 +48,19 @@
       </article>
     </section>
 
-    <RdArticleConcern :items="mockConcernList" class="news__concern" />
+    <!-- <RdArticleConcern :items="mockConcernList" class="news__concern" /> -->
+    <RdArticleConcern class="news__concern" />
 
     <RdButtonDonate class="news__donate" />
 
     <RdArticleSocialList class="news__social-list" />
 
-    <RdArticleCitation
+    <!-- <RdArticleCitation
       :infoList="mockCitation.infoList"
       :linkList="mockCitation.linkList"
       class="news__citation"
-    />
+    /> -->
+    <RdArticleCitation class="news__citation" />
 
     <section class="news__tag-list-wrapper">
       <RdArticleTagList :tags="tags" class="tag" />
@@ -159,43 +161,43 @@ export default {
     return {
       nowYear: new Date().getFullYear(),
       latestPosts: [],
-      mockConcernList: [
-        '兼任教師薪資計算公式由<a href="https://www.ttsb.gov.tw/1133/1178/1179/30146/post" target="_blank" rel="noreferrer noopener">高教工會提供</a>，測試測試',
-        '兼任教師薪資計算公式由高教工會提供，利用教育部公，兼任教師薪資計算公式由高教工會提供',
-        '兼任教師薪資計算公式由高教工會提供，利用教育部公',
-      ],
-      mockCitation: {
-        infoList: [
-          {
-            id: 'asuid',
-            text:
-              '兼任教師薪資計算公式由高教工會提供，利用教育部公開資料大專院校課程表及大專院校教師專長彙整表，總計有 3,942,121 筆，再經過比較並排除無法辨識之資料，計算出預估薪資。',
-          },
-          {
-            id: 'asuisssd',
-            text:
-              '第二段測試，測試測試測試測試測試測試測試測試測試，測試測試測試測試，測試。',
-          },
-        ],
-        linkList: [
-          {
-            title: '雙北租屋資訊',
-            href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-          },
-          {
-            title: '2020五一連假交通部1968人潮示警資料',
-            href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-          },
-          {
-            title: '一般資料標題',
-            href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-          },
-          {
-            title: '長資料標題，超過此長度就直接斷行',
-            href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-          },
-        ],
-      },
+      // mockConcernList: [
+      //   '兼任教師薪資計算公式由<a href="https://www.ttsb.gov.tw/1133/1178/1179/30146/post" target="_blank" rel="noreferrer noopener">高教工會提供</a>，測試測試',
+      //   '兼任教師薪資計算公式由高教工會提供，利用教育部公，兼任教師薪資計算公式由高教工會提供',
+      //   '兼任教師薪資計算公式由高教工會提供，利用教育部公',
+      // ],
+      // mockCitation: {
+      //   infoList: [
+      //     {
+      //       id: 'asuid',
+      //       text:
+      //         '兼任教師薪資計算公式由高教工會提供，利用教育部公開資料大專院校課程表及大專院校教師專長彙整表，總計有 3,942,121 筆，再經過比較並排除無法辨識之資料，計算出預估薪資。',
+      //     },
+      //     {
+      //       id: 'asuisssd',
+      //       text:
+      //         '第二段測試，測試測試測試測試測試測試測試測試測試，測試測試測試測試，測試。',
+      //     },
+      //   ],
+      //   linkList: [
+      //     {
+      //       title: '雙北租屋資訊',
+      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
+      //     },
+      //     {
+      //       title: '2020五一連假交通部1968人潮示警資料',
+      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
+      //     },
+      //     {
+      //       title: '一般資料標題',
+      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
+      //     },
+      //     {
+      //       title: '長資料標題，超過此長度就直接斷行',
+      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
+      //     },
+      //   ],
+      // },
     }
   },
 

@@ -1,6 +1,10 @@
 <template>
-  <a :href="href" target="_blank">
-    <picture>
+  <a
+    :href="href"
+    target="_blank"
+    :class="{ 'reverse-row': shouldReverseInMobile }"
+  >
+    <picture :class="{ 'reverse-picture': shouldReverseInMobile }">
       <img v-lazy="img" :alt="title" />
     </picture>
     <div class="text">
@@ -46,6 +50,10 @@ export default {
       type: String,
       default: '',
     },
+    shouldReverseInMobile: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
@@ -55,6 +63,14 @@ a {
   display: flex;
   @include media-breakpoint-up(md) {
     display: block;
+  }
+  &.reverse-row {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    @include media-breakpoint-up(md) {
+      flex-direction: none;
+      justify-content: none;
+    }
   }
   picture {
     position: relative;
@@ -73,6 +89,9 @@ a {
     }
     @include media-breakpoint-up(xl) {
       margin: 0 0 12px;
+    }
+    &.reverse-picture {
+      margin: 0 0 0 16px;
     }
     img {
       position: absolute;

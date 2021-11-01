@@ -11,6 +11,7 @@
           :title="item.title"
           :date="item.date"
           :readTimeText="item.readTime"
+          :shouldReverseInMobile="false"
         />
       </li>
     </ul>

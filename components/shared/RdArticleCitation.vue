@@ -1,5 +1,5 @@
 <template>
-  <div class="citation">
+  <div v-if="doesHaveInfoList" class="citation">
     <div class="citation__title">
       <span>引用數據</span>
     </div>
