@@ -1,6 +1,5 @@
 <template>
   <div class="summary">
-    <div class="deco" />
     <div class="summary__main">
       <h4>報導重點摘要</h4>
       <div class="summary__main__content">
@@ -35,14 +34,12 @@ export default {
 
 <style lang="scss" scoped>
 .summary {
-  .deco {
-    height: 16px;
-    background-color: #04295e;
-    border: 2px 2px 0 0;
-  }
+  width: 100%;
+  position: relative;
+  padding: 16px 0 0;
+  border: 2px solid #04295e;
+  border-radius: 2px;
   &__main {
-    border: 2px solid #04295e;
-    border-radius: 0 0 2px 2px;
     padding: 20px 24px;
     @include media-breakpoint-up(md) {
       padding: 32px 48px;
@@ -72,6 +69,15 @@ export default {
         }
       }
     }
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 16px;
+    background-color: #04295e;
   }
 }
 </style>

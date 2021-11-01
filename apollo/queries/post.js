@@ -100,6 +100,16 @@ const post = gql`
         urlMobileSized
         urlDesktopSized
       }
+      relatedPosts(where: { state: published }) {
+        id
+        name
+        heroImage {
+          urlMobileSized
+          urlTabletSized
+        }
+        wordCount
+        publishTime
+      }
       tags {
         name
       }

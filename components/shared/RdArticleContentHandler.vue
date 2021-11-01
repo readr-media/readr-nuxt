@@ -2,6 +2,9 @@
 import RdParagraphWithAnnotation from '~/components/shared/RdParagraphWithAnnotation.vue'
 import RdArticleImage from '~/components/shared/RdArticleImage.vue'
 import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
+import RdArticleBlockQuote from '~/components/shared/RdArticleBlockQuote.vue'
+import RdArticleRecommend from '~/components/shared/RdArticleRecommend.vue'
+import RdYoutubeEmbedByIframeApi from '~/components/shared/RdYoutubeEmbedByIframeApi.vue'
 import RdEmbeddedCode from '~/components/shared/RdEmbeddedCode.vue'
 
 export default {
@@ -12,6 +15,9 @@ export default {
     RdParagraphWithAnnotation,
     RdArticleImage,
     RdArticleVideo,
+    RdArticleBlockQuote,
+    RdArticleRecommend,
+    RdYoutubeEmbedByIframeApi,
     RdEmbeddedCode,
   },
   props: {
@@ -26,7 +32,7 @@ export default {
     },
   },
   render(h, { props }) {
-    const content = props.paragraph.content?.[0]
+    const content = props.paragraph?.content?.[0]
     const type = props.paragraph?.type
     switch (type) {
       case 'header-one':
@@ -79,6 +85,8 @@ export default {
             <RdParagraphWithAnnotation content={content} />
           </div>
         )
+      case 'quoteby':
+        return <RdArticleBlockQuote class="g-quote-by" content={content} />
       case 'video': {
         const poster = content?.coverPhote?.urlMobileSized ?? ''
         return (
@@ -89,8 +97,16 @@ export default {
           />
         )
       }
+      case 'youtube': {
+        const id = content?.id ?? ''
+        return <RdYoutubeEmbedByIframeApi videoId={id} />
+      }
       case 'image':
         return <RdArticleImage class="g-article-image" image={content} />
+      case 'recommend':
+        return (
+          <RdArticleRecommend class="g-article-recommend" content={content} />
+        )
       case 'unstyled':
         return <p class="g-article-paragraph" domPropsInnerHTML={content} />
       default:
@@ -152,9 +168,12 @@ export default {
   &-annotation {
     &::v-deep {
       a {
-        color: #04295e;
-        font-weight: 500;
-        text-decoration: underline;
+        display: inline;
+        border-bottom: 2px solid #ebf02c;
+        &:hover {
+          color: #000928;
+          border-bottom: 2px solid #04295e;
+        }
       }
     }
   }
@@ -176,9 +195,12 @@ export default {
       color: rgba(0, 9, 40, 0.87);
       &::v-deep {
         a {
-          color: #04295e;
-          font-weight: 500;
-          text-decoration: underline;
+          display: inline;
+          border-bottom: 2px solid #ebf02c;
+          &:hover {
+            color: #000928;
+            border-bottom: 2px solid #04295e;
+          }
         }
       }
     }
