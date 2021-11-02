@@ -2,10 +2,14 @@
   <a
     :href="href"
     target="_blank"
-    :class="{ 'reverse-row': shouldReverseInMobile }"
+    :class="[
+      { 'reverse-row': shouldReverseInMobile },
+      { 'report-highlight': isReport && shouldHighLightReport },
+    ]"
   >
     <picture :class="{ 'reverse-picture': shouldReverseInMobile }">
       <img v-lazy="img" :alt="title" />
+      <label v-if="isReport">專題</label>
     </picture>
     <div class="text">
       <h4>
@@ -50,7 +54,15 @@ export default {
       type: String,
       default: '',
     },
+    isReport: {
+      type: Boolean,
+      default: false,
+    },
     shouldReverseInMobile: {
+      type: Boolean,
+      default: false,
+    },
+    shouldHighLightReport: {
       type: Boolean,
       default: false,
     },
@@ -61,15 +73,15 @@ export default {
 <style lang="scss" scoped>
 a {
   display: flex;
-  @include media-breakpoint-up(md) {
+  @include media-breakpoint-up(sm) {
     display: block;
   }
   &.reverse-row {
     flex-direction: row-reverse;
     justify-content: space-between;
-    @include media-breakpoint-up(md) {
-      flex-direction: none;
-      justify-content: none;
+    @include media-breakpoint-up(sm) {
+      flex-direction: row;
+      justify-content: center;
     }
   }
   picture {
@@ -81,17 +93,17 @@ a {
     background-color: #d8d8d8;
     margin: 0 16px 0 0;
     overflow: hidden;
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-up(sm) {
       min-width: none;
       max-width: none;
       width: 100%;
-      margin: 0 0 16px;
-    }
-    @include media-breakpoint-up(xl) {
       margin: 0 0 12px;
     }
     &.reverse-picture {
       margin: 0 0 0 16px;
+      @include media-breakpoint-up(sm) {
+        margin: 0 0 12px;
+      }
     }
     img {
       position: absolute;
@@ -108,11 +120,26 @@ a {
         transform: scale(1.1);
       }
     }
+    label {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 13px;
+      line-height: 19px;
+      color: #fff;
+      background-color: rgba(0, 9, 40, 0.5);
+      border-radius: 2px;
+      padding: 2px 4px;
+      @include media-breakpoint-up(sm) {
+        top: 8px;
+        right: 8px;
+      }
+    }
     &::after {
       content: '';
       display: block;
       padding-top: 100%;
-      @include media-breakpoint-up(md) {
+      @include media-breakpoint-up(sm) {
         padding-top: 60%;
       }
     }
@@ -121,7 +148,7 @@ a {
     h4 {
       text-align: justify;
       margin: 0 0 4px;
-      @include media-breakpoint-up(md) {
+      @include media-breakpoint-up(sm) {
         margin: 0 0 8px;
       }
       span {
@@ -140,21 +167,56 @@ a {
         }
       }
     }
-  }
-  .info {
-    @include media-breakpoint-up(md) {
-      &::v-deep {
-        &.time {
-          font-size: 14px;
-          line-height: 21px;
-          .read {
-            padding: 0 0 0 14px;
-            &::before {
-              top: 9px;
-              left: 4px;
+    .info {
+      @include media-breakpoint-up(md) {
+        &::v-deep {
+          &.time {
+            font-size: 14px;
+            line-height: 21px;
+            .read {
+              padding: 0 0 0 14px;
+              &::before {
+                top: 9px;
+                left: 4px;
+              }
             }
           }
         }
+      }
+    }
+  }
+  &.report-highlight {
+    background-color: rgba(245, 235, 255, 0.5);
+    padding: 12px 8px 12px 0;
+    @include media-breakpoint-up(sm) {
+      padding: 0 0 12px;
+    }
+    picture {
+      margin: 0 8px 0 0;
+      &.reverse-picture {
+        margin: 0 0 0 8px;
+        @include media-breakpoint-up(sm) {
+          margin: 0 0 12px;
+        }
+      }
+      @include media-breakpoint-up(sm) {
+        margin: 0 0 12px;
+      }
+    }
+    .text {
+      position: relative;
+      padding: 0 0 0 20px;
+      @include media-breakpoint-up(sm) {
+        padding: 0 12px 0 24px;
+      }
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 8px;
+        background-color: #ebf02c;
       }
     }
   }

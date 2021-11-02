@@ -70,16 +70,24 @@
     <RdNewsLetter class="new__news-letter" />
 
     <section class="news__related-list-wrapper">
+      <RdListHeading title="相關報導" color="#fff" class="heading" />
       <RdArticleList
         v-if="doesHaveRelatedPosts"
-        title="相關報導"
         :posts="transformedRelatedPosts"
+        :shouldReverseInMobile="false"
+        :shouldShowSkeleton="false"
+        :shouldHighLightReport="false"
+        :filterNum="4"
         class="list"
       />
+      <RdListHeading title="最新報導" color="#fff" class="heading" />
       <RdArticleList
         v-if="doesHaveLatestPosts"
-        title="最新報導"
         :posts="transformedLatestPosts"
+        :shouldReverseInMobile="false"
+        :shouldShowSkeleton="false"
+        :shouldHighLightReport="false"
+        :filterNum="4"
         class="list"
       />
     </section>
@@ -87,8 +95,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
-
 import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
 import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
@@ -100,13 +106,19 @@ import RdArticleConcern from '~/components/shared/RdArticleConcern.vue'
 import RdArticleCitation from '~/components/shared/RdArticleCitation.vue'
 import RdArticleTagList from '~/components/shared/RdArticleTagList.vue'
 import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
+import RdListHeading from '~/components/shared/RdListHeading.vue'
 import RdArticleList from '~/components/shared/RdArticleList.vue'
 import RdNewsLetter from '~/components/shared/RdNewsLetter.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.js'
 
 // import { getHref, formatDate, handleApiData } from '~/helpers/index.js'
-import { handleApiData } from '~/helpers/index.js'
+import {
+  formatReadTime,
+  formatPostDate,
+  isReport,
+  handleApiData,
+} from '~/helpers/index.js'
 
 const CREDIT_KEYS = [
   'writers',
@@ -133,6 +145,7 @@ export default {
     RdArticleCitation,
     RdArticleTagList,
     RdArticleSocialList,
+    RdListHeading,
     RdArticleList,
     RdNewsLetter,
   },
@@ -159,7 +172,6 @@ export default {
 
   data() {
     return {
-      nowYear: new Date().getFullYear(),
       latestPosts: [],
       // mockConcernList: [
       //   '兼任教師薪資計算公式由<a href="https://www.ttsb.gov.tw/1133/1178/1179/30146/post" target="_blank" rel="noreferrer noopener">高教工會提供</a>，測試測試',
@@ -214,6 +226,7 @@ export default {
         categories = [],
         wordCount = 0,
         publishTime = '',
+        style = '',
       } = this.news
 
       return {
@@ -234,8 +247,9 @@ export default {
         },
         heroCaption,
         category: categories?.[0]?.name,
-        readTime: this.formatReadTime(wordCount, this.imageCount),
-        date: this.formatPostDate(publishTime),
+        readTime: formatReadTime(wordCount, this.imageCount),
+        date: formatPostDate(publishTime),
+        isReport: isReport(style),
       }
     },
     transformedRelatedPosts() {
@@ -247,14 +261,16 @@ export default {
             publishTime = '',
             wordCount = 0,
             heroImage = {},
+            style = '',
           }) => {
             return {
               id,
               title: name,
               type: 'recommend',
               href: `/post/${id}`,
-              date: this.formatPostDate(publishTime),
-              readTime: this.formatReadTime(wordCount, 2),
+              date: formatPostDate(publishTime),
+              readTime: formatReadTime(wordCount, 2),
+              isReport: isReport(style),
               img: {
                 src:
                   heroImage?.urlMobileSized ||
@@ -280,14 +296,16 @@ export default {
           heroImage = {},
           wordCount = 0,
           publishTime = '',
+          style = '',
         } = post || {}
 
         return {
           id,
           title,
           href: `/post/${id}`,
-          date: this.formatPostDate(publishTime),
-          readTime: this.formatReadTime(wordCount, 2),
+          date: formatPostDate(publishTime),
+          readTime: formatReadTime(wordCount, 2),
+          isReport: isReport(style),
           img: {
             src:
               heroImage?.urlMobileSized ||
@@ -366,17 +384,6 @@ export default {
     },
   },
   methods: {
-    formatReadTime(wordCount = 0, imageCount = 0) {
-      const min = Math.round((wordCount / 8 + imageCount * 10) / 60)
-      return min ? `閱讀時間 ${min} 分鐘` : ''
-    },
-    formatPostDate(datetime) {
-      const formatStr =
-        this.nowYear === new Date(datetime).getFullYear()
-          ? 'MM/DD'
-          : 'YYYY/MM/DD'
-      return dayjs(datetime).format(formatStr)
-    },
     insertRecommend(data) {
       let i = 0
       let count = 0
@@ -548,6 +555,7 @@ export default {
     @include media-breakpoint-up(xl) {
       padding: 60px 0;
     }
+    .heading,
     .list {
       width: 100%;
       margin-left: auto;
@@ -559,10 +567,19 @@ export default {
         width: 1096px;
       }
     }
-    > * + * {
-      margin-top: 48px;
+    .heading {
+      margin-bottom: 16px;
+      @include media-breakpoint-up(md) {
+        margin-bottom: 40px;
+      }
+    }
+    > .list + .heading {
+      margin-top: 32px;
+      @include media-breakpoint-up(md) {
+        margin-top: 16px;
+      }
       @include media-breakpoint-up(xl) {
-        margin-top: 60px;
+        margin-top: 0;
       }
     }
   }

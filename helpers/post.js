@@ -30,4 +30,27 @@ function handleApiData(apiData = '') {
   }
 }
 
-export { getHref, formatDate, handleApiData }
+function formatReadTime(wordCount = 0, imageCount = 0) {
+  const min = Math.round((wordCount / 8 + imageCount * 10) / 60)
+  return min ? `閱讀時間 ${min} 分鐘` : ''
+}
+
+function formatPostDate(datetime) {
+  const nowYear = new Date().getFullYear()
+  const formatStr =
+    nowYear === new Date(datetime).getFullYear() ? 'MM/DD' : 'YYYY/MM/DD'
+  return dayjs(datetime).format(formatStr)
+}
+
+function isReport(style = '') {
+  return style === 'report' || style === 'project3' || style === 'embedded'
+}
+
+export {
+  getHref,
+  formatDate,
+  formatReadTime,
+  formatPostDate,
+  isReport,
+  handleApiData,
+}
