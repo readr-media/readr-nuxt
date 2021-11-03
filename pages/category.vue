@@ -70,7 +70,7 @@ export default {
       categories: [],
       currentCategory: {
         name: '',
-        slug: 'all',
+        slug: this.$route.params?.slug || 'all',
       },
       pageNum: 16,
     }
@@ -144,9 +144,6 @@ export default {
     },
   },
 
-  mounted() {
-    console.log(this.categories)
-  },
   methods: {
     async loadMoreLatestItems(state) {
       if (this.latestList.isLoading) {

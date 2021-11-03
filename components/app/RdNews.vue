@@ -245,8 +245,11 @@ export default {
             sm: heroImage?.urlDesktopSized,
           },
         },
+        category: {
+          name: categories?.[0]?.name,
+          slug: categories?.[0]?.slug,
+        },
         heroCaption,
-        category: categories?.[0]?.name,
         readTime: formatReadTime(wordCount, this.imageCount),
         date: formatPostDate(publishTime),
         isReport: isReport(style),

@@ -1,6 +1,12 @@
 <template>
   <div class="heading">
-    <RdHighLightHeading :text="category" class="heading__category" />
+    <label
+      v-if="category"
+      class="heading__category"
+      @click="handleCategoryClicked"
+    >
+      <span>{{ categoryName }}</span>
+    </label>
     <h1>{{ title }}</h1>
     <RdDateWithReadTime
       :date="date"
@@ -15,7 +21,6 @@
 </template>
 
 <script>
-import RdHighLightHeading from '~/components/shared/RdHighLightHeading.vue'
 import RdDateWithReadTime from '~/components/shared/RdDateWithReadTime.vue'
 import RdArticleCreditList from '~/components/shared/RdArticleCreditList.vue'
 import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
@@ -24,7 +29,6 @@ export default {
   name: 'RdArticleHeading',
 
   components: {
-    RdHighLightHeading,
     RdDateWithReadTime,
     RdArticleCreditList,
     RdArticleSocialList,
@@ -43,12 +47,28 @@ export default {
       default: '',
     },
     category: {
-      type: String,
-      default: '',
+      type: Object,
+      default: () => {},
     },
     creditList: {
       type: Array,
       default: () => [],
+    },
+  },
+  computed: {
+    categoryName() {
+      return this.category?.name ?? ''
+    },
+    categorySlug() {
+      return this.category?.slug ?? ''
+    },
+  },
+  methods: {
+    handleCategoryClicked() {
+      this.$router.push({
+        name: 'category',
+        params: { slug: this.categorySlug },
+      })
     },
   },
 }
@@ -70,7 +90,32 @@ export default {
     }
   }
   &__category {
+    cursor: pointer;
     margin: 0 0 8px;
+    span {
+      position: relative;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 14px;
+      letter-spacing: 0.05em;
+      color: #000928;
+      border-bottom: 2px solid #000928;
+      z-index: 100;
+      @include media-breakpoint-up(md) {
+        font-size: 16px;
+        line-height: 16px;
+      }
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 0;
+        right: 0;
+        height: 8px;
+        background-color: #ebf02c;
+        z-index: -1;
+      }
+    }
   }
   &__time {
     margin: 0 0 16px;

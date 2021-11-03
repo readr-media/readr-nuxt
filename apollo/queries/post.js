@@ -70,6 +70,7 @@ const post = gql`
       }
       categories {
         name
+        slug
       }
       writers {
         name

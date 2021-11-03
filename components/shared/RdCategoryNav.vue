@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      currentCategory: 'all',
+      currentCategory: this.$route.params?.slug || 'all',
     }
   },
   computed: {
