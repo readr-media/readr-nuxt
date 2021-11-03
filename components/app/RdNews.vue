@@ -70,26 +70,28 @@
     <RdNewsLetter class="new__news-letter" />
 
     <section class="news__related-list-wrapper">
-      <RdListHeading title="相關報導" color="#fff" class="heading" />
-      <RdArticleList
-        v-if="doesHaveRelatedPosts"
-        :posts="transformedRelatedPosts"
-        :shouldReverseInMobile="false"
-        :shouldShowSkeleton="false"
-        :shouldHighLightReport="false"
-        :filterNum="4"
-        class="list"
-      />
-      <RdListHeading title="最新報導" color="#fff" class="heading" />
-      <RdArticleList
-        v-if="doesHaveLatestPosts"
-        :posts="transformedLatestPosts"
-        :shouldReverseInMobile="false"
-        :shouldShowSkeleton="false"
-        :shouldHighLightReport="false"
-        :filterNum="4"
-        class="list"
-      />
+      <template v-if="doesHaveRelatedPosts">
+        <RdListHeading title="相關報導" color="#fff" class="heading" />
+        <RdArticleList
+          :posts="transformedRelatedPosts"
+          :shouldReverseInMobile="false"
+          :shouldShowSkeleton="false"
+          :shouldHighLightReport="false"
+          :filterNum="4"
+          class="list"
+        />
+      </template>
+      <template v-if="doesHaveLatestPosts">
+        <RdListHeading title="最新報導" color="#fff" class="heading" />
+        <RdArticleList
+          :posts="transformedLatestPosts"
+          :shouldReverseInMobile="false"
+          :shouldShowSkeleton="false"
+          :shouldHighLightReport="false"
+          :filterNum="4"
+          class="list"
+        />
+      </template>
     </section>
   </div>
 </template>
@@ -422,6 +424,7 @@ export default {
 
 <style lang="scss" scoped>
 .news {
+  min-height: 100vh;
   padding: 68.63px 0 0;
   overflow: hidden;
   &__cover {

@@ -1,23 +1,14 @@
 <template>
-  <div class="category-wrapper">
-    <div class="category">
-      <RdListHeading
-        :title="categoryText"
-        color="#ebf02c"
-        class="category__heading"
-      />
-      <RdCategoryNav
-        :categories="categories"
-        class="category__category-nav"
-        @item-clicked="refetchList"
-      />
+  <div class="tag-wrapper">
+    <div class="tag">
+      <RdListHeading :title="tagName" color="#ebf02c" class="tag__heading" />
       <RdArticleList
-        :posts="latestList.items"
+        :posts="tagList.items"
         :shouldReverseInMobile="true"
         :shouldShowSkeleton="true"
         :shouldHighLightReport="true"
         :shouldSetLgBreakPoint="true"
-        class="category__post"
+        class="tag__post"
       />
       <ClientOnly v-if="shouldMountInfiniteLoading">
         <InfiniteLoading @infinite="loadMoreLatestItems">
@@ -34,11 +25,9 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 import RdListHeading from '~/components/shared/RdListHeading.vue'
-import RdCategoryNav from '~/components/shared/RdCategoryNav.vue'
 import RdArticleList from '~/components/shared/RdArticleList.vue'
 
-import { latestList, latestListByCategorySlug } from '~/apollo/queries/posts.js'
-import { categories } from '~/apollo/queries/categories.js'
+import { latestListByTagName } from '~/apollo/queries/posts.js'
 
 import {
   getHref,
@@ -48,52 +37,41 @@ import {
 } from '~/helpers/index.js'
 
 export default {
-  name: 'Category',
+  name: 'Tag',
 
   components: {
     InfiniteLoading,
     RdListHeading,
-    RdCategoryNav,
-    // RdListItemCategory,
     RdArticleList,
   },
 
   data() {
     return {
-      latestList: {
+      tagList: {
         items: [],
         meta: {
           count: 0,
         },
         isLoading: false,
       },
-      categories: [],
-      currentCategory: {
-        name: '',
-        slug: this.$route.params?.slug || 'all',
-      },
       pageNum: 16,
     }
   },
 
   apollo: {
-    latestList: {
-      query() {
-        return this.currentCategory.slug === 'all'
-          ? latestList
-          : latestListByCategorySlug
-      },
+    tagList: {
+      query: latestListByTagName,
       variables() {
         return {
           first: this.pageNum,
-          categorySlug: this.currentCategory.slug,
+          tagName: this.tagName,
         }
       },
       update(result) {
         const { items, meta } = result
 
         return {
-          ...this.latestList,
+          ...this.tagList,
           items: items.map((post) => {
             const {
               id = '',
@@ -124,45 +102,42 @@ export default {
         }
       },
     },
-    categories: {
-      query: categories,
-    },
   },
 
   computed: {
-    categoryText() {
-      return `所有${this.currentCategory.name}報導`
+    tagName() {
+      return this.$route.params?.name ?? ''
     },
     shouldMountInfiniteLoading() {
       return this.totalLatestItems > 0
     },
     doesHaveAnyLatestItemsLeftToLoad() {
-      return this.totalLatestItems < this.latestList.meta.count
+      return this.totalLatestItems < this.tagList.meta.count
     },
     totalLatestItems() {
-      return this.latestList.items.length
+      return this.tagList.items.length
     },
   },
 
   methods: {
     async loadMoreLatestItems(state) {
-      if (this.latestList.isLoading) {
+      if (this.tagList.isLoading) {
         return
       }
-      this.latestList.isLoading = true
+      this.tagList.isLoading = true
 
       try {
-        await this.$apollo.queries.latestList.fetchMore({
+        await this.$apollo.queries.tagList.fetchMore({
           variables: {
             skip: this.totalLatestItems,
             first: this.pageNum,
-            categorySlug: this.currentCategory.slug,
+            tagName: this.tagName,
             shouldQueryMeta: false,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             return {
               items: [...previousResult.items, ...fetchMoreResult.items],
-              meta: this.latestList.meta,
+              meta: this.tagList.meta,
             }
           },
         })
@@ -177,19 +152,15 @@ export default {
         console.error(err)
         state.error()
       } finally {
-        this.latestList.isLoading = false
+        this.tagList.isLoading = false
       }
-    },
-    refetchList({ name, slug }) {
-      this.currentCategory.name = name && name !== '不分類' ? name : ''
-      this.currentCategory.slug = slug ?? ''
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.category-wrapper {
+.tag-wrapper {
   width: 100%;
   min-height: 100vh;
   margin: 24px 0;
@@ -200,7 +171,7 @@ export default {
     margin: 60px 0 0;
   }
 }
-.category {
+.tag {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -217,12 +188,9 @@ export default {
     width: 1096px;
   }
   &__heading {
-    margin: 0 0 12px;
-  }
-  &__category-nav {
-    margin: 0 0 8px;
+    margin: 0 0 16px;
     @include media-breakpoint-up(sm) {
-      margin: 0 0 45px;
+      margin: 0 0 40px;
     }
   }
 }

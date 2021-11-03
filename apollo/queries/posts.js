@@ -46,9 +46,9 @@ const latestPostsInErrorPage = gql`
 `
 
 const latestList = gql`
-  query($skip: Int, $shouldQueryMeta: Boolean! = true) {
+  query($skip: Int, $first: Int! = 16, $shouldQueryMeta: Boolean! = true) {
     items: allPosts(
-      first: 25
+      first: $first
       skip: $skip
       where: { state: published, style_in: [news, report, embedded, project3] }
       sortBy: [publishTime_DESC]
@@ -76,11 +76,12 @@ const latestList = gql`
 const latestListByCategorySlug = gql`
   query(
     $skip: Int
+    $first: Int! = 16
     $shouldQueryMeta: Boolean! = true
     $categorySlug: String = ""
   ) {
     items: allPosts(
-      first: 25
+      first: $first
       skip: $skip
       where: {
         state: published
@@ -109,9 +110,47 @@ const latestListByCategorySlug = gql`
   }
 `
 
+const latestListByTagName = gql`
+  query(
+    $skip: Int
+    $first: Int! = 16
+    $shouldQueryMeta: Boolean! = true
+    $tagName: String = ""
+  ) {
+    items: allPosts(
+      first: $first
+      skip: $skip
+      where: {
+        state: published
+        style_in: [news, report, embedded, project3]
+        tags_some: { name: $tagName }
+      }
+      sortBy: [publishTime_DESC]
+    ) {
+      id
+      slug
+      title: name
+      style
+      heroImage {
+        urlTabletSized
+      }
+      ogImage {
+        urlTabletSized
+      }
+      publishTime
+      wordCount
+    }
+
+    meta: _allPostsMeta @include(if: $shouldQueryMeta) {
+      count
+    }
+  }
+`
+
 export {
   latestPosts,
   latestPostsInErrorPage,
   latestList,
   latestListByCategorySlug,
+  latestListByTagName,
 }
