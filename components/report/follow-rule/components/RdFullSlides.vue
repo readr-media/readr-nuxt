@@ -60,9 +60,11 @@ export default {
       return this.slides?.length
     },
     cssProps() {
+      const sideWidth = (this.viewportWidth - this.slideWidth) / 2
       return {
         '--count-slide': this.slidesLength,
         '--slide-width': `${this.slideWidth}px`,
+        '--side-width': `${sideWidth}px`,
       }
     },
   },
@@ -163,13 +165,19 @@ export default {
   }
 
   .mask {
-    z-index: 25;
+    z-index: 1000;
     background: #feeade;
     position: fixed;
     top: 0;
-    left: 0;
-    width: 500px;
+    width: var(--side-width);
     height: 100vh;
+
+    &.left {
+      left: 0;
+    }
+    &.right {
+      right: 0;
+    }
   }
 }
 </style>

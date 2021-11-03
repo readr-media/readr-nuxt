@@ -3,7 +3,6 @@
     <div class="progress-bar__wrapper">
       <div class="animate">
         <RdStalkerAnimation
-          v-if="nowTagId !== '1'"
           :stalkerStatus="stalkerStatus"
           :location="stalkerLocation"
         />
@@ -59,14 +58,15 @@ export default {
   data() {
     return {
       trackedLocation: 77,
-      stalkerLocation: 0,
+      stalkerLocation: -100,
+      stalkerCanIn: false,
       mobileTrackedLocation: 77,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
       stalkerId: 1,
       stalkerMoveId: 0,
       trackedMoveId: 0,
-      isAnimateFinishTime: 0,
+      isAnimateFinish: 0,
     }
   },
   computed: {
@@ -91,7 +91,7 @@ export default {
   watch: {
     nowTagId(id) {
       const newLocation = 77 + (parseInt(id) - 1) * (this.spacing + 18)
-      console.log(id)
+      if (id > 1) this.stalkerCanIn = true
       this.trackedMove(newLocation, 'moving', 10, () => {
         this.trackedStatus = 'stand'
         this.stalkerForword()
@@ -113,7 +113,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.nowTagId)
     window.addEventListener('scroll', this.handleScroll)
   },
   methods: {
@@ -121,7 +120,12 @@ export default {
       return this.trackedLocation > 77 + (id - 1) * (this.spacing + 18) - 9
     },
     stalkerMove(destination, status, time, cb) {
-      if (this.isAnimateFinishTime === 2) return
+      if (
+        this.isAnimateFinish ||
+        !this.stalkerCanIn ||
+        this.stalkerLocation === parseInt(destination)
+      )
+        return
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
@@ -138,7 +142,7 @@ export default {
       }, time)
     },
     trackedMove(destination, status, time, cb) {
-      if (this.isAnimateFinishTime === 2) return
+      if (this.isAnimateFinish) return
       this.trackedMoveId++
       const id = this.trackedMoveId
       this.trackedStatus = status
@@ -155,27 +159,25 @@ export default {
       }, time)
     },
     stalkerForword() {
-      if (this.isAnimateFinishTime === 2) return
+      if (this.isAnimateFinish) return
       this.stalkerMove(this.trackedLocation - 77, 'moving', 100, () => {
         this.stalkerStatus = 'stand'
       })
     },
     handleScroll() {
-      if (this.isAnimateFinishTime === 2) return
+      if (this.isAnimateFinish) return
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerStatus = 'stand'
         this.stalkerForword()
       })
     },
     endAnimate() {
-      this.stalkerMove(-77, 'back', 10, () => {
-        console.log('hohohoho')
-        this.stalkerStatus = 'stand'
-        this.isAnimateFinishTime++
-      })
       this.trackedMove(800, 'moving', 10, () => {
         this.trackedStatus = 'stand'
-        this.isAnimateFinishTime++
+        this.stalkerMove(-100, 'back', 10, () => {
+          this.stalkerStatus = 'stand'
+          this.isAnimateFinish = true
+        })
       })
     },
   },

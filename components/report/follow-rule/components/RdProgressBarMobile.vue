@@ -46,6 +46,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isScrollEnd: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -59,6 +63,7 @@ export default {
       target: null,
       percent: 0,
       hasFinishedReading: false,
+      isAnimateFinish: false,
     }
   },
   computed: {
@@ -90,6 +95,9 @@ export default {
         this.handleScroll()
       }
     },
+    isScrollEnd() {
+      this.endAnimate()
+    },
   },
 
   mounted() {
@@ -99,6 +107,11 @@ export default {
 
   methods: {
     stalkerMove(destination, status, time, cb) {
+      if (
+        this.isAnimateFinish ||
+        this.stalkerLocation === parseInt(destination)
+      )
+        return
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
@@ -115,6 +128,7 @@ export default {
       }, time)
     },
     trackedMove(destination, status, time, cb) {
+      if (this.isAnimateFinish) return
       this.trackedMoveId++
       const id = this.trackedMoveId
       this.trackedStatus = status
@@ -131,11 +145,13 @@ export default {
       }, time)
     },
     stalkerForword() {
+      if (this.isAnimateFinish) return
       this.stalkerMove(this.trackedLocation - 77, 'moving', 20, () => {
         this.stalkerStatus = 'stand'
       })
     },
     handleScroll() {
+      if (this.isAnimateFinish) return
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerStatus = 'stand'
         this.stalkerForword()
@@ -165,6 +181,15 @@ export default {
           this.stalkerForword()
         })
       })()
+    },
+    endAnimate() {
+      this.trackedMove(this.viewportWidth + 80, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
+        this.stalkerMove(-100, 'back', 10, () => {
+          this.stalkerStatus = 'stand'
+          this.isAnimateFinish = true
+        })
+      })
     },
   },
 }

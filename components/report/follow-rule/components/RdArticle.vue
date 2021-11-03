@@ -1,7 +1,7 @@
 <script>
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
-import RdFullSlides from '~/components/shared/RdFullSlides.vue'
-import RdSlideCard from '~/components/shared/RdSlideCard.vue'
+import RdFullSlides from '~/components/report/follow-rule/components/RdFullSlides.vue'
+import RdSlideCard from '~/components/report/follow-rule/components/RdSlideCard.vue'
 import { intersect } from '~/helpers/vue/directives/index.js'
 import {
   setupIntersectionObserver,
