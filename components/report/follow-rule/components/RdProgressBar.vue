@@ -49,18 +49,24 @@ export default {
       type: Number,
       default: 1,
     },
+    isScrollEnd: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
       trackedLocation: 77,
-      stalkerLocation: 0,
+      stalkerLocation: -100,
+      stalkerCanIn: false,
       mobileTrackedLocation: 77,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
       stalkerId: 1,
       stalkerMoveId: 0,
       trackedMoveId: 0,
+      isAnimateFinish: 0,
     }
   },
   computed: {
@@ -85,7 +91,7 @@ export default {
   watch: {
     nowTagId(id) {
       const newLocation = 77 + (parseInt(id) - 1) * (this.spacing + 18)
-      console.log(id)
+      if (id > 1) this.stalkerCanIn = true
       this.trackedMove(newLocation, 'moving', 10, () => {
         this.trackedStatus = 'stand'
         this.stalkerForword()
@@ -102,9 +108,11 @@ export default {
         this.handleScroll()
       }
     },
+    isScrollEnd() {
+      this.endAnimate()
+    },
   },
   mounted() {
-    console.log(this.nowTagId)
     window.addEventListener('scroll', this.handleScroll)
   },
   methods: {
@@ -112,6 +120,12 @@ export default {
       return this.trackedLocation > 77 + (id - 1) * (this.spacing + 18) - 9
     },
     stalkerMove(destination, status, time, cb) {
+      if (
+        this.isAnimateFinish ||
+        !this.stalkerCanIn ||
+        this.stalkerLocation === parseInt(destination)
+      )
+        return
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
@@ -128,6 +142,7 @@ export default {
       }, time)
     },
     trackedMove(destination, status, time, cb) {
+      if (this.isAnimateFinish) return
       this.trackedMoveId++
       const id = this.trackedMoveId
       this.trackedStatus = status
@@ -144,14 +159,25 @@ export default {
       }, time)
     },
     stalkerForword() {
-      this.stalkerMove(this.trackedLocation - 77, 'moving', 20, () => {
+      if (this.isAnimateFinish) return
+      this.stalkerMove(this.trackedLocation - 77, 'moving', 100, () => {
         this.stalkerStatus = 'stand'
       })
     },
     handleScroll() {
+      if (this.isAnimateFinish) return
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerStatus = 'stand'
         this.stalkerForword()
+      })
+    },
+    endAnimate() {
+      this.trackedMove(800, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
+        this.stalkerMove(-100, 'back', 10, () => {
+          this.stalkerStatus = 'stand'
+          this.isAnimateFinish = true
+        })
       })
     },
   },
@@ -177,6 +203,8 @@ export default {
   display: flex;
   position: relative;
   margin-bottom: 10px;
+  overflow: hidden;
+  height: 90px;
   & > div {
     width: 52px;
     height: 79px;

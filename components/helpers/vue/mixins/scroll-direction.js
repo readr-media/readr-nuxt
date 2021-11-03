@@ -10,6 +10,9 @@ const scrollDirection = {
     isScrollingDown() {
       return this.$data.$_scrollDirection_direction === 'down'
     },
+    isScrollingUp() {
+      return this.$data.$_scrollDirection_direction === 'up'
+    },
   },
 
   mounted() {

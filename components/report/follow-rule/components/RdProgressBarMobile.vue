@@ -1,6 +1,10 @@
 <template>
   <div class="progress-bar" :style="cssProps">
-    <div class="progress-bar__mobile mobile">
+    <div class="spacer"></div>
+    <div
+      class="progress-bar__mobile mobile"
+      :class="{ 'hide-title': !isScrollingUp }"
+    >
       <div class="animate">
         <RdStalkerAnimation
           :stalkerStatus="stalkerStatus"
@@ -11,7 +15,7 @@
           :location="trackedLocation"
         />
       </div>
-      <div v-show="isScrollingDown" class="mobile__title">
+      <div class="mobile__title">
         <div v-for="(row, i) in tagsGroup" :key="i" class="mobile__title_row">
           <div v-for="tag in row" :key="tag.id" class="mobile__title_row_item">
             {{ tag.title }}
@@ -38,9 +42,13 @@ export default {
       require: true,
       default: () => [],
     },
-    isScrollingDown: {
+    isScrollingUp: {
       type: Boolean,
       default: true,
+    },
+    isScrollEnd: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -55,6 +63,7 @@ export default {
       target: null,
       percent: 0,
       hasFinishedReading: false,
+      isAnimateFinish: false,
     }
   },
   computed: {
@@ -86,6 +95,9 @@ export default {
         this.handleScroll()
       }
     },
+    isScrollEnd() {
+      this.endAnimate()
+    },
   },
 
   mounted() {
@@ -95,6 +107,11 @@ export default {
 
   methods: {
     stalkerMove(destination, status, time, cb) {
+      if (
+        this.isAnimateFinish ||
+        this.stalkerLocation === parseInt(destination)
+      )
+        return
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
@@ -111,6 +128,7 @@ export default {
       }, time)
     },
     trackedMove(destination, status, time, cb) {
+      if (this.isAnimateFinish) return
       this.trackedMoveId++
       const id = this.trackedMoveId
       this.trackedStatus = status
@@ -127,11 +145,13 @@ export default {
       }, time)
     },
     stalkerForword() {
+      if (this.isAnimateFinish) return
       this.stalkerMove(this.trackedLocation - 77, 'moving', 20, () => {
         this.stalkerStatus = 'stand'
       })
     },
     handleScroll() {
+      if (this.isAnimateFinish) return
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerStatus = 'stand'
         this.stalkerForword()
@@ -162,6 +182,15 @@ export default {
         })
       })()
     },
+    endAnimate() {
+      this.trackedMove(this.viewportWidth + 80, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
+        this.stalkerMove(-100, 'back', 10, () => {
+          this.stalkerStatus = 'stand'
+          this.isAnimateFinish = true
+        })
+      })
+    },
   },
 }
 </script>
@@ -172,7 +201,6 @@ export default {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: #feeade;
   white-space: nowrap;
   &__wrapper {
     width: 712px;
@@ -180,25 +208,9 @@ export default {
   }
 }
 
-.animate {
-  display: flex;
-  position: relative;
-  height: 90px;
-  overflow: hidden;
-  & > div {
-    width: 52px;
-    height: 79px;
-    transform: translate(-50%, 0);
-  }
-
-  &::before {
-    content: '';
-    background: #28ddb1;
-    height: 100%;
-    width: var(--tracked-location);
-    position: absolute;
-  }
-}
+// .spacer {
+//   // height: 163px;
+// }
 
 .mobile {
   color: rgba(255, 233, 214, 1);
@@ -216,6 +228,33 @@ export default {
         margin-top: 11px;
       }
     }
+  }
+
+  .animate {
+    display: flex;
+    position: relative;
+    height: 90px;
+    overflow: hidden;
+    background: #feeade;
+    & > div {
+      width: 52px;
+      height: 79px;
+      transform: translate(-50%, 0);
+    }
+
+    &::before {
+      content: '';
+      background: #28ddb1;
+      height: 100%;
+      width: var(--tracked-location);
+      position: absolute;
+    }
+  }
+}
+
+.hide-title {
+  .mobile__title {
+    opacity: 0;
   }
 }
 </style>
