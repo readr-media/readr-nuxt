@@ -15,12 +15,6 @@ export default {
   components: {
     RdReportArticle,
   },
-  data() {
-    return {
-      contentGroup: [],
-      customObserver: undefined,
-    }
-  },
   props: {
     cmsData: {
       type: Object,
@@ -35,6 +29,13 @@ export default {
       default: 0,
     },
   },
+  data() {
+    return {
+      contentGroup: [],
+      customObserver: undefined,
+    }
+  },
+
   computed: {
     viewportHeight() {
       return this.$store.getters['viewport/viewportHeight']
@@ -69,9 +70,8 @@ export default {
       })
       return contents
     },
-    handleEnterLeave(e) {
-      console.log(123)
-      console.log(e)
+    sendGaEvent({ action, label }) {
+      this.$ga.event('projects', action, label)
     },
     groupContent(contents) {
       let contentStore = []
@@ -99,7 +99,6 @@ export default {
         (entries) => {
           entries.forEach(({ isIntersecting, target }) => {
             if (isIntersecting) {
-              console.log(target)
               this.$emit('chaneParagraph', target.id)
             }
           })
@@ -117,8 +116,8 @@ export default {
             slug="follow-rule"
             processBarHeight="processBarHeight"
             loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
-            isPart="true"
-            // sendGaEvent={() => this.sendGaEvent}
+            isPart={true}
+            sendGaEvent={() => this.sendGaEvent}
           />
         )
       }

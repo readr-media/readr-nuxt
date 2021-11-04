@@ -13,15 +13,15 @@
       v-else
       ref="processBar"
       :tagsArray="cmsData.contentApiData.tag"
-      :nowTagId="nowTagId"
+      :nowTagId="parseInt(nowTagId)"
       :isScrollEnd="isScrollEnd"
     />
 
     <RdArticle
       :cmsData="cmsData"
-      @chaneParagraph="(id) => chaneParagraph(id)"
       :processBarHeight="processBarHeight"
       :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
+      @chaneParagraph="(id) => chaneParagraph(id)"
     />
     <div v-intersect="quizObserver" class="article__report-quiz-wrapper">
       <RdReportQuiz
@@ -51,7 +51,7 @@
     <RdReportCredit
       :authors="cmsData.contentApiData.credit"
       :publishedAt="cmsData.contentApiData.publishedAt"
-      :canSendGaEvent="shouldShowArticle || forceSectionNavActiveIndex === 1"
+      :canSendGaEvent="true"
     />
     <LazyRenderer class="latest-coverages">
       <readr-latest-coverages />
@@ -117,6 +117,13 @@ export default {
     ...mapGetters('viewport', ['viewportWidth', 'viewportHeight']),
   },
 
+  watch: {
+    viewportWidth(width) {
+      this.isMobile = true
+      this.isMobile = width < 768
+    },
+  },
+
   mounted() {
     this.setupQuizObserver()
     if (this.viewportWidth > 768) this.isMobile = false
@@ -125,13 +132,6 @@ export default {
 
   beforeDestroy() {
     cleanupIntersectionObserver(this, 'quizObserver')
-  },
-
-  watch: {
-    viewportWidth(width) {
-      this.isMobile = true
-      this.isMobile = width < 768
-    },
   },
 
   methods: {
@@ -159,6 +159,9 @@ export default {
         }
       )
     },
+    sendGaEvent({ action, label }) {
+      this.$ga.event('projects', action, label)
+    },
   },
 
   head() {
@@ -170,7 +173,6 @@ export default {
             'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/ScrollMagic.min.js',
           callback: () => {
             this.loadScrollMagicScriptTimes++
-            this.scrollSlide()
           },
         },
         {
@@ -179,7 +181,6 @@ export default {
             'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/animation.gsap.min.js',
           callback: () => {
             this.loadScrollMagicScriptTimes++
-            this.scrollSlide()
           },
         },
         {
@@ -188,7 +189,6 @@ export default {
             'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/debug.addIndicators.min.js',
           callback: () => {
             this.loadScrollMagicScriptTimes++
-            this.scrollSlide()
           },
         },
         {
@@ -197,7 +197,6 @@ export default {
             'https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js',
           callback: () => {
             this.loadScrollMagicScriptTimes++
-            this.scrollSlide()
           },
         },
       ],

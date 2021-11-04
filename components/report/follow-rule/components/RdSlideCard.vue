@@ -3,7 +3,7 @@
     <div class="slide-card">
       <div class="slide-card__pin">
         <div class="slide-container">
-          <section v-for="card in cards" :key="card.pictureId" class="card">
+          <section v-for="(card, i) in cards" :key="i" class="card">
             <img :src="getPictureUrl(card.pictureId)" />
           </section>
         </div>
@@ -46,7 +46,6 @@ export default {
       return this.$store.getters['viewport/viewportHeight']
     },
     sideWidth() {
-      console.log()
       return this.viewportWidth > 600 ? (this.viewportWidth - 600) / 2 : 20
     },
     cssProps() {
@@ -81,16 +80,6 @@ export default {
       return this.cardWitdh * 0.15
     },
   },
-  mounted() {
-    this.wrapperWidth = this.$refs.article.clientWidth
-  },
-  methods: {
-    getPictureUrl(id) {
-      const img = require(`~/assets/imgs/report/follow-rule/report-slide-${id}.png`)
-      return img
-    },
-  },
-
   watch: {
     loadScrollMagicScriptTimes(times) {
       if (times !== 4) return
@@ -122,6 +111,15 @@ export default {
         .setTween(wipeAnimation)
         .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
+    },
+  },
+  mounted() {
+    this.wrapperWidth = this.$refs.article.clientWidth
+  },
+  methods: {
+    getPictureUrl(id) {
+      const img = require(`~/assets/imgs/report/follow-rule/report-slide-${id}.png`)
+      return img
     },
   },
 }

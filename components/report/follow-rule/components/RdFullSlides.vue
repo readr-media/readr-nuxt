@@ -1,5 +1,5 @@
 <template>
-  <div class="full-slide" :style="cssProps" ref="slide">
+  <div ref="slide" class="full-slide" :style="cssProps">
     <div v-show="enterFull" class="mask left" />
     <div class="full-slide__pin" :class="{ 'on-the-top': enterFull }">
       <div class="full-slide__container">
@@ -69,25 +69,6 @@ export default {
     },
   },
 
-  mounted() {
-    this.slideWidth = this.$refs.slide.clientWidth
-  },
-
-  methods: {
-    getPictureUrl(id) {
-      try {
-        const img = require(`~/assets/imgs/report/follow-rule/${id}.png`)
-        return img
-      } catch (e) {
-        return ''
-      }
-    },
-    handleEnterLeave(e) {
-      this.enterFull = e.type === 'enter'
-      console.log(this.enterFull)
-    },
-  },
-
   watch: {
     loadScrollMagicScriptTimes(times) {
       if (times !== 4) return
@@ -114,6 +95,24 @@ export default {
         .on('enter leave', this.handleEnterLeave)
         .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
+    },
+  },
+
+  mounted() {
+    this.slideWidth = this.$refs.slide.clientWidth
+  },
+
+  methods: {
+    getPictureUrl(id) {
+      try {
+        const img = require(`~/assets/imgs/report/follow-rule/${id}.png`)
+        return img
+      } catch (e) {
+        return ''
+      }
+    },
+    handleEnterLeave(e) {
+      this.enterFull = e.type === 'enter'
     },
   },
 }
