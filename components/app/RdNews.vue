@@ -1,6 +1,6 @@
 <template>
   <div class="news">
-    <RdHeaderProgress @sendGaEvent="sendGaScrollEvent('end')" />
+    <RdNavbar @sendGaEvent="sendGaScrollEvent('end')" />
 
     <RdArticleVideo
       v-if="doesHaveHeroVideo"
@@ -22,7 +22,7 @@
       <RdArticleHeading
         :title="transformedNews.title"
         :date="transformedNews.date"
-        :category="transformedNews.category"
+        :categories="transformedNews.categories"
         :readTimeText="transformedNews.readTime"
         :creditList="credits"
         class="news__heading"
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
+import RdNavbar from '~/components/shared/RdNavbar.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
 import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
 import RdCoverImage from '~/components/shared/RdCoverImage.vue'
@@ -114,7 +114,6 @@ import RdNewsLetter from '~/components/shared/RdNewsLetter.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.js'
 
-// import { getHref, formatDate, handleApiData } from '~/helpers/index.js'
 import {
   formatReadTime,
   formatPostDate,
@@ -136,7 +135,7 @@ export default {
   name: 'RdNews',
 
   components: {
-    RdHeaderProgress,
+    RdNavbar,
     RdButtonDonate,
     RdArticleVideo,
     RdCoverImage,
@@ -233,6 +232,8 @@ export default {
 
       return {
         title,
+        categories,
+        heroCaption,
         heroVideo: {
           src: heroVideo?.url,
           desc: heroVideo?.description,
@@ -247,11 +248,6 @@ export default {
             sm: heroImage?.urlDesktopSized,
           },
         },
-        category: {
-          name: categories?.[0]?.name,
-          slug: categories?.[0]?.slug,
-        },
-        heroCaption,
         readTime: formatReadTime(wordCount, this.imageCount),
         date: formatPostDate(publishTime),
         isReport: isReport(style),
@@ -427,11 +423,14 @@ export default {
   min-height: 100vh;
   padding: 68.63px 0 0;
   overflow: hidden;
+  @include media-breakpoint-up(md) {
+    padding: 86px 0 0;
+  }
   &__cover {
     width: 100%;
     max-width: 960px;
     margin: 0 auto 24px;
-    @include media-breakpoint-up(xl) {
+    @include media-breakpoint-up(lg) {
       margin: 24px auto 60px;
     }
   }

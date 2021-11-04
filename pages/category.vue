@@ -69,7 +69,7 @@ export default {
       },
       categories: [],
       currentCategory: {
-        name: '',
+        name: this.$route.params?.name || '',
         slug: this.$route.params?.slug || 'all',
       },
       pageNum: 16,

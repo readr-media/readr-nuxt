@@ -68,7 +68,7 @@ const post = gql`
           urlDesktopSized
         }
       }
-      categories {
+      categories(first: 3) {
         name
         slug
       }

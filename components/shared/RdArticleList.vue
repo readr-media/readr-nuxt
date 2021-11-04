@@ -11,7 +11,7 @@
           :isReport="item.isReport"
           :shouldReverseInMobile="shouldReverseInMobile"
           :shouldHighLightReport="shouldHighLightReport"
-          :shouldSetLgBreakPoint="shouldSetLgBreakPoint"
+          :shouldHideBottomInfos="shouldHideBottomInfos"
         />
       </li>
       <div class="position-correct" />
@@ -37,6 +37,10 @@ export default {
       required: true,
       default: () => [],
     },
+    filterNum: {
+      type: Number,
+      default: 0,
+    },
     shouldReverseInMobile: {
       type: Boolean,
       default: false,
@@ -53,9 +57,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    filterNum: {
-      type: Number,
-      default: 0,
+    shouldHideBottomInfos: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

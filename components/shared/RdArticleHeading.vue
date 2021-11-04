@@ -1,12 +1,10 @@
 <template>
   <div class="heading">
-    <label
-      v-if="category"
+    <RdArticleHeadingTopList
+      v-if="doesHaveCategories"
+      :list="categories"
       class="heading__category"
-      @click="handleCategoryClicked"
-    >
-      <span>{{ categoryName }}</span>
-    </label>
+    />
     <h1>{{ title }}</h1>
     <RdDateWithReadTime
       :date="date"
@@ -21,6 +19,7 @@
 </template>
 
 <script>
+import RdArticleHeadingTopList from '~/components/shared/RdArticleHeadingTopList.vue'
 import RdDateWithReadTime from '~/components/shared/RdDateWithReadTime.vue'
 import RdArticleCreditList from '~/components/shared/RdArticleCreditList.vue'
 import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
@@ -29,6 +28,7 @@ export default {
   name: 'RdArticleHeading',
 
   components: {
+    RdArticleHeadingTopList,
     RdDateWithReadTime,
     RdArticleCreditList,
     RdArticleSocialList,
@@ -46,9 +46,9 @@ export default {
       type: String,
       default: '',
     },
-    category: {
-      type: Object,
-      default: () => {},
+    categories: {
+      type: Array,
+      default: () => [],
     },
     creditList: {
       type: Array,
@@ -56,19 +56,8 @@ export default {
     },
   },
   computed: {
-    categoryName() {
-      return this.category?.name ?? ''
-    },
-    categorySlug() {
-      return this.category?.slug ?? ''
-    },
-  },
-  methods: {
-    handleCategoryClicked() {
-      this.$router.push({
-        name: 'category',
-        params: { slug: this.categorySlug },
-      })
+    doesHaveCategories() {
+      return this.categories?.length > 0
     },
   },
 }
@@ -90,32 +79,7 @@ export default {
     }
   }
   &__category {
-    cursor: pointer;
     margin: 0 0 8px;
-    span {
-      position: relative;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 14px;
-      letter-spacing: 0.05em;
-      color: #000928;
-      border-bottom: 2px solid #000928;
-      z-index: 100;
-      @include media-breakpoint-up(md) {
-        font-size: 16px;
-        line-height: 16px;
-      }
-      &::before {
-        content: '';
-        position: absolute;
-        bottom: 4px;
-        left: 0;
-        right: 0;
-        height: 8px;
-        background-color: #ebf02c;
-        z-index: -1;
-      }
-    }
   }
   &__time {
     margin: 0 0 16px;
