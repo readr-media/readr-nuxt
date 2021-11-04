@@ -95,6 +95,8 @@ export default {
     },
     async setupCustomObserver() {
       const rootMove = this.viewportHeight - 350
+      const rootMargin = `${this.viewportHeight - 300}px 0px -${rootMove}px 0px`
+      console.log('root margin', rootMargin)
       this.customObserver = await setupIntersectionObserver(
         (entries) => {
           entries.forEach(({ isIntersecting, target }) => {
@@ -104,7 +106,7 @@ export default {
           })
         },
         {
-          rootMargin: `${this.viewportHeight - 300}px 0px -${rootMove}px 0px`,
+          rootMargin,
         }
       )
     },
