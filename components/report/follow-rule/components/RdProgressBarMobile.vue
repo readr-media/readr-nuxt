@@ -17,7 +17,12 @@
       </div>
       <div class="mobile__title">
         <div v-for="(row, i) in tagsGroup" :key="i" class="mobile__title_row">
-          <div v-for="tag in row" :key="tag.id" class="mobile__title_row_item">
+          <div
+            v-for="tag in row"
+            :key="tag.id"
+            class="mobile__title_row_item"
+            :class="{ active: parseInt(tag.id) === nowTagId }"
+          >
             {{ tag.title }}
           </div>
         </div>
@@ -49,6 +54,10 @@ export default {
     isScrollEnd: {
       type: Boolean,
       default: false,
+    },
+    nowTagId: {
+      type: Number,
+      default: 1,
     },
   },
 
@@ -221,6 +230,9 @@ export default {
   &__title {
     background: #000000;
     padding: 11px 28px;
+    .active {
+      color: #28ddb1;
+    }
     &_row {
       display: flex;
       justify-content: space-between;

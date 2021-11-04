@@ -8,6 +8,7 @@
       :tagsArray="cmsData.contentApiData.tag"
       :isScrollingUp="isScrollingUp"
       :isScrollEnd="isScrollEnd"
+      :nowTagId="parseInt(nowTagId)"
     />
     <RdProgressBar
       v-else
@@ -155,7 +156,7 @@ export default {
           })
         },
         {
-          rootMargin: `${this.viewportHeight - 300}px 0px -${rootMove}px 0px`,
+          rootMargin: `${this.viewportHeight - 300}px 0px ${rootMove}px 0px`,
         }
       )
     },
