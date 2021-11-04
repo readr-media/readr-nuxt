@@ -101,6 +101,12 @@ export default {
         })
       }
 
+      console.log(
+        this.cardHeight,
+        this.processBarHeight,
+        (this.cardHeight - this.processBarHeight) / 2
+      )
+
       new ScrollMagic.Scene({
         triggerElement: '.slide-card',
         triggerHook: 0.5,

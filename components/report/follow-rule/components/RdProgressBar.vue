@@ -123,7 +123,8 @@ export default {
       if (
         this.isAnimateFinish ||
         !this.stalkerCanIn ||
-        this.stalkerLocation === parseInt(destination)
+        this.stalkerLocation === parseInt(destination) ||
+        (this.stalkerStatus === 'back' && status === 'back')
       )
         return
       this.stalkerMoveId++
@@ -167,7 +168,6 @@ export default {
     handleScroll() {
       if (this.isAnimateFinish) return
       this.stalkerMove(0, 'back', 10, () => {
-        this.stalkerStatus = 'stand'
         this.stalkerForword()
       })
     },

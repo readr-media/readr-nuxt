@@ -64,7 +64,7 @@ export default {
   data() {
     return {
       trackedLocation: 77,
-      stalkerLocation: 0,
+      stalkerLocation: -80,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
       stalkerMoveId: 0,
@@ -118,7 +118,8 @@ export default {
     stalkerMove(destination, status, time, cb) {
       if (
         this.isAnimateFinish ||
-        this.stalkerLocation === parseInt(destination)
+        this.stalkerLocation === parseInt(destination) ||
+        (this.stalkerStatus === 'back' && status === 'back')
       )
         return
       this.stalkerMoveId++
@@ -162,7 +163,6 @@ export default {
     handleScroll() {
       if (this.isAnimateFinish) return
       this.stalkerMove(0, 'back', 10, () => {
-        this.stalkerStatus = 'stand'
         this.stalkerForword()
       })
       rafThrottle(() => {
