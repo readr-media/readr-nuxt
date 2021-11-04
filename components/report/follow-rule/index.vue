@@ -128,6 +128,7 @@ export default {
   mounted() {
     this.setupQuizObserver()
     if (this.viewportWidth > 768) this.isMobile = false
+    console.log(this.viewportWidth, this.isMobile)
     this.processBarHeight = this.isMobile ? 90 : 217
   },
 
