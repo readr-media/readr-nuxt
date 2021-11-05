@@ -57,10 +57,10 @@ export default {
 
   data() {
     return {
-      trackedLocation: 77,
+      scale: 0.5,
+      trackedLocation: 40,
       stalkerLocation: -100,
       stalkerCanIn: false,
-      mobileTrackedLocation: 77,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
       stalkerId: 1,
@@ -81,10 +81,14 @@ export default {
         '--spacing': `${this.spacing}px`,
         '--tracked-location': `${this.trackedLocation}px`,
         '--stalker-location': `${this.stalkerLocation}px`,
+        '--scale': this.scale,
       }
     },
     distance() {
       return this.trackedLocation - this.stalkerLocation
+    },
+    minDistance() {
+      return 77 * this.scale
     },
   },
 
@@ -114,6 +118,7 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
+    this.trackedLocation = this.minDistance
   },
   methods: {
     isArrived(id) {
@@ -192,7 +197,7 @@ export default {
   z-index: 20;
   background: #feeade;
   white-space: nowrap;
-  padding: 30px 0 70px 0;
+  padding: 15px 0 50px 0;
   &__wrapper {
     width: 712px;
     margin: auto;
@@ -204,10 +209,10 @@ export default {
   position: relative;
   margin-bottom: 10px;
   overflow: hidden;
-  height: 90px;
+
   & > div {
-    width: 52px;
-    height: 79px;
+    width: calc(150px * 0.5 * var(--scale));
+    height: calc(230px * 0.5 * var(--scale));
     transform: translate(-50%, 0);
   }
 }
@@ -250,7 +255,7 @@ export default {
   &__title {
     position: absolute;
     transform: translate(-50%, 0);
-    top: 32px;
+    top: 24px;
     font-size: 18px;
     line-height: 36px;
     letter-spacing: 0.01em;

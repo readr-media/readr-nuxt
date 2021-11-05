@@ -63,6 +63,7 @@ export default {
 
   data() {
     return {
+      scale: 0.5,
       trackedLocation: 77,
       stalkerLocation: -80,
       trackedStatus: 'stand',
@@ -82,6 +83,7 @@ export default {
         '--spacing': `${this.spacing}px`,
         '--tracked-location': `${this.trackedLocation}px`,
         '--stalker-location': `${this.stalkerLocation}px`,
+        '--scale': this.scale,
       }
     },
     distance() {
@@ -89,6 +91,9 @@ export default {
     },
     tagsGroup() {
       return [this.tagsArray.slice(0, 3), this.tagsArray.slice(3, 6)]
+    },
+    minDistance() {
+      return 77 * this.scale
     },
   },
 
@@ -245,12 +250,12 @@ export default {
   .animate {
     display: flex;
     position: relative;
-    height: 90px;
+    // height: 90px;
     overflow: hidden;
     background: #feeade;
     & > div {
-      width: 52px;
-      height: 79px;
+      width: calc(150px * 0.5 * var(--scale));
+      height: calc(230px * 0.5 * var(--scale));
       transform: translate(-50%, 0);
     }
 
