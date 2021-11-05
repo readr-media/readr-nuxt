@@ -46,8 +46,10 @@ export default {
   }
   ul {
     width: 100%;
+    max-width: 1320px;
     display: flex;
     justify-content: space-between;
+    margin: 0 auto;
     padding: 32px 60px;
     li {
       width: calc((100% - 80px) / 5);

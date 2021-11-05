@@ -13,14 +13,19 @@
       <div v-if="!isUnderDesktopSize" class="middle">
         <ul>
           <li
-            v-for="item in categories"
+            v-for="item in categoryList"
             :id="item.slug"
             :key="item.slug"
-            @click="handleCategoryClicked(item)"
+            @click="handleCategoryClicked({ slug: item.slug, name: item.name })"
             @mouseover="openRelatedList"
             @mouseleave="closeRelatedList"
           >
             <span>{{ item.name }}</span>
+            <RdHeaderRelatedList
+              v-show="currentId === item.slug"
+              :list="item.relatedList"
+              class="related-list"
+            />
           </li>
         </ul>
       </div>
@@ -41,17 +46,9 @@
         <div :style="{ width: `${percent}%` }" class="progress-bar__fill" />
       </div>
     </section>
-    <RdHeaderRelatedList
-      v-show="shouldShowRelatedList"
-      id="related-list"
-      :list="transformedLatestPosts"
-      class="related-list"
-      @mouseover.native="openRelatedList"
-      @mouseleave.native="closeRelatedList"
-    />
     <RdHeaderHamList
       v-if="shouldShowHamList && isUnderDesktopSize"
-      :categories="mockCategories"
+      :categories="categories"
       class="ham-list"
       @close-ham="closeHam"
     />
@@ -68,7 +65,6 @@ import RdHeaderRelatedList from '~/components/shared/RdHeaderRelatedList.vue'
 import SvgReadrLogo from '~/assets/imgs/readr-logo.svg?inline'
 import SvgHamLogo from '~/assets/imgs/hamburger.svg?inline'
 
-import { latestListByCategorySlug } from '~/apollo/queries/posts.js'
 import { categories } from '~/apollo/queries/categories.js'
 
 export default {
@@ -93,27 +89,18 @@ export default {
       hasFinishedReading: false,
       shouldShowHamList: false,
       shouldShowRelatedList: false,
-      openId: '',
-      closeId: '',
+      currentId: '',
     }
   },
 
   apollo: {
     categories: {
       query: categories,
-    },
-    latestList: {
-      query: latestListByCategorySlug,
       variables() {
         return {
-          first: 5,
-          categorySlug: this.currentCategory.slug,
-          shouldQueryMeta: false,
+          first: 6,
+          shouldQueryRelatedPost: true,
         }
-      },
-      update(result) {
-        const { items } = result
-        return items
       },
     },
   },
@@ -129,26 +116,15 @@ export default {
     isPostpage() {
       return this.$route.fullPath?.includes('post/')
     },
-    transformedLatestPosts() {
-      return this.latestList.map((post) => {
-        const {
-          id = '',
-          title = '',
-          heroImage = {},
-          ogImage = {},
-          style = '',
-        } = post || {}
+    categoryList() {
+      return this.categories?.map((item) => {
+        const relatedList =
+          item.relatedPost?.map((post) => this.transformedRelatedPosts(post)) ??
+          []
         return {
-          id,
-          title,
-          href: getHref(post),
-          img: {
-            src:
-              heroImage?.urlTabletSized ||
-              ogImage?.urlTabletSized ||
-              require('~/assets/imgs/default/post.svg'),
-          },
-          isReport: isReport(style),
+          name: item?.name ?? '',
+          slug: item?.slug ?? '',
+          relatedList,
         }
       })
     },
@@ -198,6 +174,27 @@ export default {
         )
       })()
     },
+    transformedRelatedPosts(post = {}) {
+      const {
+        id = '',
+        title = '',
+        heroImage = {},
+        ogImage = {},
+        style = '',
+      } = post
+      return {
+        id,
+        title,
+        href: getHref(post),
+        isReport: isReport(style),
+        img: {
+          src:
+            heroImage?.urlTabletSized ||
+            ogImage?.urlTabletSized ||
+            require('~/assets/imgs/default/post.svg'),
+        },
+      }
+    },
     openHam() {
       this.shouldShowHamList = true
     },
@@ -212,26 +209,14 @@ export default {
       })
     },
     openRelatedList(e) {
-      console.log('open', e.srcElement?.id)
-      if (window && e.srcElement?.id && e.srcElement?.id !== 'related-list') {
-        this.openId = e.srcElement?.id
-        document.getElementById(this.openId).classList.add('deco')
+      if (e.srcElement.id) {
+        this.currentId = e.srcElement.id
       }
       this.shouldShowRelatedList = true
     },
-    closeRelatedList(e) {
-      console.log('close', e.srcElement?.id)
-      if (window && e.srcElement?.id) {
-        this.closeId = e.srcElement?.id
-        if (this.closeId === 'related-list') {
-          this.shouldShowRelatedList = false
-          document.getElementById(this.openId).classList.remove('deco')
-          this.openId = ''
-          this.closeId = ''
-        } else if (this.openId !== this.closeId) {
-          document.getElementById(this.closeId).classList.remove('deco')
-        }
-      }
+    closeRelatedList() {
+      this.currentId = ''
+      this.shouldShowRelatedList = false
     },
   },
 }
@@ -247,21 +232,8 @@ export default {
   background-color: #fff;
   transition: transform 0.3s;
   z-index: 499;
-  .related-list {
-    display: block;
-    position: absolute;
-    bottom: -316px;
-    left: 0;
-    right: 0;
-  }
-  .ham-list {
-    position: absolute;
-    z-index: 550;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
   &-top-wrapper {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -292,10 +264,10 @@ export default {
         display: flex;
         align-items: center;
         li {
-          position: relative;
           cursor: pointer;
           padding: 12px 24px 28px;
           span {
+            position: relative;
             font-size: 16px;
             font-weight: 700;
             line-height: 24px;
@@ -303,14 +275,23 @@ export default {
             color: #000928;
             z-index: 100;
           }
-          &.deco {
+          .related-list {
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 78px;
+            box-shadow: 0 0 32px rgba(0, 0, 0, 0.1),
+              0 8px 24px -2px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+          }
+          &:hover {
             span {
               &:before {
                 content: '';
                 position: absolute;
-                top: 21px;
-                left: 20px;
-                right: 22px;
+                top: 9px;
+                left: 0;
+                right: 0;
                 height: 8px;
                 background-color: #ebf02c;
                 z-index: -1;
@@ -321,9 +302,10 @@ export default {
                 border: solid transparent;
                 width: 0;
                 height: 0;
-                left: 40%;
-                bottom: 2px;
-                border-width: 0 10px 8px 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: -26px;
+                border-width: 0 12px 10px 12px;
                 border-color: transparent transparent #ebf02c transparent;
                 z-index: -1;
               }
@@ -382,6 +364,13 @@ export default {
         background-image: linear-gradient(180deg, #ebf02c 0%, #cef3ee 497.8%);
       }
     }
+  }
+  .ham-list {
+    position: absolute;
+    z-index: 550;
+    top: 0;
+    left: 0;
+    right: 0;
   }
 }
 </style>
