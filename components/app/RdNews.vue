@@ -47,8 +47,11 @@
       </article>
     </section>
 
-    <!-- <RdArticleConcern :items="mockConcernList" class="news__concern" /> -->
-    <RdArticleConcern class="news__concern" />
+    <RdArticleActionList
+      v-if="doesHaveActionList"
+      :actionList="actionList"
+      class="news__concern"
+    />
 
     <RdButtonDonate class="news__donate" />
 
@@ -102,7 +105,7 @@ import RdCoverImage from '~/components/shared/RdCoverImage.vue'
 import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
 import RdArticleSummary from '~/components/shared/RdArticleSummary.vue'
 import RdArticleContentHandler from '~/components/shared/RdArticleContentHandler.vue'
-import RdArticleConcern from '~/components/shared/RdArticleConcern.vue'
+import RdArticleActionList from '~/components/shared/RdArticleActionList.vue'
 import RdArticleCitation from '~/components/shared/RdArticleCitation.vue'
 import RdArticleTagList from '~/components/shared/RdArticleTagList.vue'
 import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
@@ -141,7 +144,7 @@ export default {
     RdArticleHeading,
     RdArticleSummary,
     RdArticleContentHandler,
-    RdArticleConcern,
+    RdArticleActionList,
     RdArticleCitation,
     RdArticleTagList,
     RdArticleSocialList,
@@ -343,6 +346,9 @@ export default {
     },
     doesHaveSummary() {
       return doesHaveApiDataContent(this.summary)
+    },
+    doesHaveActionList() {
+      return doesHaveApiDataContent(this.actionList)
     },
     doesHaveCitation() {
       return doesHaveApiDataContent(this.citation)
