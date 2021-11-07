@@ -1,7 +1,6 @@
 <template>
-  <div class="news">
-    <RdNavbar @sendGaEvent="sendGaScrollEvent('end')" />
-
+  <div class="g-page-wrapper news">
+    <RdNavbar />
     <RdArticleVideo
       v-if="doesHaveHeroVideo"
       :videoSrc="transformedNews.heroVideo.src"
@@ -55,12 +54,11 @@
 
     <RdArticleSocialList class="news__social-list" />
 
-    <!-- <RdArticleCitation
-      :infoList="mockCitation.infoList"
-      :linkList="mockCitation.linkList"
+    <RdArticleCitation
+      v-if="doesHaveCitation"
+      :citation="citation"
       class="news__citation"
-    /> -->
-    <RdArticleCitation class="news__citation" />
+    />
 
     <section class="news__tag-list-wrapper">
       <RdArticleTagList :tags="tags" class="tag" />
@@ -119,6 +117,7 @@ import {
   formatPostDate,
   isReport,
   handleApiData,
+  doesHaveApiDataContent,
 } from '~/helpers/index.js'
 
 const CREDIT_KEYS = [
@@ -179,38 +178,6 @@ export default {
       //   '兼任教師薪資計算公式由高教工會提供，利用教育部公，兼任教師薪資計算公式由高教工會提供',
       //   '兼任教師薪資計算公式由高教工會提供，利用教育部公',
       // ],
-      // mockCitation: {
-      //   infoList: [
-      //     {
-      //       id: 'asuid',
-      //       text:
-      //         '兼任教師薪資計算公式由高教工會提供，利用教育部公開資料大專院校課程表及大專院校教師專長彙整表，總計有 3,942,121 筆，再經過比較並排除無法辨識之資料，計算出預估薪資。',
-      //     },
-      //     {
-      //       id: 'asuisssd',
-      //       text:
-      //         '第二段測試，測試測試測試測試測試測試測試測試測試，測試測試測試測試，測試。',
-      //     },
-      //   ],
-      //   linkList: [
-      //     {
-      //       title: '雙北租屋資訊',
-      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-      //     },
-      //     {
-      //       title: '2020五一連假交通部1968人潮示警資料',
-      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-      //     },
-      //     {
-      //       title: '一般資料標題',
-      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-      //     },
-      //     {
-      //       title: '長資料標題，超過此長度就直接斷行',
-      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-      //     },
-      //   ],
-      // },
     }
   },
 
@@ -354,6 +321,14 @@ export default {
       const data = this.news?.summaryApiData ?? ''
       return data ? handleApiData(data) : []
     },
+    actionList() {
+      const data = this.news?.actionListApiData ?? ''
+      return data ? handleApiData(data) : []
+    },
+    citation() {
+      const data = this.news?.citationApiData ?? ''
+      return data ? handleApiData(data) : []
+    },
     isContentString() {
       return typeof this.content === 'string'
     },
@@ -367,15 +342,10 @@ export default {
       return this.transformedNews?.heroVideo?.src
     },
     doesHaveSummary() {
-      const validateArray = this.summary?.map((summaryContent) => {
-        return (
-          summaryContent?.content?.length > 1 ||
-          summaryContent?.content[0]?.length > 0
-        )
-      })
-      return validateArray.find((item) => {
-        return item
-      })
+      return doesHaveApiDataContent(this.summary)
+    },
+    doesHaveCitation() {
+      return doesHaveApiDataContent(this.citation)
     },
     doesHaveRelatedPosts() {
       return this.transformedRelatedPosts?.length > 0
@@ -383,6 +353,9 @@ export default {
     doesHaveLatestPosts() {
       return this.transformedLatestPosts?.length > 0
     },
+  },
+  mounted() {
+    console.log('sss', this.citation)
   },
   methods: {
     insertRecommend(data) {
@@ -419,13 +392,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.news {
+.g-page-wrapper {
   min-height: 100vh;
-  padding: 68.63px 0 0;
-  overflow: hidden;
-  @include media-breakpoint-up(md) {
+  padding: 70px 0 0;
+  @include media-breakpoint-up(sm) {
     padding: 86px 0 0;
   }
+}
+.news {
   &__cover {
     width: 100%;
     max-width: 960px;

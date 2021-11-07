@@ -18,4 +18,5 @@ export {
   formatPostDate,
   isReport,
   handleApiData,
+  doesHaveApiDataContent,
 } from './post.js'

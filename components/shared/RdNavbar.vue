@@ -10,7 +10,7 @@
           <SvgReadrLogo />
         </NuxtLink>
       </div>
-      <div v-if="!isUnderDesktopSize" class="middle">
+      <div v-if="isUpDesktopSize" class="middle">
         <ul>
           <li
             v-for="item in categoryList"
@@ -30,11 +30,17 @@
         </ul>
       </div>
       <div class="right">
-        <div class="right__progress-percent">
+        <div v-if="isPostpage" class="right__progress-percent">
           閱讀進度<span>{{ percent }}%</span>
         </div>
         <div v-if="!isPostpage" class="right__donate">
-          <button type="button">贊助我們</button>
+          <a
+            href="https://www.readr.tw/donate"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            贊助我們
+          </a>
         </div>
         <div v-if="isUnderDesktopSize" class="right__ham" @click="openHam">
           <SvgHamLogo class="right__ham-icon" />
@@ -42,13 +48,13 @@
       </div>
     </section>
     <section class="header-bottom-wrapper">
-      <div class="progress-bar">
+      <div v-if="isPostpage" class="progress-bar">
         <div :style="{ width: `${percent}%` }" class="progress-bar__fill" />
       </div>
     </section>
     <RdHeaderHamList
       v-if="shouldShowHamList && isUnderDesktopSize"
-      :categories="categories"
+      :categories="hamCategoryList"
       class="ham-list"
       @close-ham="closeHam"
     />
@@ -108,10 +114,13 @@ export default {
   computed: {
     ...mapGetters('viewport', ['viewportWidth', 'viewportHeight']),
     isUnderTabletSize() {
-      return this.viewportWidth < 768
+      return this.viewportWidth && this.viewportWidth < 768
     },
     isUnderDesktopSize() {
-      return this.viewportWidth < 960
+      return this.viewportWidth && this.viewportWidth < 960
+    },
+    isUpDesktopSize() {
+      return this.viewportWidth && this.viewportWidth > 960
     },
     isPostpage() {
       return this.$route.fullPath?.includes('post/')
@@ -128,6 +137,14 @@ export default {
         }
       })
     },
+    hamCategoryList() {
+      return this.categoryList?.map((item) => {
+        return {
+          name: item?.name ?? '',
+          slug: item?.slug ?? '',
+        }
+      })
+    },
   },
 
   watch: {
@@ -139,7 +156,6 @@ export default {
   },
 
   mounted() {
-    console.log('nn', this.transformedLatestPosts)
     this.initProgress()
   },
 
@@ -197,10 +213,23 @@ export default {
     },
     openHam() {
       this.shouldShowHamList = true
+      // this.setBodyNotScroll()
     },
     closeHam() {
       this.shouldShowHamList = false
+      // this.resetBodyNotScroll()
     },
+    // setBodyNotScroll() {
+    //   const scrollY = window.scrollY
+    //   document.body.style.overflow = 'hidden'
+    //   document.body.style.top = `-${scrollY}px`
+    // },
+    // resetBodyNotScroll() {
+    //   const scrollY = document.body.style.top
+    //   document.body.style.overflow = ''
+    //   document.body.style.top = ''
+    //   window.scrollTo(0, parseInt(scrollY || '0') * -1)
+    // },
     handleCategoryClicked({ name = '', slug = '' }) {
       if (!slug || !name) return
       this.$router.push({
@@ -238,9 +267,9 @@ export default {
     align-items: center;
     justify-content: space-between;
     box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    padding: 12px 20px;
+    padding: 12px 12px 12px 20px;
     @include media-breakpoint-up(sm) {
-      padding: 16px 24px;
+      padding: 16px 36px 16px 24px;
     }
     @include media-breakpoint-up(lg) {
       padding: 16px 24px 0;
@@ -296,6 +325,7 @@ export default {
                 background-color: #ebf02c;
                 z-index: -1;
               }
+              // triangle
               &:after {
                 content: '';
                 position: absolute;
@@ -334,20 +364,29 @@ export default {
         }
       }
       &__donate {
-        font-size: 16px;
-        font-weight: 700;
-        line-height: 24px;
-        letter-spacing: 2.5px;
-        color: #000928;
         background-color: #fff;
         border: 1px solid #000928;
         border-radius: 2px;
-        padding: 8px 16px;
+        a {
+          display: block;
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 24px;
+          letter-spacing: 2.5px;
+          color: #000928;
+          padding: 8px 16px;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+          background-color: #ebf02c;
+        }
       }
       &__ham {
         width: 40px;
         height: 40px;
         margin: 0 0 0 20px;
+        padding: 4px;
         &-icon {
           width: 100%;
           height: 100%;

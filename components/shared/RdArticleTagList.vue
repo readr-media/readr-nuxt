@@ -38,6 +38,10 @@ ul {
     cursor: pointer;
     padding: 8px;
     margin: 0 8px 8px 0;
+    &:hover,
+    &:focus {
+      color: rgba(0, 9, 40, 0.5);
+    }
   }
 }
 </style>

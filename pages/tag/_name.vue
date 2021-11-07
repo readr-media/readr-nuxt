@@ -1,5 +1,6 @@
 <template>
-  <div class="tag-wrapper">
+  <div class="g-page-wrapper tag-wrapper">
+    <RdNavbar />
     <div class="tag">
       <RdListHeading :title="tagName" color="#ebf02c" class="tag__heading" />
       <RdArticleList
@@ -24,6 +25,7 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
+import RdNavbar from '~/components/shared/RdNavbar.vue'
 import RdListHeading from '~/components/shared/RdListHeading.vue'
 import RdArticleList from '~/components/shared/RdArticleList.vue'
 
@@ -41,6 +43,7 @@ export default {
 
   components: {
     InfiniteLoading,
+    RdNavbar,
     RdListHeading,
     RdArticleList,
   },
@@ -160,6 +163,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.g-page-wrapper {
+  min-height: 100vh;
+  padding: 64px 0 0;
+  overflow: hidden;
+  @include media-breakpoint-up(sm) {
+    padding: 80px 0 0;
+  }
+}
 .tag-wrapper {
   width: 100%;
   min-height: 100vh;

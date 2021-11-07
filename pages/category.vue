@@ -1,5 +1,6 @@
 <template>
-  <div class="category-wrapper">
+  <div class="g-page-wrapper category-wrapper">
+    <RdNavbar />
     <div class="category">
       <RdListHeading
         :title="categoryText"
@@ -33,6 +34,7 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
+import RdNavbar from '~/components/shared/RdNavbar.vue'
 import RdListHeading from '~/components/shared/RdListHeading.vue'
 import RdCategoryNav from '~/components/shared/RdCategoryNav.vue'
 import RdArticleList from '~/components/shared/RdArticleList.vue'
@@ -52,6 +54,7 @@ export default {
 
   components: {
     InfiniteLoading,
+    RdNavbar,
     RdListHeading,
     RdCategoryNav,
     // RdListItemCategory,
@@ -189,10 +192,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.g-page-wrapper {
+  min-height: 100vh;
+  padding: 64px 0 0;
+  overflow: hidden;
+  @include media-breakpoint-up(sm) {
+    padding: 80px 0 0;
+  }
+}
 .category-wrapper {
   width: 100%;
-  min-height: 100vh;
-  margin: 24px 0;
+  margin: 24px 0 0;
   @include media-breakpoint-up(sm) {
     margin: 48px 0 0;
   }

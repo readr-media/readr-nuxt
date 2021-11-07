@@ -46,6 +46,17 @@ function isReport(style = '') {
   return style === 'report' || style === 'project3' || style === 'embedded'
 }
 
+function doesHaveApiDataContent(data = []) {
+  const validateArray = data?.map((dataContent) => {
+    return (
+      dataContent?.content?.length > 1 || dataContent?.content[0]?.length > 0
+    )
+  })
+  return validateArray.find((item) => {
+    return item
+  })
+}
+
 export {
   getHref,
   formatDate,
@@ -53,4 +64,5 @@ export {
   formatPostDate,
   isReport,
   handleApiData,
+  doesHaveApiDataContent,
 }
