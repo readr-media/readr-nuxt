@@ -10,13 +10,13 @@
           <SvgReadrLogo />
         </NuxtLink>
       </div>
-      <div v-if="isUpDesktopSize" class="middle">
+      <div class="middle">
         <ul>
           <li
             v-for="item in categoryList"
             :id="item.slug"
             :key="item.slug"
-            @click="handleCategoryClicked({ slug: item.slug, name: item.name })"
+            @click="navbarItemsClicked({ slug: item.slug, name: item.name })"
             @mouseover="openRelatedList"
             @mouseleave="closeRelatedList"
           >
@@ -42,7 +42,7 @@
             贊助我們
           </a>
         </div>
-        <div v-if="isUnderDesktopSize" class="right__ham" @click="openHam">
+        <div class="right__ham" @click="openHam">
           <SvgHamLogo class="right__ham-icon" />
         </div>
       </div>
@@ -53,10 +53,11 @@
       </div>
     </section>
     <RdHeaderHamList
-      v-if="shouldShowHamList && isUnderDesktopSize"
+      v-if="shouldShowHamList"
       :categories="hamCategoryList"
       class="ham-list"
       @close-ham="closeHam"
+      @clicked-category="closeHamWithRedirect"
     />
   </header>
 </template>
@@ -112,18 +113,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters('viewport', ['viewportWidth', 'viewportHeight']),
-    isUnderTabletSize() {
-      return this.viewportWidth && this.viewportWidth < 768
-    },
-    isUnderDesktopSize() {
-      return this.viewportWidth && this.viewportWidth < 960
-    },
-    isUpDesktopSize() {
-      return this.viewportWidth && this.viewportWidth > 960
-    },
+    ...mapGetters('viewport', ['viewportHeight']),
     isPostpage() {
       return this.$route.fullPath?.includes('post/')
+    },
+    isCategoryPage() {
+      return this.$route.fullPath?.includes('/category')
     },
     categoryList() {
       return this.categories?.map((item) => {
@@ -156,11 +151,15 @@ export default {
   },
 
   mounted() {
-    this.initProgress()
+    if (this.isPostpage) {
+      this.initProgress()
+    }
   },
 
   beforeDestroy() {
-    window.removeEventListener('scroll', this.calculateProgress)
+    if (this.isPostpage) {
+      window.removeEventListener('scroll', this.calculateProgress)
+    }
   },
 
   methods: {
@@ -205,37 +204,21 @@ export default {
         isReport: isReport(style),
         img: {
           src:
-            heroImage?.urlTabletSized ||
-            ogImage?.urlTabletSized ||
+            heroImage?.urlMobileSized ||
+            ogImage?.urlMobileSized ||
             require('~/assets/imgs/default/post.svg'),
         },
       }
     },
+    navbarItemsClicked(item) {
+      this.handleCategoryClicked(item)
+    },
     openHam() {
       this.shouldShowHamList = true
-      // this.setBodyNotScroll()
+      this.setBodyNotScroll()
     },
     closeHam() {
       this.shouldShowHamList = false
-      // this.resetBodyNotScroll()
-    },
-    // setBodyNotScroll() {
-    //   const scrollY = window.scrollY
-    //   document.body.style.overflow = 'hidden'
-    //   document.body.style.top = `-${scrollY}px`
-    // },
-    // resetBodyNotScroll() {
-    //   const scrollY = document.body.style.top
-    //   document.body.style.overflow = ''
-    //   document.body.style.top = ''
-    //   window.scrollTo(0, parseInt(scrollY || '0') * -1)
-    // },
-    handleCategoryClicked({ name = '', slug = '' }) {
-      if (!slug || !name) return
-      this.$router.push({
-        name: 'category',
-        params: { name, slug },
-      })
     },
     openRelatedList(e) {
       if (e.srcElement.id) {
@@ -246,6 +229,26 @@ export default {
     closeRelatedList() {
       this.currentId = ''
       this.shouldShowRelatedList = false
+    },
+    closeHamWithRedirect(item) {
+      this.shouldShowHamList = false
+      this.handleCategoryClicked(item)
+    },
+    setBodyNotScroll() {
+      const scrollY = window.scrollY
+      document.body.style.overflow = 'hidden'
+      document.body.style.top = `-${scrollY}px`
+    },
+    handleCategoryClicked({ name = '', slug = '' }) {
+      if (!slug || !name) return
+      if (this.isCategoryPage) {
+        this.$emit('category-change', { name, slug })
+      } else {
+        this.$router.push({
+          name: 'category',
+          params: { name, slug },
+        })
+      }
     },
   },
 }
@@ -290,8 +293,11 @@ export default {
     }
     .middle {
       ul {
-        display: flex;
-        align-items: center;
+        display: none;
+        @include media-breakpoint-up(lg) {
+          display: flex;
+          align-items: center;
+        }
         li {
           cursor: pointer;
           padding: 12px 24px 28px;
@@ -383,10 +389,14 @@ export default {
         }
       }
       &__ham {
+        display: block;
         width: 40px;
         height: 40px;
         margin: 0 0 0 20px;
         padding: 4px;
+        @include media-breakpoint-up(lg) {
+          display: none;
+        }
         &-icon {
           width: 100%;
           height: 100%;
@@ -405,11 +415,18 @@ export default {
     }
   }
   .ham-list {
-    position: absolute;
+    display: block;
+    position: fixed;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
     z-index: 550;
     top: 0;
     left: 0;
     right: 0;
+    @include media-breakpoint-up(lg) {
+      display: none;
+    }
   }
 }
 </style>

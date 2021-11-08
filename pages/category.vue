@@ -1,6 +1,6 @@
 <template>
   <div class="g-page-wrapper category-wrapper">
-    <RdNavbar />
+    <RdNavbar @category-change="refetchList" />
     <div class="category">
       <RdListHeading
         :title="categoryText"
@@ -9,6 +9,7 @@
       />
       <RdCategoryNav
         :categories="categories"
+        :currentCategorySlug="currentCategory.slug"
         class="category__category-nav"
         @item-clicked="refetchList"
       />

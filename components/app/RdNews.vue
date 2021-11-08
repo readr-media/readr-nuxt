@@ -50,7 +50,7 @@
     <RdArticleActionList
       v-if="doesHaveActionList"
       :actionList="actionList"
-      class="news__concern"
+      class="news__action-list"
     />
 
     <RdButtonDonate class="news__donate" />
@@ -176,11 +176,6 @@ export default {
   data() {
     return {
       latestPosts: [],
-      // mockConcernList: [
-      //   '兼任教師薪資計算公式由<a href="https://www.ttsb.gov.tw/1133/1178/1179/30146/post" target="_blank" rel="noreferrer noopener">高教工會提供</a>，測試測試',
-      //   '兼任教師薪資計算公式由高教工會提供，利用教育部公，兼任教師薪資計算公式由高教工會提供',
-      //   '兼任教師薪資計算公式由高教工會提供，利用教育部公',
-      // ],
     }
   },
 
@@ -360,9 +355,11 @@ export default {
       return this.transformedLatestPosts?.length > 0
     },
   },
+
   mounted() {
-    console.log('sss', this.citation)
+    console.log('hah', this.citation)
   },
+
   methods: {
     insertRecommend(data) {
       let i = 0
@@ -383,6 +380,21 @@ export default {
         }
       }
       return data
+    },
+    doseInsideList(data) {
+      let firstListIndex
+      return data.map((item, i) => {
+        if (item.type === 'unordered-list-item') {
+          firstListIndex = i
+        }
+
+        const isInList = firstListIndex !== undefined
+
+        return {
+          ...item,
+          isInList,
+        }
+      })
     },
     sendGaClickEvent(label, value) {
       this.sendGaEvent('click', label, value)
@@ -460,7 +472,7 @@ export default {
       }
     }
   }
-  &__concern {
+  &__action-list {
     width: 100%;
     margin: 0 auto 48px;
     max-width: 568px;

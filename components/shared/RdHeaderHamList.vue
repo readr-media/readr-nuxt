@@ -34,21 +34,18 @@ export default {
   },
   methods: {
     handleClose() {
+      this.resetBodyNotScroll()
       this.$emit('close-ham')
     },
-    // resetBodyNotScroll() {
-    //   const scrollY = document.body.style.top
-    //   document.body.style.overflow = ''
-    //   document.body.style.top = ''
-    //   window.scrollTo(0, parseInt(scrollY || '0') * -1)
-    // },
-    handleCategoryClicked({ name = '', slug = '' }) {
-      // this.resetBodyNotScroll()
-      if (!slug || !name) return
-      this.$router.push({
-        name: 'category',
-        params: { name, slug },
-      })
+    handleCategoryClicked(item) {
+      this.resetBodyNotScroll()
+      this.$emit('clicked-category', item)
+    },
+    resetBodyNotScroll() {
+      const scrollY = document.body.style.top
+      document.body.style.overflow = ''
+      document.body.style.top = ''
+      window.scrollTo(0, parseInt(scrollY || '0') * -1)
     },
   },
 }
@@ -56,10 +53,8 @@ export default {
 
 <style lang="scss" scoped>
 .ham-list-wrapper {
-  min-height: 100vh;
   background-color: #fff;
   text-align: right;
-  overflow-y: auto;
   padding: 12px;
   @include media-breakpoint-up(sm) {
     padding: 20px 36px;
@@ -126,10 +121,10 @@ export default {
 
 // transition effect
 .toggle-fade-enter-active {
-  transition: all 0.25s ease-out;
+  transition: all 0.35s ease-out;
 }
 .toggle-fade-leave-active {
-  transition: all 0.25s ease-out;
+  transition: all 0.15s ease-out;
 }
 .toggle-fade-enter {
   opacity: 1;

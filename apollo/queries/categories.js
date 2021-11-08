@@ -15,9 +15,11 @@ const categories = gql`
         style
         title: name
         heroImage {
+          urlMobileSized
           urlTabletSized
         }
         ogImage {
+          urlMobileSized
           urlTabletSized
         }
       }

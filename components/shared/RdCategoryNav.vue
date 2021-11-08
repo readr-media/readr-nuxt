@@ -3,7 +3,7 @@
     <li
       v-for="category in formatedCategories"
       :key="category.slug"
-      :class="{ active: category.slug === currentCategory }"
+      :class="{ active: category.slug === currentCategorySlug }"
       @click="handleItemClicked(category)"
     >
       {{ category.name }}
@@ -20,11 +20,10 @@ export default {
       type: Array,
       default: () => [],
     },
-  },
-  data() {
-    return {
-      currentCategory: this.$route.params?.slug || 'all',
-    }
+    currentCategorySlug: {
+      type: String,
+      default: 'all',
+    },
   },
   computed: {
     formatedCategories() {
@@ -36,7 +35,6 @@ export default {
   },
   methods: {
     handleItemClicked(item) {
-      this.currentCategory = item.slug
       this.$emit('item-clicked', item)
     },
   },

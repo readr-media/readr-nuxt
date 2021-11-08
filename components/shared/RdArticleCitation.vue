@@ -64,6 +64,12 @@ export default {
           margin: 16px 0 0;
         }
       }
+      .quote + .quote {
+        margin: 8px 0 0;
+        @include media-breakpoint-up(md) {
+          margin: 8px 0 0;
+        }
+      }
     }
   }
 }
