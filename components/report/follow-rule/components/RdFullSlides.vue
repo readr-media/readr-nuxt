@@ -92,6 +92,19 @@ export default {
       })
         .setPin('.full-slide__pin')
         .setTween(wipeAnimation)
+        .addIndicators() // add indicators (requires plugin)
+        .addTo(controller)
+
+      const offset = this.viewportWidth > 768 ? '-100' : -'60'
+
+      new ScrollMagic.Scene({
+        triggerElement: '.full-slide',
+        triggerHook: 0,
+        duration: `${
+          this.$refs.slide.clientHeight - offset - this.viewportHeight
+        }px`,
+        offset: `${offset}px`,
+      })
         .on('enter leave', this.handleEnterLeave)
         .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
@@ -113,6 +126,7 @@ export default {
     },
     handleEnterLeave(e) {
       this.enterFull = e.type === 'enter'
+      console.log(e)
     },
   },
 }

@@ -9,8 +9,8 @@ export default {
   },
   props: {
     sectionArticle: {
-      type: Object,
-      default: () => {},
+      type: Array,
+      default: () => [],
     },
     loadScrollMagicScriptTimes: {
       type: Number,
