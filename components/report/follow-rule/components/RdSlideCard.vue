@@ -1,6 +1,6 @@
 <template>
-  <div ref="article" class="spacer" :style="cssProps">
-    <div class="slide-card">
+  <div ref="cards" class="spacer" :style="cssProps">
+    <div class="slide-card" :class="{ enterFull: enterFull }">
       <div class="slide-card__pin">
         <div class="slide-container">
           <section v-for="(card, i) in cards" :key="i" class="card">
@@ -9,6 +9,7 @@
         </div>
       </div>
     </div>
+    <div v-show="enterFull" class="background" />
   </div>
 </template>
 
@@ -23,10 +24,6 @@ export default {
       default: () => {},
       require: true,
     },
-    processBarHeight: {
-      type: Number,
-      default: 0,
-    },
     loadScrollMagicScriptTimes: {
       type: Number,
       default: 0,
@@ -36,9 +33,13 @@ export default {
     return {
       loadScriptTimes: 0,
       wrapperWidth: 600,
+      enterFull: false,
     }
   },
   computed: {
+    progressBarHeight() {
+      return this.viewportWidth > 768 ? 100 : 60
+    },
     viewportWidth() {
       return this.$store.getters['viewport/viewportWidth']
     },
@@ -62,7 +63,7 @@ export default {
           this.cards.length * cardWithGap -
           this.gap +
           0.5 * this.viewportHeight +
-          (this.cardHeight - this.processBarHeight) / 2
+          (this.cardHeight - this.progressBarHeight) / 2
         }px`,
         '--card-width': `${this.cardWitdh}px`,
         '--card-height': `${this.cardHeight}px`,
@@ -100,32 +101,30 @@ export default {
           delay: 1,
         })
       }
-
-      console.log(
-        this.cardHeight,
-        this.processBarHeight,
-        (this.cardHeight - this.processBarHeight) / 2
-      )
-
       new ScrollMagic.Scene({
         triggerElement: '.slide-card',
         triggerHook: 0.5,
         duration: `${allWidth}px`,
-        offset: `${(this.cardHeight - this.processBarHeight) / 2}px`,
+        // offset: `${(this.cardHeight - this.progressBarHeight) / 2}px`,
+        offset: `${this.cardHeight / 2}px`,
       })
         .setPin('.slide-card__pin')
         .setTween(wipeAnimation)
+        .on('enter leave', (e) => this.handleEnterLeave(e))
         .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
     },
   },
   mounted() {
-    this.wrapperWidth = this.$refs.article.clientWidth
+    this.wrapperWidth = this.$refs.cards.clientWidth
   },
   methods: {
     getPictureUrl(id) {
       const img = require(`~/assets/imgs/report/follow-rule/report-slide-${id}.png`)
       return img
+    },
+    handleEnterLeave(e) {
+      this.enterFull = e.type === 'enter'
     },
   },
 }
@@ -138,6 +137,9 @@ export default {
   padding-top: 32px;
   max-width: 600px;
   margin: 0 auto;
+}
+.enterFull {
+  z-index: 50;
 }
 .slide-card {
   position: absolute;
@@ -181,5 +183,15 @@ export default {
     width: 380px;
     height: 380px;
   }
+}
+
+.background {
+  background: #feeade;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 30;
 }
 </style>

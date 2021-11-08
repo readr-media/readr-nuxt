@@ -59,7 +59,7 @@ export default {
     return {
       scale: 0.5,
       trackedLocation: 40,
-      stalkerLocation: -100,
+      stalkerLocation: -50,
       stalkerCanIn: false,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
@@ -73,8 +73,14 @@ export default {
     countTags() {
       return this.tagsArray.length
     },
+    firstMargin() {
+      return this.minDistance - 18
+    },
     spacing() {
-      return (712 - 50 - 18 * (this.countTags + 1)) / (this.countTags - 1)
+      return (
+        (712 - this.firstMargin - 18 * (this.countTags + 1)) /
+        (this.countTags - 1)
+      )
     },
     cssProps() {
       return {
@@ -82,33 +88,37 @@ export default {
         '--tracked-location': `${this.trackedLocation}px`,
         '--stalker-location': `${this.stalkerLocation}px`,
         '--scale': this.scale,
+        '--first-margin': `${this.firstMargin}px`,
       }
     },
     distance() {
       return this.trackedLocation - this.stalkerLocation
     },
     minDistance() {
-      return 77 * this.scale
+      return parseInt(77 * this.scale + 15)
     },
   },
 
   watch: {
     nowTagId(id) {
-      const newLocation = 77 + (parseInt(id) - 1) * (this.spacing + 18)
-      if (id > 1) this.stalkerCanIn = true
+      const newLocation =
+        this.minDistance + (parseInt(id) - 1) * (this.spacing + 18)
+      if (id > 1 && !this.stalkerCanIn) {
+        this.stalkerCanIn = true
+      }
       this.trackedMove(newLocation, 'moving', 10, () => {
         this.trackedStatus = 'stand'
         this.stalkerForword()
       })
     },
     distance(d) {
-      if (d <= 77 && this.trackedStatus === 'stand') {
+      if (d <= this.minDistance && this.trackedStatus === 'stand') {
         this.trackedStatus = 'afraid'
       }
-      if (d === 78) {
+      if (d === this.minDistance + 1) {
         if (this.trackedStatus !== 'moving') this.trackedStatus = 'stand'
       }
-      if (d < 77) {
+      if (d < this.minDistance) {
         this.handleScroll()
       }
     },
@@ -117,19 +127,23 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll)
     this.trackedLocation = this.minDistance
+    window.addEventListener('scroll', this.handleScroll)
   },
   methods: {
     isArrived(id) {
-      return this.trackedLocation > 77 + (id - 1) * (this.spacing + 18) - 9
+      return (
+        this.trackedLocation >
+        this.minDistance + (id - 1) * (this.spacing + 18) - 9
+      )
     },
     stalkerMove(destination, status, time, cb) {
       if (
         this.isAnimateFinish ||
         !this.stalkerCanIn ||
         this.stalkerLocation === parseInt(destination) ||
-        (this.stalkerStatus === 'back' && status === 'back')
+        (this.stalkerStatus === 'back' && status === 'back') ||
+        (status === 'back' && this.stalkerLocation < 1)
       )
         return
       this.stalkerMoveId++
@@ -166,9 +180,14 @@ export default {
     },
     stalkerForword() {
       if (this.isAnimateFinish) return
-      this.stalkerMove(this.trackedLocation - 77, 'moving', 100, () => {
-        this.stalkerStatus = 'stand'
-      })
+      this.stalkerMove(
+        this.trackedLocation - this.minDistance,
+        'moving',
+        100,
+        () => {
+          this.stalkerStatus = 'stand'
+        }
+      )
     },
     handleScroll() {
       if (this.isAnimateFinish) return
@@ -244,7 +263,7 @@ export default {
 }
 
 .anchor {
-  margin-left: 50px;
+  margin-left: var(--first-margin);
   background: rgba(111, 111, 111, 1);
   & + & {
     margin-left: var(--spacing);

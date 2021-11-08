@@ -137,12 +137,6 @@ export default {
   },
 
   methods: {
-    handleSim() {
-      this.nowTagId++
-    },
-    handleSimDecrease() {
-      this.nowTagId--
-    },
     chaneParagraph(id) {
       this.nowTagId = id
     },
