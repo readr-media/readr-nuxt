@@ -126,7 +126,6 @@ export default {
     },
     handleEnterLeave(e) {
       this.enterFull = e.type === 'enter'
-      console.log(e)
     },
   },
 }
