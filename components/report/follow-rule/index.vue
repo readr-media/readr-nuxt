@@ -9,6 +9,7 @@
       :isScrollingUp="isScrollingUp"
       :isScrollEnd="isScrollEnd"
       :nowTagId="parseInt(nowTagId)"
+      @scroll-to-section="(id) => handleScroll(id)"
     />
     <RdProgressBar
       v-else
@@ -16,6 +17,8 @@
       :tagsArray="cmsData.contentApiData.tag"
       :nowTagId="parseInt(nowTagId)"
       :isScrollEnd="isScrollEnd"
+      :isScrollingUp="isScrollingUp"
+      @scroll-to-section="(id) => handleScroll(id)"
     />
 
     <RdArticle
@@ -24,7 +27,7 @@
       :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
       @chaneParagraph="(id) => chaneParagraph(id)"
     />
-    <div v-intersect="quizObserver" class="article__report-quiz-wrapper">
+    <div ref="quiz" class="article__report-quiz-wrapper" id="quiz">
       <RdReportQuiz
         :quizTitle="cmsData.contentApiData.articleQuiz.title"
         :quizDescription="cmsData.contentApiData.articleQuiz.description"
@@ -61,6 +64,8 @@
 </template>
 
 <script>
+/* global ScrollMagic */
+/* eslint no-undef: "error" */
 import { mapGetters } from 'vuex'
 import LazyRenderer from 'vue-lazy-renderer'
 import RdReportQuiz from './components/RdReportQuiz.vue'
@@ -72,17 +77,8 @@ import RdReportHeader from '~/components/app/Report/RdReportHeader.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 import { scrollDirection } from '~/components/helpers/vue/mixins/index.js'
-import { intersect } from '~/helpers/vue/directives/index.js'
-
-import {
-  setupIntersectionObserver,
-  cleanupIntersectionObserver,
-} from '~/helpers/index.js'
 
 export default {
-  directives: {
-    intersect,
-  },
   components: {
     RdReportHeader,
     RdCover,
@@ -109,7 +105,6 @@ export default {
       nowTagId: 1,
       processBarHeight: 0,
       loadScrollMagicScriptTimes: 0,
-      quizObserver: undefined,
       isScrollEnd: false,
     }
   },
@@ -123,40 +118,47 @@ export default {
       this.isMobile = true
       this.isMobile = width < 768
     },
+    loadScrollMagicScriptTimes(times) {
+      if (times === 4) this.addQuizObserver()
+    },
   },
 
   mounted() {
-    this.setupQuizObserver()
+    window.scrollTo(0, 0)
     if (this.viewportWidth > 768) this.isMobile = false
-    console.log(this.viewportWidth, this.isMobile)
     this.processBarHeight = this.isMobile ? 90 : 217
   },
 
-  beforeDestroy() {
-    cleanupIntersectionObserver(this, 'quizObserver')
-  },
-
   methods: {
+    handleScroll(id) {
+      const controller = new ScrollMagic.Controller()
+      controller.scrollTo(`#section-${id}`)
+      const scrollBy = this.viewportWidth > 768 ? 200 : 100
+      window.scrollBy(0, -scrollBy)
+    },
     chaneParagraph(id) {
       this.nowTagId = id
     },
-    async setupQuizObserver() {
-      const rootMove = this.viewportHeight - 350
-      this.quizObserver = await setupIntersectionObserver(
-        (entries) => {
-          entries.forEach(({ isIntersecting }) => {
-            if (isIntersecting) {
-              this.isScrollEnd = true
-            }
-          })
-        },
-        {
-          rootMargin: `${this.viewportHeight - 300}px 0px ${rootMove}px 0px`,
-        }
-      )
-    },
     sendGaEvent({ action, label }) {
       this.$ga.event('projects', action, label)
+    },
+
+    addQuizObserver() {
+      const duration = this.$refs.quiz.clientHeight
+      const controller = new ScrollMagic.Controller({
+        globalSceneOptions: {
+          duration,
+          triggerHook: 0.2,
+          reverse: true,
+        },
+      })
+      new ScrollMagic.Scene({
+        triggerElement: `#quiz`,
+      })
+        .on('enter', () => {
+          if (!this.isScrollEnd) this.isScrollEnd = true
+        })
+        .addTo(controller)
     },
   },
 

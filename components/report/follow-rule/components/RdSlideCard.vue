@@ -111,7 +111,7 @@ export default {
         .setPin('.slide-card__pin')
         .setTween(wipeAnimation)
         .on('enter leave', (e) => this.handleEnterLeave(e))
-        .addIndicators() // add indicators (requires plugin)
+        // .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
     },
   },

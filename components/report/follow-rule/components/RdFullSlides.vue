@@ -92,7 +92,7 @@ export default {
       })
         .setPin('.full-slide__pin')
         .setTween(wipeAnimation)
-        .addIndicators() // add indicators (requires plugin)
+        // .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
 
       const offset = this.viewportWidth > 768 ? '-100' : -'60'
@@ -106,7 +106,7 @@ export default {
         offset: `${offset}px`,
       })
         .on('enter leave', this.handleEnterLeave)
-        .addIndicators() // add indicators (requires plugin)
+        // .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
     },
   },

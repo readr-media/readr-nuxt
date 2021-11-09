@@ -22,6 +22,7 @@
             :key="tag.id"
             class="mobile__title_row_item"
             :class="{ active: parseInt(tag.id) === nowTagId }"
+            @click="handleClick(tag.id)"
           >
             {{ tag.title }}
           </div>
@@ -64,7 +65,7 @@ export default {
   data() {
     return {
       scale: 0.5,
-      trackedLocation: 77,
+      trackedLocation: 0,
       stalkerLocation: -80,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
@@ -74,6 +75,7 @@ export default {
       percent: 0,
       hasFinishedReading: false,
       isAnimateFinish: false,
+      frozenScroll: false,
     }
   },
   computed: {
@@ -93,19 +95,19 @@ export default {
       return [this.tagsArray.slice(0, 3), this.tagsArray.slice(3, 6)]
     },
     minDistance() {
-      return 77 * this.scale
+      return parseInt(100 * this.scale)
     },
   },
 
   watch: {
     distance(d) {
-      if (d <= 77 && this.trackedStatus === 'stand') {
+      if (d <= this.minDistance && this.trackedStatus === 'stand') {
         this.trackedStatus = 'afraid'
       }
-      if (d === 78) {
+      if (d === this.minDistance + 1) {
         if (this.trackedStatus !== 'moving') this.trackedStatus = 'stand'
       }
-      if (d < 77) {
+      if (d < this.minDistance) {
         this.handleScroll()
       }
     },
@@ -115,18 +117,25 @@ export default {
   },
 
   mounted() {
+    this.trackedLocation = this.minDistance
     this.handleScroll()
     window.addEventListener('scroll', this.handleScroll)
   },
 
   methods: {
+    handleClick(id) {
+      this.$emit('scroll-to-section', id)
+    },
     stalkerMove(destination, status, time, cb) {
       if (
+        // !this.stalkerCanMove ||
         this.isAnimateFinish ||
         this.stalkerLocation === parseInt(destination) ||
         (this.stalkerStatus === 'back' && status === 'back')
+        // (status === 'back' && this.stalkerLocation < this.minDistance)
       )
         return
+      console.log(destination, this.stalkerLocation, status)
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
@@ -161,15 +170,26 @@ export default {
     },
     stalkerForword() {
       if (this.isAnimateFinish) return
-      this.stalkerMove(this.trackedLocation - 77, 'moving', 20, () => {
-        this.stalkerStatus = 'stand'
-      })
+      this.stalkerMove(
+        this.trackedLocation - this.minDistance,
+        'moving',
+        20,
+        () => {
+          this.stalkerStatus = 'stand'
+        }
+      )
     },
     handleScroll() {
       if (this.isAnimateFinish) return
-      this.stalkerMove(0, 'back', 10, () => {
-        this.stalkerForword()
-      })
+      console.log(this.frozenScroll)
+      if (!this.frozenScroll) {
+        this.stalkerMove(0, 'back', 10, () => {
+          this.stalkerStatus = 'stand'
+          setTimeout(() => {
+            this.stalkerForword()
+          }, 1000)
+        })
+      }
       rafThrottle(() => {
         if (!this.target) {
           this.target = document.getElementsByTagName('article')[0]
@@ -188,11 +208,16 @@ export default {
           (pageYOffset / (bottom + pageYOffset - this.viewportHeight)) * 100
         )
 
-        const totalWidth = this.viewportWidth - 77
-        const newLocation = Math.round(totalWidth * this.percent * 0.01) + 77
+        const totalWidth = this.viewportWidth - this.minDistance
+        const newLocation =
+          Math.round(totalWidth * this.percent * 0.01) + this.minDistance
         this.trackedMove(newLocation, 'moving', 10, () => {
           this.trackedStatus = 'stand'
-          this.stalkerForword()
+          if (this.stalkerStatus !== 'back')
+            setTimeout(() => {
+              this.stalkerForword()
+              // this.frozenScroll = true
+            }, 1000)
         })
       })()
     },
