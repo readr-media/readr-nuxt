@@ -18,8 +18,13 @@
           :key="tag.id"
           class="bar__dot anchor"
           :class="{ anchor__light: isArrived(tag.id) }"
+          @click="handleClick(tag.id)"
         >
-          <div class="anchor__title" :class="{ light: isArrived(tag.id) }">
+          <div
+            v-show="isScrollingUp"
+            class="anchor__title"
+            :class="{ light: isArrived(tag.id) }"
+          >
             {{ tag.title }}
           </div>
         </div>
@@ -27,6 +32,7 @@
           <div class="bar__proccess_finish"></div>
         </div>
       </div>
+      <div class="title-space" :class="{ 'hide-title': !isScrollingUp }" />
     </div>
   </div>
 </template>
@@ -52,6 +58,10 @@ export default {
     isScrollEnd: {
       type: Boolean,
       default: false,
+    },
+    isScrollingUp: {
+      type: Boolean,
+      default: true,
     },
   },
 
@@ -131,6 +141,9 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
   },
   methods: {
+    handleClick(id) {
+      this.$emit('scroll-to-section', id)
+    },
     isArrived(id) {
       return (
         this.trackedLocation >
@@ -138,12 +151,14 @@ export default {
       )
     },
     stalkerMove(destination, status, time, cb) {
+      const CorrectionDestination = destination > 712 ? -50 : destination
+
       if (
         this.isAnimateFinish ||
         !this.stalkerCanIn ||
-        this.stalkerLocation === parseInt(destination) ||
+        this.stalkerLocation === parseInt(CorrectionDestination) ||
         (this.stalkerStatus === 'back' && status === 'back') ||
-        (status === 'back' && this.stalkerLocation < 1)
+        (status === 'back' && this.stalkerLocation < 10)
       )
         return
       this.stalkerMoveId++
@@ -151,11 +166,11 @@ export default {
       this.stalkerStatus = status
       const interval = setInterval(() => {
         if (id !== this.stalkerMoveId) clearInterval(interval)
-        if (this.stalkerLocation === parseInt(destination)) {
+        if (this.stalkerLocation === parseInt(CorrectionDestination)) {
           clearInterval(interval)
           cb()
         } else {
-          this.stalkerLocation > parseInt(destination)
+          this.stalkerLocation > parseInt(CorrectionDestination)
             ? this.stalkerLocation--
             : this.stalkerLocation++
         }
@@ -216,11 +231,24 @@ export default {
   z-index: 20;
   background: #feeade;
   white-space: nowrap;
-  padding: 15px 0 50px 0;
+  padding: 15px 0 5px 0;
+  margin-bottom: 40px;
   &__wrapper {
     width: 712px;
     margin: auto;
   }
+}
+
+.title-space {
+  background: #feeade;
+  height: 40px;
+  width: 100%;
+  position: absolute;
+  bottom: -40px;
+}
+
+.hide-title {
+  opacity: 0;
 }
 
 .animate {
@@ -278,6 +306,7 @@ export default {
     font-size: 18px;
     line-height: 36px;
     letter-spacing: 0.01em;
+    cursor: pointer;
   }
   .light {
     color: #28ddb1;
