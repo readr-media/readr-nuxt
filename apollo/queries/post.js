@@ -68,8 +68,9 @@ const post = gql`
           urlDesktopSized
         }
       }
-      categories {
+      categories(first: 3) {
         name
+        slug
       }
       writers {
         name
@@ -93,6 +94,8 @@ const post = gql`
       heroCaption
       contentApiData
       summaryApiData
+      citationApiData
+      actionListApiData
       ogTitle
       ogDescription
       ogImage {

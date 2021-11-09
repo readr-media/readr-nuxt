@@ -1,7 +1,6 @@
 <template>
-  <div class="news">
-    <RdHeaderProgress @sendGaEvent="sendGaScrollEvent('end')" />
-
+  <div class="g-page-wrapper news">
+    <RdNavbar />
     <RdArticleVideo
       v-if="doesHaveHeroVideo"
       :videoSrc="transformedNews.heroVideo.src"
@@ -22,7 +21,7 @@
       <RdArticleHeading
         :title="transformedNews.title"
         :date="transformedNews.date"
-        :category="transformedNews.category"
+        :categories="transformedNews.categories"
         :readTimeText="transformedNews.readTime"
         :creditList="credits"
         class="news__heading"
@@ -48,19 +47,21 @@
       </article>
     </section>
 
-    <!-- <RdArticleConcern :items="mockConcernList" class="news__concern" /> -->
-    <RdArticleConcern class="news__concern" />
+    <RdArticleActionList
+      v-if="doesHaveActionList"
+      :actionList="actionList"
+      class="news__action-list"
+    />
 
     <RdButtonDonate class="news__donate" />
 
     <RdArticleSocialList class="news__social-list" />
 
-    <!-- <RdArticleCitation
-      :infoList="mockCitation.infoList"
-      :linkList="mockCitation.linkList"
+    <RdArticleCitation
+      v-if="doesHaveCitation"
+      :citation="citation"
       class="news__citation"
-    /> -->
-    <RdArticleCitation class="news__citation" />
+    />
 
     <section class="news__tag-list-wrapper">
       <RdArticleTagList :tags="tags" class="tag" />
@@ -70,43 +71,57 @@
     <RdNewsLetter class="new__news-letter" />
 
     <section class="news__related-list-wrapper">
-      <RdArticleList
-        v-if="doesHaveRelatedPosts"
-        title="相關報導"
-        :posts="transformedRelatedPosts"
-        class="list"
-      />
-      <RdArticleList
-        v-if="doesHaveLatestPosts"
-        title="最新報導"
-        :posts="transformedLatestPosts"
-        class="list"
-      />
+      <template v-if="doesHaveRelatedPosts">
+        <RdListHeading title="相關報導" color="#fff" class="heading" />
+        <RdArticleList
+          :posts="transformedRelatedPosts"
+          :shouldReverseInMobile="false"
+          :shouldShowSkeleton="false"
+          :shouldHighLightReport="false"
+          :filterNum="4"
+          class="list"
+        />
+      </template>
+      <template v-if="doesHaveLatestPosts">
+        <RdListHeading title="最新報導" color="#fff" class="heading" />
+        <RdArticleList
+          :posts="transformedLatestPosts"
+          :shouldReverseInMobile="false"
+          :shouldShowSkeleton="false"
+          :shouldHighLightReport="false"
+          :filterNum="4"
+          class="list"
+        />
+      </template>
     </section>
   </div>
 </template>
 
 <script>
-import dayjs from 'dayjs'
-
-import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
+import RdNavbar from '~/components/shared/RdNavbar.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
 import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
 import RdCoverImage from '~/components/shared/RdCoverImage.vue'
 import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
 import RdArticleSummary from '~/components/shared/RdArticleSummary.vue'
 import RdArticleContentHandler from '~/components/shared/RdArticleContentHandler.vue'
-import RdArticleConcern from '~/components/shared/RdArticleConcern.vue'
+import RdArticleActionList from '~/components/shared/RdArticleActionList.vue'
 import RdArticleCitation from '~/components/shared/RdArticleCitation.vue'
 import RdArticleTagList from '~/components/shared/RdArticleTagList.vue'
 import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
+import RdListHeading from '~/components/shared/RdListHeading.vue'
 import RdArticleList from '~/components/shared/RdArticleList.vue'
 import RdNewsLetter from '~/components/shared/RdNewsLetter.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.js'
 
-// import { getHref, formatDate, handleApiData } from '~/helpers/index.js'
-import { handleApiData } from '~/helpers/index.js'
+import {
+  formatReadTime,
+  formatPostDate,
+  isReport,
+  handleApiData,
+  doesHaveApiDataContent,
+} from '~/helpers/index.js'
 
 const CREDIT_KEYS = [
   'writers',
@@ -122,17 +137,18 @@ export default {
   name: 'RdNews',
 
   components: {
-    RdHeaderProgress,
+    RdNavbar,
     RdButtonDonate,
     RdArticleVideo,
     RdCoverImage,
     RdArticleHeading,
     RdArticleSummary,
     RdArticleContentHandler,
-    RdArticleConcern,
+    RdArticleActionList,
     RdArticleCitation,
     RdArticleTagList,
     RdArticleSocialList,
+    RdListHeading,
     RdArticleList,
     RdNewsLetter,
   },
@@ -159,45 +175,7 @@ export default {
 
   data() {
     return {
-      nowYear: new Date().getFullYear(),
       latestPosts: [],
-      // mockConcernList: [
-      //   '兼任教師薪資計算公式由<a href="https://www.ttsb.gov.tw/1133/1178/1179/30146/post" target="_blank" rel="noreferrer noopener">高教工會提供</a>，測試測試',
-      //   '兼任教師薪資計算公式由高教工會提供，利用教育部公，兼任教師薪資計算公式由高教工會提供',
-      //   '兼任教師薪資計算公式由高教工會提供，利用教育部公',
-      // ],
-      // mockCitation: {
-      //   infoList: [
-      //     {
-      //       id: 'asuid',
-      //       text:
-      //         '兼任教師薪資計算公式由高教工會提供，利用教育部公開資料大專院校課程表及大專院校教師專長彙整表，總計有 3,942,121 筆，再經過比較並排除無法辨識之資料，計算出預估薪資。',
-      //     },
-      //     {
-      //       id: 'asuisssd',
-      //       text:
-      //         '第二段測試，測試測試測試測試測試測試測試測試測試，測試測試測試測試，測試。',
-      //     },
-      //   ],
-      //   linkList: [
-      //     {
-      //       title: '雙北租屋資訊',
-      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-      //     },
-      //     {
-      //       title: '2020五一連假交通部1968人潮示警資料',
-      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-      //     },
-      //     {
-      //       title: '一般資料標題',
-      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-      //     },
-      //     {
-      //       title: '長資料標題，超過此長度就直接斷行',
-      //       href: 'https://www.ttsb.gov.tw/1133/1178/1179/30146/post',
-      //     },
-      //   ],
-      // },
     }
   },
 
@@ -214,10 +192,13 @@ export default {
         categories = [],
         wordCount = 0,
         publishTime = '',
+        style = '',
       } = this.news
 
       return {
         title,
+        categories,
+        heroCaption,
         heroVideo: {
           src: heroVideo?.url,
           desc: heroVideo?.description,
@@ -232,10 +213,9 @@ export default {
             sm: heroImage?.urlDesktopSized,
           },
         },
-        heroCaption,
-        category: categories?.[0]?.name,
-        readTime: this.formatReadTime(wordCount, this.imageCount),
-        date: this.formatPostDate(publishTime),
+        readTime: formatReadTime(wordCount, this.imageCount),
+        date: formatPostDate(publishTime),
+        isReport: isReport(style),
       }
     },
     transformedRelatedPosts() {
@@ -247,14 +227,16 @@ export default {
             publishTime = '',
             wordCount = 0,
             heroImage = {},
+            style = '',
           }) => {
             return {
               id,
               title: name,
               type: 'recommend',
               href: `/post/${id}`,
-              date: this.formatPostDate(publishTime),
-              readTime: this.formatReadTime(wordCount, 2),
+              date: formatPostDate(publishTime),
+              readTime: formatReadTime(wordCount, 2),
+              isReport: isReport(style),
               img: {
                 src:
                   heroImage?.urlMobileSized ||
@@ -280,14 +262,16 @@ export default {
           heroImage = {},
           wordCount = 0,
           publishTime = '',
+          style = '',
         } = post || {}
 
         return {
           id,
           title,
           href: `/post/${id}`,
-          date: this.formatPostDate(publishTime),
-          readTime: this.formatReadTime(wordCount, 2),
+          date: formatPostDate(publishTime),
+          readTime: formatReadTime(wordCount, 2),
+          isReport: isReport(style),
           img: {
             src:
               heroImage?.urlMobileSized ||
@@ -335,6 +319,14 @@ export default {
       const data = this.news?.summaryApiData ?? ''
       return data ? handleApiData(data) : []
     },
+    actionList() {
+      const data = this.news?.actionListApiData ?? ''
+      return data ? handleApiData(data) : []
+    },
+    citation() {
+      const data = this.news?.citationApiData ?? ''
+      return data ? handleApiData(data) : []
+    },
     isContentString() {
       return typeof this.content === 'string'
     },
@@ -348,15 +340,13 @@ export default {
       return this.transformedNews?.heroVideo?.src
     },
     doesHaveSummary() {
-      const validateArray = this.summary?.map((summaryContent) => {
-        return (
-          summaryContent?.content?.length > 1 ||
-          summaryContent?.content[0]?.length > 0
-        )
-      })
-      return validateArray.find((item) => {
-        return item
-      })
+      return doesHaveApiDataContent(this.summary)
+    },
+    doesHaveActionList() {
+      return doesHaveApiDataContent(this.actionList)
+    },
+    doesHaveCitation() {
+      return doesHaveApiDataContent(this.citation)
     },
     doesHaveRelatedPosts() {
       return this.transformedRelatedPosts?.length > 0
@@ -365,18 +355,12 @@ export default {
       return this.transformedLatestPosts?.length > 0
     },
   },
+
+  mounted() {
+    console.log('hah', this.citation)
+  },
+
   methods: {
-    formatReadTime(wordCount = 0, imageCount = 0) {
-      const min = Math.round((wordCount / 8 + imageCount * 10) / 60)
-      return min ? `閱讀時間 ${min} 分鐘` : ''
-    },
-    formatPostDate(datetime) {
-      const formatStr =
-        this.nowYear === new Date(datetime).getFullYear()
-          ? 'MM/DD'
-          : 'YYYY/MM/DD'
-      return dayjs(datetime).format(formatStr)
-    },
     insertRecommend(data) {
       let i = 0
       let count = 0
@@ -397,6 +381,21 @@ export default {
       }
       return data
     },
+    doseInsideList(data) {
+      let firstListIndex
+      return data.map((item, i) => {
+        if (item.type === 'unordered-list-item') {
+          firstListIndex = i
+        }
+
+        const isInList = firstListIndex !== undefined
+
+        return {
+          ...item,
+          isInList,
+        }
+      })
+    },
     sendGaClickEvent(label, value) {
       this.sendGaEvent('click', label, value)
     },
@@ -411,14 +410,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.g-page-wrapper {
+  min-height: 100vh;
+  padding: 70px 0 0;
+  @include media-breakpoint-up(sm) {
+    padding: 86px 0 0;
+  }
+}
 .news {
-  padding: 68.63px 0 0;
-  overflow: hidden;
   &__cover {
     width: 100%;
     max-width: 960px;
     margin: 0 auto 24px;
-    @include media-breakpoint-up(xl) {
+    @include media-breakpoint-up(lg) {
       margin: 24px auto 60px;
     }
   }
@@ -468,7 +472,7 @@ export default {
       }
     }
   }
-  &__concern {
+  &__action-list {
     width: 100%;
     margin: 0 auto 48px;
     max-width: 568px;
@@ -548,6 +552,7 @@ export default {
     @include media-breakpoint-up(xl) {
       padding: 60px 0;
     }
+    .heading,
     .list {
       width: 100%;
       margin-left: auto;
@@ -559,10 +564,19 @@ export default {
         width: 1096px;
       }
     }
-    > * + * {
-      margin-top: 48px;
+    .heading {
+      margin-bottom: 16px;
+      @include media-breakpoint-up(md) {
+        margin-bottom: 40px;
+      }
+    }
+    > .list + .heading {
+      margin-top: 32px;
+      @include media-breakpoint-up(md) {
+        margin-top: 16px;
+      }
       @include media-breakpoint-up(xl) {
-        margin-top: 60px;
+        margin-top: 0;
       }
     }
   }

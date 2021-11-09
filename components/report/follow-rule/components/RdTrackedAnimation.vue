@@ -47,6 +47,6 @@ export default {
   margin: 5px 0;
   position: absolute;
   left: 0;
-  transform: translate(calc(var(--location) - 50%), 0) !important;
+  transform: translate(calc(var(--location) - 25%), 0) !important;
 }
 </style>

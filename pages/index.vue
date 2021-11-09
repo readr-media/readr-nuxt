@@ -1,7 +1,6 @@
 <template>
-  <div>
-    <RdHeader />
-
+  <div class="g-page-wrapper home">
+    <RdNavbar />
     <section class="marquee-container">
       <RdMarquee class="home__marquee" />
       <NuxtLink to="/landing" @click.native="sendGaClickEvent('landing')">
@@ -117,7 +116,7 @@ import { get as axiosGet } from 'axios'
 import gql from 'graphql-tag'
 import gqlCombineQuery from 'graphql-combine-query'
 
-import RdHeader from '~/components/shared/Header/RdHeader.vue'
+import RdNavbar from '~/components/shared/RdNavbar.vue'
 import RdMarquee from '~/components/shared/RdMarquee.vue'
 import RdCarousel from '~/components/app/RdCarousel.vue'
 import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
@@ -149,8 +148,9 @@ import {
 
 export default {
   name: 'Home',
+
   components: {
-    RdHeader,
+    RdNavbar,
     RdMarquee,
     RdCarousel,
     RdSectionHeading,
@@ -609,6 +609,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.g-page-wrapper {
+  min-height: 100vh;
+  padding: 64px 0 0;
+  overflow: hidden;
+  @include media-breakpoint-up(sm) {
+    padding: 80px 0 0;
+  }
+}
 .home {
   &__section-heading {
     margin-bottom: 20px;

@@ -13,6 +13,7 @@ import { SITE_TITLE } from '~/helpers/index.js'
 
 export default {
   name: 'Donate',
+
   components: {
     RdHeader,
     RdDonateContainer,
