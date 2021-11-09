@@ -1,26 +1,12 @@
 <template>
   <div class="g-page-wrapper home">
     <RdNavbar />
-    <section class="marquee-container">
-      <RdMarquee class="home__marquee" />
-      <NuxtLink to="/landing" @click.native="sendGaClickEvent('landing')">
-        <span>了解更多</span>
-        <SvgArrowMore />
-      </NuxtLink>
-    </section>
 
-    <section>
-      <RdCarousel
-        v-if="shouldOpenEditorChoices"
-        :posts="editorChoices"
-        class="home__carousel"
-        @sendGaEvent="sendGaClickEvent('editor choices')"
-      >
-        <template #heading>
-          <RdSectionHeading title="編輯精選" />
-        </template>
-      </RdCarousel>
-    </section>
+    <RdEditorChoice
+      v-if="shouldOpenEditorChoices"
+      :posts="transformedEditorChoice"
+      class="home__editor-choice"
+    />
 
     <section ref="latest" class="container container--latest">
       <RdSectionHeading
@@ -117,8 +103,7 @@ import gql from 'graphql-tag'
 import gqlCombineQuery from 'graphql-combine-query'
 
 import RdNavbar from '~/components/shared/RdNavbar.vue'
-import RdMarquee from '~/components/shared/RdMarquee.vue'
-import RdCarousel from '~/components/app/RdCarousel.vue'
+import RdEditorChoice from '~/components/shared/RdEditorChoice.vue'
 import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
 import RdListLatest from '~/components/shared/List/RdListLatest.vue'
 import RdDatabaseList from '~/components/app/RdDatabaseList.vue'
@@ -127,7 +112,6 @@ import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
 import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
 import RdListCategory from '~/components/shared/List/RdListCategory.vue'
-import SvgArrowMore from '~/assets/imgs/arrow-more.svg?inline'
 
 import { intersect } from '~/helpers/vue/directives/index.js'
 
@@ -144,6 +128,9 @@ import {
   cleanupIntersectionObserver,
   getHref,
   formatDate,
+  formatPostDate,
+  formatReadTime,
+  isReport,
 } from '~/helpers/index.js'
 
 export default {
@@ -151,8 +138,7 @@ export default {
 
   components: {
     RdNavbar,
-    RdMarquee,
-    RdCarousel,
+    RdEditorChoice,
     RdSectionHeading,
     RdListLatest,
     RdDatabaseList,
@@ -161,8 +147,6 @@ export default {
     RdCollaborativeList,
     RdButtonDonate,
     RdListCategory,
-
-    SvgArrowMore,
   },
 
   directives: {
@@ -294,6 +278,34 @@ export default {
     shouldOpenEditorChoices() {
       return this.editorChoices && this.editorChoices.length > 0
     },
+    transformedEditorChoice() {
+      return this.editorChoices?.map((post) => {
+        const {
+          id = '',
+          title = '',
+          slug = '',
+          wordCount = 0,
+          style = '',
+          heroImage = {},
+          publishTime = '',
+        } = post?.choice || {}
+
+        return {
+          id,
+          title,
+          href: getHref({ style, id, slug }),
+          date: formatPostDate(publishTime),
+          readTime: formatReadTime(wordCount, 2),
+          isReport: isReport(style),
+          img: {
+            src:
+              heroImage?.urlTabletSized ||
+              heroImage?.urlMobileSized ||
+              require('~/assets/imgs/default/post.svg'),
+          },
+        }
+      })
+    },
 
     shouldOpenLatestList() {
       return this.latestPosts.length > 0
@@ -345,6 +357,7 @@ export default {
     },
   },
   mounted() {
+    console.log('hh', this.transformedEditorChoice)
     this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
@@ -618,6 +631,12 @@ export default {
   }
 }
 .home {
+  &__editor-choice {
+    margin: 0 0 48px;
+    @include media-breakpoint-up(md) {
+      margin: 0 0 80px;
+    }
+  }
   &__section-heading {
     margin-bottom: 20px;
     max-width: 1096px;
