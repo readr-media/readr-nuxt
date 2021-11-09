@@ -1,7 +1,7 @@
 <template>
   <ul>
     <li v-for="tag in tagList" :key="tag">
-      <span>{{ tag }}</span>
+      <a :href="`/tag/${tag}`" target="_blank">{{ tag }}</a>
     </li>
   </ul>
 </template>
@@ -35,8 +35,13 @@ ul {
     border-radius: 2px;
     color: rgba(0, 9, 40, 0.66);
     background-color: #f6f6fb;
+    cursor: pointer;
     padding: 8px;
     margin: 0 8px 8px 0;
+    &:hover,
+    &:focus {
+      color: rgba(0, 9, 40, 0.5);
+    }
   }
 }
 </style>

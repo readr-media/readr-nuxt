@@ -1,7 +1,6 @@
 <template>
   <div class="default">
     <nuxt />
-
     <readr-footer
       id="default-footer"
       @aboutLinkClick="sendGaClickFooterEvent('aboutus')"

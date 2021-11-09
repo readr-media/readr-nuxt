@@ -1,9 +1,6 @@
 <template>
   <div class="article-list">
-    <div v-if="title" class="highlight">
-      <span>{{ title }}</span>
-    </div>
-    <ul>
+    <ul :class="{ 'lg-layout': shouldSetLgBreakPoint }">
       <li v-for="item in formatedPosts" :key="item.id">
         <RdArticleListCard
           :href="item.href"
@@ -11,36 +8,65 @@
           :title="item.title"
           :date="item.date"
           :readTimeText="item.readTime"
-          :shouldReverseInMobile="false"
+          :isReport="item.isReport"
+          :shouldReverseInMobile="shouldReverseInMobile"
+          :shouldHighLightReport="shouldHighLightReport"
+          :shouldHideBottomInfos="shouldHideBottomInfos"
         />
       </li>
+      <div class="position-correct" />
     </ul>
+    <RdSkeleton v-if="shouldShowSkeleton && formatedPosts.isLoading" />
   </div>
 </template>
 
 <script>
 import RdArticleListCard from '~/components/shared/RdArticleListCard.vue'
+import RdSkeleton from '~/components/shared/RdSkeleton.vue'
 
 export default {
   name: 'RdArticleList',
 
   components: {
     RdArticleListCard,
+    RdSkeleton,
   },
   props: {
-    title: {
-      type: String,
-      default: '',
-    },
     posts: {
       type: Array,
       required: true,
       default: () => [],
     },
+    filterNum: {
+      type: Number,
+      default: 0,
+    },
+    shouldReverseInMobile: {
+      type: Boolean,
+      default: false,
+    },
+    shouldHighLightReport: {
+      type: Boolean,
+      default: false,
+    },
+    shouldShowSkeleton: {
+      type: Boolean,
+      default: false,
+    },
+    shouldSetLgBreakPoint: {
+      type: Boolean,
+      default: false,
+    },
+    shouldHideBottomInfos: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     formatedPosts() {
-      return this.posts?.filter((item, i) => i < 4) ?? []
+      return this.filterNum
+        ? this.posts?.filter((item, i) => i < this.filterNum) ?? []
+        : this.posts
     },
   },
 }
@@ -48,69 +74,51 @@ export default {
 
 <style lang="scss" scoped>
 .article-list {
-  .highlight {
-    border-bottom: 3px solid #000928;
-    padding: 0 0 12px;
-    margin: 0 0 16px;
-    @include media-breakpoint-up(md) {
-      margin: 0 0 40px;
-    }
-    span {
-      position: relative;
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 24px;
-      letter-spacing: 0.05em;
-      color: #000928;
-      z-index: 100;
-      &::before {
-        content: '';
-        position: absolute;
-        bottom: 10px;
-        left: 0;
-        right: 0;
-        height: 10px;
-        background-color: #fff;
-        z-index: -1;
-      }
-    }
-  }
   ul {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    @include media-breakpoint-up(md) {
-      &::after {
-        content: '';
+    &::after {
+      content: '';
+    }
+    li,
+    &::after,
+    .position-correct {
+      width: 100%;
+      @include media-breakpoint-up(sm) {
         width: calc((100% - 24px) / 2);
       }
-    }
-    @include media-breakpoint-up(xl) {
-      &::after {
-        content: '';
-        width: calc((100% - 72px) / 4);
-      }
-    }
-    li + li {
-      margin: 16px 0 0;
-      @include media-breakpoint-up(md) {
-        margin: 32px 0 0;
-      }
       @include media-breakpoint-up(xl) {
-        margin: 0;
+        width: calc((100% - 72px) / 4);
       }
     }
     li {
-      width: 100%;
-      @include media-breakpoint-up(md) {
-        width: calc((100% - 24px) / 2);
-        &:nth-child(2) {
-          margin: 0;
+      margin: 0 0 16px;
+      @include media-breakpoint-up(sm) {
+        margin: 0 0 32px;
+      }
+      @include media-breakpoint-up(lg) {
+        margin: 0 0 60px;
+      }
+    }
+    .position-correct {
+      margin: 0;
+    }
+    &.lg-layout {
+      @include media-breakpoint-up(lg) {
+        li,
+        &::after,
+        .position-correct {
+          width: calc((100% - 48px) / 3);
         }
       }
       @include media-breakpoint-up(xl) {
-        width: calc((100% - 72px) / 4);
+        li,
+        &::after,
+        .position-correct {
+          width: calc((100% - 72px) / 4);
+        }
       }
     }
   }
