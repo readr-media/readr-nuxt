@@ -162,7 +162,6 @@ export default {
         (status === 'back' && this.stalkerLocation < 10 && !this.isScrollEnd)
       )
         return
-      console.log('start move')
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status

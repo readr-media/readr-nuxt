@@ -11,6 +11,7 @@
           :location="stalkerLocation"
         />
         <RdTrackedAnimation
+          v-show="this.isAnimateFinish !== 2"
           :trackedStatus="trackedStatus"
           :location="trackedLocation"
         />
@@ -74,8 +75,8 @@ export default {
       target: null,
       percent: 0,
       hasFinishedReading: false,
-      isAnimateFinish: false,
-      frozenScroll: false,
+      isAnimateFinish: 0,
+      stalkerCanMove: true,
     }
   },
   computed: {
@@ -128,13 +129,14 @@ export default {
     },
     stalkerMove(destination, status, time, cb) {
       if (
-        // !this.stalkerCanMove ||
-        this.isAnimateFinish ||
-        this.stalkerLocation === parseInt(destination) ||
-        (this.stalkerStatus === 'back' && status === 'back')
+        !this.stalkerCanMove ||
+        this.isAnimateFinish === 2 ||
+        this.stalkerLocation === parseInt(destination)
+        // (this.stalkerStatus === 'back' && status === 'back')
         // (status === 'back' && this.stalkerLocation < this.minDistance)
       )
         return
+      if (destination < 0) this.stalkerCanMove = false
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
@@ -151,7 +153,6 @@ export default {
       }, time)
     },
     trackedMove(destination, status, time, cb) {
-      if (this.isAnimateFinish) return
       this.trackedMoveId++
       const id = this.trackedMoveId
       this.trackedStatus = status
@@ -168,7 +169,7 @@ export default {
       }, time)
     },
     stalkerForword() {
-      if (this.isAnimateFinish) return
+      if (this.isAnimateFinish === 2) return
       this.stalkerMove(
         this.trackedLocation - this.minDistance,
         'moving',
@@ -179,7 +180,6 @@ export default {
       )
     },
     handleScroll() {
-      if (this.isAnimateFinish) return
       if (!this.frozenScroll) {
         this.stalkerMove(0, 'back', 10, () => {
           this.stalkerStatus = 'stand'
@@ -220,12 +220,14 @@ export default {
       })()
     },
     endAnimate() {
-      this.trackedMove(this.viewportWidth + 80, 'moving', 10, () => {
+      console.log('end')
+      this.trackedMove(this.viewportWidth + 50, 'moving', 10, () => {
         this.trackedStatus = 'stand'
-        this.stalkerMove(-100, 'back', 10, () => {
-          this.stalkerStatus = 'stand'
-          this.isAnimateFinish = true
-        })
+        this.isAnimateFinish++
+      })
+      this.stalkerMove(-50, 'back', 10, () => {
+        this.stalkerStatus = 'stand'
+        this.isAnimateFinish++
       })
     },
   },
