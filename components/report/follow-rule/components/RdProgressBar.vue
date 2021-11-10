@@ -117,7 +117,8 @@ export default {
       if (id > 1 && !this.stalkerCanIn) {
         this.stalkerCanIn = true
       }
-      this.trackedMove(newLocation, 'moving', 10, () => {
+      const speed = this.isAnimateFinish < 2 ? 10 : 5
+      this.trackedMove(newLocation, 'moving', speed, () => {
         this.trackedStatus = 'stand'
         this.stalkerForword()
       })

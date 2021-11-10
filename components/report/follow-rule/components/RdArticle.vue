@@ -68,7 +68,7 @@ export default {
       )
       const controller = new ScrollMagic.Controller({
         globalSceneOptions: {
-          triggerHook: 0.3,
+          triggerHook: 0.4,
           reverse: true,
         },
       })
