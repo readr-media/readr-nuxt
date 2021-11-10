@@ -1,13 +1,6 @@
 <template>
-  <a
-    :href="href"
-    target="_blank"
-    :class="[
-      { 'reverse-row': shouldReverseInMobile },
-      { 'report-highlight': isReport && shouldHighLightReport },
-    ]"
-  >
-    <picture :class="{ 'reverse-picture': shouldReverseInMobile }">
+  <a :href="href" target="_blank">
+    <picture>
       <img v-lazy="img" :alt="title" />
       <label v-if="isReport">專題</label>
     </picture>
@@ -16,7 +9,6 @@
         <span>{{ title }}</span>
       </h4>
       <RdDateWithReadTime
-        v-if="!shouldHideBottomInfos"
         :date="date"
         :readTimeText="readTimeText"
         class="info"
@@ -29,7 +21,7 @@
 import RdDateWithReadTime from '~/components/shared/RdDateWithReadTime.vue'
 
 export default {
-  name: 'RdArticleListCard',
+  name: 'RdHomeCategoryReportCard',
 
   components: {
     RdDateWithReadTime,
@@ -59,58 +51,41 @@ export default {
       type: Boolean,
       default: false,
     },
-    shouldReverseInMobile: {
-      type: Boolean,
-      default: false,
-    },
-    shouldHighLightReport: {
-      type: Boolean,
-      default: false,
-    },
-    shouldHideBottomInfos: {
-      type: Boolean,
-      default: false,
-    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
 a {
-  display: flex;
+  display: block;
+  background-color: rgba(245, 235, 255, 0.5);
   border-radius: 2px;
+  padding: 0 0 16px;
   @include media-breakpoint-up(sm) {
-    display: block;
-  }
-  &.reverse-row {
+    display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
-    @include media-breakpoint-up(sm) {
-      flex-direction: row;
-      justify-content: center;
-    }
+    padding: 0;
+  }
+  @include media-breakpoint-up(xl) {
+    display: block;
+    padding: 0 0 24px;
   }
   picture {
     position: relative;
-    display: inline-block;
-    align-self: flex-start;
-    min-width: calc((100% - 16px) * 0.2727);
-    max-width: calc((100% - 16px) * 0.2727);
+    display: block;
+    width: 100%;
     background-color: #d8d8d8;
-    margin: 0 16px 0 0;
     overflow: hidden;
-    border-radius: 2px;
+    border-radius: 2px 2px 0 0;
+    margin: 0 0 16px;
     @include media-breakpoint-up(sm) {
-      min-width: none;
-      max-width: none;
-      width: 100%;
-      margin: 0 0 12px;
+      margin: 0;
+      border-radius: 0 2px 2px 0;
     }
-    &.reverse-picture {
-      margin: 0 0 0 16px;
-      @include media-breakpoint-up(sm) {
-        margin: 0 0 12px;
-      }
+    @include media-breakpoint-up(xl) {
+      margin: 0 0 24px;
+      border-radius: 2px 2px 0 0;
     }
     img {
       position: absolute;
@@ -129,8 +104,8 @@ a {
     }
     label {
       position: absolute;
-      top: 4px;
-      right: 4px;
+      top: 8px;
+      right: 8px;
       font-size: 13px;
       line-height: 19px;
       color: #fff;
@@ -138,44 +113,56 @@ a {
       border-radius: 2px;
       padding: 2px 4px;
       @include media-breakpoint-up(sm) {
-        top: 8px;
-        right: 8px;
+        padding: 2px 8px;
       }
     }
     &::after {
       content: '';
       display: block;
-      padding-top: 100%;
-      @include media-breakpoint-up(sm) {
-        padding-top: 60%;
-      }
+      padding-top: 75%;
     }
   }
   .text {
+    position: relative;
+    padding: 0 12px 0 24px;
+    @include media-breakpoint-up(sm) {
+      min-width: 62%;
+      padding: 45px 32px 45px 28px;
+    }
+    @include media-breakpoint-up(xl) {
+      padding: 0 24px 0 28px;
+    }
     h4 {
       text-align: justify;
-      margin: 0 0 4px;
+      margin: 0 0 8px;
       @include media-breakpoint-up(sm) {
-        margin: 0 0 8px;
+        margin: 0 0 12px;
       }
       span {
         display: inline;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 700;
-        line-height: 24px;
+        line-height: 27px;
         letter-spacing: 0.03em;
         color: #000928;
-        @include media-breakpoint-up(md) {
-          font-size: 18px;
-          line-height: 27px;
+        word-wrap: break-word;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        @include media-breakpoint-up(sm) {
+          font-size: 24px;
+          line-height: 36px;
         }
         &:hover {
-          border-bottom: 1.5px solid #000928;
+          text-decoration: underline;
+          text-decoration-thickness: 1.5px;
+          text-underline-offset: 4px;
         }
       }
     }
     .info {
-      @include media-breakpoint-up(md) {
+      @include media-breakpoint-up(sm) {
         &::v-deep {
           &.time {
             font-size: 14px;
@@ -191,39 +178,21 @@ a {
         }
       }
     }
-  }
-  &.report-highlight {
-    background-color: rgba(245, 235, 255, 0.5);
-    padding: 12px 8px 12px 0;
-    @include media-breakpoint-up(sm) {
-      padding: 0 0 12px;
-    }
-    picture {
-      margin: 0 8px 0 0;
-      &.reverse-picture {
-        margin: 0 0 0 8px;
-        @include media-breakpoint-up(sm) {
-          margin: 0 0 12px;
-        }
-      }
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 8px;
+      background-color: #ebf02c;
       @include media-breakpoint-up(sm) {
-        margin: 0 0 12px;
+        top: 45px;
+        bottom: 45px;
       }
-    }
-    .text {
-      position: relative;
-      padding: 0 0 0 20px;
-      @include media-breakpoint-up(sm) {
-        padding: 0 12px 0 24px;
-      }
-      &::before {
-        content: '';
-        position: absolute;
+      @include media-breakpoint-up(xl) {
         top: 0;
         bottom: 0;
-        left: 0;
-        width: 8px;
-        background-color: #ebf02c;
       }
     }
   }

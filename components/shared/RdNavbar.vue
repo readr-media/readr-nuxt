@@ -123,7 +123,7 @@ export default {
     categoryList() {
       return this.categories?.map((item) => {
         const relatedList =
-          item.relatedPost?.map((post) => this.transformedRelatedPosts(post)) ??
+          item.relatedPost?.map((post) => this.transformRelatedPosts(post)) ??
           []
         return {
           name: item?.name ?? '',
@@ -189,7 +189,7 @@ export default {
         )
       })()
     },
-    transformedRelatedPosts(post = {}) {
+    transformRelatedPosts(post = {}) {
       const {
         id = '',
         title = '',

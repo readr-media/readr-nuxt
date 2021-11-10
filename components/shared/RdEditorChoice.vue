@@ -70,8 +70,8 @@ export default {
       padding: 40px 48px;
     }
     @include media-breakpoint-up(xl) {
-      min-width: 67.7%;
-      max-width: 67.7%;
+      min-width: calc((100% - 1096px) / 2 + 720px + 40px);
+      max-width: calc((100% - 1096px) / 2 + 720px + 40px);
       padding: 40px 40px 40px 0;
     }
   }
@@ -85,7 +85,8 @@ export default {
     }
     @include media-breakpoint-up(xl) {
       display: block;
-      width: calc(100% - 67.7%);
+      min-width: calc((100% - 1096px) / 2 + 296px + 40px);
+      max-width: calc((100% - 1096px) / 2 + 296px + 40px);
       padding: 40px 0 40px 40px;
     }
     li {

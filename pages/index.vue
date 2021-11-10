@@ -8,20 +8,11 @@
       class="home__editor-choice"
     />
 
-    <section ref="latest" class="container container--latest">
-      <RdSectionHeading
-        v-intersect="scrollDepthObserver"
-        title="最新文章"
-        fill="#ebf02c"
-        class="home__section-heading"
-      />
-      <RdListLatest
-        v-if="shouldOpenLatestList"
-        :postMain="latestPostMain"
-        :postsSub="latestPostsSub"
-        @sendGaEvent="sendGaClickEvent('latest articles')"
-      />
-    </section>
+    <RdHomeCategory
+      :categories="transformedCategoryies"
+      :latest="transformedCategoryLatest"
+      class="container container--category"
+    />
 
     <section class="container container--database">
       <div v-intersect="scrollDepthObserver" class="database-heading">
@@ -99,13 +90,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import { get as axiosGet } from 'axios'
-import gql from 'graphql-tag'
 import gqlCombineQuery from 'graphql-combine-query'
 
 import RdNavbar from '~/components/shared/RdNavbar.vue'
 import RdEditorChoice from '~/components/shared/RdEditorChoice.vue'
+import RdHomeCategory from '~/components/shared/RdHomeCategory.vue'
 import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
-import RdListLatest from '~/components/shared/List/RdListLatest.vue'
 import RdDatabaseList from '~/components/app/RdDatabaseList.vue'
 import RdQuoteSlide from '~/components/app/RdQuoteSlide.vue'
 import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
@@ -127,7 +117,6 @@ import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
   getHref,
-  formatDate,
   formatPostDate,
   formatReadTime,
   isReport,
@@ -139,8 +128,8 @@ export default {
   components: {
     RdNavbar,
     RdEditorChoice,
+    RdHomeCategory,
     RdSectionHeading,
-    RdListLatest,
     RdDatabaseList,
     RdQuoteSlide,
     RdCollaboratorWall,
@@ -159,7 +148,7 @@ export default {
         .add(editorChoices)
         .add(latestPosts).document,
       variables: {
-        first: 5,
+        first: 15,
       },
       manual: true,
       result({ data, loading }) {
@@ -173,11 +162,14 @@ export default {
                 heroImage = {},
                 ogImage = {},
                 publishTime = '',
+                wordCount = 0,
+                style = '',
               } = post || {}
 
               return {
                 id,
                 title,
+                style,
                 href: getHref(post),
                 img: {
                   src:
@@ -185,7 +177,9 @@ export default {
                     ogImage?.urlTabletSized ||
                     require('~/assets/imgs/default/post.svg'),
                 },
-                date: formatDate(publishTime),
+                readTime: formatReadTime(wordCount, 2),
+                date: formatPostDate(publishTime),
+                isReport: isReport(style),
               }
             }) || []
         }
@@ -215,21 +209,14 @@ export default {
     },
     categories: {
       query: categories,
-      prefetch: false,
-      manual: true,
-      result: async function handleCategoryLists({ data, loading }) {
-        if (
-          !loading &&
-          !this.isLoadingCategoryLists &&
-          !this.doesHaveCategoryLists
-        ) {
-          await this.loadCategoryLists(data.categories)
-
-          this.unwatchIsViewportWidthUpMd = this.$watch(
-            'isViewportWidthUpMd',
-            this.handleCategorySectionLayout,
-            { immediate: true }
-          )
+      variables() {
+        return {
+          relatedPostFirst: 4,
+          relatedReportFirst: 1,
+          shouldQueryRelatedPost: true,
+          shouldQueryRelatedReport: true,
+          relatedPostTypes: ['news'],
+          relatedReportTypes: ['embedded', 'project3', 'report'],
         }
       },
     },
@@ -306,15 +293,39 @@ export default {
         }
       })
     },
+    transformedCategoryies() {
+      return this.categories?.map((item) => {
+        const posts = item.posts?.map((post) =>
+          this.transformCategoryItem(post)
+        )
+        const reports = item.reports?.map((report) =>
+          this.transformCategoryItem(report)
+        )
 
-    shouldOpenLatestList() {
-      return this.latestPosts.length > 0
+        return {
+          name: item?.name ?? '',
+          slug: item?.slug ?? '',
+          posts,
+          reports,
+        }
+      })
     },
-    latestPostMain() {
-      return this.latestPosts[0]
-    },
-    latestPostsSub() {
-      return this.latestPosts.slice(1)
+
+    transformedCategoryLatest() {
+      let count = 0
+      const report = this.latestPosts.find((item, i) => item.style !== 'news')
+      const posts = this.latestPosts.filter((item) => {
+        if (count < 4 && item.style === 'news') {
+          count++
+          return item
+        }
+      })
+      return {
+        slug: 'all',
+        name: '',
+        posts,
+        reports: [report],
+      }
     },
 
     shouldLoadMoreDatabaseItems() {
@@ -357,7 +368,6 @@ export default {
     },
   },
   mounted() {
-    console.log('hh', this.transformedEditorChoice)
     this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
@@ -368,6 +378,31 @@ export default {
   },
 
   methods: {
+    transformCategoryItem(post = {}) {
+      const {
+        id = '',
+        title = '',
+        heroImage = {},
+        ogImage = {},
+        style = '',
+        publishTime = '',
+        wordCount = 0,
+      } = post
+      return {
+        id,
+        title,
+        href: getHref(post),
+        isReport: isReport(style),
+        img: {
+          src:
+            heroImage?.urlMobileSized ||
+            ogImage?.urlMobileSized ||
+            require('~/assets/imgs/default/post.svg'),
+        },
+        readTime: formatReadTime(wordCount, 2),
+        date: formatPostDate(publishTime),
+      }
+    },
     transformDatabaseItem(item) {
       const { id = '', title = '', link = '', relatedGallery: galleries = [] } =
         item || {}
@@ -463,113 +498,6 @@ export default {
         console.error(error)
       }
     },
-
-    async loadCategoryLists(categories) {
-      this.isLoadingCategoryLists = true
-
-      try {
-        const { data = {} } =
-          (await this.$apollo.query({
-            query: gql`query {
-            ${categories.map(function buildField(category) {
-              const { slug } = category
-              return `${slug}: allPosts(
-                first: 3
-                where: { categories_some: { slug: "${slug}" } }
-                sortBy: [publishTime_DESC]
-              ) {
-                id
-                title: name
-                style
-                slug
-                heroImage {
-                  urlMobileSized
-                }
-                ogImage {
-                  urlMobileSized
-                }
-                publishTime
-              }`
-            })}
-          }`,
-          })) || {}
-
-        categories.forEach((category) => {
-          // to ensure the order of the categoryLists
-          this.pushCategoryList(data, category)
-        })
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err)
-      } finally {
-        this.isLoadingCategoryLists = false
-      }
-    },
-    pushCategoryList(data = {}, category = {}) {
-      const { slug, name } = category
-      const items = data[slug] || []
-      this.categoryLists.push({
-        name,
-        items: items.map(function transformContent(post) {
-          const {
-            id = '',
-            title = '',
-            heroImage = {},
-            ogImage = {},
-            publishTime = '',
-          } = post || {}
-
-          return {
-            id,
-            title,
-            href: getHref(post),
-            img: {
-              src:
-                heroImage?.urlMobileSized ||
-                ogImage?.urlMobileSized ||
-                require('~/assets/imgs/default/post.svg'),
-            },
-            date: formatDate(publishTime),
-          }
-        }),
-      })
-    },
-    async handleCategorySectionLayout(isViewportWidthUpMd) {
-      if (this.macyInstance) {
-        this.unwatchIsViewportWidthUpMd()
-        return
-      }
-
-      if (
-        isViewportWidthUpMd &&
-        this.doesHaveCategoryLists &&
-        !this.isInitializingMacy
-      ) {
-        this.isInitializingMacy = true
-
-        try {
-          const initMacy = (await import('macy')).default
-          this.macyInstance = initMacy({
-            container: '#category-list-container',
-            mobileFirst: true,
-            trueOrder: true,
-            columns: 1,
-            breakAt: {
-              [this.breakpointMd]: {
-                margin: { x: 22 },
-                columns: 3,
-              },
-            },
-          })
-        } catch (err) {
-          // eslint-disable-next-line no-console
-          console.error(err)
-        }
-
-        this.isInitializingMacy = false
-      }
-    },
-
     scrollTo(hash) {
       if (hash) {
         const scrollIntoView = require('scroll-into-view')
@@ -702,6 +630,14 @@ export default {
     padding-left: 0;
     padding-right: 0;
   }
+  &--category {
+    @include media-breakpoint-up(sm) {
+      padding: 0 48px;
+    }
+    @include media-breakpoint-up(xl) {
+      padding: 0;
+    }
+  }
   &--database {
     padding-left: 0;
     padding-right: 0;
@@ -722,47 +658,6 @@ export default {
     max-width: 1070px;
     @include media-breakpoint-up(md) {
       margin-bottom: 20px;
-    }
-  }
-}
-
-.marquee-container {
-  display: flex;
-  align-items: center;
-  padding-top: 11px;
-  padding-bottom: 11px;
-  padding-right: 23px;
-  box-shadow: 0 0 2px rgba(#000, 0.2);
-  @include media-breakpoint-up(md) {
-    padding-left: 26px;
-    padding-right: 29px;
-  }
-
-  a {
-    flex: 0 0 auto;
-    user-select: none;
-    @include media-breakpoint-up(lg) {
-      display: flex;
-      align-items: center;
-    }
-  }
-
-  span {
-    display: none;
-    @include media-breakpoint-up(lg) {
-      display: inline;
-      font-weight: 700;
-      font-size: 15px;
-      line-height: 1.5;
-      letter-spacing: 2.5px;
-    }
-  }
-
-  svg {
-    padding-left: 19px;
-    box-sizing: content-box;
-    @include media-breakpoint-up(lg) {
-      padding-left: 16px;
     }
   }
 }
