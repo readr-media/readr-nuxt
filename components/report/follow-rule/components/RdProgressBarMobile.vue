@@ -67,7 +67,7 @@ export default {
     return {
       scale: 0.5,
       trackedLocation: 0,
-      stalkerLocation: -80,
+      stalkerLocation: 0,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
       stalkerMoveId: 0,
