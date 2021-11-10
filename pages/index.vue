@@ -14,6 +14,8 @@
       class="container container--category"
     />
 
+    <RdFeature :posts="transformedFeatures" class="home__feature" />
+
     <section class="container container--database">
       <div v-intersect="scrollDepthObserver" class="database-heading">
         <h2>開放資料庫</h2>
@@ -95,6 +97,7 @@ import gqlCombineQuery from 'graphql-combine-query'
 import RdNavbar from '~/components/shared/RdNavbar.vue'
 import RdEditorChoice from '~/components/shared/RdEditorChoice.vue'
 import RdHomeCategory from '~/components/shared/RdHomeCategory.vue'
+import RdFeature from '~/components/shared/RdFeature.vue'
 import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
 import RdDatabaseList from '~/components/app/RdDatabaseList.vue'
 import RdQuoteSlide from '~/components/app/RdQuoteSlide.vue'
@@ -107,6 +110,7 @@ import { intersect } from '~/helpers/vue/directives/index.js'
 
 import { editorChoices } from '~/apollo/queries/editor-choices.js'
 import { latestPosts } from '~/apollo/queries/posts.js'
+import { feature } from '~/apollo/queries/feature.js'
 import { databaseList } from '~/apollo/queries/datas.js'
 import { quotes } from '~/apollo/queries/quotes.js'
 import { collaborations } from '~/apollo/queries/collaborations.js'
@@ -129,6 +133,7 @@ export default {
     RdNavbar,
     RdEditorChoice,
     RdHomeCategory,
+    RdFeature,
     RdSectionHeading,
     RdDatabaseList,
     RdQuoteSlide,
@@ -219,6 +224,9 @@ export default {
           relatedReportTypes: ['embedded', 'project3', 'report'],
         }
       },
+    },
+    feature: {
+      query: feature,
     },
   },
 
@@ -326,6 +334,26 @@ export default {
         posts,
         reports: [report],
       }
+    },
+    transformedFeatures() {
+      return this.feature?.map((post) => {
+        const { description = '' } = post || {}
+        const { id = '', title = '', slug = '', style = '', heroImage = {} } =
+          post?.featuredPost || {}
+
+        return {
+          id,
+          title,
+          description,
+          href: getHref({ style, id, slug }),
+          img: {
+            src:
+              heroImage?.urlTabletSized ||
+              heroImage?.urlMobileSized ||
+              require('~/assets/imgs/default/post.svg'),
+          },
+        }
+      })
     },
 
     shouldLoadMoreDatabaseItems() {
@@ -559,7 +587,8 @@ export default {
   }
 }
 .home {
-  &__editor-choice {
+  &__editor-choice,
+  &__feature {
     margin: 0 0 48px;
     @include media-breakpoint-up(md) {
       margin: 0 0 80px;

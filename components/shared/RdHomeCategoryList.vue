@@ -60,10 +60,10 @@ export default {
       }
       @include media-breakpoint-up(xl) {
         margin: 0 0 60px;
-      }
-      &:nth-child(3),
-      &:nth-child(4) {
-        margin: 0;
+        &:nth-child(3),
+        &:nth-child(4) {
+          margin: 0;
+        }
       }
     }
     .position-correct {

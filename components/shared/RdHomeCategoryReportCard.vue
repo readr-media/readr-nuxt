@@ -139,7 +139,6 @@ a {
         margin: 0 0 12px;
       }
       span {
-        display: inline;
         font-size: 18px;
         font-weight: 700;
         line-height: 27px;
