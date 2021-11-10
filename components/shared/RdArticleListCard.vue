@@ -8,7 +8,8 @@
     ]"
   >
     <picture :class="{ 'reverse-picture': shouldReverseInMobile }">
-      <img v-lazy="img" :alt="title" />
+      <img v-if="shouldNotLazyload" :src="img" :alt="title" />
+      <img v-else v-lazy="img" :alt="title" />
       <label v-if="isReport">專題</label>
     </picture>
     <div class="text">
@@ -68,6 +69,10 @@ export default {
       default: false,
     },
     shouldHideBottomInfos: {
+      type: Boolean,
+      default: false,
+    },
+    shouldNotLazyload: {
       type: Boolean,
       default: false,
     },

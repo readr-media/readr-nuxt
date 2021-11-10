@@ -83,7 +83,7 @@ a {
       background: linear-gradient(
         180deg,
         rgba(0, 9, 40, 0) 0%,
-        rgba(0, 9, 40, 0.9) 100%
+        rgba(0, 9, 40, 0.3) 100%
       );
     }
     &::after {

@@ -356,10 +356,6 @@ export default {
     },
   },
 
-  mounted() {
-    console.log('hah', this.citation)
-  },
-
   methods: {
     insertRecommend(data) {
       let i = 0

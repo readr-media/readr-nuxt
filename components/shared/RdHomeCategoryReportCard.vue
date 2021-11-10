@@ -70,6 +70,7 @@ a {
   @include media-breakpoint-up(xl) {
     display: block;
     padding: 0 0 24px;
+    margin-bottom: auto;
   }
   picture {
     position: relative;

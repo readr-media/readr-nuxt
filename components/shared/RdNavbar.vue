@@ -13,7 +13,7 @@
       <div class="middle">
         <ul>
           <li
-            v-for="item in categoryList"
+            v-for="item in transformedCategoryies"
             :id="item.slug"
             :key="item.slug"
             @click="navbarItemsClicked({ slug: item.slug, name: item.name })"
@@ -22,7 +22,7 @@
           >
             <span>{{ item.name }}</span>
             <RdHeaderRelatedList
-              v-show="currentId === item.slug"
+              v-show="currentId === item.slug || currentName === item.name"
               :list="item.relatedList"
               class="related-list"
             />
@@ -95,8 +95,8 @@ export default {
       percent: 0,
       hasFinishedReading: false,
       shouldShowHamList: false,
-      shouldShowRelatedList: false,
       currentId: '',
+      currentName: '',
     }
   },
 
@@ -107,6 +107,8 @@ export default {
         return {
           first: 6,
           shouldQueryRelatedPost: true,
+          relatedPostFirst: 5,
+          relatedPostTypes: ['news', 'embedded', 'project3', 'report'],
         }
       },
     },
@@ -120,11 +122,12 @@ export default {
     isCategoryPage() {
       return this.$route.fullPath?.includes('/category')
     },
-    categoryList() {
+    transformedCategoryies() {
       return this.categories?.map((item) => {
-        const relatedList =
-          item.relatedPost?.map((post) => this.transformRelatedPosts(post)) ??
-          []
+        const relatedList = item.posts?.map((post) =>
+          this.transformRelatedPosts(post)
+        )
+
         return {
           name: item?.name ?? '',
           slug: item?.slug ?? '',
@@ -133,7 +136,7 @@ export default {
       })
     },
     hamCategoryList() {
-      return this.categoryList?.map((item) => {
+      return this.transformedCategoryies?.map((item) => {
         return {
           name: item?.name ?? '',
           slug: item?.slug ?? '',
@@ -223,12 +226,12 @@ export default {
     openRelatedList(e) {
       if (e.srcElement.id) {
         this.currentId = e.srcElement.id
+      } else if (e.relatedTarget.textContent) {
+        this.currentName = e.relatedTarget.textContent
       }
-      this.shouldShowRelatedList = true
     },
     closeRelatedList() {
       this.currentId = ''
-      this.shouldShowRelatedList = false
     },
     closeHamWithRedirect(item) {
       this.shouldShowHamList = false

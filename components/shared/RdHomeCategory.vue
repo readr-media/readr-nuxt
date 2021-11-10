@@ -98,9 +98,6 @@ export default {
       return this.currentItem?.reports?.[0] ?? undefined
     },
   },
-  mounted() {
-    console.log('kk', this.currentItem)
-  },
   methods: {
     refetchList({ name, slug }) {
       this.currentCategory.name = name && name !== '不分類' ? name : ''

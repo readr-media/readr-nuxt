@@ -16,6 +16,27 @@
 
     <RdFeature :posts="transformedFeatures" class="home__feature" />
 
+    <section ref="collaboration" class="collaboration-container">
+      <div class="container container--quote">
+        <RdListHeading title="協作專區" color="#ebf02c" class="quote-heading" />
+        <RdQuoteSlide :quotes="quotes" />
+      </div>
+      <div class="container container--wall">
+        <RdCollaboratorWall
+          v-if="countOfCollaboratorWall"
+          :count="countOfCollaboratorWall"
+          :names="namesOfCollaboratorWall"
+          :loadNames="loadCollaboratorNames"
+          @sendGaEvent="sendGaEventForCollaboratorWall"
+        />
+      </div>
+      <RdCollaborativeList
+        class="home__collaborative-list"
+        :items="collaborations"
+        @sendGaEvent="sendGaClickEvent('collaboration')"
+      />
+    </section>
+
     <section class="container container--database">
       <div v-intersect="scrollDepthObserver" class="database-heading">
         <h2>開放資料庫</h2>
@@ -35,57 +56,6 @@
         @sendGaEvent="sendGaClickEvent('donate-opendata')"
       />
     </section>
-
-    <section ref="collaboration" class="collaboration-container">
-      <div class="container container--quote">
-        <RdSectionHeading
-          v-intersect="scrollDepthObserver"
-          title="協作專區"
-          color="#f5ebff"
-          fill="#04295e"
-          class="home__section-heading"
-        />
-        <RdQuoteSlide :quotes="quotes" />
-      </div>
-      <div class="container container--wall">
-        <RdCollaboratorWall
-          v-if="countOfCollaboratorWall"
-          :count="countOfCollaboratorWall"
-          :names="namesOfCollaboratorWall"
-          :loadNames="loadCollaboratorNames"
-          @sendGaEvent="sendGaEventForCollaboratorWall"
-        />
-      </div>
-      <RdCollaborativeList
-        class="home__collaborative-list"
-        :items="collaborations"
-        @sendGaEvent="sendGaClickEvent('collaboration')"
-      />
-    </section>
-
-    <section
-      v-show="shouldShowCategorySection"
-      class="category-section yellow-bg"
-    >
-      <div class="container">
-        <RdSectionHeading
-          v-intersect="scrollDepthObserver"
-          title="更多專題"
-          linkHref="/category/"
-          class="home__section-heading"
-        />
-        <div id="category-list-container">
-          <RdListCategory
-            v-for="categoryList in displayedCategoryLists"
-            :key="categoryList.name"
-            :category="categoryList.name"
-            :posts="categoryList.items"
-            class="home__list-category"
-            @sendGaEvent="sendGaClickEvent(`category ${categoryList.name}`)"
-          />
-        </div>
-      </div>
-    </section>
   </div>
 </template>
 
@@ -98,13 +68,12 @@ import RdNavbar from '~/components/shared/RdNavbar.vue'
 import RdEditorChoice from '~/components/shared/RdEditorChoice.vue'
 import RdHomeCategory from '~/components/shared/RdHomeCategory.vue'
 import RdFeature from '~/components/shared/RdFeature.vue'
-import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
+import RdListHeading from '~/components/shared/RdListHeading.vue'
 import RdDatabaseList from '~/components/app/RdDatabaseList.vue'
 import RdQuoteSlide from '~/components/app/RdQuoteSlide.vue'
 import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
 import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
-import RdListCategory from '~/components/shared/List/RdListCategory.vue'
 
 import { intersect } from '~/helpers/vue/directives/index.js'
 
@@ -134,13 +103,12 @@ export default {
     RdEditorChoice,
     RdHomeCategory,
     RdFeature,
-    RdSectionHeading,
+    RdListHeading,
     RdDatabaseList,
     RdQuoteSlide,
     RdCollaboratorWall,
     RdCollaborativeList,
     RdButtonDonate,
-    RdListCategory,
   },
 
   directives: {
@@ -591,7 +559,15 @@ export default {
   &__feature {
     margin: 0 0 48px;
     @include media-breakpoint-up(md) {
+      margin: 0 0 60px;
+    }
+    @include media-breakpoint-up(xl) {
       margin: 0 0 80px;
+    }
+  }
+  &__feature {
+    @include media-breakpoint-up(xxl) {
+      margin: 0 0 120px;
     }
   }
   &__section-heading {
@@ -681,23 +657,30 @@ export default {
     @include media-breakpoint-up(md) {
       margin-bottom: 24px;
     }
+    .quote-heading {
+      margin: 0 0 20px;
+      @include media-breakpoint-up(md) {
+        margin: 0 0 40px;
+      }
+    }
   }
   &--wall {
     margin-bottom: 14px;
-    max-width: 1070px;
+    max-width: 1096px;
     @include media-breakpoint-up(md) {
       margin-bottom: 20px;
     }
   }
 }
 
-.home__carousel,
-.container--latest,
 .container--database,
 .collaboration-container {
-  margin-bottom: 40px;
+  margin: 0 auto 48px;
   @include media-breakpoint-up(md) {
-    margin-bottom: 60px;
+    margin: 0 auto 60px;
+  }
+  @include media-breakpoint-up(xl) {
+    margin: 0 auto 80px;
   }
 }
 

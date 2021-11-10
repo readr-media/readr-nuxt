@@ -50,9 +50,6 @@ export default {
       return this.posts?.slice(1, 3) ?? []
     },
   },
-  mounted() {
-    console.log('rr', this.postItems)
-  },
 }
 </script>
 
