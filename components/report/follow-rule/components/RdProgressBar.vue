@@ -7,6 +7,7 @@
           :location="stalkerLocation"
         />
         <RdTrackedAnimation
+          v-show="isAnimateFinish < 2"
           :trackedStatus="trackedStatus"
           :location="trackedLocation"
         />
@@ -152,15 +153,15 @@ export default {
     },
     stalkerMove(destination, status, time, cb) {
       const CorrectionDestination = destination > 712 ? -50 : destination
-
       if (
-        this.isAnimateFinish ||
+        this.isAnimateFinish === 2 ||
         !this.stalkerCanIn ||
         this.stalkerLocation === parseInt(CorrectionDestination) ||
-        (this.stalkerStatus === 'back' && status === 'back') ||
-        (status === 'back' && this.stalkerLocation < 10)
+        // (this.stalkerStatus === 'back' && status === 'back') ||
+        (status === 'back' && this.stalkerLocation < 10 && !this.isScrollEnd)
       )
         return
+      console.log('start move')
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
@@ -177,7 +178,6 @@ export default {
       }, time)
     },
     trackedMove(destination, status, time, cb) {
-      if (this.isAnimateFinish) return
       this.trackedMoveId++
       const id = this.trackedMoveId
       this.trackedStatus = status
@@ -194,7 +194,7 @@ export default {
       }, time)
     },
     stalkerForword() {
-      if (this.isAnimateFinish) return
+      if (this.isAnimateFinish === 2) return
       this.stalkerMove(
         this.trackedLocation - this.minDistance,
         'moving',
@@ -205,7 +205,7 @@ export default {
       )
     },
     handleScroll() {
-      if (this.isAnimateFinish) return
+      if (this.isScrollEnd) return
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerForword()
       })
@@ -213,10 +213,11 @@ export default {
     endAnimate() {
       this.trackedMove(800, 'moving', 10, () => {
         this.trackedStatus = 'stand'
-        this.stalkerMove(-100, 'back', 10, () => {
-          this.stalkerStatus = 'stand'
-          this.isAnimateFinish = true
-        })
+        this.isAnimateFinish++
+      })
+      this.stalkerMove(-100, 'back', 10, () => {
+        this.stalkerStatus = 'stand'
+        this.isAnimateFinish++
       })
     },
   },
@@ -245,6 +246,7 @@ export default {
   width: 100%;
   position: absolute;
   bottom: -40px;
+  left: 0;
 }
 
 .hide-title {

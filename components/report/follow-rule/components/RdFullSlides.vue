@@ -177,7 +177,7 @@ export default {
   }
 
   .mask {
-    z-index: 1000;
+    z-index: 200;
     background: #feeade;
     position: fixed;
     top: 0;

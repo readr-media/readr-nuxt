@@ -68,7 +68,7 @@ export default {
       )
       const controller = new ScrollMagic.Controller({
         globalSceneOptions: {
-          triggerHook: 0.2,
+          triggerHook: 0.3,
           reverse: true,
         },
       })
@@ -95,39 +95,6 @@ export default {
   }
   @include media-breakpoint-up(xl) {
     padding: 60px 100px;
-  }
-}
-.report-article::v-deep {
-  padding: 0;
-  a {
-    color: rgba(40, 221, 177, 1);
-  }
-
-  .paragraph-with-annotation {
-    .toggle {
-      background: #ffffff;
-      border: 1px solid rgba(40, 221, 177, 1);
-
-      path {
-        fill: #28ddb1;
-      }
-    }
-
-    .annotation {
-      background: rgba(17, 17, 17, 1);
-      background: rgba(40, 221, 177, 1);
-      border: 1px solid rgba(0, 0, 0, 1);
-    }
-  }
-
-  .container {
-    > :first-child {
-      margin-top: 48px !important;
-    }
-
-    > :last-child {
-      margin-bottom: 0 !important;
-    }
   }
 }
 </style>

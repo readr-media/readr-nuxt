@@ -135,7 +135,6 @@ export default {
         // (status === 'back' && this.stalkerLocation < this.minDistance)
       )
         return
-      console.log(destination, this.stalkerLocation, status)
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
@@ -181,7 +180,6 @@ export default {
     },
     handleScroll() {
       if (this.isAnimateFinish) return
-      console.log(this.frozenScroll)
       if (!this.frozenScroll) {
         this.stalkerMove(0, 'back', 10, () => {
           this.stalkerStatus = 'stand'

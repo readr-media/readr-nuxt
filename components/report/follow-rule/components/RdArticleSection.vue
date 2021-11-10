@@ -132,7 +132,7 @@ export default {
   }
 }
 .report-article::v-deep {
-  padding: 0;
+  padding: 0 !important;
   a {
     color: rgba(40, 221, 177, 1);
   }
