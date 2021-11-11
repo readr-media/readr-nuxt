@@ -184,7 +184,7 @@ export default {
       query: categories,
       variables() {
         return {
-          relatedPostFirst: 4,
+          relatedPostFirst: 8,
           relatedReportFirst: 1,
           shouldQueryRelatedPost: true,
           shouldQueryRelatedReport: true,
@@ -201,9 +201,9 @@ export default {
   data() {
     return {
       editorChoices: [],
-
       latestPosts: [],
-
+      quotes: [],
+      collaborations: [],
       databaseList: {
         items: [],
         meta: {
@@ -211,21 +211,12 @@ export default {
         },
         isLoading: false,
       },
-
-      quotes: [],
-
-      collaborations: [],
       collaboratorWall: {
         count: 0,
         names: '',
       },
 
-      categoryLists: [],
       isLoadingCategoryLists: false,
-      isInitializingMacy: false,
-      macyInstance: undefined,
-      unwatchIsViewportWidthUpMd: undefined,
-
       scrollDepthObserver: undefined,
     }
   },
@@ -271,12 +262,14 @@ export default {
     },
     transformedCategoryies() {
       return this.categories?.map((item) => {
-        const posts = item.posts?.map((post) =>
-          this.transformCategoryItem(post)
-        )
         const reports = item.reports?.map((report) =>
           this.transformCategoryItem(report)
         )
+        const postList =
+          item.posts?.length && !reports?.length
+            ? item.posts
+            : item.posts?.filter((item, i) => i < 4)
+        const posts = postList?.map((post) => this.transformCategoryItem(post))
 
         return {
           name: item?.name ?? '',
@@ -347,23 +340,9 @@ export default {
         this.collaboratorWall.names = names
       },
     },
-
-    shouldShowCategorySection() {
-      return (
-        (!this.isViewportWidthUpMd || this.macyInstance) &&
-        this.doesHaveCategoryLists
-      )
-    },
-    doesHaveCategoryLists() {
-      return this.displayedCategoryLists.length > 0
-    },
-    displayedCategoryLists() {
-      return this.categoryLists.filter(function doesHaveItems(list) {
-        return list.items.length > 0
-      })
-    },
   },
   mounted() {
+    console.log('nn', this.categories)
     this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
@@ -424,6 +403,7 @@ export default {
         }),
       }
     },
+
     async loadMoreDatabaseItems() {
       if (this.databaseList.isLoading) {
         return

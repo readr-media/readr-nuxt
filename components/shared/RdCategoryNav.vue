@@ -61,7 +61,8 @@ ul {
     &:last-child {
       margin: 0 0 12px;
     }
-    &.active {
+    &.active,
+    &:hover {
       position: relative;
       color: rgba(0, 9, 40, 0.87);
       &:after {

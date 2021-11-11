@@ -52,6 +52,9 @@ export default {
       @include media-breakpoint-up(sm) {
         width: calc((100% - 24px) / 2);
       }
+      @include media-breakpoint-up(xl) {
+        width: 256px;
+      }
     }
     li {
       margin: 0 0 16px;

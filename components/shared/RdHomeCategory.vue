@@ -104,6 +104,9 @@ export default {
       this.currentCategory.slug = slug ?? ''
     },
   },
+  mounted() {
+    console.log('dd', this.currentReport)
+  },
 }
 </script>
 
@@ -123,11 +126,14 @@ export default {
       display: flex;
       justify-content: space-between;
     }
-    &-posts,
+    &-posts {
+      margin: 0;
+    }
     &-report {
       @include media-breakpoint-up(xl) {
-        min-width: 536px;
-        max-width: 536px;
+        min-width: calc((100% - 24px) / 2);
+        max-width: calc((100% - 24px) / 2);
+        margin-left: 24px;
       }
     }
   }
