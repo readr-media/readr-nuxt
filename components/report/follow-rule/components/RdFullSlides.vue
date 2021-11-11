@@ -109,9 +109,22 @@ export default {
         // .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
     },
+    viewportHeight(height) {
+      console.log('height change', height)
+      this.slideWidth =
+        this.$refs.slide.clientWidth > height
+          ? height
+          : this.$refs.slide.clientWidth
+    },
   },
 
   mounted() {
+    console.log(
+      'slide',
+      this.$refs.slide.clientWidth,
+      'height',
+      this.viewportHeight
+    )
     this.slideWidth =
       this.$refs.slide.clientWidth > this.viewportHeight
         ? this.viewportHeight
