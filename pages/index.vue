@@ -9,7 +9,7 @@
     />
 
     <RdHomeCategory
-      :categories="transformedCategoryies"
+      :categories="transformedCategories"
       :latest="transformedCategoryLatest"
       class="container container--category"
     />
@@ -150,7 +150,7 @@ export default {
                     ogImage?.urlTabletSized ||
                     require('~/assets/imgs/default/post.svg'),
                 },
-                readTime: formatReadTime(wordCount, 2),
+                readTime: formatReadTime(wordCount, 5),
                 date: formatPostDate(publishTime),
                 isReport: isReport(style),
               }
@@ -249,7 +249,7 @@ export default {
           title,
           href: getHref({ style, id, slug }),
           date: formatPostDate(publishTime),
-          readTime: formatReadTime(wordCount, 2),
+          readTime: formatReadTime(wordCount, 5),
           isReport: isReport(style),
           img: {
             src:
@@ -260,7 +260,7 @@ export default {
         }
       })
     },
-    transformedCategoryies() {
+    transformedCategories() {
       return this.categories?.map((item) => {
         const reports = item.reports?.map((report) =>
           this.transformCategoryItem(report)
@@ -342,7 +342,6 @@ export default {
     },
   },
   mounted() {
-    console.log('nn', this.categories)
     this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
@@ -374,7 +373,7 @@ export default {
             ogImage?.urlMobileSized ||
             require('~/assets/imgs/default/post.svg'),
         },
-        readTime: formatReadTime(wordCount, 2),
+        readTime: formatReadTime(wordCount, 5),
         date: formatPostDate(publishTime),
       }
     },

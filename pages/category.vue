@@ -8,7 +8,7 @@
         class="category__heading"
       />
       <RdCategoryNav
-        :categories="categories"
+        :categories="categoryList"
         :currentCategorySlug="currentCategory.slug"
         class="category__category-nav"
         @item-clicked="refetchList"
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import InfiniteLoading from 'vue-infinite-loading'
 import RdNavbar from '~/components/shared/RdNavbar.vue'
 import RdListHeading from '~/components/shared/RdListHeading.vue'
@@ -41,7 +42,6 @@ import RdCategoryNav from '~/components/shared/RdCategoryNav.vue'
 import RdArticleList from '~/components/shared/RdArticleList.vue'
 
 import { latestList, latestListByCategorySlug } from '~/apollo/queries/posts.js'
-import { categories } from '~/apollo/queries/categories.js'
 
 import {
   getHref,
@@ -58,7 +58,6 @@ export default {
     RdNavbar,
     RdListHeading,
     RdCategoryNav,
-    // RdListItemCategory,
     RdArticleList,
   },
 
@@ -71,7 +70,6 @@ export default {
         },
         isLoading: false,
       },
-      categories: [],
       currentCategory: {
         name: this.$route.params?.name || '',
         slug: this.$route.params?.slug || 'all',
@@ -119,7 +117,7 @@ export default {
                   ogImage?.urlTabletSized ||
                   require('~/assets/imgs/default/post.svg'),
               },
-              readTime: formatReadTime(wordCount, 2),
+              readTime: formatReadTime(wordCount, 5),
               date: formatPostDate(publishTime),
               isReport: isReport(style),
             }
@@ -128,12 +126,12 @@ export default {
         }
       },
     },
-    categories: {
-      query: categories,
-    },
   },
 
   computed: {
+    ...mapGetters({
+      categoryList: 'category/categoryList',
+    }),
     categoryText() {
       return `所有${this.currentCategory.name}報導`
     },

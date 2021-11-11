@@ -9,7 +9,7 @@
       class="home-category__heading"
     />
     <RdCategoryNav
-      :categories="labels"
+      :categories="categoryList"
       :currentCategorySlug="currentCategory.slug"
       class="home-category__nav"
       @item-clicked="refetchList"
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import RdListHeading from '~/components/shared/RdListHeading.vue'
 import RdCategoryNav from '~/components/shared/RdCategoryNav.vue'
 import RdHomeCategoryList from '~/components/shared/RdHomeCategoryList.vue'
@@ -69,16 +70,11 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      categoryList: 'category/categoryList',
+    }),
     categoryReadMoreText() {
       return `更多${this.currentCategory.name}報導`
-    },
-    labels() {
-      return this.categories?.map((item) => {
-        return {
-          name: item?.name ?? '',
-          slug: item?.slug ?? '',
-        }
-      })
     },
     currentItem() {
       if (this.currentCategory.slug === 'all') {
@@ -103,9 +99,6 @@ export default {
       this.currentCategory.name = name && name !== '不分類' ? name : ''
       this.currentCategory.slug = slug ?? ''
     },
-  },
-  mounted() {
-    console.log('dd', this.currentReport)
   },
 }
 </script>

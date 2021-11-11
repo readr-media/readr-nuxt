@@ -30,10 +30,10 @@
         </ul>
       </div>
       <div class="right">
-        <div v-if="isPostpage" class="right__progress-percent">
+        <div v-if="isPostPage" class="right__progress-percent">
           閱讀進度<span>{{ percent }}%</span>
         </div>
-        <div v-if="!isPostpage" class="right__donate">
+        <div v-if="!isPostPage" class="right__donate">
           <a
             href="https://www.readr.tw/donate"
             target="_blank"
@@ -48,7 +48,7 @@
       </div>
     </section>
     <section class="header-bottom-wrapper">
-      <div v-if="isPostpage" class="progress-bar">
+      <div v-if="isPostPage" class="progress-bar">
         <div :style="{ width: `${percent}%` }" class="progress-bar__fill" />
       </div>
     </section>
@@ -72,8 +72,6 @@ import RdHeaderRelatedList from '~/components/shared/RdHeaderRelatedList.vue'
 import SvgReadrLogo from '~/assets/imgs/readr-logo.svg?inline'
 import SvgHamLogo from '~/assets/imgs/hamburger.svg?inline'
 
-import { categories } from '~/apollo/queries/categories.js'
-
 export default {
   name: 'RdNavbar',
 
@@ -86,7 +84,6 @@ export default {
 
   data() {
     return {
-      categories: [],
       latestList: [],
       currentCategory: {
         slug: 'culture',
@@ -100,30 +97,19 @@ export default {
     }
   },
 
-  apollo: {
-    categories: {
-      query: categories,
-      variables() {
-        return {
-          first: 6,
-          shouldQueryRelatedPost: true,
-          relatedPostFirst: 5,
-          relatedPostTypes: ['news', 'embedded', 'project3', 'report'],
-        }
-      },
-    },
-  },
-
   computed: {
-    ...mapGetters('viewport', ['viewportHeight']),
-    isPostpage() {
+    ...mapGetters({
+      viewportHeight: 'viewport/viewportHeight',
+      headerData: 'category/headerData',
+    }),
+    isPostPage() {
       return this.$route.fullPath?.includes('post/')
     },
     isCategoryPage() {
       return this.$route.fullPath?.includes('/category')
     },
     transformedCategoryies() {
-      return this.categories?.map((item) => {
+      return this.headerData?.map((item) => {
         const relatedList = item.posts?.map((post) =>
           this.transformRelatedPosts(post)
         )
@@ -154,13 +140,13 @@ export default {
   },
 
   mounted() {
-    if (this.isPostpage) {
+    if (this.isPostPage) {
       this.initProgress()
     }
   },
 
   beforeDestroy() {
-    if (this.isPostpage) {
+    if (this.isPostPage) {
       window.removeEventListener('scroll', this.calculateProgress)
     }
   },
