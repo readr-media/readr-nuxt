@@ -112,7 +112,10 @@ export default {
   },
 
   mounted() {
-    this.slideWidth = this.$refs.slide.clientWidth
+    this.slideWidth =
+      this.$refs.slide.clientWidth > this.viewportHeight
+        ? this.viewportHeight
+        : this.$refs.slide.clientWidth
   },
 
   methods: {
@@ -149,15 +152,23 @@ export default {
   .slide {
     min-width: var(--slide-width);
     max-width: 712px;
+    max-height: 100vh;
     z-index: 100;
+    &__top {
+      max-height: 67vh;
+    }
     &__bottom {
       height: 232px;
+      max-height: 33vh;
       &_description {
         margin: 50px 20px;
         padding: 10px;
         border-top: 2px dashed #000;
-        font-size: 20px;
+        font-size: 14px;
         line-height: 30px;
+        @include media-breakpoint-up(md) {
+          font-size: 20px;
+        }
       }
     }
   }
