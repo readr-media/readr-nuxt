@@ -325,7 +325,8 @@ export default {
     },
     citation() {
       const data = this.news?.citationApiData ?? ''
-      return data ? handleApiData(data) : []
+      const formatedData = data ? handleApiData(data) : []
+      return this.filterCitation(formatedData)
     },
     isContentString() {
       return typeof this.content === 'string'
@@ -391,6 +392,36 @@ export default {
           isInList,
         }
       })
+    },
+    filterCitation(data) {
+      return data.filter((item) => {
+        const type = item.type ?? ''
+        const content = item?.content?.[0] ?? ''
+        if (type === 'unstyled' || type === 'blockquote') {
+          return item
+        }
+        if (type === 'unordered-list-item') {
+          if (
+            typeof content === 'string' &&
+            this.isValidCitationString(content)
+          ) {
+            return item
+          } else {
+            const formatedContent = content?.filter((item) =>
+              this.isValidCitationString(item)
+            )
+            if (
+              formatedContent?.length &&
+              formatedContent?.length === content?.length
+            ) {
+              return item
+            }
+          }
+        }
+      })
+    },
+    isValidCitationString(rawStr = '') {
+      return rawStr.includes('<a') && rawStr.includes('</a>')
     },
     sendGaClickEvent(label, value) {
       this.sendGaEvent('click', label, value)

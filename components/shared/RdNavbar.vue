@@ -210,10 +210,10 @@ export default {
       this.shouldShowHamList = false
     },
     openRelatedList(e) {
-      if (e.srcElement.id) {
+      if (e.srcElement?.id) {
         this.currentId = e.srcElement.id
-      } else if (e.relatedTarget.textContent) {
-        this.currentName = e.relatedTarget.textContent
+      } else if (e.relatedTarget?.textContent) {
+        this.currentName = e.relatedTarget?.textContent
       }
     },
     closeRelatedList() {
