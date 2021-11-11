@@ -161,7 +161,58 @@ Object.assign(module.exports, {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/apollo', '@nuxtjs/svg', 'nuxt-ssr-cache'],
+  modules: [
+    '@nuxtjs/apollo',
+    '@nuxtjs/svg',
+    'nuxt-ssr-cache',
+    [
+      '@nuxtjs/firebase',
+      {
+        /*
+         * exposed apiKey in config is not a security risk
+         * see: https://stackoverflow.com/a/37484053
+         */
+        config: (function getFirebaseConfig(ENV) {
+          switch (ENV) {
+            case 'prod': {
+              return {
+                apiKey: 'AIzaSyDna248DTK4AtPNIx6TRNjn0qtIsYX7utY',
+                authDomain: 'readr-prod.firebaseapp.com',
+                projectId: 'readr-prod',
+                storageBucket: 'readr-prod.appspot.com',
+                messagingSenderId: '593370764604',
+                appId: '1:593370764604:web:3e90810bc5e6345ef37a39',
+                measurementId: 'G-RHEPK7BP2D',
+              }
+            }
+
+            case 'staging': {
+              return {
+                apiKey: 'AIzaSyBuJV8lv-UWRFE479xIQVkVSl96LKz_2hQ',
+                authDomain: 'readr-staging.firebaseapp.com',
+                projectId: 'readr-staging',
+                storageBucket: 'readr-staging.appspot.com',
+                messagingSenderId: '40777440099',
+                appId: '1:40777440099:web:84ffb8372928b4a8809156',
+              }
+            }
+
+            case 'dev':
+            default: {
+              return {
+                apiKey: 'AIzaSyBO495WVBDY8cGfuHmpThZxKFgiipRlILs',
+                authDomain: 'readr-dev-38eec.firebaseapp.com',
+                projectId: 'readr-dev-38eec',
+                storageBucket: 'readr-dev-38eec.appspot.com',
+                messagingSenderId: '611179505112',
+                appId: '1:611179505112:web:91b52854e9136ad4a83ead',
+              }
+            }
+          }
+        })(require('./configs/config').ENV),
+      },
+    ],
+  ],
 
   cache: !inDevEnv && {
     pages: ['/'],
