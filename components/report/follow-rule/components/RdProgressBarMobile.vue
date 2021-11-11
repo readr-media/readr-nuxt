@@ -35,7 +35,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import rafThrottle from 'raf-throttle'
+// import rafThrottle from 'raf-throttle'
 import RdStalkerAnimation from './RdStalkerAnimation.vue'
 import RdTrackedAnimation from './RdTrackedAnimation.vue'
 export default {
@@ -120,10 +120,22 @@ export default {
   mounted() {
     this.trackedLocation = this.minDistance
     this.handleScroll()
-    window.addEventListener('scroll', this.handleScroll)
+    window.addEventListener('scroll', this.throttle(this.handleScroll, 2000))
   },
 
   methods: {
+    throttle(callback, limit) {
+      let wait = false
+      return function () {
+        if (!wait) {
+          callback()
+          wait = true
+          setTimeout(function () {
+            wait = false
+          }, limit)
+        }
+      }
+    },
     handleClick(id) {
       this.$emit('scroll-to-section', id)
     },
@@ -180,47 +192,36 @@ export default {
       )
     },
     handleScroll() {
-      if (!this.frozenScroll) {
-        this.stalkerMove(0, 'back', 10, () => {
-          this.stalkerStatus = 'stand'
-          setTimeout(() => {
-            this.stalkerForword()
-          }, 1000)
-        })
+      this.stalkerMove(0, 'back', 10, () => {
+        this.stalkerStatus = 'stand'
+        this.stalkerForword()
+      })
+      if (!this.target) {
+        this.target = document.getElementsByTagName('article')[0]
       }
-      rafThrottle(() => {
-        if (!this.target) {
-          this.target = document.getElementsByTagName('article')[0]
+      const { bottom } = this.target.getBoundingClientRect()
+      if (bottom - this.viewportHeight < 0) {
+        this.percent = 100
+        if (this.hasFinishedReading === false) {
+          this.hasFinishedReading = true
         }
-        const { bottom } = this.target.getBoundingClientRect()
-        if (bottom - this.viewportHeight < 0) {
-          this.percent = 100
-          if (this.hasFinishedReading === false) {
-            this.hasFinishedReading = true
-          }
-          return
-        }
+        return
+      }
 
-        const { pageYOffset } = window
-        this.percent = Math.round(
-          (pageYOffset / (bottom + pageYOffset - this.viewportHeight)) * 100
-        )
+      const { pageYOffset } = window
+      this.percent = Math.round(
+        (pageYOffset / (bottom + pageYOffset - this.viewportHeight)) * 100
+      )
 
-        const totalWidth = this.viewportWidth - this.minDistance
-        const newLocation =
-          Math.round(totalWidth * this.percent * 0.01) + this.minDistance
-        this.trackedMove(newLocation, 'moving', 10, () => {
-          this.trackedStatus = 'stand'
-          if (this.stalkerStatus !== 'back')
-            setTimeout(() => {
-              this.stalkerForword()
-              // this.frozenScroll = true
-            }, 1000)
-        })
-      })()
+      const totalWidth = this.viewportWidth - this.minDistance
+      const newLocation =
+        Math.round(totalWidth * this.percent * 0.01) + this.minDistance
+      this.trackedMove(newLocation, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
+        if (this.stalkerStatus !== 'back') this.stalkerForword()
+      })
     },
     endAnimate() {
-      console.log('end')
       this.trackedMove(this.viewportWidth + 50, 'moving', 10, () => {
         this.trackedStatus = 'stand'
         this.isAnimateFinish++

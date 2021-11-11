@@ -140,9 +140,21 @@ export default {
   },
   mounted() {
     this.trackedLocation = this.minDistance
-    window.addEventListener('scroll', this.handleScroll)
+    window.addEventListener('scroll', this.throttle(this.handleScroll, 2000))
   },
   methods: {
+    throttle(callback, limit) {
+      let wait = false
+      return function () {
+        if (!wait) {
+          callback()
+          wait = true
+          setTimeout(function () {
+            wait = false
+          }, limit)
+        }
+      }
+    },
     handleClick(id) {
       this.$emit('scroll-to-section', id)
     },
@@ -157,9 +169,9 @@ export default {
       if (
         this.isAnimateFinish === 2 ||
         !this.stalkerCanIn ||
-        this.stalkerLocation === parseInt(CorrectionDestination) ||
+        this.stalkerLocation === parseInt(CorrectionDestination)
         // (this.stalkerStatus === 'back' && status === 'back') ||
-        (status === 'back' && this.stalkerLocation < 10 && !this.isScrollEnd)
+        // (status === 'back' && this.stalkerLocation < 10 && !this.isScrollEnd)
       )
         return
       this.stalkerMoveId++

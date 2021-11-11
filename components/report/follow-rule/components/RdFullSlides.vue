@@ -110,25 +110,12 @@ export default {
         .addTo(controller)
     },
     viewportHeight(height) {
-      console.log('height change', height)
-      this.slideWidth =
-        this.$refs.slide.clientWidth > height
-          ? height
-          : this.$refs.slide.clientWidth
+      this.getSlideWidth(height)
     },
   },
 
   mounted() {
-    console.log(
-      'slide',
-      this.$refs.slide.clientWidth,
-      'height',
-      this.viewportHeight
-    )
-    this.slideWidth =
-      this.$refs.slide.clientWidth > this.viewportHeight
-        ? this.viewportHeight
-        : this.$refs.slide.clientWidth
+    this.getSlideWidth(this.viewportHeight)
   },
 
   methods: {
@@ -142,6 +129,12 @@ export default {
     },
     handleEnterLeave(e) {
       this.enterFull = e.type === 'enter'
+    },
+    getSlideWidth(height) {
+      this.slideWidth =
+        this.$refs.slide.clientWidth > height
+          ? height
+          : this.$refs.slide.clientWidth
     },
   },
 }
