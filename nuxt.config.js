@@ -210,6 +210,9 @@ Object.assign(module.exports, {
             }
           }
         })(require('./configs/config').ENV),
+        services: {
+          auth: true,
+        },
       },
     ],
   ],
