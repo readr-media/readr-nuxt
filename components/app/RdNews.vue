@@ -438,7 +438,6 @@ export default {
 
 <style lang="scss" scoped>
 .g-page-wrapper {
-  min-height: 100vh;
   padding: 70px 0 0;
   @include media-breakpoint-up(sm) {
     padding: 86px 0 0;
