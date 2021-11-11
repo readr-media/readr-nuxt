@@ -96,7 +96,7 @@ export default {
                   ogImage?.urlTabletSized ||
                   require('~/assets/imgs/default/post.svg'),
               },
-              readTime: formatReadTime(wordCount, 2),
+              readTime: formatReadTime(wordCount, 5),
               date: formatPostDate(publishTime),
               isReport: isReport(style),
             }

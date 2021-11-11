@@ -25,44 +25,33 @@ export default {
         )
       case 'unordered-list-item': {
         if (typeof content === 'string') {
-          if (isValidString(content)) {
-            const str = formatList(content)
-            return (
-              <ul class="citation-list">
-                <li domPropsInnerHTML={str} />
-              </ul>
-            )
-          } else {
-            return undefined
-          }
+          const str = formatList(content)
+          return (
+            <ul class="citation-list">
+              <li domPropsInnerHTML={str} />
+            </ul>
+          )
         } else {
-          const formatedContent = content?.filter((item) => isValidString(item))
-          if (formatedContent.length) {
-            return (
-              <ul class="citation-list">
-                {content.map((item) => {
-                  const str = formatList(item)
-                  return <li domPropsInnerHTML={str} />
-                })}
-              </ul>
-            )
-          } else {
-            return undefined
-          }
+          return (
+            <ul class="citation-list">
+              {content.map((item) => {
+                const str = formatList(item)
+                return <li domPropsInnerHTML={str} />
+              })}
+            </ul>
+          )
         }
       }
       default:
         return undefined
     }
 
-    function isValidString(rawStr = '') {
-      return rawStr.includes('<a') && rawStr.includes('</a>')
-    }
-
     function formatList(rawStr = '') {
       const [str1, str2] = rawStr?.split('">')
       const str3 = str2?.split('</')[0]
-      return `${str1}"><span>${str3}</span><div class="icon">${SvgDownload}</div></a>`
+      if (str1 && str3) {
+        return `${str1}"><span>${str3}</span><div class="icon">${SvgDownload}</div></a>`
+      }
     }
   },
 }

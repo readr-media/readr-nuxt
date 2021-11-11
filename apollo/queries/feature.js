@@ -1,27 +1,28 @@
 import gql from 'graphql-tag'
 
-const editorChoices = gql`
+const feature = gql`
   query {
-    editorChoices: allEditorChoices(
+    feature: allFeatures(
       sortBy: [sortOrder_ASC, publishTime_DESC]
-      first: 3
+      first: 4
       where: { state: published }
     ) {
-      choice {
+      description
+      featuredPost {
         id
-        title: name
         slug
+        title: name
         style
-        wordCount
         heroImage {
-          urlTabletSized
           urlMobileSized
+          urlTabletSized
         }
-        publishTime
+        ogImage {
+          urlTabletSized
+        }
       }
-      publishTime
     }
   }
 `
 
-export { editorChoices }
+export { feature }

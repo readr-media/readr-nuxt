@@ -13,7 +13,7 @@
       <div class="middle">
         <ul>
           <li
-            v-for="item in categoryList"
+            v-for="item in transformedCategoryies"
             :id="item.slug"
             :key="item.slug"
             @click="navbarItemsClicked({ slug: item.slug, name: item.name })"
@@ -22,7 +22,7 @@
           >
             <span>{{ item.name }}</span>
             <RdHeaderRelatedList
-              v-show="currentId === item.slug"
+              v-show="currentId === item.slug || currentName === item.name"
               :list="item.relatedList"
               class="related-list"
             />
@@ -30,10 +30,10 @@
         </ul>
       </div>
       <div class="right">
-        <div v-if="isPostpage" class="right__progress-percent">
+        <div v-if="isPostPage" class="right__progress-percent">
           閱讀進度<span>{{ percent }}%</span>
         </div>
-        <div v-if="!isPostpage" class="right__donate">
+        <div v-if="!isPostPage" class="right__donate">
           <a
             href="https://www.readr.tw/donate"
             target="_blank"
@@ -48,7 +48,7 @@
       </div>
     </section>
     <section class="header-bottom-wrapper">
-      <div v-if="isPostpage" class="progress-bar">
+      <div v-if="isPostPage" class="progress-bar">
         <div :style="{ width: `${percent}%` }" class="progress-bar__fill" />
       </div>
     </section>
@@ -72,8 +72,6 @@ import RdHeaderRelatedList from '~/components/shared/RdHeaderRelatedList.vue'
 import SvgReadrLogo from '~/assets/imgs/readr-logo.svg?inline'
 import SvgHamLogo from '~/assets/imgs/hamburger.svg?inline'
 
-import { categories } from '~/apollo/queries/categories.js'
-
 export default {
   name: 'RdNavbar',
 
@@ -86,7 +84,6 @@ export default {
 
   data() {
     return {
-      categories: [],
       latestList: [],
       currentCategory: {
         slug: 'culture',
@@ -95,36 +92,28 @@ export default {
       percent: 0,
       hasFinishedReading: false,
       shouldShowHamList: false,
-      shouldShowRelatedList: false,
       currentId: '',
+      currentName: '',
     }
   },
 
-  apollo: {
-    categories: {
-      query: categories,
-      variables() {
-        return {
-          first: 6,
-          shouldQueryRelatedPost: true,
-        }
-      },
-    },
-  },
-
   computed: {
-    ...mapGetters('viewport', ['viewportHeight']),
-    isPostpage() {
+    ...mapGetters({
+      viewportHeight: 'viewport/viewportHeight',
+      headerData: 'category/headerData',
+    }),
+    isPostPage() {
       return this.$route.fullPath?.includes('post/')
     },
     isCategoryPage() {
       return this.$route.fullPath?.includes('/category')
     },
-    categoryList() {
-      return this.categories?.map((item) => {
-        const relatedList =
-          item.relatedPost?.map((post) => this.transformedRelatedPosts(post)) ??
-          []
+    transformedCategoryies() {
+      return this.headerData?.map((item) => {
+        const relatedList = item.posts?.map((post) =>
+          this.transformRelatedPosts(post)
+        )
+
         return {
           name: item?.name ?? '',
           slug: item?.slug ?? '',
@@ -133,7 +122,7 @@ export default {
       })
     },
     hamCategoryList() {
-      return this.categoryList?.map((item) => {
+      return this.transformedCategoryies?.map((item) => {
         return {
           name: item?.name ?? '',
           slug: item?.slug ?? '',
@@ -151,13 +140,13 @@ export default {
   },
 
   mounted() {
-    if (this.isPostpage) {
+    if (this.isPostPage) {
       this.initProgress()
     }
   },
 
   beforeDestroy() {
-    if (this.isPostpage) {
+    if (this.isPostPage) {
       window.removeEventListener('scroll', this.calculateProgress)
     }
   },
@@ -189,7 +178,7 @@ export default {
         )
       })()
     },
-    transformedRelatedPosts(post = {}) {
+    transformRelatedPosts(post = {}) {
       const {
         id = '',
         title = '',
@@ -221,14 +210,14 @@ export default {
       this.shouldShowHamList = false
     },
     openRelatedList(e) {
-      if (e.srcElement.id) {
+      if (e.srcElement?.id) {
         this.currentId = e.srcElement.id
+      } else if (e.relatedTarget?.textContent) {
+        this.currentName = e.relatedTarget?.textContent
       }
-      this.shouldShowRelatedList = true
     },
     closeRelatedList() {
       this.currentId = ''
-      this.shouldShowRelatedList = false
     },
     closeHamWithRedirect(item) {
       this.shouldShowHamList = false

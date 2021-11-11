@@ -9,6 +9,7 @@
           :title="item.title"
           :isReport="item.isReport"
           :shouldHideBottomInfos="true"
+          :shouldNotLazyload="true"
         />
       </li>
     </ul>

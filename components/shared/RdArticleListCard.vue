@@ -8,7 +8,8 @@
     ]"
   >
     <picture :class="{ 'reverse-picture': shouldReverseInMobile }">
-      <img v-lazy="img" :alt="title" />
+      <img v-if="shouldNotLazyload" :src="img" :alt="title" />
+      <img v-else v-lazy="img" :alt="title" />
       <label v-if="isReport">專題</label>
     </picture>
     <div class="text">
@@ -71,6 +72,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    shouldNotLazyload: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
@@ -78,6 +83,7 @@ export default {
 <style lang="scss" scoped>
 a {
   display: flex;
+  border-radius: 2px;
   @include media-breakpoint-up(sm) {
     display: block;
   }
@@ -98,6 +104,7 @@ a {
     background-color: #d8d8d8;
     margin: 0 16px 0 0;
     overflow: hidden;
+    border-radius: 2px;
     @include media-breakpoint-up(sm) {
       min-width: none;
       max-width: none;
