@@ -13,7 +13,7 @@
         :shouldHideBottomInfos="shouldHideBottomInfos"
       />
     </li>
-    <div class="position-correct" />
+    <div v-if="!isLoading" class="position-correct" />
     <template v-if="shouldShowSkeleton && isLoading">
       <RdSkeleton v-for="n in 4" :key="`skeleton${n}`" class="skeleton-item" />
     </template>

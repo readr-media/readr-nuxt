@@ -299,12 +299,19 @@ export default {
     transformedFeatures() {
       return this.feature?.map((post) => {
         const { description = '' } = post || {}
-        const { id = '', title = '', slug = '', style = '', heroImage = {} } =
-          post?.featuredPost || {}
+        const {
+          id = '',
+          title = '',
+          subtitle = '',
+          slug = '',
+          style = '',
+          heroImage = {},
+        } = post?.featuredPost || {}
 
         return {
           id,
           title,
+          subtitle,
           description,
           href: getHref({ style, id, slug }),
           img: {

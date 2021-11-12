@@ -5,6 +5,7 @@
       <RdListHeading :title="tagName" color="#ebf02c" class="tag__heading" />
       <RdArticleList
         :posts="tagList.items"
+        :isLoading="tagList.isLoading"
         :shouldReverseInMobile="true"
         :shouldShowSkeleton="true"
         :shouldHighLightReport="true"

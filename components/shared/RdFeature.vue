@@ -6,6 +6,7 @@
           :href="item.href"
           :img="item.img.src"
           :title="item.title"
+          :subtitle="item.subtitle"
           :description="item.description"
           :isFirst="i === 0"
         />

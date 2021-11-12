@@ -3,13 +3,16 @@
     <picture>
       <img v-lazy="img" :alt="title" />
     </picture>
-    <div class="text">
+    <div v-if="title" class="text">
       <label class="label-intext">
         {{ description }}
       </label>
       <h4>
         <span>{{ title }}</span>
       </h4>
+      <span v-if="subtitle && isFirst" class="subtitle">
+        {{ subtitle }}
+      </span>
     </div>
     <label class="label-upper">
       {{ description }}
@@ -27,6 +30,10 @@ export default {
       default: '',
     },
     title: {
+      type: String,
+      default: '',
+    },
+    subtitle: {
       type: String,
       default: '',
     },
@@ -113,6 +120,7 @@ a {
         line-height: 1.5;
         letter-spacing: 0.03em;
         color: #fff;
+        text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
         word-wrap: break-word;
         -webkit-line-clamp: 2;
         display: -webkit-box;
@@ -124,6 +132,27 @@ a {
         &:hover {
           text-decoration: underline;
           text-decoration-thickness: 1.5px;
+          text-underline-offset: 4px;
+        }
+      }
+    }
+    .subtitle {
+      display: none;
+      @include media-breakpoint-up(xl) {
+        font-size: 18px;
+        line-height: 1.5;
+        color: #fff;
+        text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+        word-wrap: break-word;
+        -webkit-line-clamp: 1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin: 8px 0 0;
+        padding: 0 80px;
+        &:hover {
+          text-decoration: underline;
+          text-decoration-thickness: 1px;
           text-underline-offset: 4px;
         }
       }

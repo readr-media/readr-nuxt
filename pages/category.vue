@@ -15,13 +15,14 @@
       />
       <RdArticleList
         :posts="latestList.items"
+        :isLoading="latestList.isLoading"
         :shouldReverseInMobile="true"
         :shouldShowSkeleton="true"
         :shouldHighLightReport="true"
         :shouldSetLgBreakPoint="true"
         class="category__post"
       />
-      <ClientOnly v-if="shouldMountInfiniteLoading">
+      <ClientOnly v-if="moreResultNum">
         <InfiniteLoading @infinite="loadMoreLatestItems">
           <div slot="spinner" />
           <div slot="no-more" />
@@ -77,6 +78,7 @@ export default {
         slug: this.$route.params?.slug || 'all',
       },
       pageNum: 16,
+      moreResultNum: 1,
     }
   },
 
@@ -95,6 +97,7 @@ export default {
       },
       update(result) {
         const { items, meta } = result
+        this.moreResultNum = items.length < this.pageNum ? 0 : 1
 
         return {
           ...this.latestList,
@@ -137,12 +140,6 @@ export default {
     categoryText() {
       return `所有${this.currentCategory.name}報導`
     },
-    shouldMountInfiniteLoading() {
-      return this.totalLatestItems > 0
-    },
-    doesHaveAnyLatestItemsLeftToLoad() {
-      return this.totalLatestItems < this.latestList.meta.count
-    },
     totalLatestItems() {
       return this.latestList.items.length
     },
@@ -161,9 +158,10 @@ export default {
             skip: this.totalLatestItems,
             first: this.pageNum,
             categorySlug: this.currentCategory.slug,
-            shouldQueryMeta: false,
+            shouldQueryMeta: true,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
+            this.moreResultNum = fetchMoreResult.items.length
             return {
               items: [...previousResult.items, ...fetchMoreResult.items],
               meta: this.latestList.meta,
@@ -171,7 +169,7 @@ export default {
           },
         })
 
-        if (this.doesHaveAnyLatestItemsLeftToLoad) {
+        if (this.moreResultNum) {
           state.loaded()
         } else {
           state.complete()

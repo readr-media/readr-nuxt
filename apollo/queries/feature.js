@@ -12,6 +12,7 @@ const feature = gql`
         id
         slug
         title: name
+        subtitle
         style
         heroImage {
           urlMobileSized
