@@ -6,19 +6,43 @@
       v-if="isMobile"
       ref="processBar"
       :tagsArray="cmsData.contentApiData.tag"
-      :isScrollingDown="isScrollingDown"
+      :isScrollingUp="isScrollingUp"
+      :isScrollEnd="isScrollEnd"
+      :nowTagId="parseInt(nowTagId)"
+      @scroll-to-section="(id) => handleScroll(id)"
     />
     <RdProgressBar
       v-else
       ref="processBar"
       :tagsArray="cmsData.contentApiData.tag"
-      :nowTagId="nowTagId"
+      :nowTagId="parseInt(nowTagId)"
+      :isScrollEnd="isScrollEnd"
+      :isScrollingUp="isScrollingUp"
+      @scroll-to-section="(id) => handleScroll(id)"
     />
 
     <RdArticle
       :cmsData="cmsData"
+      :processBarHeight="processBarHeight"
+      :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
       @chaneParagraph="(id) => chaneParagraph(id)"
     />
+    <div ref="quiz" class="article__report-quiz-wrapper" id="quiz">
+      <RdReportQuiz
+        :quizTitle="cmsData.contentApiData.articleQuiz.title"
+        :quizDescription="cmsData.contentApiData.articleQuiz.description"
+        :quizOptions="cmsData.contentApiData.articleQuiz.options"
+        :quizDetailTitleCorrect="
+          cmsData.contentApiData.articleQuiz.answerDetailTitleCorrect
+        "
+        :quizDetailTitleWrong="
+          cmsData.contentApiData.articleQuiz.answerDetailTitleWrong
+        "
+        :quizDetailDescription="
+          cmsData.contentApiData.articleQuiz.answerDetailDescription
+        "
+      />
+    </div>
     <RdReportExtras
       :contents="cmsData.contentApiData.extras.contents"
       @sendGaEvent="sendGaEvent"
@@ -31,7 +55,7 @@
     <RdReportCredit
       :authors="cmsData.contentApiData.credit"
       :publishedAt="cmsData.contentApiData.publishedAt"
-      :canSendGaEvent="shouldShowArticle || forceSectionNavActiveIndex === 1"
+      :canSendGaEvent="true"
     />
     <LazyRenderer class="latest-coverages">
       <readr-latest-coverages />
@@ -40,8 +64,11 @@
 </template>
 
 <script>
+/* global ScrollMagic */
+/* eslint no-undef: "error" */
 import { mapGetters } from 'vuex'
 import LazyRenderer from 'vue-lazy-renderer'
+import RdReportQuiz from './components/RdReportQuiz.vue'
 import RdCover from './components/RdCover.vue'
 import RdProgressBarMobile from './components/RdProgressBarMobile.vue'
 import RdProgressBar from './components/RdProgressBar.vue'
@@ -61,6 +88,7 @@ export default {
     RdReportCredit,
     LazyRenderer,
     RdProgressBarMobile,
+    RdReportQuiz,
   },
   mixins: [scrollDirection],
   props: {
@@ -75,11 +103,14 @@ export default {
     return {
       isMobile: true,
       nowTagId: 1,
+      processBarHeight: 0,
+      loadScrollMagicScriptTimes: 0,
+      isScrollEnd: false,
     }
   },
 
   computed: {
-    ...mapGetters('viewport', ['viewportWidth']),
+    ...mapGetters('viewport', ['viewportWidth', 'viewportHeight']),
   },
 
   watch: {
@@ -87,22 +118,87 @@ export default {
       this.isMobile = true
       this.isMobile = width < 768
     },
+    loadScrollMagicScriptTimes(times) {
+      if (times === 4) this.addQuizObserver()
+    },
   },
 
   mounted() {
+    window.scrollTo(0, 0)
     if (this.viewportWidth > 768) this.isMobile = false
+    this.processBarHeight = this.isMobile ? 90 : 217
   },
 
   methods: {
-    handleSim() {
-      this.nowTagId++
-    },
-    handleSimDecrease() {
-      this.nowTagId--
+    handleScroll(id) {
+      const controller = new ScrollMagic.Controller()
+      controller.scrollTo(`#section-${id}`)
+      const scrollBy = this.viewportWidth > 768 ? 200 : 100
+      window.scrollBy(0, -scrollBy)
     },
     chaneParagraph(id) {
       this.nowTagId = id
     },
+    sendGaEvent({ action, label }) {
+      this.$ga.event('projects', action, label)
+    },
+
+    addQuizObserver() {
+      const duration = this.$refs.quiz.clientHeight
+      const controller = new ScrollMagic.Controller({
+        globalSceneOptions: {
+          duration,
+          triggerHook: 0.2,
+          reverse: true,
+        },
+      })
+      new ScrollMagic.Scene({
+        triggerElement: `#quiz`,
+      })
+        .on('enter', () => {
+          if (!this.isScrollEnd) this.isScrollEnd = true
+        })
+        .addTo(controller)
+    },
+  },
+
+  head() {
+    return {
+      script: [
+        {
+          defer: true,
+          src:
+            'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/ScrollMagic.min.js',
+          callback: () => {
+            this.loadScrollMagicScriptTimes++
+          },
+        },
+        {
+          defer: true,
+          src:
+            'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/animation.gsap.min.js',
+          callback: () => {
+            this.loadScrollMagicScriptTimes++
+          },
+        },
+        {
+          defer: true,
+          src:
+            'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/debug.addIndicators.min.js',
+          callback: () => {
+            this.loadScrollMagicScriptTimes++
+          },
+        },
+        {
+          defer: true,
+          src:
+            'https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js',
+          callback: () => {
+            this.loadScrollMagicScriptTimes++
+          },
+        },
+      ],
+    }
   },
 }
 </script>
@@ -174,6 +270,7 @@ $--secondary-color: rgb(133, 101, 93);
       }
     }
     a.sc-readr-donate-button {
+      width: 95%;
       &::before {
         background-color: #111111;
       }

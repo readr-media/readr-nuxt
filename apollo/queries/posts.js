@@ -12,11 +12,13 @@ const latestPosts = gql`
       title: name
       style
       heroImage {
+        urlMobileSized
         urlTabletSized
       }
       ogImage {
         urlTabletSized
       }
+      wordCount
       publishTime
     }
   }
@@ -44,9 +46,9 @@ const latestPostsInErrorPage = gql`
 `
 
 const latestList = gql`
-  query($skip: Int, $shouldQueryMeta: Boolean! = true) {
+  query($skip: Int, $first: Int! = 16, $shouldQueryMeta: Boolean! = true) {
     items: allPosts(
-      first: 25
+      first: $first
       skip: $skip
       where: { state: published, style_in: [news, report, embedded, project3] }
       sortBy: [publishTime_DESC]
@@ -62,6 +64,7 @@ const latestList = gql`
         urlTabletSized
       }
       publishTime
+      wordCount
     }
 
     meta: _allPostsMeta @include(if: $shouldQueryMeta) {
@@ -70,4 +73,84 @@ const latestList = gql`
   }
 `
 
-export { latestPosts, latestPostsInErrorPage, latestList }
+const latestListByCategorySlug = gql`
+  query(
+    $skip: Int
+    $first: Int! = 16
+    $shouldQueryMeta: Boolean! = true
+    $categorySlug: String = ""
+  ) {
+    items: allPosts(
+      first: $first
+      skip: $skip
+      where: {
+        state: published
+        style_in: [news, report, embedded, project3]
+        categories_some: { slug: $categorySlug }
+      }
+      sortBy: [publishTime_DESC]
+    ) {
+      id
+      slug
+      title: name
+      style
+      heroImage {
+        urlTabletSized
+      }
+      ogImage {
+        urlTabletSized
+      }
+      publishTime
+      wordCount
+    }
+
+    meta: _allPostsMeta @include(if: $shouldQueryMeta) {
+      count
+    }
+  }
+`
+
+const latestListByTagName = gql`
+  query(
+    $skip: Int
+    $first: Int! = 16
+    $shouldQueryMeta: Boolean! = true
+    $tagName: String = ""
+  ) {
+    items: allPosts(
+      first: $first
+      skip: $skip
+      where: {
+        state: published
+        style_in: [news, report, embedded, project3]
+        tags_some: { name: $tagName }
+      }
+      sortBy: [publishTime_DESC]
+    ) {
+      id
+      slug
+      title: name
+      style
+      heroImage {
+        urlTabletSized
+      }
+      ogImage {
+        urlTabletSized
+      }
+      publishTime
+      wordCount
+    }
+
+    meta: _allPostsMeta @include(if: $shouldQueryMeta) {
+      count
+    }
+  }
+`
+
+export {
+  latestPosts,
+  latestPostsInErrorPage,
+  latestList,
+  latestListByCategorySlug,
+  latestListByTagName,
+}

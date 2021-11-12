@@ -1,96 +1,100 @@
 <template>
-  <div>
-    <RdReportArticle
-      :contents="splitUnderline(cmsData.contentApiData.article)"
-      :slug="'follow-rule'"
-      @sendGaEvent="sendGaEvent"
-      @observe="(target) => handleObserve(target)"
-    />
-    <div class="article__report-quiz-wrapper">
-      <RdReportQuiz
-        :quizTitle="cmsData.contentApiData.articleQuiz.title"
-        :quizDescription="cmsData.contentApiData.articleQuiz.description"
-        :quizOptions="cmsData.contentApiData.articleQuiz.options"
-        :quizDetailTitleCorrect="
-          cmsData.contentApiData.articleQuiz.answerDetailTitleCorrect
-        "
-        :quizDetailTitleWrong="
-          cmsData.contentApiData.articleQuiz.answerDetailTitleWrong
-        "
-        :quizDetailDescription="
-          cmsData.contentApiData.articleQuiz.answerDetailDescription
-        "
+  <article class="article">
+    <section
+      v-for="section in articleSections"
+      :key="section.type"
+      :id="`section-${section.type}`"
+      :ref="`section`"
+    >
+      <RdArticleSection
+        :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
+        :sectionArticle="section.value"
       />
-    </div>
-  </div>
+    </section>
+  </article>
 </template>
 
 <script>
-import RdReportQuiz from './RdReportQuiz.vue'
-import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
+/* global ScrollMagic */
+/* eslint no-undef: "error" */
+import RdArticleSection from './RdArticleSection.vue'
 
 export default {
   components: {
-    RdReportArticle,
-    RdReportQuiz,
+    RdArticleSection,
   },
   props: {
     cmsData: {
       type: Object,
       default: () => {},
     },
-  },
-  methods: {
-    splitUnderline(contents) {
-      contents = contents.map((content) => {
-        if (typeof content.value !== 'string') return content
-        const underlineContent = content.value.match(/<u*.*>*.*<\/u>/)
-        if (underlineContent) {
-          const newContent =
-            '<u>' +
-            underlineContent[0]
-              .split('')
-              .slice(3, underlineContent.length - 5)
-              .join('</u><u>') +
-            '</u>'
-          content.value = content.value.replace(/<u*.*>*.*<\/u>/, newContent)
-        }
-        return content
-      })
-      return contents
+    loadScrollMagicScriptTimes: {
+      type: Number,
+      default: 0,
     },
-    handleObserve(target) {
-      this.$emit('chaneParagraph', target.id)
+  },
+  data() {
+    return {
+      contentGroup: [],
+      sceneArray: [],
+      heightArray: [],
+    }
+  },
+  watch: {
+    loadScrollMagicScriptTimes(times) {
+      if (times === 4) this.addTagObserver()
+    },
+  },
+
+  computed: {
+    viewportHeight() {
+      return this.$store.getters[
+        ('viewport/viewportHeight', 'viewport/viewportWidth')
+      ]
+    },
+    articleSections() {
+      return this.cmsData.contentApiData.article
+    },
+  },
+
+  methods: {
+    sendGaEvent({ action, label }) {
+      this.$ga.event('projects', action, label)
+    },
+    addTagObserver() {
+      // const triggerHook = 90 / this.viewportHeight
+      this.$refs.section.map((target) =>
+        this.heightArray.push(target.clientHeight)
+      )
+      const controller = new ScrollMagic.Controller({
+        globalSceneOptions: {
+          triggerHook: 0.4,
+          reverse: true,
+        },
+      })
+      for (let i = 0; i < this.articleSections.length; i++) {
+        this.sceneArray[i] = new ScrollMagic.Scene({
+          duration: this.heightArray[i],
+          triggerElement: `#section-${i + 1}`,
+        })
+          .on('enter', (e) => this.$emit('chaneParagraph', i + 1))
+          .addTo(controller)
+      }
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.report-article::v-deep {
+.article {
   padding: 48px 20px;
   color: #000000;
   background-color: rgba(254, 234, 223, 1);
-
-  a {
-    color: rgba(40, 221, 177, 1);
+  @include media-breakpoint-up(md) {
+    padding: 48px 100px;
   }
-
-  .paragraph-with-annotation {
-    .toggle {
-      background: #ffffff;
-      border: 1px solid rgba(40, 221, 177, 1);
-
-      path {
-        fill: #28ddb1;
-      }
-    }
-
-    .annotation {
-      background: rgba(17, 17, 17, 1);
-      background: rgba(40, 221, 177, 1);
-      border: 1px solid rgba(0, 0, 0, 1);
-    }
+  @include media-breakpoint-up(xl) {
+    padding: 60px 100px;
   }
 }
 </style>

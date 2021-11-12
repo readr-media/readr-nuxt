@@ -1,7 +1,6 @@
 <template>
-  <div class="news">
-    <RdHeaderProgress @sendGaEvent="sendGaScrollEvent('end')" />
-
+  <div class="g-page-wrapper news">
+    <RdNavbar />
     <RdArticleVideo
       v-if="doesHaveHeroVideo"
       :videoSrc="transformedNews.heroVideo.src"
@@ -22,8 +21,8 @@
       <RdArticleHeading
         :title="transformedNews.title"
         :date="transformedNews.date"
-        :category="transformedNews.category"
-        :readTimeText="readTime"
+        :categories="transformedNews.categories"
+        :readTimeText="transformedNews.readTime"
         :creditList="credits"
         class="news__heading"
       />
@@ -48,82 +47,81 @@
       </article>
     </section>
 
+    <RdArticleActionList
+      v-if="doesHaveActionList"
+      :actionList="actionList"
+      class="news__action-list"
+    />
+
     <RdButtonDonate class="news__donate" />
 
-    <!-- <ClientOnly>
-      <section class="post-feedback container">
-        <div v-if="postFeedback.step === 'rating'" class="post-feedback__step">
-          <div class="post-feedback__title">這篇報導如何？</div>
+    <RdArticleSocialList class="news__social-list" />
 
-          <RdStarRating
-            class="post-feedback__star-rating"
-            @userGiveRating="setRating"
-          />
+    <RdArticleCitation
+      v-if="doesHaveCitation"
+      :citation="citation"
+      class="news__citation"
+    />
 
-          <RdFeedbackButton
-            v-if="doesHaveRating"
-            :text="ratingBtnText"
-            class="post-feedback__btn"
-            @click.native="handleClickRatingBtn"
-            @sendGaEvent="sendGaClickEvent('rate')"
-          />
-        </div>
+    <section class="news__tag-list-wrapper">
+      <RdArticleTagList :tags="tags" class="tag" />
+      <RdArticleSocialList class="social" />
+    </section>
 
-        <div
-          v-else-if="postFeedback.step === 'opinion'"
-          class="post-feedback__step"
-        >
-          <div class="post-feedback__title">可以的話，給我們一些回饋吧</div>
+    <RdNewsLetter v-if="shouldShowNewsLetter" class="new__news-letter" />
 
-          <RdFeedbackForm @userGiveFeedback="setOpinion" />
-
-          <RdFeedbackButton
-            v-if="doesHaveOpinionContent"
-            text="傳送給 READr"
-            class="post-feedback__btn"
-            @click.native="handleClickOpinionBtn"
-          />
-        </div>
-
-        <RdFeedbackThanks v-else />
-      </section>
-    </ClientOnly> -->
-
-    <ClientOnly>
-      <section class="latest-posts container">
-        <h2>
-          <div>最新報導</div>
-        </h2>
-        <RdList
-          :posts="latestPosts"
-          @sendGaEvent="sendGaClickEvent('related articles')"
+    <section class="news__related-list-wrapper">
+      <template v-if="doesHaveRelatedPosts">
+        <RdListHeading title="相關報導" color="#fff" class="heading" />
+        <RdArticleList
+          :posts="transformedRelatedPosts"
+          :shouldReverseInMobile="false"
+          :shouldShowSkeleton="false"
+          :shouldHighLightReport="false"
+          :filterNum="4"
+          class="list"
         />
-      </section>
-    </ClientOnly>
+      </template>
+      <template v-if="doesHaveLatestPosts">
+        <RdListHeading title="最新報導" color="#fff" class="heading" />
+        <RdArticleList
+          :posts="transformedLatestPosts"
+          :shouldReverseInMobile="false"
+          :shouldShowSkeleton="false"
+          :shouldHighLightReport="false"
+          :filterNum="4"
+          class="list"
+        />
+      </template>
+    </section>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { post as axiosPost } from 'axios'
-import dayjs from 'dayjs'
-
-import RdHeaderProgress from '~/components/shared/Header/RdHeaderProgress.vue'
+import RdNavbar from '~/components/shared/RdNavbar.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
-// import RdFeedbackForm from '~/components/shared/Feedback/RdFeedbackForm.vue'
-// import RdFeedbackThanks from '~/components/shared/Feedback/RdFeedbackThanks.vue'
-// import RdFeedbackButton from '~/components/shared/Feedback/RdFeedbackButton.vue'
-// import RdStarRating from '~/components/shared/RdStarRating.vue'
 import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
 import RdCoverImage from '~/components/shared/RdCoverImage.vue'
 import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
 import RdArticleSummary from '~/components/shared/RdArticleSummary.vue'
 import RdArticleContentHandler from '~/components/shared/RdArticleContentHandler.vue'
-import RdList from '~/components/shared/List/RdList.vue'
+import RdArticleActionList from '~/components/shared/RdArticleActionList.vue'
+import RdArticleCitation from '~/components/shared/RdArticleCitation.vue'
+import RdArticleTagList from '~/components/shared/RdArticleTagList.vue'
+import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
+import RdListHeading from '~/components/shared/RdListHeading.vue'
+import RdArticleList from '~/components/shared/RdArticleList.vue'
+import RdNewsLetter from '~/components/shared/RdNewsLetter.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.js'
 
-import { getHref, formatDate, handleApiData } from '~/helpers/index.js'
+import {
+  formatReadTime,
+  formatPostDate,
+  isReport,
+  handleApiData,
+  doesHaveApiDataContent,
+} from '~/helpers/index.js'
 
 const CREDIT_KEYS = [
   'writers',
@@ -139,18 +137,20 @@ export default {
   name: 'RdNews',
 
   components: {
-    RdHeaderProgress,
+    RdNavbar,
     RdButtonDonate,
-    // RdFeedbackForm,
-    // RdFeedbackThanks,
-    // RdFeedbackButton,
-    // RdStarRating,
     RdArticleVideo,
     RdCoverImage,
     RdArticleHeading,
     RdArticleSummary,
     RdArticleContentHandler,
-    RdList,
+    RdArticleActionList,
+    RdArticleCitation,
+    RdArticleTagList,
+    RdArticleSocialList,
+    RdListHeading,
+    RdArticleList,
+    RdNewsLetter,
   },
 
   props: {
@@ -165,58 +165,25 @@ export default {
     latestPosts: {
       query: latestPosts,
       prefetch: false,
-      update(result) {
-        return result.latestPosts.map(function transformContent(post) {
-          const {
-            id = '',
-            title = '',
-            heroImage = {},
-            ogImage = {},
-            publishTime = '',
-          } = post || {}
-
-          return {
-            id,
-            title,
-            href: getHref(post),
-            img: {
-              src:
-                heroImage?.urlTabletSized ||
-                ogImage?.urlTabletSized ||
-                require('~/assets/imgs/default/post.svg'),
-            },
-            date: formatDate(publishTime),
-          }
-        })
+      variables() {
+        return {
+          first: 4,
+        }
       },
     },
   },
 
   data() {
     return {
-      postFeedback: {
-        step: 'rating',
-
-        rating: 0,
-        opinion: {
-          nickname: '',
-          email: '',
-          content: '',
-        },
-      },
-
       latestPosts: [],
+      shouldShowNewsLetter: false,
     }
   },
 
   computed: {
-    ...mapState({
-      userUuid: (state) => state.user.uuid,
-    }),
     postId() {
       return this.$route.params.id
     },
-
     transformedNews() {
       const {
         title = '',
@@ -224,11 +191,15 @@ export default {
         heroImage = {},
         heroCaption = '',
         categories = [],
+        wordCount = 0,
         publishTime = '',
+        style = '',
       } = this.news
 
       return {
         title,
+        categories,
+        heroCaption,
         heroVideo: {
           src: heroVideo?.url,
           desc: heroVideo?.description,
@@ -243,11 +214,75 @@ export default {
             sm: heroImage?.urlDesktopSized,
           },
         },
-        heroCaption,
-        category: categories?.[0]?.name,
-        date: this.formatHeadingDate(publishTime),
+        readTime: formatReadTime(wordCount, this.imageCount),
+        date: formatPostDate(publishTime),
+        isReport: isReport(style),
       }
     },
+    transformedRelatedPosts() {
+      return (
+        this.news?.relatedPosts?.map(
+          ({
+            id = '',
+            name = '',
+            publishTime = '',
+            wordCount = 0,
+            heroImage = {},
+            style = '',
+          }) => {
+            return {
+              id,
+              title: name,
+              type: 'recommend',
+              href: `/post/${id}`,
+              date: formatPostDate(publishTime),
+              readTime: formatReadTime(wordCount, 2),
+              isReport: isReport(style),
+              img: {
+                src:
+                  heroImage?.urlMobileSized ||
+                  heroImage?.urlTabletSized ||
+                  require('~/assets/imgs/default/post.svg'),
+              },
+              content: [
+                {
+                  name,
+                  href: `/post/${id}`,
+                },
+              ],
+            }
+          }
+        ) ?? []
+      )
+    },
+    transformedLatestPosts() {
+      return this.latestPosts?.map((post) => {
+        const {
+          id = '',
+          title = '',
+          heroImage = {},
+          wordCount = 0,
+          publishTime = '',
+          style = '',
+        } = post || {}
+
+        return {
+          id,
+          title,
+          href: `/post/${id}`,
+          date: formatPostDate(publishTime),
+          readTime: formatReadTime(wordCount, 2),
+          isReport: isReport(style),
+          img: {
+            src:
+              heroImage?.urlMobileSized ||
+              heroImage?.urlTabletSized ||
+              require('~/assets/imgs/default/post.svg'),
+          },
+        }
+      })
+    },
+
     credits() {
       return Object.keys(this.news || {})
         .filter(
@@ -265,7 +300,9 @@ export default {
               }
         })
     },
-
+    tags() {
+      return this.news?.tags ?? []
+    },
     videoPoster() {
       return (
         this.transformedNews?.heroVideo?.coverPhoto?.sm ||
@@ -276,107 +313,117 @@ export default {
 
     content() {
       const data = this.news?.contentApiData ?? ''
-      return data ? handleApiData(data) : []
+      const formatedData = data ? handleApiData(data) : []
+      return this.insertRecommend(formatedData)
     },
     summary() {
       const data = this.news?.summaryApiData ?? ''
       return data ? handleApiData(data) : []
     },
+    actionList() {
+      const data = this.news?.actionListApiData ?? ''
+      return data ? handleApiData(data) : []
+    },
+    citation() {
+      const data = this.news?.citationApiData ?? ''
+      const formatedData = data ? handleApiData(data) : []
+      return this.filterCitation(formatedData)
+    },
     isContentString() {
       return typeof this.content === 'string'
     },
-
     imageCount() {
       const images =
         this.content?.filter((item) => item?.type === 'image') ?? []
       return images.length
     },
-    readTime() {
-      const wordCount = this.news?.wordCount ?? 0
-      const min = Math.round((wordCount / 8 + this.imageCount * 10) / 60)
-      return min ? `閱讀時間 ${min} 分鐘` : ''
-    },
 
-    feedbackRanting: {
-      get() {
-        return this.postFeedback.rating
-      },
-      set(value) {
-        this.postFeedback.rating = value
-      },
-    },
-    ratingBtnText() {
-      return `確定給 ${this.feedbackRanting} 顆星`
-    },
     doesHaveHeroVideo() {
       return this.transformedNews?.heroVideo?.src
     },
     doesHaveSummary() {
-      const validateArray = this.summary?.map((summaryContent) => {
-        return (
-          summaryContent?.content?.length > 1 ||
-          summaryContent?.content[0]?.length > 0
-        )
-      })
-      return validateArray.find((item) => {
-        return item
-      })
+      return doesHaveApiDataContent(this.summary)
     },
-    doesHaveRating() {
-      return this.feedbackRanting > 0
+    doesHaveActionList() {
+      return doesHaveApiDataContent(this.actionList)
     },
-    doesHaveOpinionContent() {
-      return this.postFeedback.opinion.content !== ''
+    doesHaveCitation() {
+      return doesHaveApiDataContent(this.citation)
+    },
+    doesHaveRelatedPosts() {
+      return this.transformedRelatedPosts?.length > 0
+    },
+    doesHaveLatestPosts() {
+      return this.transformedLatestPosts?.length > 0
     },
   },
+
   methods: {
-    setRating(value) {
-      this.feedbackRanting = value
+    insertRecommend(data) {
+      let i = 0
+      let count = 0
+      if (this.doesHaveRelatedPosts && data?.length) {
+        while (i < data.length) {
+          if (
+            (data[i]?.type === 'unstyled' || data[i]?.type === 'annotation') &&
+            data[i]?.content?.[0]
+          ) {
+            count++
+            const item = this.transformedRelatedPosts[count / 5 - 1]
+            if (count % 5 === 0 && item) {
+              data.splice(i + 1, 0, item)
+            }
+          }
+          i++
+        }
+      }
+      return data
     },
-    handleClickRatingBtn() {
-      this.sendRatingToGoogleSheet()
-      this.gotoFeedbackStep('opinion')
-    },
-    formatHeadingDate(datetime) {
-      return dayjs(datetime).format('M/DD')
-    },
-    sendRatingToGoogleSheet() {
-      axiosPost('/api/google-sheets/append', {
-        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-        range: '評分!A2:D',
-        valueInputOption: 'RAW',
-        resource: {
-          values: [
-            [Date.now(), this.userUuid, this.postId, this.feedbackRanting],
-          ],
-        },
+    doseInsideList(data) {
+      let firstListIndex
+      return data.map((item, i) => {
+        if (item.type === 'unordered-list-item') {
+          firstListIndex = i
+        }
+
+        const isInList = firstListIndex !== undefined
+
+        return {
+          ...item,
+          isInList,
+        }
       })
     },
-    gotoFeedbackStep(name) {
-      this.postFeedback.step = name
-    },
-
-    setOpinion(value) {
-      this.postFeedback.opinion = value
-    },
-    handleClickOpinionBtn() {
-      this.sendOpinionToGoogleSheet()
-      this.gotoFeedbackStep('thanks')
-    },
-    sendOpinionToGoogleSheet() {
-      const { nickname, email, content } = this.postFeedback.opinion
-      axiosPost('/api/google-sheets/append', {
-        spreadsheetId: '1q9t4tpDlEPiiSAb2TU9rn6G2MnKI1QjpYL_07xnUyGA',
-        range: '回饋!A2:F',
-        valueInputOption: 'RAW',
-        resource: {
-          values: [
-            [Date.now(), this.userUuid, this.postId, nickname, email, content],
-          ],
-        },
+    filterCitation(data) {
+      return data.filter((item) => {
+        const type = item.type ?? ''
+        const content = item?.content?.[0] ?? ''
+        if (type === 'unstyled' || type === 'blockquote') {
+          return item
+        }
+        if (type === 'unordered-list-item') {
+          if (
+            typeof content === 'string' &&
+            this.isValidCitationString(content)
+          ) {
+            return item
+          } else {
+            const formatedContent = content?.filter((item) =>
+              this.isValidCitationString(item)
+            )
+            if (
+              formatedContent?.length &&
+              formatedContent?.length === content?.length
+            ) {
+              return item
+            }
+          }
+        }
       })
     },
-
+    isValidCitationString(rawStr = '') {
+      return rawStr.includes('<a') && rawStr.includes('</a>')
+    },
     sendGaClickEvent(label, value) {
       this.sendGaEvent('click', label, value)
     },
@@ -391,14 +438,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.g-page-wrapper {
+  padding: 70px 0 0;
+  @include media-breakpoint-up(sm) {
+    padding: 86px 0 0;
+  }
+}
 .news {
-  padding: 68.63px 0 0;
-  overflow: hidden;
   &__cover {
     width: 100%;
     max-width: 960px;
     margin: 0 auto 24px;
-    @include media-breakpoint-up(xl) {
+    @include media-breakpoint-up(lg) {
       margin: 24px auto 60px;
     }
   }
@@ -440,9 +491,22 @@ export default {
       > * + * {
         margin: 32px 0 0;
       }
-      > .g-article-heading + .g-article-paragraph {
+      > .g-article-heading + * {
         margin: 16px 0 0;
       }
+      .g-quote-by {
+        margin: 40px auto 64px;
+      }
+    }
+  }
+  &__action-list {
+    width: 100%;
+    margin: 0 auto 48px;
+    max-width: 568px;
+    @include media-breakpoint-up(xl) {
+      width: 600px;
+      max-width: 600px;
+      margin: 0 auto 60px;
     }
   }
   &__donate {
@@ -452,317 +516,96 @@ export default {
       margin: 60px auto 64px;
     }
   }
-}
-
-article {
-  padding-top: 14px;
-}
-
-.date {
-  text-align: center;
-  font-size: 13px;
-  line-height: 1.4;
-  color: rgba(#000, 0.87);
-  margin-bottom: 12px;
-  @include media-breakpoint-up(md) {
-    font-size: 15px;
-    margin-bottom: 20px;
-  }
-}
-
-.content {
-  padding-top: 20px;
-  padding-bottom: 70px;
-  font-size: 15px;
-  line-height: 2;
-  letter-spacing: 0.6px;
-  color: rgba(#000, 0.87);
-  @include media-breakpoint-up(md) {
-    font-size: 18px;
-    line-height: 1.89;
-    padding-top: 30px;
-  }
-
-  &::v-deep {
-    p,
-    h2 {
-      max-width: 600px;
-      margin-left: 30px;
-      margin-right: 30px;
-      @media (min-width: 660px) {
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-
-    h2 {
-      font-weight: 900;
-      font-size: 24px;
-      line-height: 1.5;
-      margin-top: 60px;
-      margin-bottom: 40px;
-      letter-spacing: 0;
-      @include media-breakpoint-up(md) {
-        font-size: 26px;
-        margin-bottom: 30px;
-        line-height: 1.46;
-      }
-    }
-
-    p {
-      margin-top: 30px;
-      margin-bottom: 30px;
-      @include word-wrap;
-      @include media-breakpoint-up(md) {
-        margin-top: 34px;
-        margin-bottom: 34px;
-      }
-    }
-
-    blockquote {
-      background-color: rgba(245, 235, 255, 0.2);
-      font-weight: 500;
-      font-size: 15px;
-      line-height: 2;
-      letter-spacing: 0.6px;
-      padding: 20px 30px 30px 30px;
-      margin: 30px auto;
-      max-width: 600px;
-      @media (min-width: 600px) {
-        border-radius: 2px;
-      }
-      @include media-breakpoint-up(md) {
-        font-size: 18px;
-        line-height: 1.8;
-        letter-spacing: 2.5px;
-        padding-left: 50px;
-        padding-right: 50px;
-        padding-bottom: 35px;
-      }
-
-      &::before {
-        content: url(~assets/imgs/quotation-mark.svg);
-        display: block;
-        text-align: center;
-        margin-bottom: 11px; /* 11 = 30 - 19 */
-        @include media-breakpoint-up(md) {
-          margin-bottom: 13px;
+  &__social-list {
+    display: block;
+    width: 180px;
+    margin: 0 auto 48px;
+    ::v-deep {
+      ul {
+        li + li {
+          margin: 0 0 0 14px;
         }
       }
     }
-
-    a {
-      color: #04295e;
-      border-bottom: 1px solid #04295e;
-    }
-
-    .readme-image,
-    .readme-embed {
-      margin: 40px auto;
-      max-width: 600px;
-      @include media-breakpoint-up(md) {
-        margin-top: 30px;
-        margin-bottom: 30px;
-      }
-    }
-
-    .readme-image {
-      img {
-        width: 100%;
-        background-color: rgba(216, 216, 216, 0.15);
-        @include media-breakpoint-up(md) {
-          border-radius: 4px;
-        }
-      }
-
-      &::after {
-        display: block;
-        content: attr(text);
-        font-size: 13px;
-        line-height: 1.46;
-        letter-spacing: 1px;
-        color: rgba(#000, 0.66);
-        margin-left: 30px;
-        margin-right: 30px;
-        margin-top: 10px;
-        @media (min-width: 600px) {
-          margin-left: calc(30px - (100vw - 600px) / 2);
-          margin-right: calc(30px - (100vw - 600px) / 2);
-        }
-        @media (min-width: 660px) {
-          margin-left: 1px;
-          margin-right: 1px;
-        }
-        @include media-breakpoint-up(md) {
-          font-size: 15px;
-          line-height: 1.27;
-        }
-      }
-
-      &[text='undefined']::after {
-        content: none;
-      }
-    }
-
-    ul,
-    ol {
-      font-weight: 500;
-      font-size: 15px;
-      line-height: 1.8;
-      letter-spacing: 0.6px;
-      margin: 40px 30px;
-      max-width: 500px;
-      @media (min-width: 560px) {
-        margin-left: auto;
-        margin-right: auto;
-      }
-      @include media-breakpoint-up(md) {
-        font-size: 18px;
-        letter-spacing: 2.5px;
-      }
-
-      li {
-        position: relative;
-        padding-left: 30px;
-        margin-top: 12px;
-        margin-bottom: 12px;
-        @include media-breakpoint-up(md) {
-          padding-left: 40px;
-        }
-
-        &::before {
-          display: block;
-          position: absolute;
-        }
-      }
-    }
-
-    ul {
-      li::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background-color: #04295e;
-        left: 9px;
-        top: 10.5px; /* (15 * 1.8 - 6) / 2 */
-        @include media-breakpoint-up(md) {
-          width: 8px;
-          height: 8px;
-          left: 14px;
-          top: 12.2px; /* (18 * 1.8 - 8) / 2 */
-        }
-      }
-    }
-
-    ol {
-      counter-reset: num;
-
-      li::before {
-        top: 0;
-        left: 0;
-        counter-increment: num;
-        content: counter(num) '.';
-        width: 24px;
-        text-align: center;
-        @include media-breakpoint-up(md) {
-          width: 36px;
-        }
-      }
-    }
-
-    hr {
+    @include media-breakpoint-up(md) {
       display: none;
     }
   }
-}
-
-.post-feedback {
-  background-color: rgba(#f5ebff, 0.2);
-  border-radius: 2px;
-  margin-bottom: 20px;
-  text-align: center;
-  color: rgba(#000, 0.87);
-  @include media-breakpoint-up(md) {
-    margin-bottom: 30px;
-  }
-
-  &__step {
-    padding: 30px;
-    @include media-breakpoint-up(md) {
-      padding: 22px 50px;
-    }
-  }
-
-  &__title {
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 1;
-    letter-spacing: 1.5px;
-    padding-left: 1.5px; /* to offset letter-spacing at the rightmost */
-
-    margin-bottom: 20px;
-    @include media-breakpoint-up(md) {
-      margin-bottom: 22px;
-      font-size: 18px;
-      letter-spacing: 2.5px;
-      padding-left: 2.5px; /* to offset letter-spacing at the rightmost */
-    }
-  }
-
-  &__btn {
-    max-width: 240px;
+  &__citation {
     width: 100%;
-    margin-top: 20px;
-    @include media-breakpoint-up(md) {
-      margin-top: 22px;
+    margin: 0 auto 48px;
+    max-width: 568px;
+    @include media-breakpoint-up(xl) {
+      width: 600px;
+      max-width: 600px;
     }
   }
-
-  &__star-rating {
-    max-width: 260px;
-    margin-left: auto;
-    margin-right: auto;
+  &__tag-list-wrapper {
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto 40px;
+    @include media-breakpoint-up(md) {
+      width: 568px;
+      display: flex;
+      justify-content: space-between;
+      padding: 0;
+      margin: 0 auto 52px;
+    }
+    @include media-breakpoint-up(xl) {
+      width: 600px;
+    }
+    .tag {
+      width: 100%;
+      @include media-breakpoint-up(md) {
+        max-width: 336px;
+      }
+    }
+    .social {
+      display: none;
+      @include media-breakpoint-up(md) {
+        min-width: 192px;
+        max-width: 192px;
+        display: block;
+      }
+    }
   }
-}
-
-.latest-posts {
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 50px;
-  @media (min-width: 620px) {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  @include media-breakpoint-up(md) {
-    margin-bottom: 22px;
-  }
-
-  h2 {
-    background-color: #f5ebff;
-    border-radius: 2px;
-    text-align: center;
-    color: #04295e;
-    font-weight: 900;
-    font-size: 18px;
-    line-height: 1.5;
-    padding: 8px 24px;
-    margin-bottom: 14px;
-  }
-
-  div {
-    letter-spacing: 5px;
-    margin-left: 2.5px; /* to offset letter-spacing at the rightmost */
-  }
-}
-
-.container {
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-
-  &--post {
-    max-width: 660px;
+  &__related-list-wrapper {
+    width: 100%;
+    background-color: #ebf02c;
+    padding: 48px 20px;
+    @include media-breakpoint-up(md) {
+      padding: 48px 0;
+    }
+    @include media-breakpoint-up(xl) {
+      padding: 60px 0;
+    }
+    .heading,
+    .list {
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      @include media-breakpoint-up(md) {
+        width: 672px;
+      }
+      @include media-breakpoint-up(xl) {
+        width: 1096px;
+      }
+    }
+    .heading {
+      margin-bottom: 16px;
+      @include media-breakpoint-up(md) {
+        margin-bottom: 40px;
+      }
+    }
+    > .list + .heading {
+      margin-top: 32px;
+      @include media-breakpoint-up(md) {
+        margin-top: 16px;
+      }
+      @include media-breakpoint-up(xl) {
+        margin-top: 0;
+      }
+    }
   }
 }
 </style>

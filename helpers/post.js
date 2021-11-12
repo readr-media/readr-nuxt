@@ -30,4 +30,39 @@ function handleApiData(apiData = '') {
   }
 }
 
-export { getHref, formatDate, handleApiData }
+function formatReadTime(wordCount = 0, imageCount = 0) {
+  const min = Math.round((wordCount / 8 + imageCount * 10) / 60)
+  return min ? `閱讀時間 ${min} 分鐘` : ''
+}
+
+function formatPostDate(datetime) {
+  const nowYear = new Date().getFullYear()
+  const formatStr =
+    nowYear === new Date(datetime).getFullYear() ? 'MM/DD' : 'YYYY/MM/DD'
+  return dayjs(datetime).format(formatStr)
+}
+
+function isReport(style = '') {
+  return style === 'report' || style === 'project3' || style === 'embedded'
+}
+
+function doesHaveApiDataContent(data = []) {
+  const validateArray = data?.map((dataContent) => {
+    return (
+      dataContent?.content?.length > 1 || dataContent?.content[0]?.length > 0
+    )
+  })
+  return validateArray.find((item) => {
+    return item
+  })
+}
+
+export {
+  getHref,
+  formatDate,
+  formatReadTime,
+  formatPostDate,
+  isReport,
+  handleApiData,
+  doesHaveApiDataContent,
+}

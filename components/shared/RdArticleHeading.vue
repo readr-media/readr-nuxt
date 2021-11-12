@@ -1,6 +1,10 @@
 <template>
   <div class="heading">
-    <RdHighLightHeading :text="category" class="heading__category" />
+    <RdArticleHeadingTopList
+      v-if="doesHaveCategories"
+      :list="categories"
+      class="heading__category"
+    />
     <h1>{{ title }}</h1>
     <RdDateWithReadTime
       :date="date"
@@ -15,7 +19,7 @@
 </template>
 
 <script>
-import RdHighLightHeading from '~/components/shared/RdHighLightHeading.vue'
+import RdArticleHeadingTopList from '~/components/shared/RdArticleHeadingTopList.vue'
 import RdDateWithReadTime from '~/components/shared/RdDateWithReadTime.vue'
 import RdArticleCreditList from '~/components/shared/RdArticleCreditList.vue'
 import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
@@ -24,7 +28,7 @@ export default {
   name: 'RdArticleHeading',
 
   components: {
-    RdHighLightHeading,
+    RdArticleHeadingTopList,
     RdDateWithReadTime,
     RdArticleCreditList,
     RdArticleSocialList,
@@ -42,13 +46,18 @@ export default {
       type: String,
       default: '',
     },
-    category: {
-      type: String,
-      default: '',
+    categories: {
+      type: Array,
+      default: () => [],
     },
     creditList: {
       type: Array,
       default: () => [],
+    },
+  },
+  computed: {
+    doesHaveCategories() {
+      return this.categories?.length > 0
     },
   },
 }
