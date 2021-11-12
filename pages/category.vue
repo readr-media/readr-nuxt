@@ -48,6 +48,8 @@ import {
   formatReadTime,
   formatPostDate,
   isReport,
+  SITE_TITLE,
+  SITE_URL,
 } from '~/helpers/index.js'
 
 export default {
@@ -117,7 +119,7 @@ export default {
                   ogImage?.urlTabletSized ||
                   require('~/assets/imgs/default/post.svg'),
               },
-              readTime: formatReadTime(wordCount, 5),
+              readTime: formatReadTime(wordCount, 2),
               date: formatPostDate(publishTime),
               isReport: isReport(style),
             }
@@ -186,6 +188,18 @@ export default {
       this.currentCategory.name = name && name !== '不分類' ? name : ''
       this.currentCategory.slug = slug ?? ''
     },
+  },
+
+  head() {
+    const metaTitle = `${this.currentCategory.name || '不分類'} - ${SITE_TITLE}`
+    const ogUrl = `${SITE_URL}${this.$route.path}`
+    return {
+      title: metaTitle,
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: metaTitle },
+        { hid: 'og:url', property: 'og:url', content: ogUrl },
+      ],
+    }
   },
 }
 </script>

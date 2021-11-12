@@ -235,7 +235,7 @@ export default {
               type: 'recommend',
               href: `/post/${id}`,
               date: formatPostDate(publishTime),
-              readTime: formatReadTime(wordCount, 5),
+              readTime: formatReadTime(wordCount, 2),
               isReport: isReport(style),
               img: {
                 src:
@@ -270,7 +270,7 @@ export default {
           title,
           href: `/post/${id}`,
           date: formatPostDate(publishTime),
-          readTime: formatReadTime(wordCount, 5),
+          readTime: formatReadTime(wordCount, 2),
           isReport: isReport(style),
           img: {
             src:
