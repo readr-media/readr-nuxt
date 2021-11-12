@@ -189,7 +189,7 @@ export default {
   },
 
   head() {
-    const metaTitle = `${this.currentCategory.name || '不分類'} - ${SITE_TITLE}`
+    const metaTitle = `所有報導 - ${SITE_TITLE}`
     const ogUrl = `${SITE_URL}${this.$route.path}`
     return {
       title: metaTitle,

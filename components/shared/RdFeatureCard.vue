@@ -202,6 +202,10 @@ a {
           span {
             font-size: 36px;
             font-weight: 900;
+            &:hover {
+              text-decoration-thickness: 2px;
+              text-underline-offset: 8px;
+            }
           }
         }
       }
