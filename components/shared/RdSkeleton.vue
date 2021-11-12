@@ -1,16 +1,9 @@
 <template>
-  <div>
-    <div
-      v-for="n in 4"
-      :key="`skeleton${n}`"
-      class="category__post post-skeleton"
-    >
-      <div class="post-skeleton__picture" />
-      <div class="post-skeleton__title" />
-      <div class="post-skeleton__title" />
-      <div class="post-skeleton__title post-skeleton__title--last" />
-      <div class="post-skeleton__date" />
-    </div>
+  <div class="post-skeleton">
+    <div class="post-skeleton__picture" />
+    <div class="post-skeleton__title" />
+    <div class="post-skeleton__title" />
+    <div class="post-skeleton__title post-skeleton__title--last" />
   </div>
 </template>
 
@@ -51,17 +44,6 @@ export default {
       margin-bottom: 24px;
       width: 52.4%;
     }
-  }
-
-  &__date {
-    margin: 0 auto;
-    width: 90px;
-    height: 16px;
-    background-image: linear-gradient(
-      270deg,
-      rgba(196, 196, 196, 0.3) 0%,
-      rgba(196, 196, 196, 0.2) 100%
-    );
   }
 }
 </style>

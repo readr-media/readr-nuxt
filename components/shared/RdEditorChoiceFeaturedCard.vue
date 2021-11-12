@@ -1,7 +1,7 @@
 <template>
   <a :href="href" target="_blank">
     <picture>
-      <img v-lazy="img" :alt="title" />
+      <img :src="img" :alt="title" />
       <label v-if="isReport">專題</label>
     </picture>
     <div class="text">

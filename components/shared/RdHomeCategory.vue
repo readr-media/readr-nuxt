@@ -106,7 +106,7 @@ export default {
 <style lang="scss" scoped>
 .home-category {
   width: 100%;
-  margin: 0 0 48px;
+  margin: 0 auto 48px;
   &__heading {
     margin: 0 0 12px;
   }

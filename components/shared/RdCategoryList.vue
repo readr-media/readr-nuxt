@@ -1,6 +1,6 @@
 <template>
-  <ul :class="{ 'lg-layout': shouldSetLgBreakPoint }">
-    <li v-for="item in formatedPosts" :key="item.id">
+  <ul>
+    <li v-for="(item, i) in posts" :key="`${item.id}-${i}`">
       <RdArticleListCard
         :href="item.href"
         :img="item.img.src"
@@ -8,13 +8,12 @@
         :date="item.date"
         :readTimeText="item.readTime"
         :isReport="item.isReport"
-        :shouldReverseInMobile="shouldReverseInMobile"
-        :shouldHighLightReport="shouldHighLightReport"
-        :shouldHideBottomInfos="shouldHideBottomInfos"
+        :shouldReverseInMobile="true"
+        :shouldHighLightReport="true"
       />
     </li>
     <div class="position-correct" />
-    <template v-if="shouldShowSkeleton && isLoading">
+    <template v-if="isLoading">
       <RdSkeleton v-for="n in 4" :key="`skeleton${n}`" class="skeleton-item" />
     </template>
   </ul>
@@ -25,54 +24,56 @@ import RdArticleListCard from '~/components/shared/RdArticleListCard.vue'
 import RdSkeleton from '~/components/shared/RdSkeleton.vue'
 
 export default {
-  name: 'RdArticleList',
+  name: 'RdCategoryList',
 
   components: {
     RdArticleListCard,
     RdSkeleton,
   },
   props: {
+    slug: {
+      type: String,
+      default: '',
+    },
     posts: {
       type: Array,
       required: true,
       default: () => [],
     },
-    filterNum: {
+    total: {
       type: Number,
       default: 0,
-    },
-    shouldReverseInMobile: {
-      type: Boolean,
-      default: false,
-    },
-    shouldHighLightReport: {
-      type: Boolean,
-      default: false,
-    },
-    shouldShowSkeleton: {
-      type: Boolean,
-      default: false,
-    },
-    shouldSetLgBreakPoint: {
-      type: Boolean,
-      default: false,
-    },
-    shouldHideBottomInfos: {
-      type: Boolean,
-      default: false,
     },
     isLoading: {
       type: Boolean,
       default: false,
     },
   },
-  computed: {
-    formatedPosts() {
-      return this.filterNum
-        ? this.posts?.filter((item, i) => i < this.filterNum) ?? []
-        : this.posts
-    },
+  // computed: {
+  //   shouldMountInfiniteLoading() {
+  //     return this.totalLatestItems > 0
+  //   },
+  //   doesHaveAnyLatestItemsLeftToLoad() {
+  //     return this.totalLatestItems < this.total
+  //   },
+  //   totalLatestItems() {
+  //     return this.posts?.length
+  //   },
+  // },
+  mounted() {
+    console.log('ff', this.total)
   },
+  // methods: {
+  //   loadMoreItems(state) {
+  //     console.log('hhhh')
+  //     this.$emit('load-more', { slug: this.slug, total: this.total })
+  //     if (this.doesHaveAnyLatestItemsLeftToLoad) {
+  //       state.loaded()
+  //     } else {
+  //       state.complete()
+  //     }
+  //   },
+  // },
 }
 </script>
 
@@ -93,6 +94,9 @@ ul {
     @include media-breakpoint-up(sm) {
       width: calc((100% - 24px) / 2);
     }
+    @include media-breakpoint-up(lg) {
+      width: calc((100% - 48px) / 3);
+    }
     @include media-breakpoint-up(xl) {
       width: calc((100% - 72px) / 4);
     }
@@ -109,24 +113,6 @@ ul {
   }
   .position-correct {
     margin: 0;
-  }
-  &.lg-layout {
-    @include media-breakpoint-up(lg) {
-      li,
-      &::after,
-      .position-correct,
-      .skeleton-item {
-        width: calc((100% - 48px) / 3);
-      }
-    }
-    @include media-breakpoint-up(xl) {
-      li,
-      &::after,
-      .position-correct,
-      .skeleton-item {
-        width: calc((100% - 72px) / 4);
-      }
-    }
   }
 }
 </style>
