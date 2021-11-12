@@ -4,15 +4,22 @@ const editorChoices = gql`
   query {
     editorChoices: allEditorChoices(
       sortBy: [sortOrder_ASC, publishTime_DESC]
-      first: 5
+      first: 3
       where: { state: published }
     ) {
-      id
-      title: name
-      link
-      heroImage {
-        urlTabletSized
+      choice {
+        id
+        title: name
+        slug
+        style
+        wordCount
+        heroImage {
+          urlTabletSized
+          urlMobileSized
+        }
+        publishTime
       }
+      publishTime
     }
   }
 `

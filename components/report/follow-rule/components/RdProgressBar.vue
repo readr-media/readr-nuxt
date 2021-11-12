@@ -7,6 +7,7 @@
           :location="stalkerLocation"
         />
         <RdTrackedAnimation
+          v-show="isAnimateFinish < 2"
           :trackedStatus="trackedStatus"
           :location="trackedLocation"
         />
@@ -18,8 +19,13 @@
           :key="tag.id"
           class="bar__dot anchor"
           :class="{ anchor__light: isArrived(tag.id) }"
+          @click="handleClick(tag.id)"
         >
-          <div class="anchor__title" :class="{ light: isArrived(tag.id) }">
+          <div
+            v-show="isScrollingUp"
+            class="anchor__title"
+            :class="{ light: isArrived(tag.id) }"
+          >
             {{ tag.title }}
           </div>
         </div>
@@ -27,6 +33,7 @@
           <div class="bar__proccess_finish"></div>
         </div>
       </div>
+      <div class="title-space" :class="{ 'hide-title': !isScrollingUp }" />
     </div>
   </div>
 </template>
@@ -49,79 +56,134 @@ export default {
       type: Number,
       default: 1,
     },
+    isScrollEnd: {
+      type: Boolean,
+      default: false,
+    },
+    isScrollingUp: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   data() {
     return {
-      trackedLocation: 77,
-      stalkerLocation: 0,
-      mobileTrackedLocation: 77,
+      scale: 0.5,
+      trackedLocation: 40,
+      stalkerLocation: -50,
+      stalkerCanIn: false,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
       stalkerId: 1,
       stalkerMoveId: 0,
       trackedMoveId: 0,
+      isAnimateFinish: 0,
     }
   },
   computed: {
     countTags() {
       return this.tagsArray.length
     },
+    firstMargin() {
+      return this.minDistance - 18
+    },
     spacing() {
-      return (712 - 50 - 18 * (this.countTags + 1)) / (this.countTags - 1)
+      return (
+        (712 - this.firstMargin - 18 * (this.countTags + 1)) /
+        (this.countTags - 1)
+      )
     },
     cssProps() {
       return {
         '--spacing': `${this.spacing}px`,
         '--tracked-location': `${this.trackedLocation}px`,
         '--stalker-location': `${this.stalkerLocation}px`,
+        '--scale': this.scale,
+        '--first-margin': `${this.firstMargin}px`,
       }
     },
     distance() {
       return this.trackedLocation - this.stalkerLocation
     },
+    minDistance() {
+      return parseInt(77 * this.scale + 15)
+    },
   },
 
   watch: {
     nowTagId(id) {
-      const newLocation = 77 + (parseInt(id) - 1) * (this.spacing + 18)
-      console.log(id)
-      this.trackedMove(newLocation, 'moving', 10, () => {
+      const newLocation =
+        this.minDistance + (parseInt(id) - 1) * (this.spacing + 18)
+      if (id > 1 && !this.stalkerCanIn) {
+        this.stalkerCanIn = true
+      }
+      const speed = this.isAnimateFinish < 2 ? 10 : 5
+      this.trackedMove(newLocation, 'moving', speed, () => {
         this.trackedStatus = 'stand'
         this.stalkerForword()
       })
     },
     distance(d) {
-      if (d <= 77 && this.trackedStatus === 'stand') {
+      if (d <= this.minDistance && this.trackedStatus === 'stand') {
         this.trackedStatus = 'afraid'
       }
-      if (d === 78) {
+      if (d === this.minDistance + 1) {
         if (this.trackedStatus !== 'moving') this.trackedStatus = 'stand'
       }
-      if (d < 77) {
+      if (d < this.minDistance) {
         this.handleScroll()
       }
     },
+    isScrollEnd() {
+      this.endAnimate()
+    },
   },
   mounted() {
-    console.log(this.nowTagId)
-    window.addEventListener('scroll', this.handleScroll)
+    this.trackedLocation = this.minDistance
+    window.addEventListener('scroll', this.throttle(this.handleScroll, 2000))
   },
   methods: {
+    throttle(callback, limit) {
+      let wait = false
+      return function () {
+        if (!wait) {
+          callback()
+          wait = true
+          setTimeout(function () {
+            wait = false
+          }, limit)
+        }
+      }
+    },
+    handleClick(id) {
+      this.$emit('scroll-to-section', id)
+    },
     isArrived(id) {
-      return this.trackedLocation > 77 + (id - 1) * (this.spacing + 18) - 9
+      return (
+        this.trackedLocation >
+        this.minDistance + (id - 1) * (this.spacing + 18) - 9
+      )
     },
     stalkerMove(destination, status, time, cb) {
+      const CorrectionDestination = destination > 712 ? -50 : destination
+      if (
+        this.isAnimateFinish === 2 ||
+        !this.stalkerCanIn ||
+        this.stalkerLocation === parseInt(CorrectionDestination)
+        // (this.stalkerStatus === 'back' && status === 'back') ||
+        // (status === 'back' && this.stalkerLocation < 10 && !this.isScrollEnd)
+      )
+        return
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
       const interval = setInterval(() => {
         if (id !== this.stalkerMoveId) clearInterval(interval)
-        if (this.stalkerLocation === parseInt(destination)) {
+        if (this.stalkerLocation === parseInt(CorrectionDestination)) {
           clearInterval(interval)
           cb()
         } else {
-          this.stalkerLocation > parseInt(destination)
+          this.stalkerLocation > parseInt(CorrectionDestination)
             ? this.stalkerLocation--
             : this.stalkerLocation++
         }
@@ -144,14 +206,30 @@ export default {
       }, time)
     },
     stalkerForword() {
-      this.stalkerMove(this.trackedLocation - 77, 'moving', 20, () => {
-        this.stalkerStatus = 'stand'
-      })
+      if (this.isAnimateFinish === 2) return
+      this.stalkerMove(
+        this.trackedLocation - this.minDistance,
+        'moving',
+        100,
+        () => {
+          this.stalkerStatus = 'stand'
+        }
+      )
     },
     handleScroll() {
+      if (this.isScrollEnd) return
       this.stalkerMove(0, 'back', 10, () => {
-        this.stalkerStatus = 'stand'
         this.stalkerForword()
+      })
+    },
+    endAnimate() {
+      this.trackedMove(800, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
+        this.isAnimateFinish++
+      })
+      this.stalkerMove(-100, 'back', 10, () => {
+        this.stalkerStatus = 'stand'
+        this.isAnimateFinish++
       })
     },
   },
@@ -166,20 +244,36 @@ export default {
   z-index: 20;
   background: #feeade;
   white-space: nowrap;
-  padding: 30px 0 70px 0;
+  padding: 15px 0 5px 0;
+  margin-bottom: 40px;
   &__wrapper {
     width: 712px;
     margin: auto;
   }
 }
 
+.title-space {
+  background: #feeade;
+  height: 40px;
+  width: 100%;
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+}
+
+.hide-title {
+  opacity: 0;
+}
+
 .animate {
   display: flex;
   position: relative;
   margin-bottom: 10px;
+  overflow: hidden;
+
   & > div {
-    width: 52px;
-    height: 79px;
+    width: calc(150px * 0.5 * var(--scale));
+    height: calc(230px * 0.5 * var(--scale));
     transform: translate(-50%, 0);
   }
 }
@@ -211,7 +305,7 @@ export default {
 }
 
 .anchor {
-  margin-left: 50px;
+  margin-left: var(--first-margin);
   background: rgba(111, 111, 111, 1);
   & + & {
     margin-left: var(--spacing);
@@ -222,10 +316,11 @@ export default {
   &__title {
     position: absolute;
     transform: translate(-50%, 0);
-    top: 32px;
+    top: 24px;
     font-size: 18px;
     line-height: 36px;
     letter-spacing: 0.01em;
+    cursor: pointer;
   }
   .light {
     color: #28ddb1;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="post-and-report-wrapper">
     <RdNews v-if="shouldMountNews" :news="post" />
     <RdReport v-if="shouldMountEmbeddedReport" :report="post" />
   </div>
@@ -136,3 +136,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.post-and-report-wrapper {
+  min-height: 100vh;
+}
+</style>

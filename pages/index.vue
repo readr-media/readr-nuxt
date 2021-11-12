@@ -1,40 +1,39 @@
 <template>
-  <div>
-    <RdHeader />
+  <div class="g-page-wrapper home">
+    <RdNavbar />
 
-    <section class="marquee-container">
-      <RdMarquee class="home__marquee" />
-      <NuxtLink to="/landing" @click.native="sendGaClickEvent('landing')">
-        <span>了解更多</span>
-        <SvgArrowMore />
-      </NuxtLink>
-    </section>
+    <RdEditorChoice
+      v-if="shouldOpenEditorChoices"
+      :posts="transformedEditorChoice"
+      class="home__editor-choice"
+    />
 
-    <section>
-      <RdCarousel
-        v-if="shouldOpenEditorChoices"
-        :posts="editorChoices"
-        class="home__carousel"
-        @sendGaEvent="sendGaClickEvent('editor choices')"
-      >
-        <template #heading>
-          <RdSectionHeading title="編輯精選" />
-        </template>
-      </RdCarousel>
-    </section>
+    <RdHomeCategory
+      :categories="transformedCategories"
+      :latest="transformedCategoryLatest"
+      class="container container--category"
+    />
 
-    <section ref="latest" class="container container--latest">
-      <RdSectionHeading
-        v-intersect="scrollDepthObserver"
-        title="最新文章"
-        fill="#ebf02c"
-        class="home__section-heading"
-      />
-      <RdListLatest
-        v-if="shouldOpenLatestList"
-        :postMain="latestPostMain"
-        :postsSub="latestPostsSub"
-        @sendGaEvent="sendGaClickEvent('latest articles')"
+    <RdFeature :posts="transformedFeatures" class="home__feature" />
+
+    <section ref="collaboration" class="collaboration-container">
+      <div class="container container--quote">
+        <RdListHeading title="協作專區" color="#ebf02c" class="quote-heading" />
+        <RdQuoteSlide :quotes="quotes" />
+      </div>
+      <div class="container container--wall">
+        <RdCollaboratorWall
+          v-if="countOfCollaboratorWall"
+          :count="countOfCollaboratorWall"
+          :names="namesOfCollaboratorWall"
+          :loadNames="loadCollaboratorNames"
+          @sendGaEvent="sendGaEventForCollaboratorWall"
+        />
+      </div>
+      <RdCollaborativeList
+        class="home__collaborative-list"
+        :items="collaborations"
+        @sendGaEvent="sendGaClickEvent('collaboration')"
       />
     </section>
 
@@ -57,83 +56,30 @@
         @sendGaEvent="sendGaClickEvent('donate-opendata')"
       />
     </section>
-
-    <section ref="collaboration" class="collaboration-container">
-      <div class="container container--quote">
-        <RdSectionHeading
-          v-intersect="scrollDepthObserver"
-          title="協作專區"
-          color="#f5ebff"
-          fill="#04295e"
-          class="home__section-heading"
-        />
-        <RdQuoteSlide :quotes="quotes" />
-      </div>
-      <div class="container container--wall">
-        <RdCollaboratorWall
-          v-if="countOfCollaboratorWall"
-          :count="countOfCollaboratorWall"
-          :names="namesOfCollaboratorWall"
-          :loadNames="loadCollaboratorNames"
-          @sendGaEvent="sendGaEventForCollaboratorWall"
-        />
-      </div>
-      <RdCollaborativeList
-        class="home__collaborative-list"
-        :items="collaborations"
-        @sendGaEvent="sendGaClickEvent('collaboration')"
-      />
-    </section>
-
-    <section
-      v-show="shouldShowCategorySection"
-      class="category-section yellow-bg"
-    >
-      <div class="container">
-        <RdSectionHeading
-          v-intersect="scrollDepthObserver"
-          title="更多專題"
-          linkHref="/category/"
-          class="home__section-heading"
-        />
-        <div id="category-list-container">
-          <RdListCategory
-            v-for="categoryList in displayedCategoryLists"
-            :key="categoryList.name"
-            :category="categoryList.name"
-            :posts="categoryList.items"
-            class="home__list-category"
-            @sendGaEvent="sendGaClickEvent(`category ${categoryList.name}`)"
-          />
-        </div>
-      </div>
-    </section>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { get as axiosGet } from 'axios'
-import gql from 'graphql-tag'
 import gqlCombineQuery from 'graphql-combine-query'
 
-import RdHeader from '~/components/shared/Header/RdHeader.vue'
-import RdMarquee from '~/components/shared/RdMarquee.vue'
-import RdCarousel from '~/components/app/RdCarousel.vue'
-import RdSectionHeading from '~/components/shared/RdSectionHeading.vue'
-import RdListLatest from '~/components/shared/List/RdListLatest.vue'
+import RdNavbar from '~/components/shared/RdNavbar.vue'
+import RdEditorChoice from '~/components/shared/RdEditorChoice.vue'
+import RdHomeCategory from '~/components/shared/RdHomeCategory.vue'
+import RdFeature from '~/components/shared/RdFeature.vue'
+import RdListHeading from '~/components/shared/RdListHeading.vue'
 import RdDatabaseList from '~/components/app/RdDatabaseList.vue'
 import RdQuoteSlide from '~/components/app/RdQuoteSlide.vue'
 import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
 import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
-import RdListCategory from '~/components/shared/List/RdListCategory.vue'
-import SvgArrowMore from '~/assets/imgs/arrow-more.svg?inline'
 
 import { intersect } from '~/helpers/vue/directives/index.js'
 
 import { editorChoices } from '~/apollo/queries/editor-choices.js'
 import { latestPosts } from '~/apollo/queries/posts.js'
+import { feature } from '~/apollo/queries/feature.js'
 import { databaseList } from '~/apollo/queries/datas.js'
 import { quotes } from '~/apollo/queries/quotes.js'
 import { collaborations } from '~/apollo/queries/collaborations.js'
@@ -144,25 +90,25 @@ import {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
   getHref,
-  formatDate,
+  formatPostDate,
+  formatReadTime,
+  isReport,
 } from '~/helpers/index.js'
 
 export default {
   name: 'Home',
+
   components: {
-    RdHeader,
-    RdMarquee,
-    RdCarousel,
-    RdSectionHeading,
-    RdListLatest,
+    RdNavbar,
+    RdEditorChoice,
+    RdHomeCategory,
+    RdFeature,
+    RdListHeading,
     RdDatabaseList,
     RdQuoteSlide,
     RdCollaboratorWall,
     RdCollaborativeList,
     RdButtonDonate,
-    RdListCategory,
-
-    SvgArrowMore,
   },
 
   directives: {
@@ -175,7 +121,7 @@ export default {
         .add(editorChoices)
         .add(latestPosts).document,
       variables: {
-        first: 5,
+        first: 15,
       },
       manual: true,
       result({ data, loading }) {
@@ -189,11 +135,14 @@ export default {
                 heroImage = {},
                 ogImage = {},
                 publishTime = '',
+                wordCount = 0,
+                style = '',
               } = post || {}
 
               return {
                 id,
                 title,
+                style,
                 href: getHref(post),
                 img: {
                   src:
@@ -201,7 +150,9 @@ export default {
                     ogImage?.urlTabletSized ||
                     require('~/assets/imgs/default/post.svg'),
                 },
-                date: formatDate(publishTime),
+                readTime: formatReadTime(wordCount, 2),
+                date: formatPostDate(publishTime),
+                isReport: isReport(style),
               }
             }) || []
         }
@@ -231,32 +182,28 @@ export default {
     },
     categories: {
       query: categories,
-      prefetch: false,
-      manual: true,
-      result: async function handleCategoryLists({ data, loading }) {
-        if (
-          !loading &&
-          !this.isLoadingCategoryLists &&
-          !this.doesHaveCategoryLists
-        ) {
-          await this.loadCategoryLists(data.categories)
-
-          this.unwatchIsViewportWidthUpMd = this.$watch(
-            'isViewportWidthUpMd',
-            this.handleCategorySectionLayout,
-            { immediate: true }
-          )
+      variables() {
+        return {
+          relatedPostFirst: 8,
+          relatedReportFirst: 1,
+          shouldQueryRelatedPost: true,
+          shouldQueryRelatedReport: true,
+          relatedPostTypes: ['news'],
+          relatedReportTypes: ['embedded', 'project3', 'report'],
         }
       },
+    },
+    feature: {
+      query: feature,
     },
   },
 
   data() {
     return {
       editorChoices: [],
-
       latestPosts: [],
-
+      quotes: [],
+      collaborations: [],
       databaseList: {
         items: [],
         meta: {
@@ -264,21 +211,12 @@ export default {
         },
         isLoading: false,
       },
-
-      quotes: [],
-
-      collaborations: [],
       collaboratorWall: {
         count: 0,
         names: '',
       },
 
-      categoryLists: [],
       isLoadingCategoryLists: false,
-      isInitializingMacy: false,
-      macyInstance: undefined,
-      unwatchIsViewportWidthUpMd: undefined,
-
       scrollDepthObserver: undefined,
     }
   },
@@ -294,15 +232,96 @@ export default {
     shouldOpenEditorChoices() {
       return this.editorChoices && this.editorChoices.length > 0
     },
+    transformedEditorChoice() {
+      return this.editorChoices?.map((post) => {
+        const {
+          id = '',
+          title = '',
+          slug = '',
+          wordCount = 0,
+          style = '',
+          heroImage = {},
+          publishTime = '',
+        } = post?.choice || {}
 
-    shouldOpenLatestList() {
-      return this.latestPosts.length > 0
+        return {
+          id,
+          title,
+          href: getHref({ style, id, slug }),
+          date: formatPostDate(publishTime),
+          readTime: formatReadTime(wordCount, 2),
+          isReport: isReport(style),
+          img: {
+            src:
+              heroImage?.urlTabletSized ||
+              heroImage?.urlMobileSized ||
+              require('~/assets/imgs/default/post.svg'),
+          },
+        }
+      })
     },
-    latestPostMain() {
-      return this.latestPosts[0]
+    transformedCategories() {
+      return this.categories?.map((item) => {
+        const reports = item.reports?.map((report) =>
+          this.transformCategoryItem(report)
+        )
+        const postList =
+          item.posts?.length && !reports?.length
+            ? item.posts
+            : item.posts?.filter((item, i) => i < 4)
+        const posts = postList?.map((post) => this.transformCategoryItem(post))
+
+        return {
+          name: item?.name ?? '',
+          slug: item?.slug ?? '',
+          posts,
+          reports,
+        }
+      })
     },
-    latestPostsSub() {
-      return this.latestPosts.slice(1)
+
+    transformedCategoryLatest() {
+      let count = 0
+      const report = this.latestPosts.find((item, i) => item.style !== 'news')
+      const posts = this.latestPosts.filter((item) => {
+        if (count < 4 && item.style === 'news') {
+          count++
+          return item
+        }
+      })
+      return {
+        slug: 'all',
+        name: '',
+        posts,
+        reports: [report],
+      }
+    },
+    transformedFeatures() {
+      return this.feature?.map((post) => {
+        const { description = '' } = post || {}
+        const {
+          id = '',
+          title = '',
+          subtitle = '',
+          slug = '',
+          style = '',
+          heroImage = {},
+        } = post?.featuredPost || {}
+
+        return {
+          id,
+          title,
+          subtitle,
+          description,
+          href: getHref({ style, id, slug }),
+          img: {
+            src:
+              heroImage?.urlTabletSized ||
+              heroImage?.urlMobileSized ||
+              require('~/assets/imgs/default/post.svg'),
+          },
+        }
+      })
     },
 
     shouldLoadMoreDatabaseItems() {
@@ -328,21 +347,6 @@ export default {
         this.collaboratorWall.names = names
       },
     },
-
-    shouldShowCategorySection() {
-      return (
-        (!this.isViewportWidthUpMd || this.macyInstance) &&
-        this.doesHaveCategoryLists
-      )
-    },
-    doesHaveCategoryLists() {
-      return this.displayedCategoryLists.length > 0
-    },
-    displayedCategoryLists() {
-      return this.categoryLists.filter(function doesHaveItems(list) {
-        return list.items.length > 0
-      })
-    },
   },
   mounted() {
     this.loadCollaboratorsCount()
@@ -355,6 +359,31 @@ export default {
   },
 
   methods: {
+    transformCategoryItem(post = {}) {
+      const {
+        id = '',
+        title = '',
+        heroImage = {},
+        ogImage = {},
+        style = '',
+        publishTime = '',
+        wordCount = 0,
+      } = post
+      return {
+        id,
+        title,
+        href: getHref(post),
+        isReport: isReport(style),
+        img: {
+          src:
+            heroImage?.urlMobileSized ||
+            ogImage?.urlMobileSized ||
+            require('~/assets/imgs/default/post.svg'),
+        },
+        readTime: formatReadTime(wordCount, 2),
+        date: formatPostDate(publishTime),
+      }
+    },
     transformDatabaseItem(item) {
       const { id = '', title = '', link = '', relatedGallery: galleries = [] } =
         item || {}
@@ -380,6 +409,7 @@ export default {
         }),
       }
     },
+
     async loadMoreDatabaseItems() {
       if (this.databaseList.isLoading) {
         return
@@ -450,113 +480,6 @@ export default {
         console.error(error)
       }
     },
-
-    async loadCategoryLists(categories) {
-      this.isLoadingCategoryLists = true
-
-      try {
-        const { data = {} } =
-          (await this.$apollo.query({
-            query: gql`query {
-            ${categories.map(function buildField(category) {
-              const { slug } = category
-              return `${slug}: allPosts(
-                first: 3
-                where: { categories_some: { slug: "${slug}" } }
-                sortBy: [publishTime_DESC]
-              ) {
-                id
-                title: name
-                style
-                slug
-                heroImage {
-                  urlMobileSized
-                }
-                ogImage {
-                  urlMobileSized
-                }
-                publishTime
-              }`
-            })}
-          }`,
-          })) || {}
-
-        categories.forEach((category) => {
-          // to ensure the order of the categoryLists
-          this.pushCategoryList(data, category)
-        })
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err)
-      } finally {
-        this.isLoadingCategoryLists = false
-      }
-    },
-    pushCategoryList(data = {}, category = {}) {
-      const { slug, name } = category
-      const items = data[slug] || []
-      this.categoryLists.push({
-        name,
-        items: items.map(function transformContent(post) {
-          const {
-            id = '',
-            title = '',
-            heroImage = {},
-            ogImage = {},
-            publishTime = '',
-          } = post || {}
-
-          return {
-            id,
-            title,
-            href: getHref(post),
-            img: {
-              src:
-                heroImage?.urlMobileSized ||
-                ogImage?.urlMobileSized ||
-                require('~/assets/imgs/default/post.svg'),
-            },
-            date: formatDate(publishTime),
-          }
-        }),
-      })
-    },
-    async handleCategorySectionLayout(isViewportWidthUpMd) {
-      if (this.macyInstance) {
-        this.unwatchIsViewportWidthUpMd()
-        return
-      }
-
-      if (
-        isViewportWidthUpMd &&
-        this.doesHaveCategoryLists &&
-        !this.isInitializingMacy
-      ) {
-        this.isInitializingMacy = true
-
-        try {
-          const initMacy = (await import('macy')).default
-          this.macyInstance = initMacy({
-            container: '#category-list-container',
-            mobileFirst: true,
-            trueOrder: true,
-            columns: 1,
-            breakAt: {
-              [this.breakpointMd]: {
-                margin: { x: 22 },
-                columns: 3,
-              },
-            },
-          })
-        } catch (err) {
-          // eslint-disable-next-line no-console
-          console.error(err)
-        }
-
-        this.isInitializingMacy = false
-      }
-    },
-
     scrollTo(hash) {
       if (hash) {
         const scrollIntoView = require('scroll-into-view')
@@ -609,7 +532,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.g-page-wrapper {
+  min-height: 100vh;
+  padding: 64px 0 0;
+  overflow: hidden;
+  @include media-breakpoint-up(sm) {
+    padding: 80px 0 0;
+  }
+}
 .home {
+  &__editor-choice,
+  &__feature {
+    margin: 0 0 48px;
+    @include media-breakpoint-up(md) {
+      margin: 0 0 60px;
+    }
+    @include media-breakpoint-up(xl) {
+      margin: 0 0 80px;
+    }
+  }
+  &__feature {
+    @include media-breakpoint-up(xxl) {
+      margin: 0 0 120px;
+    }
+  }
   &__section-heading {
     margin-bottom: 20px;
     max-width: 1096px;
@@ -675,6 +621,14 @@ export default {
     padding-left: 0;
     padding-right: 0;
   }
+  &--category {
+    @include media-breakpoint-up(sm) {
+      padding: 0 48px;
+    }
+    @include media-breakpoint-up(xl) {
+      padding: 0;
+    }
+  }
   &--database {
     padding-left: 0;
     padding-right: 0;
@@ -689,64 +643,30 @@ export default {
     @include media-breakpoint-up(md) {
       margin-bottom: 24px;
     }
+    .quote-heading {
+      margin: 0 0 20px;
+      @include media-breakpoint-up(md) {
+        margin: 0 0 40px;
+      }
+    }
   }
   &--wall {
     margin-bottom: 14px;
-    max-width: 1070px;
+    max-width: 1096px;
     @include media-breakpoint-up(md) {
       margin-bottom: 20px;
     }
   }
 }
 
-.marquee-container {
-  display: flex;
-  align-items: center;
-  padding-top: 11px;
-  padding-bottom: 11px;
-  padding-right: 23px;
-  box-shadow: 0 0 2px rgba(#000, 0.2);
-  @include media-breakpoint-up(md) {
-    padding-left: 26px;
-    padding-right: 29px;
-  }
-
-  a {
-    flex: 0 0 auto;
-    user-select: none;
-    @include media-breakpoint-up(lg) {
-      display: flex;
-      align-items: center;
-    }
-  }
-
-  span {
-    display: none;
-    @include media-breakpoint-up(lg) {
-      display: inline;
-      font-weight: 700;
-      font-size: 15px;
-      line-height: 1.5;
-      letter-spacing: 2.5px;
-    }
-  }
-
-  svg {
-    padding-left: 19px;
-    box-sizing: content-box;
-    @include media-breakpoint-up(lg) {
-      padding-left: 16px;
-    }
-  }
-}
-
-.home__carousel,
-.container--latest,
 .container--database,
 .collaboration-container {
-  margin-bottom: 40px;
+  margin: 0 auto 48px;
   @include media-breakpoint-up(md) {
-    margin-bottom: 60px;
+    margin: 0 auto 60px;
+  }
+  @include media-breakpoint-up(xl) {
+    margin: 0 auto 80px;
   }
 }
 

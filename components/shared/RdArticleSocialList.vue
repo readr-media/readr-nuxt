@@ -122,16 +122,11 @@ export default {
             background-color: #f6f6fb;
             z-index: -1;
           }
-          &:hover {
-            &::after {
-              background-color: #9b9b9b;
-              opacity: 0.05;
-            }
-          }
+          &:hover,
           &:active {
             &::after {
               background-color: #9b9b9b;
-              opacity: 0.15;
+              opacity: 0.05;
             }
           }
         }

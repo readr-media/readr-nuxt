@@ -1,19 +1,30 @@
 <template>
   <div class="progress-bar" :style="cssProps">
-    <div class="progress-bar__mobile mobile">
+    <div class="spacer"></div>
+    <div
+      class="progress-bar__mobile mobile"
+      :class="{ 'hide-title': !isScrollingUp }"
+    >
       <div class="animate">
         <RdStalkerAnimation
           :stalkerStatus="stalkerStatus"
           :location="stalkerLocation"
         />
         <RdTrackedAnimation
+          v-show="this.isAnimateFinish !== 2"
           :trackedStatus="trackedStatus"
           :location="trackedLocation"
         />
       </div>
-      <div v-show="isScrollingDown" class="mobile__title">
+      <div class="mobile__title">
         <div v-for="(row, i) in tagsGroup" :key="i" class="mobile__title_row">
-          <div v-for="tag in row" :key="tag.id" class="mobile__title_row_item">
+          <div
+            v-for="tag in row"
+            :key="tag.id"
+            class="mobile__title_row_item"
+            :class="{ active: parseInt(tag.id) === nowTagId }"
+            @click="handleClick(tag.id)"
+          >
             {{ tag.title }}
           </div>
         </div>
@@ -24,7 +35,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import rafThrottle from 'raf-throttle'
+// import rafThrottle from 'raf-throttle'
 import RdStalkerAnimation from './RdStalkerAnimation.vue'
 import RdTrackedAnimation from './RdTrackedAnimation.vue'
 export default {
@@ -38,15 +49,24 @@ export default {
       require: true,
       default: () => [],
     },
-    isScrollingDown: {
+    isScrollingUp: {
       type: Boolean,
       default: true,
+    },
+    isScrollEnd: {
+      type: Boolean,
+      default: false,
+    },
+    nowTagId: {
+      type: Number,
+      default: 1,
     },
   },
 
   data() {
     return {
-      trackedLocation: 77,
+      scale: 0.5,
+      trackedLocation: 0,
       stalkerLocation: 0,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
@@ -55,6 +75,8 @@ export default {
       target: null,
       percent: 0,
       hasFinishedReading: false,
+      isAnimateFinish: 0,
+      stalkerCanMove: true,
     }
   },
   computed: {
@@ -64,6 +86,7 @@ export default {
         '--spacing': `${this.spacing}px`,
         '--tracked-location': `${this.trackedLocation}px`,
         '--stalker-location': `${this.stalkerLocation}px`,
+        '--scale': this.scale,
       }
     },
     distance() {
@@ -72,29 +95,60 @@ export default {
     tagsGroup() {
       return [this.tagsArray.slice(0, 3), this.tagsArray.slice(3, 6)]
     },
+    minDistance() {
+      return parseInt(100 * this.scale)
+    },
   },
 
   watch: {
     distance(d) {
-      if (d <= 77 && this.trackedStatus === 'stand') {
+      if (d <= this.minDistance && this.trackedStatus === 'stand') {
         this.trackedStatus = 'afraid'
       }
-      if (d === 78) {
+      if (d === this.minDistance + 1) {
         if (this.trackedStatus !== 'moving') this.trackedStatus = 'stand'
       }
-      if (d < 77) {
+      if (d < this.minDistance) {
         this.handleScroll()
       }
+    },
+    isScrollEnd() {
+      this.endAnimate()
     },
   },
 
   mounted() {
+    this.trackedLocation = this.minDistance
     this.handleScroll()
-    window.addEventListener('scroll', this.handleScroll)
+    window.addEventListener('scroll', this.throttle(this.handleScroll, 2000))
   },
 
   methods: {
+    throttle(callback, limit) {
+      let wait = false
+      return function () {
+        if (!wait) {
+          callback()
+          wait = true
+          setTimeout(function () {
+            wait = false
+          }, limit)
+        }
+      }
+    },
+    handleClick(id) {
+      this.$emit('scroll-to-section', id)
+    },
     stalkerMove(destination, status, time, cb) {
+      if (
+        !this.stalkerCanMove ||
+        this.isAnimateFinish === 2 ||
+        this.stalkerLocation === parseInt(destination)
+        // (this.stalkerStatus === 'back' && status === 'back')
+        // (status === 'back' && this.stalkerLocation < this.minDistance)
+      )
+        return
+      if (destination < 0) this.stalkerCanMove = false
       this.stalkerMoveId++
       const id = this.stalkerMoveId
       this.stalkerStatus = status
@@ -127,40 +181,55 @@ export default {
       }, time)
     },
     stalkerForword() {
-      this.stalkerMove(this.trackedLocation - 77, 'moving', 20, () => {
-        this.stalkerStatus = 'stand'
-      })
+      if (this.isAnimateFinish === 2) return
+      this.stalkerMove(
+        this.trackedLocation - this.minDistance,
+        'moving',
+        20,
+        () => {
+          this.stalkerStatus = 'stand'
+        }
+      )
     },
     handleScroll() {
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerStatus = 'stand'
         this.stalkerForword()
       })
-      rafThrottle(() => {
-        if (!this.target) {
-          this.target = document.getElementsByTagName('article')[0]
+      if (!this.target) {
+        this.target = document.getElementsByTagName('article')[0]
+      }
+      const { bottom } = this.target.getBoundingClientRect()
+      if (bottom - this.viewportHeight < 0) {
+        this.percent = 100
+        if (this.hasFinishedReading === false) {
+          this.hasFinishedReading = true
         }
-        const { bottom } = this.target.getBoundingClientRect()
-        if (bottom - this.viewportHeight < 0) {
-          this.percent = 100
-          if (this.hasFinishedReading === false) {
-            this.hasFinishedReading = true
-          }
-          return
-        }
+        return
+      }
 
-        const { pageYOffset } = window
-        this.percent = Math.round(
-          (pageYOffset / (bottom + pageYOffset - this.viewportHeight)) * 100
-        )
+      const { pageYOffset } = window
+      this.percent = Math.round(
+        (pageYOffset / (bottom + pageYOffset - this.viewportHeight)) * 100
+      )
 
-        const totalWidth = this.viewportWidth - 77
-        const newLocation = Math.round(totalWidth * this.percent * 0.01) + 77
-        this.trackedMove(newLocation, 'moving', 10, () => {
-          this.trackedStatus = 'stand'
-          this.stalkerForword()
-        })
-      })()
+      const totalWidth = this.viewportWidth - this.minDistance
+      const newLocation =
+        Math.round(totalWidth * this.percent * 0.01) + this.minDistance
+      this.trackedMove(newLocation, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
+        if (this.stalkerStatus !== 'back') this.stalkerForword()
+      })
+    },
+    endAnimate() {
+      this.trackedMove(this.viewportWidth + 50, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
+        this.isAnimateFinish++
+      })
+      this.stalkerMove(-50, 'back', 10, () => {
+        this.stalkerStatus = 'stand'
+        this.isAnimateFinish++
+      })
     },
   },
 }
@@ -172,7 +241,6 @@ export default {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: #feeade;
   white-space: nowrap;
   &__wrapper {
     width: 712px;
@@ -180,25 +248,9 @@ export default {
   }
 }
 
-.animate {
-  display: flex;
-  position: relative;
-  height: 90px;
-  overflow: hidden;
-  & > div {
-    width: 52px;
-    height: 79px;
-    transform: translate(-50%, 0);
-  }
-
-  &::before {
-    content: '';
-    background: #28ddb1;
-    height: 100%;
-    width: var(--tracked-location);
-    position: absolute;
-  }
-}
+// .spacer {
+//   // height: 163px;
+// }
 
 .mobile {
   color: rgba(255, 233, 214, 1);
@@ -209,6 +261,9 @@ export default {
   &__title {
     background: #000000;
     padding: 11px 28px;
+    .active {
+      color: #28ddb1;
+    }
     &_row {
       display: flex;
       justify-content: space-between;
@@ -216,6 +271,33 @@ export default {
         margin-top: 11px;
       }
     }
+  }
+
+  .animate {
+    display: flex;
+    position: relative;
+    // height: 90px;
+    overflow: hidden;
+    background: #feeade;
+    & > div {
+      width: calc(150px * 0.5 * var(--scale));
+      height: calc(230px * 0.5 * var(--scale));
+      transform: translate(-50%, 0);
+    }
+
+    &::before {
+      content: '';
+      background: #28ddb1;
+      height: 100%;
+      width: var(--tracked-location);
+      position: absolute;
+    }
+  }
+}
+
+.hide-title {
+  .mobile__title {
+    opacity: 0;
   }
 }
 </style>

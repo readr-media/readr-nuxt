@@ -1,6 +1,14 @@
 <template>
   <li>
-    <a :href="post.href" target="_blank">
+    <RdArticleListCard
+      :href="post.href"
+      :img="post.img.src"
+      :title="post.title"
+      :date="post.date"
+      :readTimeText="post.readTime"
+      :shouldReverseInMobile="true"
+    />
+    <!-- <a :href="post.href" target="_blank">
       <article>
         <picture>
           <img :src="post.img.src" alt="" />
@@ -8,14 +16,19 @@
         <h1>{{ post.title }}</h1>
         <div class="date">{{ post.date }}</div>
       </article>
-    </a>
+    </a> -->
   </li>
 </template>
 
 <script>
+import RdArticleListCard from '~/components/shared/RdArticleListCard.vue'
+
 export default {
   name: 'RdListItemCategory',
 
+  components: {
+    RdArticleListCard,
+  },
   props: {
     post: {
       type: Object,
