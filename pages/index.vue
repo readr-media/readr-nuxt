@@ -150,7 +150,7 @@ export default {
                     ogImage?.urlTabletSized ||
                     require('~/assets/imgs/default/post.svg'),
                 },
-                readTime: formatReadTime(wordCount, 5),
+                readTime: formatReadTime(wordCount, 2),
                 date: formatPostDate(publishTime),
                 isReport: isReport(style),
               }
@@ -249,7 +249,7 @@ export default {
           title,
           href: getHref({ style, id, slug }),
           date: formatPostDate(publishTime),
-          readTime: formatReadTime(wordCount, 5),
+          readTime: formatReadTime(wordCount, 2),
           isReport: isReport(style),
           img: {
             src:
@@ -373,7 +373,7 @@ export default {
             ogImage?.urlMobileSized ||
             require('~/assets/imgs/default/post.svg'),
         },
-        readTime: formatReadTime(wordCount, 5),
+        readTime: formatReadTime(wordCount, 2),
         date: formatPostDate(publishTime),
       }
     },
