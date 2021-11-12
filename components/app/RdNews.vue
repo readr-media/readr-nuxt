@@ -68,7 +68,7 @@
       <RdArticleSocialList class="social" />
     </section>
 
-    <RdNewsLetter class="new__news-letter" />
+    <RdNewsLetter v-if="shouldShowNewsLetter" class="new__news-letter" />
 
     <section class="news__related-list-wrapper">
       <template v-if="doesHaveRelatedPosts">
@@ -176,6 +176,7 @@ export default {
   data() {
     return {
       latestPosts: [],
+      shouldShowNewsLetter: false,
     }
   },
 
