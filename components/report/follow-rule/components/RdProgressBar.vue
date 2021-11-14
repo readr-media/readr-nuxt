@@ -1,5 +1,5 @@
 <template>
-  <div class="progress-bar" :style="cssProps">
+  <div class="progress-bar" :style="cssProps" :class="{ hide: !shouldShowBar }">
     <div class="progress-bar__wrapper">
       <div class="animate">
         <RdStalkerAnimation
@@ -63,6 +63,10 @@ export default {
     isScrollingUp: {
       type: Boolean,
       default: true,
+    },
+    shouldShowBar: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -325,5 +329,9 @@ export default {
   .light {
     color: #28ddb1;
   }
+}
+
+.hide {
+  opacity: 0;
 }
 </style>

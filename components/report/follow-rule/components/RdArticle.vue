@@ -2,8 +2,8 @@
   <article class="article">
     <section
       v-for="section in articleSections"
-      :key="section.type"
       :id="`section-${section.type}`"
+      :key="section.type"
       :ref="`section`"
     >
       <RdArticleSection
@@ -32,6 +32,10 @@ export default {
       type: Number,
       default: 0,
     },
+    triggerHook: {
+      type: Number,
+      default: 0.2,
+    },
   },
   data() {
     return {
@@ -40,12 +44,6 @@ export default {
       heightArray: [],
     }
   },
-  watch: {
-    loadScrollMagicScriptTimes(times) {
-      if (times === 4) this.addTagObserver()
-    },
-  },
-
   computed: {
     viewportHeight() {
       return this.$store.getters[
@@ -54,6 +52,11 @@ export default {
     },
     articleSections() {
       return this.cmsData.contentApiData.article
+    },
+  },
+  watch: {
+    loadScrollMagicScriptTimes(times) {
+      if (times === 4) this.addTagObserver()
     },
   },
 
@@ -68,7 +71,7 @@ export default {
       )
       const controller = new ScrollMagic.Controller({
         globalSceneOptions: {
-          triggerHook: 0.4,
+          triggerHook: this.triggerHook,
           reverse: true,
         },
       })
@@ -77,7 +80,11 @@ export default {
           duration: this.heightArray[i],
           triggerElement: `#section-${i + 1}`,
         })
-          .on('enter', (e) => this.$emit('chaneParagraph', i + 1))
+          .on('enter', () => {
+            console.log('enter paragraph to', i + 1)
+            this.$emit('chaneParagraph', i + 1)
+          })
+          // .addIndicators() // add indicators (requires plugin)
           .addTo(controller)
       }
     },
