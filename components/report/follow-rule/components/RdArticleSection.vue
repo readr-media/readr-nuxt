@@ -77,7 +77,7 @@ export default {
           <RdReportArticle
             contents={content.content}
             slug="follow-rule"
-            processBarHeight="processBarHeight"
+            progressBarHeight="progressBarHeight"
             loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
             isPart={true}
             sendGaEvent={() => this.sendGaEvent}
@@ -100,7 +100,7 @@ export default {
           return (
             <RdSlideCard
               cards={contentValue.value}
-              processBarHeight={this.processBarHeight}
+              progressBarHeight={this.progressBarHeight}
               loadScrollMagicScriptTimes={this.loadScrollMagicScriptTimes}
             />
           )

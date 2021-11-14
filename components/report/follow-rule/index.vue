@@ -23,7 +23,7 @@
 
     <RdArticle
       :cmsData="cmsData"
-      :processBarHeight="processBarHeight"
+      :progressBarHeight="progressBarHeight"
       :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
       @chaneParagraph="(id) => chaneParagraph(id)"
     />
@@ -103,7 +103,7 @@ export default {
     return {
       isMobile: true,
       nowTagId: 1,
-      processBarHeight: 0,
+      progressBarHeight: 0,
       loadScrollMagicScriptTimes: 0,
       isScrollEnd: false,
     }
@@ -126,7 +126,7 @@ export default {
   mounted() {
     window.scrollTo(0, 0)
     if (this.viewportWidth > 768) this.isMobile = false
-    this.processBarHeight = this.isMobile ? 90 : 217
+    this.progressBarHeight = this.isMobile ? 90 : 217
   },
 
   methods: {
