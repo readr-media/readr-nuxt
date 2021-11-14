@@ -1,6 +1,5 @@
 <template>
-  <div class="progress-bar" :style="cssProps">
-    <div class="spacer"></div>
+  <div class="progress-bar" :style="cssProps" :class="{ hide: !shouldShowBar }">
     <div
       class="progress-bar__mobile mobile"
       :class="{ 'hide-title': !isScrollingUp }"
@@ -60,6 +59,10 @@ export default {
     nowTagId: {
       type: Number,
       default: 1,
+    },
+    shouldShowBar: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -299,5 +302,9 @@ export default {
   .mobile__title {
     opacity: 0;
   }
+}
+
+.hide {
+  opacity: 0;
 }
 </style>
