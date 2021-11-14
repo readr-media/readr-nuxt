@@ -2,8 +2,8 @@
   <article class="article">
     <section
       v-for="section in articleSections"
-      :key="section.type"
       :id="`section-${section.type}`"
+      :key="section.type"
       :ref="`section`"
     >
       <RdArticleSection
@@ -40,12 +40,6 @@ export default {
       heightArray: [],
     }
   },
-  watch: {
-    loadScrollMagicScriptTimes(times) {
-      if (times === 4) this.addTagObserver()
-    },
-  },
-
   computed: {
     viewportHeight() {
       return this.$store.getters[
@@ -54,6 +48,11 @@ export default {
     },
     articleSections() {
       return this.cmsData.contentApiData.article
+    },
+  },
+  watch: {
+    loadScrollMagicScriptTimes(times) {
+      if (times === 4) this.addTagObserver()
     },
   },
 

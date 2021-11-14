@@ -11,7 +11,7 @@
           :location="stalkerLocation"
         />
         <RdTrackedAnimation
-          v-show="this.isAnimateFinish !== 2"
+          v-show="isAnimateFinish !== 2"
           :trackedStatus="trackedStatus"
           :location="trackedLocation"
         />

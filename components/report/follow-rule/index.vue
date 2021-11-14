@@ -27,7 +27,7 @@
       :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
       @chaneParagraph="(id) => chaneParagraph(id)"
     />
-    <div ref="quiz" class="article__report-quiz-wrapper" id="quiz">
+    <div id="quiz" ref="quiz" class="article__report-quiz-wrapper">
       <RdReportQuiz
         :quizTitle="cmsData.contentApiData.articleQuiz.title"
         :quizDescription="cmsData.contentApiData.articleQuiz.description"
