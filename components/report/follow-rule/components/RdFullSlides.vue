@@ -110,7 +110,7 @@ export default {
         duration: `${this.$refs.slide.clientHeight}px`,
       })
         .on('enter leave', this.handleEnterLeave)
-        .addIndicators() // add indicators (requires plugin)
+        // .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
     },
     viewportHeight(height) {
