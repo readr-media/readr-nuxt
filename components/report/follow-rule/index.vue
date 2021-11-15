@@ -28,6 +28,7 @@
       :triggerHook="triggerHook"
       :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
       @chaneParagraph="(id) => chaneParagraph(id)"
+      @toggleFull="toggleFull"
     />
     <div id="quiz" ref="quiz" class="article__report-quiz-wrapper">
       <RdReportQuiz
@@ -174,6 +175,10 @@ export default {
         })
         // .addIndicators() // add indicators (requires plugin)
         .addTo(quizController)
+    },
+
+    toggleFull(type) {
+      this.shouldShowBar = type !== 'enter'
     },
   },
 

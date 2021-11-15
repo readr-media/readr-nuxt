@@ -76,7 +76,7 @@ export default {
         this.contentGroup.push({ type: 'normal', content: contentStore })
     },
     toggleFull(type) {
-      console.log('section', type)
+      this.$emit('toggleFull', type)
     },
     buildContent(content) {
       if (content.type === 'normal') {
@@ -100,7 +100,7 @@ export default {
               slides={contentValue.value}
               loadScrollMagicScriptTimes={this.loadScrollMagicScriptTimes}
               triggerHook={this.triggerHook}
-              toggle-full={this.toggleFull}
+              toggleFull={this.toggleFull}
             />
           )
         }

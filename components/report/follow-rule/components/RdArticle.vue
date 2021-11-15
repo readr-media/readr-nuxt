@@ -10,6 +10,7 @@
         :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
         :sectionArticle="section.value"
         :triggerHook="triggerHook"
+        @toggleFull="toggleFull"
       />
     </section>
   </article>
@@ -88,6 +89,9 @@ export default {
           // .addIndicators() // add indicators (requires plugin)
           .addTo(controller)
       }
+    },
+    toggleFull(type) {
+      this.$emit('toggleFull', type)
     },
   },
 }
