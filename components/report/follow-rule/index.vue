@@ -104,11 +104,11 @@ export default {
   data() {
     return {
       isMobile: true,
-      nowTagId: 1,
+      nowTagId: 0,
       loadScrollMagicScriptTimes: 0,
       isScrollEnd: false,
       shouldShowBar: false,
-      isMounted: false,
+      isScrollStart: false,
     }
   },
 
