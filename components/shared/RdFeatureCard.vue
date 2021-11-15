@@ -104,6 +104,7 @@ a {
     bottom: 8px;
     left: 8px;
     right: 8px;
+    text-align: left;
     z-index: 70;
     @include media-breakpoint-up(md) {
       bottom: 16px;

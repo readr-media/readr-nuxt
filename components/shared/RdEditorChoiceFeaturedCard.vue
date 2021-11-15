@@ -155,12 +155,12 @@ a {
       }
     }
     h4 {
+      text-align: left;
       margin: 0 0 12px;
       span {
         font-size: 24px;
         font-weight: 900;
         line-height: 1.5;
-        text-align: justify;
         letter-spacing: 0.03em;
         color: #000928;
         @include media-breakpoint-up(md) {

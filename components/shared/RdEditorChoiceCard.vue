@@ -103,6 +103,7 @@ a {
   }
   .text {
     h4 {
+      text-align: left;
       margin: 0 0 8px;
       span {
         display: inline;

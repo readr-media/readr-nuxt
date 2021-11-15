@@ -134,7 +134,7 @@ a {
       padding: 0 24px 0 28px;
     }
     h4 {
-      text-align: justify;
+      text-align: left;
       margin: 0 0 8px;
       @include media-breakpoint-up(sm) {
         margin: 0 0 12px;
