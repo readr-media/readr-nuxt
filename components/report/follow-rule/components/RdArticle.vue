@@ -9,6 +9,7 @@
       <RdArticleSection
         :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
         :sectionArticle="section.value"
+        :triggerHook="triggerHook"
       />
     </section>
   </article>
