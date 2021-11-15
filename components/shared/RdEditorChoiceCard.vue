@@ -2,8 +2,8 @@
   <a :href="href" target="_blank">
     <picture>
       <img v-lazy="img" :alt="title" />
-      <label v-if="isReport">專題</label>
     </picture>
+    <label v-if="isReport" class="report-label">專題</label>
     <div class="text">
       <h4>
         <span>{{ title }}</span>
@@ -58,6 +58,7 @@ export default {
 <style lang="scss" scoped>
 a {
   display: block;
+  position: relative;
   @include media-breakpoint-up(xl) {
     max-width: 296px;
     margin-right: auto;
@@ -66,7 +67,6 @@ a {
     position: relative;
     display: block;
     width: 100%;
-    background-color: #d8d8d8;
     margin: 0 0 16px;
     overflow: hidden;
     img {
@@ -79,26 +79,31 @@ a {
       height: 100%;
       object-fit: cover;
       object-position: center;
-      transition: all 0.6s ease-in-out;
+      background-color: #d8d8d8;
+      transition: all 0.3s ease;
       &:hover {
         transform: scale(1.1);
       }
     }
-    label {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      font-size: 13px;
-      line-height: 19px;
-      color: #fff;
-      background-color: rgba(0, 9, 40, 0.5);
-      border-radius: 2px;
-      padding: 2px 4px;
-    }
     &::after {
       content: '';
       display: block;
-      padding-top: 52.25%;
+      padding-top: 52.52%;
+    }
+  }
+  .report-label {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 13px;
+    line-height: 19px;
+    color: #fff;
+    background-color: rgba(0, 9, 40, 0.5);
+    border-radius: 2px;
+    padding: 2px 4px;
+    @include media-breakpoint-up(sm) {
+      top: 8px;
+      right: 8px;
     }
   }
   .text {

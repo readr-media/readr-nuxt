@@ -61,7 +61,6 @@ a {
     position: relative;
     display: block;
     width: 100%;
-    background-color: #d8d8d8;
     overflow: hidden;
     img {
       position: absolute;
@@ -73,8 +72,9 @@ a {
       height: 100%;
       object-fit: cover;
       object-position: center;
+      background-color: #d8d8d8;
       z-index: 5;
-      transition: all 0.6s ease-in-out;
+      transition: all 0.3s ease;
       &:hover {
         transform: scale(1.1);
       }
@@ -96,7 +96,7 @@ a {
     &::after {
       content: '';
       display: block;
-      padding-top: 52.5%;
+      padding-top: 52.52%;
     }
   }
   .text {
