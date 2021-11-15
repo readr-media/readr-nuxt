@@ -42,6 +42,10 @@ export default {
       type: Number,
       default: 0,
     },
+    triggerHook: {
+      type: Number,
+      default: 0.2,
+    },
   },
 
   data() {
@@ -95,18 +99,15 @@ export default {
         // .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
 
-      const offset = this.viewportWidth > 768 ? '-100' : -'60'
+      // const offset = this.viewportWidth > 768 ? '-100' : -'60'
 
       new ScrollMagic.Scene({
         triggerElement: '.full-slide',
-        triggerHook: 0,
-        duration: `${
-          this.$refs.slide.clientHeight - offset - this.viewportHeight
-        }px`,
-        offset: `${offset}px`,
+        triggerHook: this.triggerHook,
+        duration: `${this.$refs.slide.clientHeight}px`,
       })
         .on('enter leave', this.handleEnterLeave)
-        // .addIndicators() // add indicators (requires plugin)
+        .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
     },
     viewportHeight(height) {
@@ -129,6 +130,8 @@ export default {
     },
     handleEnterLeave(e) {
       this.enterFull = e.type === 'enter'
+      console.log(e.type)
+      this.$emit('toggle-full', e.type)
     },
     getSlideWidth(height) {
       this.slideWidth =
@@ -187,7 +190,7 @@ export default {
     background: #feeade;
     position: fixed;
     width: 100vw;
-    height: 100vh;
+    height: 25vh;
     top: 0;
     left: 0;
     z-index: 30;

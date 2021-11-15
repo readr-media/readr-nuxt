@@ -70,7 +70,7 @@ export default {
     return {
       scale: 0.5,
       trackedLocation: 0,
-      stalkerLocation: 0,
+      stalkerLocation: -50,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
       stalkerMoveId: 0,
@@ -79,7 +79,8 @@ export default {
       percent: 0,
       hasFinishedReading: false,
       isAnimateFinish: 0,
-      stalkerCanMove: true,
+      stalkerCanMove: false,
+      animateStart: false,
     }
   },
   computed: {
@@ -118,11 +119,23 @@ export default {
     isScrollEnd() {
       this.endAnimate()
     },
+    nowTagId(id) {
+      if (id === 1) {
+        this.trackedMove(58, 'moving', 50, () => {
+          this.trackedStatus = 'stand'
+          this.animateStart = true
+        })
+      }
+      if (id > 1) {
+        this.stalkerCanMove = true
+        this.handleScroll()
+      }
+    },
   },
 
   mounted() {
-    this.trackedLocation = this.minDistance
-    this.handleScroll()
+    // this.trackedLocation = this.minDistance
+    // this.handleScroll()
     window.addEventListener('scroll', this.throttle(this.handleScroll, 2000))
   },
 
@@ -195,9 +208,10 @@ export default {
       )
     },
     handleScroll() {
+      if (!this.animateStart) return
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerStatus = 'stand'
-        this.stalkerForword()
+        setTimeout(() => this.stalkerForword(), 500)
       })
       if (!this.target) {
         this.target = document.getElementsByTagName('article')[0]
@@ -221,7 +235,9 @@ export default {
         Math.round(totalWidth * this.percent * 0.01) + this.minDistance
       this.trackedMove(newLocation, 'moving', 10, () => {
         this.trackedStatus = 'stand'
-        if (this.stalkerStatus !== 'back') this.stalkerForword()
+        if (this.stalkerStatus !== 'back') {
+          setTimeout(() => this.stalkerForword(), 500)
+        }
       })
     },
     endAnimate() {
