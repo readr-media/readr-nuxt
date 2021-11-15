@@ -108,6 +108,7 @@ export default {
       loadScrollMagicScriptTimes: 0,
       isScrollEnd: false,
       shouldShowBar: false,
+      isMounted: false,
     }
   },
 
@@ -137,14 +138,13 @@ export default {
     window.scrollTo(0, 0)
     this.isMobile = this.viewportWidth < 768
     this.progressBarHeight = this.$refs.progressBar?.$el.clientHeight
-    console.log(this.viewportWidth, this.isMobile)
   },
 
   methods: {
     handleScroll(id) {
       const controller = new ScrollMagic.Controller()
       controller.scrollTo(`#section-${id}`)
-      const scrollBy = this.viewportWidth > 768 ? 200 : 100
+      const scrollBy = this.progressBarHeight
       window.scrollBy(0, -scrollBy)
     },
     chaneParagraph(id) {
