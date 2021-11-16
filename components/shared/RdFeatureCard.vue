@@ -1,7 +1,7 @@
 <template>
   <a :href="href" target="_blank" :class="{ 'first-item': isFirst }">
     <picture>
-      <img v-lazy="img" :alt="title" />
+      <img v-lazy="img" :src="'./post.svg'" :alt="title" />
     </picture>
     <div v-if="title" class="text">
       <label class="label-intext">

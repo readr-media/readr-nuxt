@@ -31,7 +31,10 @@ export default {
         }
       },
       update(data) {
-        if (!data.post?.title || !validStyles.includes(data.post?.style)) {
+        if (
+          !data.post?.title ||
+          (data.post?.style && !validStyles.includes(data.post?.style))
+        ) {
           this.has404Err = true
           if (process.server) {
             this.$nuxt.context.res.statusCode = 404
