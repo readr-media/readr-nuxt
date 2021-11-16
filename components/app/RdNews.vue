@@ -394,31 +394,36 @@ export default {
         }
       })
     },
-    filterCitation(data) {
-      return data.filter((item) => {
+    filterCitation(data = []) {
+      let hasInvalid = false
+      return data?.filter((item, i) => {
         const type = item.type ?? ''
-        const content = item?.content?.[0] ?? ''
-        if (type === 'unstyled' || type === 'blockquote') {
+        let content = []
+        if (typeof item?.content?.[0]?.[0] === 'string') {
+          content = item?.content?.[0]
+        }
+        if (typeof item?.content?.[0] === 'string') {
+          content = item?.content
+        }
+        if (!hasInvalid && (type === 'unstyled' || type === 'blockquote')) {
           return item
         }
         if (type === 'unordered-list-item') {
+          const formatedContent = content?.filter((d) =>
+            this.isValidCitationString(d)
+          )
           if (
-            typeof content === 'string' &&
-            this.isValidCitationString(content)
+            formatedContent?.length &&
+            formatedContent?.length === content?.length
           ) {
+            hasInvalid = false
             return item
           } else {
-            const formatedContent = content?.filter((item) =>
-              this.isValidCitationString(item)
-            )
-            if (
-              formatedContent?.length &&
-              formatedContent?.length === content?.length
-            ) {
-              return item
-            }
+            hasInvalid = true
+            return undefined
           }
         }
+        return undefined
       })
     },
     isValidCitationString(rawStr = '') {
