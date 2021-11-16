@@ -1,8 +1,3 @@
-import { ENV } from '../configs/config.js'
-
-const isProdOrStagingEnv = ENV === 'prod' || ENV === 'staging'
-
-export { isProdOrStagingEnv }
 export {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
