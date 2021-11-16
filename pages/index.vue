@@ -161,7 +161,10 @@ export default {
 
     databaseList: {
       query: databaseList,
-      prefetch: false,
+      variables: {
+        first: 3,
+        shouldQueryMeta: true,
+      },
       update(result) {
         const { items, meta } = result
 
@@ -325,7 +328,10 @@ export default {
     },
 
     shouldLoadMoreDatabaseItems() {
-      return this.databaseList.meta.count > 3 && this.totalDatabaseItems < 9
+      return (
+        this.databaseList.meta.count > 3 &&
+        this.databaseList.meta.count > this.totalDatabaseItems
+      )
     },
     totalDatabaseItems() {
       return this.databaseList.items.length
@@ -419,11 +425,13 @@ export default {
       try {
         await this.$apollo.queries.databaseList.fetchMore({
           variables: {
+            first: 3,
             skip: this.totalDatabaseItems,
             shouldQueryMeta: false,
           },
           updateQuery: (prevResult, { fetchMoreResult }) => {
             return {
+              ...this.databaseList,
               items: [...prevResult.items, ...fetchMoreResult.items],
               meta: this.databaseList.meta,
             }
