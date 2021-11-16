@@ -109,8 +109,9 @@ export default {
           return (
             <RdSlideCard
               cards={contentValue.value}
-              progressBarHeight={this.progressBarHeight}
               loadScrollMagicScriptTimes={this.loadScrollMagicScriptTimes}
+              triggerHook={this.triggerHook}
+              toggleFull={this.toggleFull}
             />
           )
         }

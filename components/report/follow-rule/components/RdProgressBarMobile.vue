@@ -123,8 +123,8 @@ export default {
       if (id === 1) {
         this.trackedMove(58, 'moving', 50, () => {
           this.trackedStatus = 'stand'
-          this.animateStart = true
         })
+        this.animateStart = true
       }
       if (id > 1) {
         this.stalkerCanMove = true
@@ -210,6 +210,7 @@ export default {
     },
     handleScroll() {
       if (!this.animateStart) return
+      console.log('handle scroll')
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerStatus = 'stand'
         setTimeout(() => this.stalkerForword(), 500)
@@ -253,12 +254,10 @@ export default {
         }
         return
       }
-
       const { pageYOffset } = window
       this.percent = Math.round(
         (pageYOffset / (bottom + pageYOffset - this.viewportHeight)) * 100
       )
-
       const totalWidth = this.viewportWidth - this.minDistance
       const newLocation =
         Math.round(totalWidth * this.percent * 0.01) + this.minDistance

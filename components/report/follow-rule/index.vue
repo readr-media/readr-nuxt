@@ -270,7 +270,7 @@ $--secondary-color: rgb(133, 101, 93);
     .report-article {
       background: #feeade;
       &__title {
-        font-size: 24px;
+        // font-size: 28px;
         line-height: 36px;
       }
     }
