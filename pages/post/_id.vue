@@ -8,11 +8,9 @@
 <script>
 // import { news, report } from '~/apollo/queries/post.js'
 import { post } from '~/apollo/queries/post.js'
+import { handleGQLError, SITE_TITLE, SITE_URL } from '~/helpers/index.js'
 
-import { SITE_TITLE, SITE_URL } from '~/helpers/index.js'
-
-// const KEYSTONE_POST_IDS = [2749, 2834, 2836, 2840, 2841, 2842]
-// const KEYSTONE_POST_IDS = [2749, 2834, 2836, 2840, 2841, 2848]
+const validStyles = ['news', 'embedded', 'project3', 'report']
 
 export default {
   name: 'Post',
@@ -32,12 +30,25 @@ export default {
           id: this.postId,
         }
       },
+      update(data) {
+        if (!data.post?.title || !validStyles.includes(data.post?.style)) {
+          this.has404Err = true
+          if (process.server) {
+            this.$nuxt.context.res.statusCode = 404
+          }
+        }
+        return data?.post ?? {}
+      },
+      error(error) {
+        handleGQLError(this.$nuxt, error.networkError.statusCode)
+      },
     },
   },
 
   data() {
     return {
       post: {},
+      has404Err: false,
     }
   },
 
@@ -59,11 +70,19 @@ export default {
     },
   },
   mounted() {
-    if (this.postStyle === 'report' && window) {
-      window.location.href = `https://www.readr.tw/project/${this.postSlug}`
+    if (this.has404Err) {
+      this.$nuxt.error({ statusCode: 404 })
     }
-    if (this.postStyle === 'project3' && window) {
-      window.location.href = `https://www.readr.tw/project/3/${this.postSlug}`
+    if (
+      (this.postStyle === 'report' || this.postStyle === 'project3') &&
+      window
+    ) {
+      if (this.postSlug) {
+        const url = this.postStyle === 'report' ? 'project' : 'project/3'
+        window.location.href = `${SITE_URL}/${url}/${this.postSlug}`
+      } else {
+        this.$nuxt.error({ statusCode: 404 })
+      }
     }
   },
   head() {

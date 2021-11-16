@@ -116,6 +116,7 @@ import RdNewsLetter from '~/components/shared/RdNewsLetter.vue'
 import { latestPosts } from '~/apollo/queries/posts.js'
 
 import {
+  getHref,
   formatReadTime,
   formatPostDate,
   isReport,
@@ -221,38 +222,38 @@ export default {
     },
     transformedRelatedPosts() {
       return (
-        this.news?.relatedPosts?.map(
-          ({
+        this.news?.relatedPosts?.map((post) => {
+          const {
             id = '',
             name = '',
             publishTime = '',
             wordCount = 0,
             heroImage = {},
             style = '',
-          }) => {
-            return {
-              id,
-              title: name,
-              type: 'recommend',
-              href: `/post/${id}`,
-              date: formatPostDate(publishTime),
-              readTime: formatReadTime(wordCount, 2),
-              isReport: isReport(style),
-              img: {
-                src:
-                  heroImage?.urlMobileSized ||
-                  heroImage?.urlTabletSized ||
-                  require('~/assets/imgs/default/post.svg'),
+          } = post
+
+          return {
+            id,
+            title: name,
+            type: 'recommend',
+            href: getHref(post),
+            date: formatPostDate(publishTime),
+            readTime: formatReadTime(wordCount, 2),
+            isReport: isReport(style),
+            img: {
+              src:
+                heroImage?.urlMobileSized ||
+                heroImage?.urlTabletSized ||
+                require('~/assets/imgs/default/post.svg'),
+            },
+            content: [
+              {
+                name,
+                href: getHref(post),
               },
-              content: [
-                {
-                  name,
-                  href: `/post/${id}`,
-                },
-              ],
-            }
+            ],
           }
-        ) ?? []
+        }) ?? []
       )
     },
     transformedLatestPosts() {
@@ -269,7 +270,7 @@ export default {
         return {
           id,
           title,
-          href: `/post/${id}`,
+          href: getHref(post),
           date: formatPostDate(publishTime),
           readTime: formatReadTime(wordCount, 2),
           isReport: isReport(style),
