@@ -55,22 +55,28 @@ export default {
 .ham-list-wrapper {
   background-color: #fff;
   text-align: right;
-  padding: 12px;
+  padding: 4px 4px 12px 12px;
   @include media-breakpoint-up(sm) {
-    padding: 20px 36px;
+    padding: 10px 28px 20px 36px;
   }
   .close {
     display: inline-block;
-    width: 40px;
-    height: 40px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
     margin: 0 0 16px;
-    padding: 4px;
+    padding: 16px;
     @include media-breakpoint-up(md) {
       margin: 0 0 20px;
     }
     &-icon {
       width: 100%;
       height: 100%;
+    }
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: #f6f6fb;
     }
   }
   ul {

@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
 
 const databaseList = gql`
-  query($skip: Int, $shouldQueryMeta: Boolean! = true) {
+  query($skip: Int, $first: Int = 3, $shouldQueryMeta: Boolean! = true) {
     items: allDatas(
       sortBy: [publishTime_DESC]
-      first: 3
+      first: $first
       skip: $skip
       where: { state: published }
     ) {
@@ -24,7 +24,8 @@ const databaseList = gql`
       }
     }
 
-    meta: _allDatasMeta @include(if: $shouldQueryMeta) {
+    meta: _allDatasMeta(where: { state: published })
+      @include(if: $shouldQueryMeta) {
       count
     }
   }

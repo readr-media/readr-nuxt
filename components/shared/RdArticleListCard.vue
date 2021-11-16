@@ -9,9 +9,9 @@
   >
     <picture :class="{ 'reverse-picture': shouldReverseInMobile }">
       <img v-if="shouldNotLazyload" :src="img" :alt="title" />
-      <img v-else v-lazy="img" :alt="title" />
-      <label v-if="isReport">專題</label>
+      <img v-else v-lazy="img" :src="'/post.svg'" :alt="title" />
     </picture>
+    <label v-if="isReport" class="report-label">專題</label>
     <div class="text">
       <h4>
         <span>{{ title }}</span>
@@ -84,6 +84,7 @@ export default {
 a {
   display: flex;
   border-radius: 2px;
+  position: relative;
   @include media-breakpoint-up(sm) {
     display: block;
   }
@@ -101,7 +102,6 @@ a {
     align-self: flex-start;
     min-width: calc((100% - 16px) * 0.2727);
     max-width: calc((100% - 16px) * 0.2727);
-    background-color: #d8d8d8;
     margin: 0 16px 0 0;
     overflow: hidden;
     border-radius: 2px;
@@ -127,38 +127,40 @@ a {
       height: 100%;
       object-fit: cover;
       object-position: center;
-      transition: all 0.6s ease-in-out;
+      background-color: #d8d8d8;
+      transition: all 0.3s ease;
       &:hover {
         transform: scale(1.1);
       }
     }
-    label {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      font-size: 13px;
-      line-height: 19px;
-      color: #fff;
-      background-color: rgba(0, 9, 40, 0.5);
-      border-radius: 2px;
-      padding: 2px 4px;
-      @include media-breakpoint-up(sm) {
-        top: 8px;
-        right: 8px;
-      }
-    }
     &::after {
       content: '';
+      width: 100%;
       display: block;
       padding-top: 100%;
       @include media-breakpoint-up(sm) {
-        padding-top: 60%;
+        padding-top: 52.5%;
       }
+    }
+  }
+  .report-label {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 13px;
+    line-height: 19px;
+    color: #fff;
+    background-color: rgba(0, 9, 40, 0.5);
+    border-radius: 2px;
+    padding: 2px 4px;
+    @include media-breakpoint-up(sm) {
+      top: 8px;
+      right: 8px;
     }
   }
   .text {
     h4 {
-      text-align: justify;
+      text-align: left;
       margin: 0 0 4px;
       @include media-breakpoint-up(sm) {
         margin: 0 0 8px;

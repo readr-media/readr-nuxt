@@ -70,7 +70,7 @@
 
     <RdNewsLetter v-if="shouldShowNewsLetter" class="new__news-letter" />
 
-    <section class="news__related-list-wrapper">
+    <section v-if="shouldOpenRelatedPart" class="news__related-list-wrapper">
       <template v-if="doesHaveRelatedPosts">
         <RdListHeading title="相關報導" color="#fff" class="heading" />
         <RdArticleList
@@ -116,6 +116,7 @@ import RdNewsLetter from '~/components/shared/RdNewsLetter.vue'
 import { latestPosts } from '~/apollo/queries/posts.js'
 
 import {
+  getHref,
   formatReadTime,
   formatPostDate,
   isReport,
@@ -221,38 +222,38 @@ export default {
     },
     transformedRelatedPosts() {
       return (
-        this.news?.relatedPosts?.map(
-          ({
+        this.news?.relatedPosts?.map((post) => {
+          const {
             id = '',
             name = '',
             publishTime = '',
             wordCount = 0,
             heroImage = {},
             style = '',
-          }) => {
-            return {
-              id,
-              title: name,
-              type: 'recommend',
-              href: `/post/${id}`,
-              date: formatPostDate(publishTime),
-              readTime: formatReadTime(wordCount, 2),
-              isReport: isReport(style),
-              img: {
-                src:
-                  heroImage?.urlMobileSized ||
-                  heroImage?.urlTabletSized ||
-                  require('~/assets/imgs/default/post.svg'),
+          } = post
+
+          return {
+            id,
+            title: name,
+            type: 'recommend',
+            href: getHref(post),
+            date: formatPostDate(publishTime),
+            readTime: formatReadTime(wordCount, 2),
+            isReport: isReport(style),
+            img: {
+              src:
+                heroImage?.urlMobileSized ||
+                heroImage?.urlTabletSized ||
+                require('~/assets/imgs/default/post.svg'),
+            },
+            content: [
+              {
+                name,
+                href: getHref(post),
               },
-              content: [
-                {
-                  name,
-                  href: `/post/${id}`,
-                },
-              ],
-            }
+            ],
           }
-        ) ?? []
+        }) ?? []
       )
     },
     transformedLatestPosts() {
@@ -269,7 +270,7 @@ export default {
         return {
           id,
           title,
-          href: `/post/${id}`,
+          href: getHref(post),
           date: formatPostDate(publishTime),
           readTime: formatReadTime(wordCount, 2),
           isReport: isReport(style),
@@ -356,6 +357,9 @@ export default {
     doesHaveLatestPosts() {
       return this.transformedLatestPosts?.length > 0
     },
+    shouldOpenRelatedPart() {
+      return this.doesHaveLatestPosts || this.doesHaveRelatedPosts
+    },
   },
 
   methods: {
@@ -394,31 +398,36 @@ export default {
         }
       })
     },
-    filterCitation(data) {
-      return data.filter((item) => {
+    filterCitation(data = []) {
+      let hasInvalid = false
+      return data?.filter((item, i) => {
         const type = item.type ?? ''
-        const content = item?.content?.[0] ?? ''
-        if (type === 'unstyled' || type === 'blockquote') {
+        let content = []
+        if (typeof item?.content?.[0]?.[0] === 'string') {
+          content = item?.content?.[0]
+        }
+        if (typeof item?.content?.[0] === 'string') {
+          content = item?.content
+        }
+        if (!hasInvalid && (type === 'unstyled' || type === 'blockquote')) {
           return item
         }
         if (type === 'unordered-list-item') {
+          const formatedContent = content?.filter((d) =>
+            this.isValidCitationString(d)
+          )
           if (
-            typeof content === 'string' &&
-            this.isValidCitationString(content)
+            formatedContent?.length &&
+            formatedContent?.length === content?.length
           ) {
+            hasInvalid = false
             return item
           } else {
-            const formatedContent = content?.filter((item) =>
-              this.isValidCitationString(item)
-            )
-            if (
-              formatedContent?.length &&
-              formatedContent?.length === content?.length
-            ) {
-              return item
-            }
+            hasInvalid = true
+            return undefined
           }
         }
+        return undefined
       })
     },
     isValidCitationString(rawStr = '') {
