@@ -1,8 +1,8 @@
 import { ENV } from '../configs/config.js'
 
-const isProdEnv = ENV === 'prod'
+const isProdOrStagingEnv = ENV === 'prod' || ENV === 'staging'
 
-export { isProdEnv }
+export { isProdOrStagingEnv }
 export {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
