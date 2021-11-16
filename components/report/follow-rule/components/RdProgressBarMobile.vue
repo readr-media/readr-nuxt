@@ -137,6 +137,7 @@ export default {
     // this.trackedLocation = this.minDistance
     // this.handleScroll()
     window.addEventListener('scroll', this.throttle(this.handleScroll, 2000))
+    window.addEventListener('scroll', this.handleTrackedScroll)
   },
 
   methods: {
@@ -238,6 +239,31 @@ export default {
         if (this.stalkerStatus !== 'back') {
           setTimeout(() => this.stalkerForword(), 500)
         }
+      })
+    },
+    handleTrackedScroll() {
+      if (!this.target) {
+        this.target = document.getElementsByTagName('article')[0]
+      }
+      const { bottom } = this.target.getBoundingClientRect()
+      if (bottom - this.viewportHeight < 0) {
+        this.percent = 100
+        if (this.hasFinishedReading === false) {
+          this.hasFinishedReading = true
+        }
+        return
+      }
+
+      const { pageYOffset } = window
+      this.percent = Math.round(
+        (pageYOffset / (bottom + pageYOffset - this.viewportHeight)) * 100
+      )
+
+      const totalWidth = this.viewportWidth - this.minDistance
+      const newLocation =
+        Math.round(totalWidth * this.percent * 0.01) + this.minDistance
+      this.trackedMove(newLocation, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
       })
     },
     endAnimate() {
