@@ -1,7 +1,7 @@
 <template>
   <a :href="href" target="_blank">
     <picture>
-      <img v-lazy="img" :src="'./post.svg'" :alt="title" />
+      <img v-lazy="img" :src="'/post.svg'" :alt="title" />
     </picture>
     <label v-if="isReport" class="report-label">專題</label>
     <div class="text">
@@ -88,7 +88,7 @@ a {
     &::after {
       content: '';
       display: block;
-      padding-top: 52.52%;
+      padding-top: 52.55%;
     }
   }
   .report-label {

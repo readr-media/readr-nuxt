@@ -70,7 +70,7 @@
 
     <RdNewsLetter v-if="shouldShowNewsLetter" class="new__news-letter" />
 
-    <section class="news__related-list-wrapper">
+    <section v-if="shouldOpenRelatedPart" class="news__related-list-wrapper">
       <template v-if="doesHaveRelatedPosts">
         <RdListHeading title="相關報導" color="#fff" class="heading" />
         <RdArticleList
@@ -356,6 +356,9 @@ export default {
     },
     doesHaveLatestPosts() {
       return this.transformedLatestPosts?.length > 0
+    },
+    shouldOpenRelatedPart() {
+      return this.doesHaveLatestPosts || this.doesHaveRelatedPosts
     },
   },
 

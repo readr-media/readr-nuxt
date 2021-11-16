@@ -9,7 +9,7 @@
   >
     <picture :class="{ 'reverse-picture': shouldReverseInMobile }">
       <img v-if="shouldNotLazyload" :src="img" :alt="title" />
-      <img v-else v-lazy="img" :src="'./post.svg'" :alt="title" />
+      <img v-else v-lazy="img" :src="'/post.svg'" :alt="title" />
     </picture>
     <label v-if="isReport" class="report-label">專題</label>
     <div class="text">
