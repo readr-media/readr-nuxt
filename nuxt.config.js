@@ -90,6 +90,15 @@ Object.assign(module.exports, {
           })(document);
         `,
       },
+      {
+        hid: 'google-sign-in',
+        src: 'https://accounts.google.com/gsi/client',
+        async: true,
+        defer: true,
+
+        // Remove this option if we are ready to introduce Google Sign In feature
+        skip: ENV === 'prod',
+      },
     ],
     __dangerouslyDisableSanitizersByTagID: {
       'adobe-fonts': ['innerHTML'],

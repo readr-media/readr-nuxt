@@ -1,5 +1,6 @@
 <template>
   <div class="default">
+    <RdSignInWithGoogleOneTap />
     <nuxt />
     <readr-footer
       id="default-footer"
@@ -17,10 +18,12 @@ import { mapState, mapMutations } from 'vuex'
 import rafThrottle from 'raf-throttle'
 
 import RdGdpr from '~/components/app/RdGdpr.vue'
+import RdSignInWithGoogleOneTap from '~/components/app/RdSignInWithGoogleOneTap.vue'
 
 export default {
   components: {
     RdGdpr,
+    RdSignInWithGoogleOneTap,
   },
 
   computed: {
