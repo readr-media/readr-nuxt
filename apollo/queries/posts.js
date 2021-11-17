@@ -141,7 +141,13 @@ const latestListByTagName = gql`
       wordCount
     }
 
-    meta: _allPostsMeta @include(if: $shouldQueryMeta) {
+    meta: _allPostsMeta(
+      where: {
+        state: published
+        style_in: [news, report, embedded, project3]
+        tags_some: { name: $tagName }
+      }
+    ) @include(if: $shouldQueryMeta) {
       count
     }
   }
