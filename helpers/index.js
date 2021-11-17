@@ -1,8 +1,3 @@
-import { ENV } from '../configs/config.js'
-
-const isProdEnv = ENV === 'prod'
-
-export { isProdEnv }
 export {
   setupIntersectionObserver,
   cleanupIntersectionObserver,
@@ -18,5 +13,6 @@ export {
   formatPostDate,
   isReport,
   handleApiData,
+  handleGQLError,
   doesHaveApiDataContent,
 } from './post.js'

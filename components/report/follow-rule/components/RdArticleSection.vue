@@ -16,6 +16,10 @@ export default {
       type: Number,
       default: 0,
     },
+    triggerHook: {
+      type: Number,
+      default: 0.2,
+    },
   },
   data() {
     return {
@@ -71,13 +75,16 @@ export default {
       if (contentStore[0])
         this.contentGroup.push({ type: 'normal', content: contentStore })
     },
+    toggleFull(type) {
+      this.$emit('toggleFull', type)
+    },
     buildContent(content) {
       if (content.type === 'normal') {
         return (
           <RdReportArticle
             contents={content.content}
             slug="follow-rule"
-            processBarHeight="processBarHeight"
+            progressBarHeight="progressBarHeight"
             loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
             isPart={true}
             sendGaEvent={() => this.sendGaEvent}
@@ -92,6 +99,8 @@ export default {
             <RdFullSlides
               slides={contentValue.value}
               loadScrollMagicScriptTimes={this.loadScrollMagicScriptTimes}
+              triggerHook={this.triggerHook}
+              toggleFull={this.toggleFull}
             />
           )
         }
@@ -100,8 +109,9 @@ export default {
           return (
             <RdSlideCard
               cards={contentValue.value}
-              processBarHeight={this.processBarHeight}
               loadScrollMagicScriptTimes={this.loadScrollMagicScriptTimes}
+              triggerHook={this.triggerHook}
+              toggleFull={this.toggleFull}
             />
           )
         }

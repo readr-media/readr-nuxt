@@ -4,30 +4,33 @@
     <RdCover />
     <RdProgressBarMobile
       v-if="isMobile"
-      ref="processBar"
+      ref="progressBar"
       :tagsArray="cmsData.contentApiData.tag"
       :isScrollingUp="isScrollingUp"
       :isScrollEnd="isScrollEnd"
       :nowTagId="parseInt(nowTagId)"
+      :shouldShowBar="shouldShowBar"
       @scroll-to-section="(id) => handleScroll(id)"
     />
     <RdProgressBar
       v-else
-      ref="processBar"
+      ref="progressBar"
       :tagsArray="cmsData.contentApiData.tag"
       :nowTagId="parseInt(nowTagId)"
       :isScrollEnd="isScrollEnd"
       :isScrollingUp="isScrollingUp"
+      :shouldShowBar="shouldShowBar"
       @scroll-to-section="(id) => handleScroll(id)"
     />
 
     <RdArticle
       :cmsData="cmsData"
-      :processBarHeight="processBarHeight"
+      :triggerHook="triggerHook"
       :loadScrollMagicScriptTimes="loadScrollMagicScriptTimes"
       @chaneParagraph="(id) => chaneParagraph(id)"
+      @toggleFull="toggleFull"
     />
-    <div ref="quiz" class="article__report-quiz-wrapper" id="quiz">
+    <div id="quiz" ref="quiz" class="article__report-quiz-wrapper">
       <RdReportQuiz
         :quizTitle="cmsData.contentApiData.articleQuiz.title"
         :quizDescription="cmsData.contentApiData.articleQuiz.description"
@@ -102,41 +105,51 @@ export default {
   data() {
     return {
       isMobile: true,
-      nowTagId: 1,
-      processBarHeight: 0,
+      nowTagId: 0,
       loadScrollMagicScriptTimes: 0,
       isScrollEnd: false,
+      shouldShowBar: false,
+      isScrollStart: false,
     }
   },
 
   computed: {
     ...mapGetters('viewport', ['viewportWidth', 'viewportHeight']),
+    triggerHook() {
+      return (this.progressBarHeight + 10) / this.viewportHeight || 0.2
+    },
   },
 
   watch: {
     viewportWidth(width) {
-      this.isMobile = true
       this.isMobile = width < 768
     },
     loadScrollMagicScriptTimes(times) {
       if (times === 4) this.addQuizObserver()
     },
+    $refs: {
+      handler: (ref) => {
+        this.progressBarHeight = ref.progressBar?.$el.clientHeight
+      },
+      deep: true,
+    },
   },
 
   mounted() {
     window.scrollTo(0, 0)
-    if (this.viewportWidth > 768) this.isMobile = false
-    this.processBarHeight = this.isMobile ? 90 : 217
+    this.isMobile = this.viewportWidth < 768
+    this.progressBarHeight = this.$refs.progressBar?.$el.clientHeight
   },
 
   methods: {
     handleScroll(id) {
       const controller = new ScrollMagic.Controller()
       controller.scrollTo(`#section-${id}`)
-      const scrollBy = this.viewportWidth > 768 ? 200 : 100
+      const scrollBy = this.progressBarHeight
       window.scrollBy(0, -scrollBy)
     },
     chaneParagraph(id) {
+      this.shouldShowBar = true
       this.nowTagId = id
     },
     sendGaEvent({ action, label }) {
@@ -145,10 +158,10 @@ export default {
 
     addQuizObserver() {
       const duration = this.$refs.quiz.clientHeight
-      const controller = new ScrollMagic.Controller({
+      const quizController = new ScrollMagic.Controller({
         globalSceneOptions: {
           duration,
-          triggerHook: 0.2,
+          triggerHook: this.triggerHook,
           reverse: true,
         },
       })
@@ -157,8 +170,15 @@ export default {
       })
         .on('enter', () => {
           if (!this.isScrollEnd) this.isScrollEnd = true
+          this.shouldShowBar = false
+          console.log('enter quiz')
         })
-        .addTo(controller)
+        // .addIndicators() // add indicators (requires plugin)
+        .addTo(quizController)
+    },
+
+    toggleFull(type) {
+      this.shouldShowBar = type !== 'enter'
     },
   },
 
@@ -250,7 +270,7 @@ $--secondary-color: rgb(133, 101, 93);
     .report-article {
       background: #feeade;
       &__title {
-        font-size: 24px;
+        // font-size: 28px;
         line-height: 36px;
       }
     }

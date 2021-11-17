@@ -1,6 +1,5 @@
 <template>
-  <div class="progress-bar" :style="cssProps">
-    <div class="spacer"></div>
+  <div class="progress-bar" :style="cssProps" :class="{ hide: !shouldShowBar }">
     <div
       class="progress-bar__mobile mobile"
       :class="{ 'hide-title': !isScrollingUp }"
@@ -11,7 +10,7 @@
           :location="stalkerLocation"
         />
         <RdTrackedAnimation
-          v-show="this.isAnimateFinish !== 2"
+          v-show="isAnimateFinish !== 2"
           :trackedStatus="trackedStatus"
           :location="trackedLocation"
         />
@@ -61,13 +60,17 @@ export default {
       type: Number,
       default: 1,
     },
+    shouldShowBar: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
       scale: 0.5,
       trackedLocation: 0,
-      stalkerLocation: 0,
+      stalkerLocation: -50,
       trackedStatus: 'stand',
       stalkerStatus: 'stand',
       stalkerMoveId: 0,
@@ -76,7 +79,8 @@ export default {
       percent: 0,
       hasFinishedReading: false,
       isAnimateFinish: 0,
-      stalkerCanMove: true,
+      stalkerCanMove: false,
+      animateStart: false,
     }
   },
   computed: {
@@ -115,12 +119,25 @@ export default {
     isScrollEnd() {
       this.endAnimate()
     },
+    nowTagId(id) {
+      if (id === 1) {
+        this.trackedMove(58, 'moving', 50, () => {
+          this.trackedStatus = 'stand'
+        })
+        this.animateStart = true
+      }
+      if (id > 1) {
+        this.stalkerCanMove = true
+        this.handleScroll()
+      }
+    },
   },
 
   mounted() {
-    this.trackedLocation = this.minDistance
-    this.handleScroll()
+    // this.trackedLocation = this.minDistance
+    // this.handleScroll()
     window.addEventListener('scroll', this.throttle(this.handleScroll, 2000))
+    window.addEventListener('scroll', this.handleTrackedScroll)
   },
 
   methods: {
@@ -192,9 +209,11 @@ export default {
       )
     },
     handleScroll() {
+      if (!this.animateStart) return
+      console.log('handle scroll')
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerStatus = 'stand'
-        this.stalkerForword()
+        setTimeout(() => this.stalkerForword(), 500)
       })
       if (!this.target) {
         this.target = document.getElementsByTagName('article')[0]
@@ -218,7 +237,32 @@ export default {
         Math.round(totalWidth * this.percent * 0.01) + this.minDistance
       this.trackedMove(newLocation, 'moving', 10, () => {
         this.trackedStatus = 'stand'
-        if (this.stalkerStatus !== 'back') this.stalkerForword()
+        if (this.stalkerStatus !== 'back') {
+          setTimeout(() => this.stalkerForword(), 500)
+        }
+      })
+    },
+    handleTrackedScroll() {
+      if (!this.target) {
+        this.target = document.getElementsByTagName('article')[0]
+      }
+      const { bottom } = this.target.getBoundingClientRect()
+      if (bottom - this.viewportHeight < 0) {
+        this.percent = 100
+        if (this.hasFinishedReading === false) {
+          this.hasFinishedReading = true
+        }
+        return
+      }
+      const { pageYOffset } = window
+      this.percent = Math.round(
+        (pageYOffset / (bottom + pageYOffset - this.viewportHeight)) * 100
+      )
+      const totalWidth = this.viewportWidth - this.minDistance
+      const newLocation =
+        Math.round(totalWidth * this.percent * 0.01) + this.minDistance
+      this.trackedMove(newLocation, 'moving', 10, () => {
+        this.trackedStatus = 'stand'
       })
     },
     endAnimate() {
@@ -299,5 +343,9 @@ export default {
   .mobile__title {
     opacity: 0;
   }
+}
+
+.hide {
+  opacity: 0;
 }
 </style>

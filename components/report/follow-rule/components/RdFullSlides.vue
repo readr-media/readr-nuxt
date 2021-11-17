@@ -22,7 +22,6 @@
       </div>
     </div>
     <div v-show="enterFull" class="mask right" />
-    <div v-show="enterFull" class="background" />
   </div>
 </template>
 
@@ -41,6 +40,14 @@ export default {
     loadScrollMagicScriptTimes: {
       type: Number,
       default: 0,
+    },
+    triggerHook: {
+      type: Number,
+      default: 0.2,
+    },
+    toggleFull: {
+      type: Function,
+      default: () => {},
     },
   },
 
@@ -95,15 +102,12 @@ export default {
         // .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
 
-      const offset = this.viewportWidth > 768 ? '-100' : -'60'
+      // const offset = this.viewportWidth > 768 ? '-100' : -'60'
 
       new ScrollMagic.Scene({
         triggerElement: '.full-slide',
-        triggerHook: 0,
-        duration: `${
-          this.$refs.slide.clientHeight - offset - this.viewportHeight
-        }px`,
-        offset: `${offset}px`,
+        triggerHook: this.triggerHook,
+        duration: `${this.$refs.slide.clientHeight}px`,
       })
         .on('enter leave', this.handleEnterLeave)
         // .addIndicators() // add indicators (requires plugin)
@@ -129,6 +133,7 @@ export default {
     },
     handleEnterLeave(e) {
       this.enterFull = e.type === 'enter'
+      this.toggleFull(e.type)
     },
     getSlideWidth(height) {
       this.slideWidth =
@@ -181,16 +186,6 @@ export default {
 
   .on-the-top {
     z-index: 100;
-  }
-
-  .background {
-    background: #feeade;
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    z-index: 30;
   }
 
   .mask {

@@ -49,31 +49,6 @@ export default {
       default: false,
     },
   },
-  // computed: {
-  //   shouldMountInfiniteLoading() {
-  //     return this.totalLatestItems > 0
-  //   },
-  //   doesHaveAnyLatestItemsLeftToLoad() {
-  //     return this.totalLatestItems < this.total
-  //   },
-  //   totalLatestItems() {
-  //     return this.posts?.length
-  //   },
-  // },
-  mounted() {
-    console.log('ff', this.total)
-  },
-  // methods: {
-  //   loadMoreItems(state) {
-  //     console.log('hhhh')
-  //     this.$emit('load-more', { slug: this.slug, total: this.total })
-  //     if (this.doesHaveAnyLatestItemsLeftToLoad) {
-  //       state.loaded()
-  //     } else {
-  //       state.complete()
-  //     }
-  //   },
-  // },
 }
 </script>
 

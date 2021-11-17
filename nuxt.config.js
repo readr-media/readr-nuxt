@@ -29,6 +29,8 @@ const metaTwitter = [
 
 const BASE_URL = 'http://localhost:3000'
 
+const { ENV = 'dev' } = require('./configs/config')
+
 const inDevEnv = process.env.NODE_ENV === 'development'
 
 Object.assign(module.exports, {
@@ -165,6 +167,7 @@ Object.assign(module.exports, {
     '@nuxtjs/apollo',
     '@nuxtjs/svg',
     'nuxt-ssr-cache',
+    '@nuxtjs/gtm',
     [
       '@nuxtjs/firebase',
       {
@@ -209,7 +212,7 @@ Object.assign(module.exports, {
               }
             }
           }
-        })(require('./configs/config').ENV),
+        })(ENV),
         services: {
           auth: true,
         },
@@ -230,6 +233,25 @@ Object.assign(module.exports, {
   telemetry: {
     enabled: true,
     consent: true,
+  },
+
+  gtm: {
+    id: (function getGTMId(ENV) {
+      switch (ENV) {
+        case 'prod': {
+          return 'GTM-TH2M74H'
+        }
+
+        case 'staging': {
+          return 'GTM-WZ6TDW4'
+        }
+
+        case 'dev':
+        default: {
+          return 'GTM-PQSSJ5V'
+        }
+      }
+    })(ENV),
   },
 
   styleResources: {
