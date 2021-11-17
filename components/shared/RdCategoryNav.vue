@@ -49,6 +49,7 @@ ul {
   align-items: center;
   margin: 12px 0 0;
   li {
+    position: relative;
     font-size: 16px;
     line-height: 1.5;
     color: rgba(0, 9, 40, 0.3);
@@ -61,18 +62,24 @@ ul {
     &:last-child {
       margin: 0 0 12px;
     }
-    &.active,
+    &:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background-color: #ebf02c;
+      transition: all 0.3s ease;
+    }
     &:hover {
-      position: relative;
+      color: rgba(0, 9, 40, 0.66);
+    }
+    &.active {
       color: rgba(0, 9, 40, 0.87);
       &:after {
-        content: '';
-        position: absolute;
         left: 0;
-        right: 0;
-        bottom: 0;
-        height: 2px;
-        background-color: #ebf02c;
+        width: 100%;
       }
     }
   }

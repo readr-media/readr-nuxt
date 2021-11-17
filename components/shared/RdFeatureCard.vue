@@ -1,7 +1,7 @@
 <template>
   <a :href="href" target="_blank" :class="{ 'first-item': isFirst }">
     <picture>
-      <img v-lazy="img" :alt="title" />
+      <img v-lazy="img" :src="'/post.svg'" :alt="title" />
     </picture>
     <div v-if="title" class="text">
       <label class="label-intext">
@@ -61,7 +61,6 @@ a {
     position: relative;
     display: block;
     width: 100%;
-    background-color: #d8d8d8;
     overflow: hidden;
     img {
       position: absolute;
@@ -73,8 +72,9 @@ a {
       height: 100%;
       object-fit: cover;
       object-position: center;
+      background-color: #d8d8d8;
       z-index: 5;
-      transition: all 0.6s ease-in-out;
+      transition: all 0.3s ease;
       &:hover {
         transform: scale(1.1);
       }
@@ -104,6 +104,7 @@ a {
     bottom: 8px;
     left: 8px;
     right: 8px;
+    text-align: left;
     z-index: 70;
     @include media-breakpoint-up(md) {
       bottom: 16px;

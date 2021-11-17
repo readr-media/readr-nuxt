@@ -26,6 +26,7 @@ const categories = gql`
         sortBy: [publishTime_DESC]
       ) @include(if: $shouldQueryRelatedPost) {
         id
+        slug
         style
         title: name
         heroImage {
@@ -46,6 +47,7 @@ const categories = gql`
         sortBy: [publishTime_DESC]
       ) @include(if: $shouldQueryRelatedReport) {
         id
+        slug
         style
         title: name
         heroImage {

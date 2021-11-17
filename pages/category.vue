@@ -163,6 +163,7 @@ export default {
           updateQuery: (previousResult, { fetchMoreResult }) => {
             this.moreResultNum = fetchMoreResult.items.length
             return {
+              ...this.latestList,
               items: [...previousResult.items, ...fetchMoreResult.items],
               meta: this.latestList.meta,
             }

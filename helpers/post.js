@@ -1,5 +1,7 @@
 import dayjs from 'dayjs'
 
+const SITE_URL = 'https://www.readr.tw'
+
 function getHref({ style, id, slug } = {}) {
   switch (style) {
     case 'news':
@@ -7,11 +9,11 @@ function getHref({ style, id, slug } = {}) {
     case 'embedded':
       return `/post/${id}`
     case 'report':
-      return `/project/${slug}`
+      return `${SITE_URL}/project/${slug}`
     case 'project3':
-      return `/project/3/${slug}`
+      return `${SITE_URL}/project/3/${slug}`
     default:
-      return `/post/${id}`
+      return undefined
   }
 }
 
@@ -28,6 +30,13 @@ function handleApiData(apiData = '') {
   } catch {
     return []
   }
+}
+
+function handleGQLError($nuxt, statusCode) {
+  const is5xxError = /^5[0-9]/
+  is5xxError.test(statusCode)
+    ? $nuxt.error({ statusCode: 500 })
+    : $nuxt.error({ statusCode: 404 })
 }
 
 function formatReadTime(wordCount = 0, imageCount = 0) {
@@ -64,5 +73,6 @@ export {
   formatPostDate,
   isReport,
   handleApiData,
+  handleGQLError,
   doesHaveApiDataContent,
 }

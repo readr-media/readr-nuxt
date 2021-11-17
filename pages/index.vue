@@ -9,14 +9,23 @@
     />
 
     <RdHomeCategory
+      v-if="shouldOpenHomeCategory"
       :categories="transformedCategories"
       :latest="transformedCategoryLatest"
       class="container container--category"
     />
 
-    <RdFeature :posts="transformedFeatures" class="home__feature" />
+    <RdFeature
+      v-if="shouldOpenFeature"
+      :posts="transformedFeatures"
+      class="home__feature"
+    />
 
-    <section ref="collaboration" class="collaboration-container">
+    <section
+      v-if="shouldOpenCollaboration"
+      ref="collaboration"
+      class="collaboration-container"
+    >
       <div class="container container--quote">
         <RdListHeading title="協作專區" color="#ebf02c" class="quote-heading" />
         <RdQuoteSlide :quotes="quotes" />
@@ -37,7 +46,7 @@
       />
     </section>
 
-    <section class="container container--database">
+    <section v-if="shouldOpenDatabase" class="container container--database">
       <div v-intersect="scrollDepthObserver" class="database-heading">
         <h2>開放資料庫</h2>
       </div>
@@ -161,7 +170,10 @@ export default {
 
     databaseList: {
       query: databaseList,
-      prefetch: false,
+      variables: {
+        first: 3,
+        shouldQueryMeta: true,
+      },
       update(result) {
         const { items, meta } = result
 
@@ -228,9 +240,6 @@ export default {
     },
     breakpointMd() {
       return parseInt(styleVariables['breakpoint-md'], 10)
-    },
-    shouldOpenEditorChoices() {
-      return this.editorChoices && this.editorChoices.length > 0
     },
     transformedEditorChoice() {
       return this.editorChoices?.map((post) => {
@@ -324,11 +333,33 @@ export default {
       })
     },
 
+    shouldOpenEditorChoices() {
+      return (
+        this.transformedEditorChoice && this.transformedEditorChoice?.length > 0
+      )
+    },
+    shouldOpenHomeCategory() {
+      return (
+        this.transformedCategories && this.transformedCategories?.length > 0
+      )
+    },
+    shouldOpenFeature() {
+      return this.transformedFeatures && this.transformedFeatures?.length > 0
+    },
+    shouldOpenCollaboration() {
+      return this.collaborations && this.collaborations?.length > 0
+    },
+    shouldOpenDatabase() {
+      return this.databaseList?.items && this.databaseList?.items?.length > 0
+    },
     shouldLoadMoreDatabaseItems() {
-      return this.databaseList.meta.count > 3 && this.totalDatabaseItems < 9
+      return (
+        this.databaseList.meta.count > 3 &&
+        this.databaseList.meta.count > this.totalDatabaseItems
+      )
     },
     totalDatabaseItems() {
-      return this.databaseList.items.length
+      return this.databaseList.items?.length
     },
 
     countOfCollaboratorWall: {
@@ -419,11 +450,13 @@ export default {
       try {
         await this.$apollo.queries.databaseList.fetchMore({
           variables: {
+            first: 3,
             skip: this.totalDatabaseItems,
             shouldQueryMeta: false,
           },
           updateQuery: (prevResult, { fetchMoreResult }) => {
             return {
+              ...this.databaseList,
               items: [...prevResult.items, ...fetchMoreResult.items],
               meta: this.databaseList.meta,
             }

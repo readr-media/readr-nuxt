@@ -31,7 +31,7 @@ ul {
   li {
     font-size: 14px;
     line-height: 1.5;
-    text-align: center;
+    text-align: left;
     border-radius: 2px;
     color: rgba(0, 9, 40, 0.66);
     background-color: #f6f6fb;

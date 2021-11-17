@@ -1,6 +1,6 @@
 <template>
   <div ref="cards" class="spacer" :style="cssProps">
-    <div class="slide-card" :class="{ enterFull: enterFull }">
+    <div class="slide-card">
       <div class="slide-card__pin">
         <div class="slide-container">
           <section v-for="(card, i) in cards" :key="i" class="card">
@@ -9,13 +9,13 @@
         </div>
       </div>
     </div>
-    <div v-show="enterFull" class="background" />
   </div>
 </template>
 
 <script>
 /* global ScrollMagic, TimelineMax */
 /* eslint no-undef: "error" */
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -28,43 +28,44 @@ export default {
       type: Number,
       default: 0,
     },
+    triggerHook: {
+      type: Number,
+      default: 0.2,
+    },
+    toggleFull: {
+      type: Function,
+      default: () => {},
+    },
   },
   data() {
     return {
       loadScriptTimes: 0,
       wrapperWidth: 600,
-      enterFull: false,
     }
   },
   computed: {
-    progressBarHeight() {
-      return this.viewportWidth > 768 ? 100 : 60
-    },
-    viewportWidth() {
-      return this.$store.getters['viewport/viewportWidth']
-    },
-    viewportHeight() {
-      return this.$store.getters['viewport/viewportHeight']
-    },
+    ...mapGetters('viewport', ['viewportWidth', 'viewportHeight']),
     sideWidth() {
       return this.viewportWidth > 600 ? (this.viewportWidth - 600) / 2 : 20
     },
+    allHeight() {
+      return (
+        this.sideWidth +
+        this.cards.length * this.cardWithGap -
+        this.gap +
+        this.cardHeight / 2
+      )
+    },
+    cardWithGap() {
+      return this.cardWitdh + this.gap
+    },
     cssProps() {
       const countCard = this.cards.length
-      const cardWithGap = this.cardWitdh + this.gap
       return {
         '--side-width': `${this.sideWidth}px`,
         '--count-card': countCard,
-        '--all-width': `${
-          this.sideWidth + this.cards.length * cardWithGap - this.gap
-        }px`,
-        '--space-height': `${
-          this.sideWidth +
-          this.cards.length * cardWithGap -
-          this.gap +
-          0.5 * this.viewportHeight +
-          (this.cardHeight - this.progressBarHeight) / 2
-        }px`,
+        '--all-width': `${this.allHeight - this.cardHeight / 2}px`,
+        '--space-height': `${this.allHeight}px`,
         '--card-width': `${this.cardWitdh}px`,
         '--card-height': `${this.cardHeight}px`,
         '--gap': `${this.gap}px`,
@@ -84,18 +85,14 @@ export default {
   watch: {
     loadScrollMagicScriptTimes(times) {
       if (times !== 4) return
-      const cardWithGap = this.cardWitdh + this.gap
-      const allWidth =
-        this.sideWidth + this.cards.length * cardWithGap - this.gap
-      // const next = (460 / allWidth) * 100
       const controller = new ScrollMagic.Controller()
       let wipeAnimation = new TimelineMax()
 
       for (let i = 1; i < this.cards.length; i++) {
         const x =
           i === this.cards.length - 1
-            ? `-${cardWithGap * i - this.wrapperWidth + this.cardWitdh}px`
-            : `-${cardWithGap * i}px`
+            ? `-${this.cardWithGap * i - this.wrapperWidth + this.cardWitdh}px`
+            : `-${this.cardWithGap * i}px`
         wipeAnimation = wipeAnimation.to('.slide-container', 1, {
           x,
           delay: 1,
@@ -104,13 +101,19 @@ export default {
       new ScrollMagic.Scene({
         triggerElement: '.slide-card',
         triggerHook: 0.5,
-        duration: `${allWidth}px`,
-        // offset: `${(this.cardHeight - this.progressBarHeight) / 2}px`,
+        duration: `${this.allHeight - this.cardHeight}px`,
         offset: `${this.cardHeight / 2}px`,
       })
         .setPin('.slide-card__pin')
         .setTween(wipeAnimation)
-        .on('enter leave', (e) => this.handleEnterLeave(e))
+        // .addIndicators() // add indicators (requires plugin)
+        .addTo(controller)
+      new ScrollMagic.Scene({
+        triggerElement: '.slide-card',
+        triggerHook: this.triggerHook,
+        duration: `${this.allHeight}px`,
+      })
+        .on('enter leave', this.handleEnterLeave)
         // .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
     },
@@ -124,7 +127,7 @@ export default {
       return img
     },
     handleEnterLeave(e) {
-      this.enterFull = e.type === 'enter'
+      this.toggleFull(e.type)
     },
   },
 }
@@ -134,12 +137,9 @@ export default {
 .spacer {
   position: relative;
   height: var(--space-height);
-  padding-top: 32px;
+  padding: 32px 0;
   max-width: 600px;
   margin: 0 auto;
-}
-.enterFull {
-  z-index: 50;
 }
 .slide-card {
   position: absolute;
