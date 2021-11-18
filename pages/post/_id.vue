@@ -8,7 +8,7 @@
 <script>
 // import { news, report } from '~/apollo/queries/post.js'
 import { post } from '~/apollo/queries/post.js'
-import { handleGQLError, SITE_TITLE, SITE_URL } from '~/helpers/index.js'
+import { SITE_TITLE, SITE_URL } from '~/helpers/index.js'
 
 const validStyles = ['news', 'embedded', 'project3', 'report']
 
@@ -42,8 +42,18 @@ export default {
         }
         return data?.post ?? {}
       },
+      // doc: https://v4.apollo.vuejs.org/guide-composable/error-handling.html#error-policies
+      errorPolicy: 'all',
       error(error) {
-        handleGQLError(this.$nuxt, error.networkError.statusCode)
+        const statusCode = error.networkError?.statusCode ?? 404
+        const is5xxError = /^5[0-9]/
+        const status = is5xxError.test(statusCode) ? 500 : 404
+        this[`has${status}Err`] = true
+        if (process.server) {
+          this.$nuxt.context.res.statusCode = status
+        }
+        // eslint-disable-next-line no-console
+        console.log('[GQL_ERR]', error)
       },
     },
   },
@@ -52,6 +62,7 @@ export default {
     return {
       post: {},
       has404Err: false,
+      has500Err: false,
     }
   },
 
@@ -75,6 +86,9 @@ export default {
   mounted() {
     if (this.has404Err) {
       this.$nuxt.error({ statusCode: 404 })
+    }
+    if (this.has500Err) {
+      this.$nuxt.error({ statusCode: 500 })
     }
     if (
       (this.postStyle === 'report' || this.postStyle === 'project3') &&
