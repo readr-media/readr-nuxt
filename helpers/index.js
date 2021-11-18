@@ -13,6 +13,5 @@ export {
   formatPostDate,
   isReport,
   handleApiData,
-  handleGQLError,
   doesHaveApiDataContent,
 } from './post.js'
