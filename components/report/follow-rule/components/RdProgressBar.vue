@@ -93,8 +93,7 @@ export default {
     },
     spacing() {
       return (
-        (712 - this.firstMargin - 18 * (this.countTags + 1)) /
-        (this.countTags - 1)
+        (712 - this.firstMargin - 18 * this.countTags) / (this.countTags - 1)
       )
     },
     cssProps() {
@@ -116,8 +115,7 @@ export default {
 
   watch: {
     nowTagId(id) {
-      const newLocation =
-        this.minDistance + (parseInt(id) - 1) * (this.spacing + 18)
+      const newLocation = this.firstMargin + 18 + (id - 1) * (this.spacing + 18)
       if (id > 1 && !this.stalkerCanIn) {
         this.stalkerCanIn = true
       }
@@ -273,6 +271,7 @@ export default {
   display: flex;
   position: relative;
   margin-bottom: 10px;
+  width: 800px;
   overflow: hidden;
 
   & > div {

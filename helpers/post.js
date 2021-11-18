@@ -32,13 +32,6 @@ function handleApiData(apiData = '') {
   }
 }
 
-function handleGQLError($nuxt, statusCode) {
-  const is5xxError = /^5[0-9]/
-  is5xxError.test(statusCode)
-    ? $nuxt.error({ statusCode: 500 })
-    : $nuxt.error({ statusCode: 404 })
-}
-
 function formatReadTime(wordCount = 0, imageCount = 0) {
   const min = Math.round((wordCount / 8 + imageCount * 10) / 60)
   return min ? `閱讀時間 ${min} 分鐘` : ''
@@ -73,6 +66,5 @@ export {
   formatPostDate,
   isReport,
   handleApiData,
-  handleGQLError,
   doesHaveApiDataContent,
 }
