@@ -2,7 +2,7 @@
   <div class="database-list">
     <p class="intro">
       READr
-      致力於產製數據驅動的新聞報導，並將所使用的資料公開，以下為公開的資料，歡迎再加以利用！
+      致力於產製資料驅動的新聞報導，並將所使用的資料公開，以下為公開的資料，歡迎再加以利用！
     </p>
 
     <div class="list-title-wrapper">
