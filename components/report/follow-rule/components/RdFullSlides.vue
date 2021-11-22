@@ -1,7 +1,6 @@
 <template>
   <div ref="slide" class="full-slide" :style="cssProps">
-    <div v-show="enterFull" class="mask left" />
-    <div class="full-slide__pin" :class="{ 'on-the-top': enterFull }">
+    <div class="full-slide__pin">
       <div class="full-slide__container">
         <div
           v-for="slide in slides"
@@ -21,7 +20,6 @@
         </div>
       </div>
     </div>
-    <div v-show="enterFull" class="mask right" />
   </div>
 </template>
 
@@ -54,7 +52,6 @@ export default {
   data() {
     return {
       loadScriptTimes: 0,
-      enterFull: false,
       slidesObserver: null,
       nowId: 0,
       slideWidth: 0,
@@ -132,7 +129,6 @@ export default {
       }
     },
     handleEnterLeave(e) {
-      this.enterFull = e.type === 'enter'
       this.toggleFull(e.type)
     },
     getSlideWidth(height) {
@@ -153,18 +149,20 @@ export default {
   margin: 0 auto;
   overflow: hidden;
 
+  &__pin {
+    overflow: hidden;
+  }
+
   &__container {
     display: flex;
     height: 100vh;
     align-items: center;
-    z-index: 100;
   }
 
   .slide {
     min-width: var(--slide-width);
     max-width: 712px;
     max-height: 100vh;
-    z-index: 100;
     &__top {
       max-height: 67vh;
     }
@@ -181,26 +179,6 @@ export default {
           font-size: 20px;
         }
       }
-    }
-  }
-
-  .on-the-top {
-    z-index: 100;
-  }
-
-  .mask {
-    z-index: 200;
-    background: #feeade;
-    position: fixed;
-    top: 0;
-    width: var(--side-width);
-    height: 100vh;
-
-    &.left {
-      left: 0;
-    }
-    &.right {
-      right: 0;
     }
   }
 }
