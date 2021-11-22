@@ -17,10 +17,8 @@ export default {
   padding-top: 77px;
   margin: 0 auto;
   width: 90%;
-  // height: 220px;
-  // background-color: rgba(105, 105, 105, 0.233);
-  // @include media-breakpoint-up(md) {
-  //   width: 700px;
-  // }
+  img {
+    margin: 0 auto;
+  }
 }
 </style>
