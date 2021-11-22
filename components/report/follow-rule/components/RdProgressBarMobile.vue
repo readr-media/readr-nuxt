@@ -10,9 +10,10 @@
           :location="stalkerLocation"
         />
         <RdTrackedAnimation
-          v-show="isAnimateFinish !== 2"
+          v-show="isAnimateFinish < 2"
           :trackedStatus="trackedStatus"
           :location="trackedLocation"
+          :isMobile="true"
         />
       </div>
       <div class="mobile__title">
@@ -210,7 +211,6 @@ export default {
     },
     handleScroll() {
       if (!this.animateStart) return
-      console.log('handle scroll')
       this.stalkerMove(0, 'back', 10, () => {
         this.stalkerStatus = 'stand'
         setTimeout(() => this.stalkerForword(), 500)
