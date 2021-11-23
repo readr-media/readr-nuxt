@@ -12,7 +12,6 @@ const editorChoices = gql`
         title: name
         slug
         style
-        readingTime
         heroImage {
           urlTabletSized
           urlMobileSized
