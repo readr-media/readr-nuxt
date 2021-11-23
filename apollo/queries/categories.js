@@ -38,7 +38,7 @@ const categories = gql`
           urlTabletSized
         }
         publishTime
-        wordCount
+        readingTime
       }
       reports: relatedPost(
         first: $relatedReportFirst
@@ -59,7 +59,7 @@ const categories = gql`
           urlTabletSized
         }
         publishTime
-        wordCount
+        readingTime
       }
     }
   }

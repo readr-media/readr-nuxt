@@ -192,7 +192,7 @@ export default {
         heroImage = {},
         heroCaption = '',
         categories = [],
-        wordCount = 0,
+        readingTime = 0,
         publishTime = '',
         style = '',
       } = this.news
@@ -215,7 +215,7 @@ export default {
             sm: heroImage?.urlDesktopSized,
           },
         },
-        readTime: formatReadTime(wordCount, this.imageCount),
+        readTime: formatReadTime(readingTime),
         date: formatPostDate(publishTime),
         isReport: isReport(style),
       }
@@ -227,7 +227,7 @@ export default {
             id = '',
             name = '',
             publishTime = '',
-            wordCount = 0,
+            readingTime = 0,
             heroImage = {},
             style = '',
           } = post
@@ -238,7 +238,7 @@ export default {
             type: 'recommend',
             href: getHref(post),
             date: formatPostDate(publishTime),
-            readTime: formatReadTime(wordCount, 2),
+            readTime: formatReadTime(readingTime),
             isReport: isReport(style),
             img: {
               src:
@@ -262,7 +262,7 @@ export default {
           id = '',
           title = '',
           heroImage = {},
-          wordCount = 0,
+          readingTime = 0,
           publishTime = '',
           style = '',
         } = post || {}
@@ -272,7 +272,7 @@ export default {
           title,
           href: getHref(post),
           date: formatPostDate(publishTime),
-          readTime: formatReadTime(wordCount, 2),
+          readTime: formatReadTime(readingTime),
           isReport: isReport(style),
           img: {
             src:
@@ -332,11 +332,6 @@ export default {
     },
     isContentString() {
       return typeof this.content === 'string'
-    },
-    imageCount() {
-      const images =
-        this.content?.filter((item) => item?.type === 'image') ?? []
-      return images.length
     },
 
     doesHaveHeroVideo() {

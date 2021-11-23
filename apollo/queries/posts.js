@@ -18,7 +18,7 @@ const latestPosts = gql`
       ogImage {
         urlTabletSized
       }
-      wordCount
+      readingTime
       publishTime
     }
   }
@@ -64,7 +64,7 @@ const latestList = gql`
         urlTabletSized
       }
       publishTime
-      wordCount
+      readingTime
     }
 
     meta: _allPostsMeta @include(if: $shouldQueryMeta) {
@@ -101,7 +101,7 @@ const latestListByCategorySlug = gql`
         urlTabletSized
       }
       publishTime
-      wordCount
+      readingTime
     }
 
     meta: _allPostsMeta @include(if: $shouldQueryMeta) {
@@ -138,7 +138,7 @@ const latestListByTagName = gql`
         urlTabletSized
       }
       publishTime
-      wordCount
+      readingTime
     }
 
     meta: _allPostsMeta(
