@@ -158,8 +158,7 @@ export default {
     }
 
     .annotation {
-      background: rgba(17, 17, 17, 1);
-      background: rgba(40, 221, 177, 1);
+      background: #aeeee6;
       border: 1px solid rgba(0, 0, 0, 1);
     }
   }
