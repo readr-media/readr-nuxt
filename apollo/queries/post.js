@@ -110,14 +110,14 @@ const post = gql`
           urlMobileSized
           urlTabletSized
         }
-        wordCount
+        readingTime
         publishTime
       }
       tags {
         name
       }
       style
-      wordCount
+      readingTime
       publishTime
       updatedAt
     }

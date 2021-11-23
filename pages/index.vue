@@ -144,7 +144,7 @@ export default {
                 heroImage = {},
                 ogImage = {},
                 publishTime = '',
-                wordCount = 0,
+                readingTime = 0,
                 style = '',
               } = post || {}
 
@@ -159,7 +159,7 @@ export default {
                     ogImage?.urlTabletSized ||
                     require('~/assets/imgs/default/post.svg'),
                 },
-                readTime: formatReadTime(wordCount, 2),
+                readTime: formatReadTime(readingTime),
                 date: formatPostDate(publishTime),
                 isReport: isReport(style),
               }
@@ -247,7 +247,7 @@ export default {
           id = '',
           title = '',
           slug = '',
-          wordCount = 0,
+          readingTime = 0,
           style = '',
           heroImage = {},
           publishTime = '',
@@ -258,7 +258,7 @@ export default {
           title,
           href: getHref({ style, id, slug }),
           date: formatPostDate(publishTime),
-          readTime: formatReadTime(wordCount, 2),
+          readTime: formatReadTime(readingTime),
           isReport: isReport(style),
           img: {
             src:
@@ -398,7 +398,7 @@ export default {
         ogImage = {},
         style = '',
         publishTime = '',
-        wordCount = 0,
+        readingTime = 0,
       } = post
       return {
         id,
@@ -411,7 +411,7 @@ export default {
             ogImage?.urlMobileSized ||
             require('~/assets/imgs/default/post.svg'),
         },
-        readTime: formatReadTime(wordCount, 2),
+        readTime: formatReadTime(readingTime),
         date: formatPostDate(publishTime),
       }
     },

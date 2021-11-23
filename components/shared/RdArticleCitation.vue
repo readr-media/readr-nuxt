@@ -1,7 +1,7 @@
 <template>
   <div class="citation">
     <div class="citation__title">
-      <span>引用數據</span>
+      <span>引用資料</span>
     </div>
     <div class="citation__content">
       <RdArticleCitationHandler

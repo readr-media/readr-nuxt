@@ -4,7 +4,7 @@
       <li v-for="item in formatedList" :key="item.key">
         <div
           class="title"
-          :class="{ extra: item.key === '數據分析' || item.key === '共同製作' }"
+          :class="{ extra: item.key === '資料分析' || item.key === '共同製作' }"
         >
           {{ item.key }}
         </div>
@@ -25,7 +25,7 @@ const CONTACT_MAPPING = {
   cameraOperators: '影音',
   designers: '設計',
   engineers: '工程',
-  dataAnalysts: '數據分析',
+  dataAnalysts: '資料分析',
   otherByline: '共同製作',
 }
 
