@@ -110,14 +110,12 @@ const post = gql`
           urlMobileSized
           urlTabletSized
         }
-        readingTime
         publishTime
       }
       tags {
         name
       }
       style
-      readingTime
       publishTime
       updatedAt
     }
