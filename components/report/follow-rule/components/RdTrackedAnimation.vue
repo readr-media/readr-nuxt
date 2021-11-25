@@ -1,5 +1,5 @@
 <template>
-  <div class="tracked" :style="cssProps">
+  <div class="tracked" :class="{ mobile: isMobile }" :style="cssProps">
     <img
       v-show="trackedStatus === 'moving'"
       src="~/assets/imgs/report/follow-rule/tracked-walk.gif"
@@ -31,6 +31,10 @@ export default {
       require: true,
       default: 0,
     },
+    isMobile: {
+      type: Boolean,
+      fefault: true,
+    },
   },
   computed: {
     cssProps() {
@@ -47,6 +51,10 @@ export default {
   margin: 5px 0;
   position: absolute;
   left: 0;
+  transform: translate(calc(var(--location) - 25%), 0) !important;
+}
+
+.mobile {
   transform: translate(calc(var(--location) - 50%), 0) !important;
 }
 </style>

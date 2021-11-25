@@ -10,6 +10,7 @@
           v-show="isAnimateFinish < 2"
           :trackedStatus="trackedStatus"
           :location="trackedLocation"
+          :isMobile="false"
         />
       </div>
       <div class="bar">
@@ -132,7 +133,8 @@ export default {
       if (d === this.minDistance + 1) {
         if (this.trackedStatus !== 'moving') this.trackedStatus = 'stand'
       }
-      if (d < this.minDistance) {
+      if (d < this.minDistance - 1) {
+        console.log(d, this.minDistance)
         this.handleScroll()
       }
     },

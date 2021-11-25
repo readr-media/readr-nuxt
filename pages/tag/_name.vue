@@ -34,7 +34,7 @@ import { latestListByTagName } from '~/apollo/queries/posts.js'
 
 import {
   getHref,
-  formatReadTime,
+  // formatReadTime,
   formatPostDate,
   isReport,
   SITE_TITLE,
@@ -85,7 +85,7 @@ export default {
               heroImage = {},
               ogImage = {},
               publishTime = '',
-              wordCount = 0,
+              // readingTime = 0,
               style = '',
             } = post || {}
 
@@ -99,7 +99,8 @@ export default {
                   ogImage?.urlTabletSized ||
                   require('~/assets/imgs/default/post.svg'),
               },
-              readTime: formatReadTime(wordCount, 2),
+              // readTime: formatReadTime(readingTime),
+              readTime: '',
               date: formatPostDate(publishTime),
               isReport: isReport(style),
             }
