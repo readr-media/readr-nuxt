@@ -32,9 +32,8 @@ function handleApiData(apiData = '') {
   }
 }
 
-function formatReadTime(wordCount = 0, imageCount = 0) {
-  const min = Math.round((wordCount / 8 + imageCount * 10) / 60)
-  return min ? `閱讀時間 ${min} 分鐘` : ''
+function formatReadTime(readingTime = 0) {
+  return readingTime ? `閱讀時間 ${readingTime} 分鐘` : `閱讀時間 10 分鐘`
 }
 
 function formatPostDate(datetime) {

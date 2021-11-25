@@ -20,7 +20,7 @@
           提供有趣、多元的新聞報導，例如
         </span>
         <span class="description__highlight">
-          數據分析
+          資料分析
         </span>
         <span>
           、
