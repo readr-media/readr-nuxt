@@ -329,4 +329,10 @@ $--secondary-color: rgb(133, 101, 93);
     }
   }
 }
+
+.report-quiz::v-deep {
+  label {
+    width: fit-content;
+  }
+}
 </style>
