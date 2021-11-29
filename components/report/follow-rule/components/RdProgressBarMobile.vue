@@ -314,6 +314,17 @@ export default {
       &:not(:first-child) {
         margin-top: 11px;
       }
+      * {
+        display: flex;
+        &:first-child {
+          width: 50%;
+          justify-content: center;
+        }
+        &:not(:first-child) {
+          flex: 1;
+          margin-left: 10%;
+        }
+      }
     }
   }
 
