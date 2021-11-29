@@ -150,6 +150,7 @@ export default {
       controller.scrollTo(`#section-${id}`)
       const scrollBy = this.progressBarHeight
       window.scrollBy(0, -scrollBy)
+      this.$ga.event('projects', 'click', `索引標題${id}`)
     },
     chaneParagraph(id) {
       this.shouldShowBar = true
@@ -326,6 +327,12 @@ $--secondary-color: rgb(133, 101, 93);
         color: #ebebeb;
       }
     }
+  }
+}
+
+.report-quiz::v-deep {
+  label {
+    width: fit-content;
   }
 }
 </style>

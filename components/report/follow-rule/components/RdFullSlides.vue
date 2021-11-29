@@ -57,6 +57,7 @@ export default {
       nowId: 0,
       slideWidth: 0,
       slideId: 'a',
+      hasSendGa: false,
     }
   },
 
@@ -89,7 +90,7 @@ export default {
           1,
           {
             x,
-            delay: 10,
+            delay: 3,
           }
         )
       }
@@ -134,6 +135,12 @@ export default {
       }
     },
     handleEnterLeave(e) {
+      if (e.type === 'enter' && !this.hasSendGa) {
+        this.hasSendGa = true
+        const idArray = ['b', 'c', 'a']
+        const id = idArray.indexOf(this.slideId) + 1
+        this.$ga.event('projects', 'click', `主互動區${id}`)
+      }
       this.toggleFull(e.type)
     },
     getSlideWidth(height) {
@@ -175,8 +182,7 @@ export default {
       height: 232px;
       max-height: 33vh;
       &_description {
-        margin: 50px 20px;
-        padding: 10px;
+        padding: 30px;
         border-top: 2px dashed #000;
         font-size: 14px;
         line-height: 30px;
