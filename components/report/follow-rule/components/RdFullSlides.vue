@@ -1,7 +1,7 @@
 <template>
   <div ref="slide" class="full-slide" :class="slideId" :style="cssProps">
     <div class="full-slide__pin" :class="slideId">
-      <div class="full-slide__container">
+      <div class="full-slide__container" :class="slideId">
         <div
           v-for="slide in slides"
           :id="slide.id"
@@ -84,10 +84,14 @@ export default {
 
       for (let i = 1; i < this.slidesLength; i++) {
         const x = `-${this.slideWidth * i}px`
-        wipeAnimation = wipeAnimation.to('.full-slide__container', 1, {
-          x,
-          delay: 10,
-        })
+        wipeAnimation = wipeAnimation.to(
+          `.full-slide__container.${this.slideId}`,
+          1,
+          {
+            x,
+            delay: 10,
+          }
+        )
       }
 
       new ScrollMagic.Scene({
