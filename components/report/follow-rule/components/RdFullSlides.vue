@@ -1,12 +1,13 @@
 <template>
-  <div ref="slide" class="full-slide" :style="cssProps">
-    <div class="full-slide__pin">
+  <div ref="slide" class="full-slide" :class="slideId" :style="cssProps">
+    <div class="full-slide__pin" :class="slideId">
       <div class="full-slide__container">
         <div
           v-for="slide in slides"
           :id="slide.id"
           :key="slide.id"
           class="slide"
+          :class="slideId"
         >
           <div class="slide__top">
             <img :src="getPictureUrl(slide.topId)" />
@@ -55,6 +56,7 @@ export default {
       slidesObserver: null,
       nowId: 0,
       slideWidth: 0,
+      slideId: 'a',
     }
   },
 
@@ -89,20 +91,18 @@ export default {
       }
 
       new ScrollMagic.Scene({
-        triggerElement: '.full-slide',
+        triggerElement: `.full-slide.${this.slideId}`,
         triggerHook: 0.5,
         duration: `${allWidth}px`,
         offset: this.viewportHeight / 2,
       })
-        .setPin('.full-slide__pin')
+        .setPin(`.full-slide__pin.${this.slideId}`)
         .setTween(wipeAnimation)
         // .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
 
-      // const offset = this.viewportWidth > 768 ? '-100' : -'60'
-
       new ScrollMagic.Scene({
-        triggerElement: '.full-slide',
+        triggerElement: `.full-slide.${this.slideId}`,
         triggerHook: this.triggerHook,
         duration: `${this.$refs.slide.clientHeight}px`,
       })
@@ -117,6 +117,7 @@ export default {
 
   mounted() {
     this.getSlideWidth(this.viewportHeight)
+    this.slideId = this.slides[0]?.topId[0]
   },
 
   methods: {
