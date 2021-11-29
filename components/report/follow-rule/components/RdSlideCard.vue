@@ -123,7 +123,7 @@ export default {
   },
   methods: {
     getPictureUrl(id) {
-      const img = require(`~/assets/imgs/report/follow-rule/report-slide-${id}.png`)
+      const img = require(`~/assets/imgs/report/follow-rule/secondary-interative/${id}.png`)
       return img
     },
     handleEnterLeave(e) {
@@ -167,21 +167,11 @@ export default {
   height: var(--card-height);
   width: var(--card-width);
   float: left;
-  background: #ffffff;
-  border: 0.5px solid #000000;
-  padding: 24px;
-  white-space: normal;
-  overflow: auto;
   &:first-child {
     margin: 0 0 0 var(--side-width);
   }
   & + & {
     margin: 0 0 0 var(--gap);
-  }
-
-  img {
-    width: 380px;
-    height: 380px;
   }
 }
 
