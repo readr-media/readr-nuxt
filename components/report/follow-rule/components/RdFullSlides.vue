@@ -90,7 +90,7 @@ export default {
           1,
           {
             x,
-            delay: 10,
+            delay: 3,
           }
         )
       }
@@ -135,7 +135,6 @@ export default {
       }
     },
     handleEnterLeave(e) {
-      console.log(e.type)
       if (e.type === 'enter' && !this.hasSendGa) {
         this.hasSendGa = true
         const idArray = ['b', 'c', 'a']
@@ -183,8 +182,7 @@ export default {
       height: 232px;
       max-height: 33vh;
       &_description {
-        margin: 50px 20px;
-        padding: 10px;
+        padding: 30px;
         border-top: 2px dashed #000;
         font-size: 14px;
         line-height: 30px;
