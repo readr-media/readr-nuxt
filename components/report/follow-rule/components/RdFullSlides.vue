@@ -57,6 +57,7 @@ export default {
       nowId: 0,
       slideWidth: 0,
       slideId: 'a',
+      hasSendGa: false,
     }
   },
 
@@ -134,6 +135,13 @@ export default {
       }
     },
     handleEnterLeave(e) {
+      console.log(e.type)
+      if (e.type === 'enter' && !this.hasSendGa) {
+        this.hasSendGa = true
+        const idArray = ['b', 'c', 'a']
+        const id = idArray.indexOf(this.slideId) + 1
+        this.$ga.event('projects', 'click', `主互動區${id}`)
+      }
       this.toggleFull(e.type)
     },
     getSlideWidth(height) {

@@ -1,4 +1,6 @@
 <script>
+/* global ScrollMagic */
+/* eslint no-undef: "error" */
 import RdReportArticle from '~/components/app/Report/RdReportArticle.vue'
 import RdFullSlides from '~/components/report/follow-rule/components/RdFullSlides.vue'
 import RdSlideCard from '~/components/report/follow-rule/components/RdSlideCard.vue'
@@ -24,12 +26,33 @@ export default {
   data() {
     return {
       contentGroup: [],
+      hasSendGa: false,
     }
   },
 
   computed: {
     viewportHeight() {
       return this.$store.getters['viewport/viewportHeight']
+    },
+  },
+
+  watch: {
+    loadScrollMagicScriptTimes(times) {
+      if (times !== 4) return
+      const controller = new ScrollMagic.Controller()
+      new ScrollMagic.Scene({
+        triggerElement: '.report-article__picture',
+        triggerHook: 1,
+        duration: `100px`,
+      })
+        .on('enter leave', (e) => {
+          if (!this.hasSendGa) {
+            this.$ga.event('projects', 'scroll', '圖1')
+            this.hasSendGa = true
+          }
+        })
+        // .addIndicators() // add indicators (requires plugin)
+        .addTo(controller)
     },
   },
 

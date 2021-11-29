@@ -41,6 +41,7 @@ export default {
     return {
       loadScriptTimes: 0,
       wrapperWidth: 600,
+      hasSendGa: false,
     }
   },
   computed: {
@@ -128,6 +129,10 @@ export default {
     },
     handleEnterLeave(e) {
       this.toggleFull(e.type)
+      if (e.type === 'enter' && !this.hasSendGa) {
+        this.hasSendGa = true
+        this.$ga.event('projects', 'click', `次互動區1`)
+      }
     },
   },
 }

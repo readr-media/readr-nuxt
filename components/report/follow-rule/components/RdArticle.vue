@@ -46,6 +46,7 @@ export default {
       heightArray: [],
       isLeave: false,
       isTouchStart: false,
+      hasSendGa: false,
     }
   },
   computed: {
@@ -88,8 +89,18 @@ export default {
             console.log('enter paragraph to', i + 1)
             this.$emit('chaneParagraph', i + 1)
           })
-          .on('start', (e) => {
-            if (e.scrollDirection === 'REVERSE' && i === 0) {
+          .on('start end', (e) => {
+            if (
+              e.type === 'end' &&
+              e.scrollDirection === 'FORWARD' &&
+              i === 3 &&
+              !this.hasSendGa
+            ) {
+              this.$ga.event('projects', 'click', '全文文末')
+              this.hasSendGa = true
+            } else if (
+              (e.type = 'start' && e.scrollDirection === 'REVERSE' && i === 0)
+            ) {
               this.$emit('toggleFull', 'enter')
             }
           })

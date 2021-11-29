@@ -150,6 +150,7 @@ export default {
       controller.scrollTo(`#section-${id}`)
       const scrollBy = this.progressBarHeight
       window.scrollBy(0, -scrollBy)
+      this.$ga.event('projects', 'click', `索引標題${id}`)
     },
     chaneParagraph(id) {
       this.shouldShowBar = true
