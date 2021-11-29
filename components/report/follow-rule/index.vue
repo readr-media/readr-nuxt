@@ -1,7 +1,7 @@
 <template>
   <div class="follow-rule">
     <RdReportHeader class="header" />
-    <RdCover />
+    <RdCover :isMobile="isMobile" />
     <RdProgressBarMobile
       v-if="isMobile"
       ref="progressBar"
