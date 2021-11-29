@@ -143,6 +143,9 @@ export default {
 
   methods: {
     handleScroll(id) {
+      if (!this.shouldShowBar) {
+        return
+      }
       const controller = new ScrollMagic.Controller()
       controller.scrollTo(`#section-${id}`)
       const scrollBy = this.progressBarHeight

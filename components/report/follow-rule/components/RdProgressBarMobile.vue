@@ -343,9 +343,17 @@ export default {
   .mobile__title {
     opacity: 0;
   }
+  a {
+    cursor: default;
+    z-index: -100;
+  }
 }
 
 .hide {
   opacity: 0;
+  a {
+    cursor: default;
+    z-index: -100;
+  }
 }
 </style>
