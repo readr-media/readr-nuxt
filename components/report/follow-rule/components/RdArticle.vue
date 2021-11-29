@@ -44,6 +44,8 @@ export default {
       contentGroup: [],
       sceneArray: [],
       heightArray: [],
+      isLeave: false,
+      isTouchStart: false,
     }
   },
   computed: {
@@ -85,6 +87,11 @@ export default {
           .on('enter', () => {
             console.log('enter paragraph to', i + 1)
             this.$emit('chaneParagraph', i + 1)
+          })
+          .on('start', (e) => {
+            if (e.scrollDirection === 'REVERSE' && i === 0) {
+              this.$emit('toggleFull', 'enter')
+            }
           })
           // .addIndicators() // add indicators (requires plugin)
           .addTo(controller)

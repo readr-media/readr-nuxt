@@ -98,7 +98,7 @@ export default {
       return this.trackedLocation - this.stalkerLocation
     },
     tagsGroup() {
-      return [this.tagsArray.slice(0, 3), this.tagsArray.slice(3, 6)]
+      return [this.tagsArray.slice(0, 2), this.tagsArray.slice(2, 4)]
     },
     minDistance() {
       return parseInt(100 * this.scale)
@@ -310,7 +310,7 @@ export default {
     }
     &_row {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       &:not(:first-child) {
         margin-top: 11px;
       }
@@ -343,9 +343,17 @@ export default {
   .mobile__title {
     opacity: 0;
   }
+  a {
+    cursor: default;
+    z-index: -100;
+  }
 }
 
 .hide {
   opacity: 0;
+  a {
+    cursor: default;
+    z-index: -100;
+  }
 }
 </style>
