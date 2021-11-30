@@ -90,7 +90,7 @@ export default {
           1,
           {
             x,
-            delay: 3,
+            delay: 7,
           }
         )
       }
