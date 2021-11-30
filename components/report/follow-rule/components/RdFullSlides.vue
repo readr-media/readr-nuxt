@@ -1,12 +1,13 @@
 <template>
-  <div ref="slide" class="full-slide" :style="cssProps">
-    <div class="full-slide__pin">
-      <div class="full-slide__container">
+  <div ref="slide" class="full-slide" :class="slideId" :style="cssProps">
+    <div class="full-slide__pin" :class="slideId">
+      <div class="full-slide__container" :class="slideId">
         <div
           v-for="slide in slides"
           :id="slide.id"
           :key="slide.id"
           class="slide"
+          :class="slideId"
         >
           <div class="slide__top">
             <img :src="getPictureUrl(slide.topId)" />
@@ -55,6 +56,8 @@ export default {
       slidesObserver: null,
       nowId: 0,
       slideWidth: 0,
+      slideId: 'a',
+      hasSendGa: false,
     }
   },
 
@@ -82,27 +85,29 @@ export default {
 
       for (let i = 1; i < this.slidesLength; i++) {
         const x = `-${this.slideWidth * i}px`
-        wipeAnimation = wipeAnimation.to('.full-slide__container', 1, {
-          x,
-          delay: 10,
-        })
+        wipeAnimation = wipeAnimation.to(
+          `.full-slide__container.${this.slideId}`,
+          1,
+          {
+            x,
+            delay: 3,
+          }
+        )
       }
 
       new ScrollMagic.Scene({
-        triggerElement: '.full-slide',
+        triggerElement: `.full-slide.${this.slideId}`,
         triggerHook: 0.5,
         duration: `${allWidth}px`,
         offset: this.viewportHeight / 2,
       })
-        .setPin('.full-slide__pin')
+        .setPin(`.full-slide__pin.${this.slideId}`)
         .setTween(wipeAnimation)
         // .addIndicators() // add indicators (requires plugin)
         .addTo(controller)
 
-      // const offset = this.viewportWidth > 768 ? '-100' : -'60'
-
       new ScrollMagic.Scene({
-        triggerElement: '.full-slide',
+        triggerElement: `.full-slide.${this.slideId}`,
         triggerHook: this.triggerHook,
         duration: `${this.$refs.slide.clientHeight}px`,
       })
@@ -117,6 +122,7 @@ export default {
 
   mounted() {
     this.getSlideWidth(this.viewportHeight)
+    this.slideId = this.slides[0]?.topId[0]
   },
 
   methods: {
@@ -129,6 +135,12 @@ export default {
       }
     },
     handleEnterLeave(e) {
+      if (e.type === 'enter' && !this.hasSendGa) {
+        this.hasSendGa = true
+        const idArray = ['b', 'c', 'a']
+        const id = idArray.indexOf(this.slideId) + 1
+        this.$ga.event('projects', 'click', `主互動區${id}`)
+      }
       this.toggleFull(e.type)
     },
     getSlideWidth(height) {
@@ -170,8 +182,7 @@ export default {
       height: 232px;
       max-height: 33vh;
       &_description {
-        margin: 50px 20px;
-        padding: 10px;
+        padding: 30px;
         border-top: 2px dashed #000;
         font-size: 14px;
         line-height: 30px;

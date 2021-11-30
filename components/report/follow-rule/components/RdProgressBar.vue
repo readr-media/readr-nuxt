@@ -267,6 +267,8 @@ export default {
 
 .hide-title {
   opacity: 0;
+  cursor: default;
+  z-index: -100;
 }
 
 .animate {
@@ -334,5 +336,7 @@ export default {
 
 .hide {
   opacity: 0;
+  cursor: default;
+  z-index: -100;
 }
 </style>
