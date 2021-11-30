@@ -1,7 +1,7 @@
 <template>
   <div class="follow-rule">
     <RdReportHeader class="header" />
-    <RdCover />
+    <RdCover :isMobile="isMobile" />
     <RdProgressBarMobile
       v-if="isMobile"
       ref="progressBar"
@@ -110,6 +110,7 @@ export default {
       isScrollEnd: false,
       shouldShowBar: false,
       isScrollStart: false,
+      hasSendGa: false,
     }
   },
 
@@ -143,10 +144,14 @@ export default {
 
   methods: {
     handleScroll(id) {
+      if (!this.shouldShowBar) {
+        return
+      }
       const controller = new ScrollMagic.Controller()
       controller.scrollTo(`#section-${id}`)
       const scrollBy = this.progressBarHeight
       window.scrollBy(0, -scrollBy)
+      this.$ga.event('projects', 'click', `索引標題${id}`)
     },
     chaneParagraph(id) {
       this.shouldShowBar = true
@@ -171,7 +176,10 @@ export default {
         .on('enter', () => {
           if (!this.isScrollEnd) this.isScrollEnd = true
           this.shouldShowBar = false
-          console.log('enter quiz')
+          if (!this.hasSendGa) {
+            this.$ga.event('projects', 'scroll', `閱讀測驗`)
+            this.hasSendGa = true
+          }
         })
         // .addIndicators() // add indicators (requires plugin)
         .addTo(quizController)
@@ -323,6 +331,12 @@ $--secondary-color: rgb(133, 101, 93);
         color: #ebebeb;
       }
     }
+  }
+}
+
+.report-quiz::v-deep {
+  label {
+    width: fit-content;
   }
 }
 </style>

@@ -93,7 +93,13 @@ export default {
   methods: {
     handleQuizButtonClick() {
       this.shouldShowAnswerDetail = true
-      // this.$ga.event('projects', 'click', `閱讀測驗${['A', 'B', 'C', 'D'][i]}`)
+      const optionArray = this.quizOptions.map((option) => option.text)
+      const index = optionArray.indexOf(this.optionClicked.text)
+      this.$ga.event(
+        'projects',
+        'click',
+        `閱讀測驗${['A', 'B', 'C', 'D'][index]}`
+      )
     },
     getQuizButtonState(option) {
       if (!this.shouldShowAnswerDetail) {
