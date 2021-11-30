@@ -110,6 +110,7 @@ export default {
       isScrollEnd: false,
       shouldShowBar: false,
       isScrollStart: false,
+      hasSendGa: false,
     }
   },
 
@@ -175,7 +176,10 @@ export default {
         .on('enter', () => {
           if (!this.isScrollEnd) this.isScrollEnd = true
           this.shouldShowBar = false
-          console.log('enter quiz')
+          if (!this.hasSendGa) {
+            this.$ga.event('projects', 'scroll', `閱讀測驗`)
+            this.hasSendGa = true
+          }
         })
         // .addIndicators() // add indicators (requires plugin)
         .addTo(quizController)
