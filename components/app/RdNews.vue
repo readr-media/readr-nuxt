@@ -68,6 +68,7 @@
       <RdArticleSocialList class="social" />
     </section>
 
+    <RdNewsLetterBtn />
     <RdNewsLetter v-if="shouldShowNewsLetter" class="new__news-letter" />
 
     <section v-if="shouldOpenRelatedPart" class="news__related-list-wrapper">
@@ -111,6 +112,7 @@ import RdArticleTagList from '~/components/shared/RdArticleTagList.vue'
 import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
 import RdListHeading from '~/components/shared/RdListHeading.vue'
 import RdArticleList from '~/components/shared/RdArticleList.vue'
+import RdNewsLetterBtn from '~/components/shared/RdNewsLetterBtn.vue'
 import RdNewsLetter from '~/components/shared/RdNewsLetter.vue'
 
 import { latestPosts } from '~/apollo/queries/posts.js'
@@ -151,6 +153,7 @@ export default {
     RdArticleSocialList,
     RdListHeading,
     RdArticleList,
+    RdNewsLetterBtn,
     RdNewsLetter,
   },
 
