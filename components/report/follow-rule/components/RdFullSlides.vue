@@ -157,7 +157,7 @@ export default {
 .full-slide {
   position: relative;
   background: #feeade;
-  max-width: 712px;
+  width: var(--slide-width);
   margin: 0 auto;
   overflow: hidden;
 
