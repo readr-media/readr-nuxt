@@ -1,21 +1,23 @@
 <template>
-  <div ref="slide" class="full-slide" :class="slideId" :style="cssProps">
-    <div class="full-slide__pin" :class="slideId">
-      <div class="full-slide__container" :class="slideId">
-        <div
-          v-for="slide in slides"
-          :id="slide.id"
-          :key="slide.id"
-          class="slide"
-          :class="slideId"
-        >
-          <div class="slide__top">
-            <img :src="getPictureUrl(slide.topId)" />
-          </div>
-          <div class="slide__bottom">
-            <img v-if="slide.bottomId" :src="getPictureUrl(slide.bottomId)" />
-            <div v-else class="slide__bottom_description">
-              {{ slide.description }}
+  <div ref="slide" class="slide-wrapper">
+    <div class="full-slide" :class="slideId" :style="cssProps">
+      <div class="full-slide__pin" :class="slideId">
+        <div class="full-slide__container" :class="slideId">
+          <div
+            v-for="slide in slides"
+            :id="slide.id"
+            :key="slide.id"
+            class="slide"
+            :class="slideId"
+          >
+            <div class="slide__top">
+              <img :src="getPictureUrl(slide.topId)" />
+            </div>
+            <div class="slide__bottom">
+              <img v-if="slide.bottomId" :src="getPictureUrl(slide.bottomId)" />
+              <div v-else class="slide__bottom_description">
+                {{ slide.description }}
+              </div>
             </div>
           </div>
         </div>
@@ -121,7 +123,9 @@ export default {
   },
 
   mounted() {
-    this.getSlideWidth(this.viewportHeight)
+    this.$nextTick(() => {
+      this.getSlideWidth(this.viewportHeight)
+    })
     this.slideId = this.slides[0]?.topId[0]
   },
 
@@ -155,6 +159,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.slide-wrapper {
+  max-width: 712px;
+}
 .full-slide {
   position: relative;
   background: #feeade;
