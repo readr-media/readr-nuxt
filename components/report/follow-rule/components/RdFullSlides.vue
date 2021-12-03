@@ -161,6 +161,7 @@ export default {
 <style lang="scss" scoped>
 .slide-wrapper {
   max-width: 712px;
+  margin: 0 auto;
 }
 .full-slide {
   position: relative;
