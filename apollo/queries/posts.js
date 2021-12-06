@@ -19,6 +19,7 @@ const latestPosts = gql`
         urlTabletSized
       }
       publishTime
+      readingTime
     }
   }
 `
@@ -63,6 +64,7 @@ const latestList = gql`
         urlTabletSized
       }
       publishTime
+      readingTime
     }
 
     meta: _allPostsMeta @include(if: $shouldQueryMeta) {
@@ -99,6 +101,7 @@ const latestListByCategorySlug = gql`
         urlTabletSized
       }
       publishTime
+      readingTime
     }
 
     meta: _allPostsMeta @include(if: $shouldQueryMeta) {

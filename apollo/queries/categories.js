@@ -38,6 +38,7 @@ const categories = gql`
           urlTabletSized
         }
         publishTime
+        readingTime
       }
       reports: relatedPost(
         first: $relatedReportFirst
@@ -58,6 +59,7 @@ const categories = gql`
           urlTabletSized
         }
         publishTime
+        readingTime
       }
     }
   }

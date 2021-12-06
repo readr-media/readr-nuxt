@@ -119,7 +119,7 @@ import { latestPosts } from '~/apollo/queries/posts.js'
 
 import {
   getHref,
-  // formatReadTime,
+  formatReadTime,
   formatPostDate,
   isReport,
   handleApiData,
@@ -195,7 +195,7 @@ export default {
         heroImage = {},
         heroCaption = '',
         categories = [],
-        // readingTime = 0,
+        readingTime = 0,
         publishTime = '',
         style = '',
       } = this.news
@@ -218,8 +218,7 @@ export default {
             sm: heroImage?.urlDesktopSized,
           },
         },
-        // readTime: formatReadTime(readingTime),
-        readTime: '',
+        readTime: formatReadTime(readingTime),
         date: formatPostDate(publishTime),
         isReport: isReport(style),
       }
@@ -231,7 +230,7 @@ export default {
             id = '',
             name = '',
             publishTime = '',
-            // readingTime = 0,
+            readingTime = 0,
             heroImage = {},
             style = '',
           } = post
@@ -242,8 +241,7 @@ export default {
             type: 'recommend',
             href: getHref(post),
             date: formatPostDate(publishTime),
-            // readTime: formatReadTime(readingTime),
-            readTime: '',
+            readTime: formatReadTime(readingTime),
             isReport: isReport(style),
             img: {
               src:
@@ -267,7 +265,7 @@ export default {
           id = '',
           title = '',
           heroImage = {},
-          // readingTime = 0,
+          readingTime = 0,
           publishTime = '',
           style = '',
         } = post || {}
@@ -277,8 +275,7 @@ export default {
           title,
           href: getHref(post),
           date: formatPostDate(publishTime),
-          // readTime: formatReadTime(readingTime),
-          readTime: '',
+          readTime: formatReadTime(readingTime),
           isReport: isReport(style),
           img: {
             src:
