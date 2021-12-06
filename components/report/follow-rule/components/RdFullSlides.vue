@@ -74,6 +74,7 @@ export default {
         '--count-slide': this.slidesLength,
         '--slide-width': `${this.slideWidth}px`,
         '--side-width': `${sideWidth}px`,
+        '--all-width': `${this.slideWidth * this.slidesLength}px`,
       }
     },
   },
@@ -162,6 +163,7 @@ export default {
 .slide-wrapper {
   max-width: 712px;
   margin: 0 auto;
+  height: var(--all-width);
 }
 .full-slide {
   position: relative;
