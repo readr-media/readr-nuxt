@@ -50,9 +50,6 @@ export default {
       default: false,
     },
   },
-  mounted() {
-    console.log('aa', this.description)
-  },
 }
 </script>
 
