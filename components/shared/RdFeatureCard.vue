@@ -4,7 +4,7 @@
       <img v-lazy="img" :src="'/post.svg'" :alt="title" />
     </picture>
     <div v-if="title" class="text">
-      <label class="label-intext">
+      <label v-if="description" class="label-intext">
         {{ description }}
       </label>
       <h4>
@@ -14,7 +14,7 @@
         {{ subtitle }}
       </span>
     </div>
-    <label class="label-upper">
+    <label v-if="description" class="label-upper">
       {{ description }}
     </label>
   </a>
@@ -49,6 +49,9 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  mounted() {
+    console.log('aa', this.description)
   },
 }
 </script>
@@ -98,6 +101,11 @@ a {
       display: block;
       padding-top: 52.5%;
     }
+  }
+  // for properly render emoji color in windows
+  .label-intext,
+  .label-upper {
+    font-family: Segoe UI Emoji;
   }
   .text {
     position: absolute;
