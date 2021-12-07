@@ -116,6 +116,7 @@ const post = gql`
       tags {
         name
       }
+      state
       style
       publishTime
       updatedAt
