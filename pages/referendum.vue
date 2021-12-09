@@ -1,5 +1,5 @@
 <template>
-  <div class="referendum">
+  <div class="referendum" v-if="data.ST">
     <div class="referendum__title">
       <div class="referendum__title_main">
         <div class="referendum__title_main_title">公投開票進度</div>
@@ -9,11 +9,7 @@
         </div>
       </div>
       <div class="referendum__title_info">
-        <div>
-          開票進度：{{ data.F1.prgRate }}%｜最後更新時間：{{
-            formateDate(updateTime)
-          }}
-        </div>
+        <div>最後更新時間：{{ formateDate(updateTime) }}</div>
       </div>
     </div>
     <div class="referendum__info">
@@ -43,11 +39,7 @@
       />
     </div>
     <div class="referendum__title_info rwd">
-      <div>
-        開票進度：{{ data.F1.prgRate }}%<br />最後更新時間：{{
-          formateDate(updateTime)
-        }}
-      </div>
+      <div>最後更新時間：{{ formateDate(updateTime) }}</div>
     </div>
   </div>
 </template>
@@ -64,37 +56,7 @@ export default {
     return {
       updateTime: new Date(),
       threhold: 4980000,
-      data: {
-        ST: '1020161637',
-        F1: {
-          agreeTks: 5673987,
-          agreeRate: 58.61,
-          disagreeTks: 4007113,
-          disagreeRate: 41.39,
-          prgRate: 100.0,
-        },
-        F2: {
-          agreeTks: 4940437,
-          agreeRate: 49.99,
-          disagreeTks: 4942123,
-          disagreeRate: 50.01,
-          prgRate: 100.0,
-        },
-        F3: {
-          agreeTks: 6904163,
-          agreeRate: 68.52,
-          disagreeTks: 3171974,
-          disagreeRate: 31.48,
-          prgRate: 100.0,
-        },
-        F4: {
-          agreeTks: 3285155,
-          agreeRate: 34.64,
-          disagreeTks: 6198238,
-          disagreeRate: 65.36,
-          prgRate: 100.0,
-        },
-      },
+      data: {},
     }
   },
   mounted() {
