@@ -20,10 +20,10 @@ export default {
   width: 100%;
   padding: 10px;
   iframe {
-    height: 544px;
+    height: 504px;
     width: 100%;
     @include media-breakpoint-up(md) {
-      height: 305px;
+      height: 265px;
     }
   }
 }
