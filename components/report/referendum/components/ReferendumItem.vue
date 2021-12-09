@@ -19,8 +19,10 @@
         <span v-if="status === 'cat'"
           >通過門檻：{{ numberWithCommas(threhold) }}</span
         >
-        <span v-if="status === 'agree'" class="status__agree">同意</span>
-        <span v-if="status === 'disagree'" class="status__disagree">同意</span>
+        <span v-if="status === 'agree'" class="status__agree">已通過</span>
+        <span v-if="status === 'disagree'" class="status__disagree"
+          >未通過</span
+        >
       </div>
     </div>
   </div>
@@ -52,17 +54,12 @@ export default {
   },
   computed: {
     status() {
-      switch (Math.max(this.agree, this.disagree, this.threhold)) {
-        case this.agree: {
-          return 'agree'
-        }
-        case this.disagree: {
-          return 'disagree'
-        }
-        default: {
-          return 'cat'
-        }
-      }
+      const { prgRate, agreeTks, disagreeTks } = this.data
+      // 通過標準：同意票大於門檻，也大於不同意票
+      if (agreeTks > this.threhold && agreeTks > disagreeTks) return 'agree'
+      // 不通過：已經開完票，但不滿足通過標準
+      if (prgRate === 100) return 'disagree'
+      return 'cat'
     },
   },
   methods: {
@@ -123,7 +120,7 @@ $disagree-color: #e51731;
       .status__agree {
         color: $agree-color;
       }
-      .status__agree {
+      .status__disagree {
         color: $disagree-color;
       }
     }
