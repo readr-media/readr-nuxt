@@ -16,11 +16,11 @@
         :isAgree="false"
       />
       <div class="referendum-item__bar_status">
-        <span v-if="status === 'cat'"
+        <span v-if="!this.adptVictor"
           >通過門檻：{{ numberWithCommas(threhold) }}</span
         >
-        <span v-if="status === 'agree'" class="status__agree">已通過</span>
-        <span v-if="status === 'disagree'" class="status__disagree"
+        <span v-if="this.adptVictor === 'Y'" class="status__agree">已通過</span>
+        <span v-if="this.adptVictor === 'N'" class="status__disagree"
           >未通過</span
         >
       </div>
@@ -50,18 +50,6 @@ export default {
     threhold: {
       type: Number,
       default: 0,
-    },
-  },
-  computed: {
-    status() {
-      const { prgRate, agreeTks, disagreeTks } = this.data
-      if (prgRate === 100) {
-        // 通過標準：開完票後，同意票大於門檻，也大於不同意票
-        if (agreeTks > this.threhold && agreeTks > disagreeTks) return 'agree'
-        // 不通過：已經開完票，但不滿足通過標準
-        return 'disagree'
-      }
-      return 'cat'
     },
   },
   methods: {
