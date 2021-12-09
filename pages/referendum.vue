@@ -98,6 +98,7 @@ export default {
     }
   },
   mounted() {
+    this.updateJson()
     setInterval(() => this.updateJson(), 60000)
   },
   methods: {
