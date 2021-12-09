@@ -2,6 +2,8 @@
   <div class="g-page-wrapper home">
     <RdNavbar />
 
+    <RdReferendumIframe />
+
     <RdEditorChoice
       v-if="shouldOpenEditorChoices"
       :posts="transformedEditorChoice"
@@ -74,6 +76,7 @@ import { get as axiosGet } from 'axios'
 import gqlCombineQuery from 'graphql-combine-query'
 
 import RdNavbar from '~/components/shared/RdNavbar.vue'
+import RdReferendumIframe from '~/components/shared/RdReferendumIframe.vue'
 import RdEditorChoice from '~/components/shared/RdEditorChoice.vue'
 import RdHomeCategory from '~/components/shared/RdHomeCategory.vue'
 import RdFeature from '~/components/shared/RdFeature.vue'
@@ -118,6 +121,7 @@ export default {
     RdCollaboratorWall,
     RdCollaborativeList,
     RdButtonDonate,
+    RdReferendumIframe,
   },
 
   directives: {

@@ -122,6 +122,7 @@ $disagree-color: #e51731;
   padding: 16px 24px;
   background: #f3f5f7;
   max-width: 704px;
+  margin: 0 auto;
   @include media-breakpoint-up(xl) {
     max-width: 970px;
   }
