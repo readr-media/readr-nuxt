@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import ReferendumItem from '../components/report/referendum/components/ReferendumItem.vue'
 export default {
   layout: 'empty',
@@ -96,6 +97,9 @@ export default {
       },
     }
   },
+  mounted() {
+    setInterval(() => this.updateJson(), 60000)
+  },
   methods: {
     formateDate(time) {
       const formattedDate =
@@ -109,6 +113,13 @@ export default {
         ':' +
         time.getMinutes()
       return formattedDate
+    },
+    async updateJson() {
+      const { data = [] } = await axios.get(
+        'https://storage.googleapis.com/statics.mirrormedia.mg/elections/2021referendum/result.json'
+      )
+      this.data = data
+      this.updateTime = new Date()
     },
   },
 }
