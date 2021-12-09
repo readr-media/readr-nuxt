@@ -9,11 +9,7 @@
         </div>
       </div>
       <div class="referendum__title_info">
-        <div>
-          開票進度：{{ data.F1.prgRate }}%｜最後更新時間：{{
-            formateDate(updateTime)
-          }}
-        </div>
+        <div>最後更新時間：{{ formateDate(updateTime) }}</div>
       </div>
     </div>
     <div class="referendum__info">
@@ -43,11 +39,7 @@
       />
     </div>
     <div class="referendum__title_info rwd">
-      <div>
-        開票進度：{{ data.F1.prgRate }}%<br />最後更新時間：{{
-          formateDate(updateTime)
-        }}
-      </div>
+      <div>最後更新時間：{{ formateDate(updateTime) }}</div>
     </div>
   </div>
 </template>

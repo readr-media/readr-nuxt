@@ -23,6 +23,8 @@
         <span v-if="this.adptVictor === 'N'" class="status__disagree"
           >未通過</span
         >
+        <br />
+        <span>開票進度：{{ data.prgRate }}%</span>
       </div>
     </div>
   </div>
@@ -106,6 +108,10 @@ $disagree-color: #e51731;
       font-size: 13px;
       line-height: 18px;
       color: #9b9b9b;
+
+      br {
+        margin-top: 2px;
+      }
 
       .status__agree {
         color: $agree-color;
