@@ -9,7 +9,11 @@
         </div>
       </div>
       <div class="referendum__title_info">
-        <div>開票進度：29%｜最後更新時間：2021/12/18 14:29</div>
+        <div>
+          開票進度：{{ data.F1.prgRate }}%｜最後更新時間：{{
+            formateDate(updateTime)
+          }}
+        </div>
       </div>
     </div>
     <div class="referendum__info">
@@ -17,29 +21,33 @@
         number="17"
         name="重啟核四"
         :data="data.F1"
-        :threhold="4980000"
+        :threhold="threhold"
       />
       <ReferendumItem
         number="18"
         name="反萊豬進口"
         :data="data.F2"
-        :threhold="4980000"
+        :threhold="threhold"
       />
       <ReferendumItem
         number="19"
         name="公投綁大選"
         :data="data.F3"
-        :threhold="4980000"
+        :threhold="threhold"
       />
       <ReferendumItem
         number="20"
         name="珍愛藻礁"
         :data="data.F4"
-        :threhold="4980000"
+        :threhold="threhold"
       />
     </div>
     <div class="referendum__title_info rwd">
-      <div>開票進度：29%<br />最後更新時間：2021/12/18 14:29</div>
+      <div>
+        開票進度：{{ data.F1.prgRate }}%<br />最後更新時間：{{
+          formateDate(updateTime)
+        }}
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +61,8 @@ export default {
   },
   data() {
     return {
+      updateTime: new Date(),
+      threhold: 4980000,
       data: {
         ST: '1020161637',
         F1: {
@@ -85,6 +95,21 @@ export default {
         },
       },
     }
+  },
+  methods: {
+    formateDate(time) {
+      const formattedDate =
+        time.getFullYear() +
+        '/' +
+        (time.getMonth() + 1) +
+        '/' +
+        time.getDate() +
+        ' ' +
+        time.getHours() +
+        ':' +
+        time.getMinutes()
+      return formattedDate
+    },
   },
 }
 </script>
