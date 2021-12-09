@@ -100,7 +100,7 @@ import {
   cleanupIntersectionObserver,
   getHref,
   formatPostDate,
-  // formatReadTime,
+  formatReadTime,
   isReport,
 } from '~/helpers/index.js'
 
@@ -144,7 +144,7 @@ export default {
                 heroImage = {},
                 ogImage = {},
                 publishTime = '',
-                // readingTime = 0,
+                readingTime = 0,
                 style = '',
               } = post || {}
 
@@ -159,8 +159,7 @@ export default {
                     ogImage?.urlTabletSized ||
                     require('~/assets/imgs/default/post.svg'),
                 },
-                // readTime: formatReadTime(readingTime),
-                readTime: '',
+                readTime: formatReadTime(readingTime),
                 date: formatPostDate(publishTime),
                 isReport: isReport(style),
               }
@@ -248,7 +247,7 @@ export default {
           id = '',
           title = '',
           slug = '',
-          // readingTime = 0,
+          readingTime = 0,
           style = '',
           heroImage = {},
           publishTime = '',
@@ -259,8 +258,7 @@ export default {
           title,
           href: getHref({ style, id, slug }),
           date: formatPostDate(publishTime),
-          // readTime: formatReadTime(readingTime),
-          readTime: '',
+          readTime: formatReadTime(readingTime),
           isReport: isReport(style),
           img: {
             src:
@@ -400,7 +398,7 @@ export default {
         ogImage = {},
         style = '',
         publishTime = '',
-        // readingTime = 0,
+        readingTime = 0,
       } = post
       return {
         id,
@@ -413,8 +411,7 @@ export default {
             ogImage?.urlMobileSized ||
             require('~/assets/imgs/default/post.svg'),
         },
-        // readTime: formatReadTime(readingTime),
-        readTime: '',
+        readTime: formatReadTime(readingTime),
         date: formatPostDate(publishTime),
       }
     },

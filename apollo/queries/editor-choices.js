@@ -17,6 +17,7 @@ const editorChoices = gql`
           urlMobileSized
         }
         publishTime
+        readingTime
       }
       publishTime
     }

@@ -111,6 +111,7 @@ const post = gql`
           urlTabletSized
         }
         publishTime
+        readingTime
       }
       tags {
         name
@@ -118,6 +119,7 @@ const post = gql`
       style
       publishTime
       updatedAt
+      readingTime
     }
   }
 `

@@ -7,11 +7,13 @@
       { 'report-highlight': isReport && shouldHighLightReport },
     ]"
   >
-    <picture :class="{ 'reverse-picture': shouldReverseInMobile }">
-      <img v-if="shouldNotLazyload" :src="img" :alt="title" />
-      <img v-else v-lazy="img" :src="'/post.svg'" :alt="title" />
-    </picture>
-    <label v-if="isReport" class="report-label">專題</label>
+    <div class="picture" :class="{ 'reverse-picture': shouldReverseInMobile }">
+      <picture>
+        <img v-if="shouldNotLazyload" :src="img" :alt="title" />
+        <img v-else v-lazy="img" :src="'/post.svg'" :alt="title" />
+      </picture>
+      <label v-if="isReport" class="report-label">專題</label>
+    </div>
     <div class="text">
       <h4>
         <span>{{ title }}</span>
@@ -96,7 +98,7 @@ a {
       justify-content: center;
     }
   }
-  picture {
+  .picture {
     position: relative;
     display: inline-block;
     align-self: flex-start;
@@ -117,45 +119,49 @@ a {
         margin: 0 0 12px;
       }
     }
-    img {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
+    picture {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: center;
-      background-color: #d8d8d8;
-      transition: all 0.3s ease;
-      &:hover {
-        transform: scale(1.1);
+      img {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        background-color: #d8d8d8;
+        transition: all 0.3s ease;
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+      &::after {
+        content: '';
+        width: 100%;
+        display: block;
+        padding-top: 100%;
+        @include media-breakpoint-up(sm) {
+          padding-top: 52.5%;
+        }
       }
     }
-    &::after {
-      content: '';
-      width: 100%;
-      display: block;
-      padding-top: 100%;
+    .report-label {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 13px;
+      line-height: 19px;
+      color: #fff;
+      background-color: rgba(0, 9, 40, 0.5);
+      border-radius: 2px;
+      padding: 2px 4px;
       @include media-breakpoint-up(sm) {
-        padding-top: 52.5%;
+        top: 8px;
+        right: 8px;
       }
-    }
-  }
-  .report-label {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    font-size: 13px;
-    line-height: 19px;
-    color: #fff;
-    background-color: rgba(0, 9, 40, 0.5);
-    border-radius: 2px;
-    padding: 2px 4px;
-    @include media-breakpoint-up(sm) {
-      top: 8px;
-      right: 8px;
     }
   }
   .text {
