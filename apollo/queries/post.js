@@ -103,9 +103,16 @@ const post = gql`
         urlMobileSized
         urlDesktopSized
       }
-      relatedPosts(where: { state: published }) {
+      relatedPosts(
+        where: {
+          state: published
+          style_in: [news, report, embedded, project3]
+        }
+      ) {
         id
         name
+        style
+        slug
         heroImage {
           urlMobileSized
           urlTabletSized
@@ -116,6 +123,7 @@ const post = gql`
       tags {
         name
       }
+      state
       style
       publishTime
       updatedAt

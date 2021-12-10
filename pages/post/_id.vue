@@ -33,6 +33,7 @@ export default {
       update(data) {
         if (
           !data.post?.title ||
+          data.post?.state !== 'published' ||
           (data.post?.style && !validStyles.includes(data.post?.style))
         ) {
           this.has404Err = true
