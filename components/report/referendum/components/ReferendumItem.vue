@@ -16,12 +16,15 @@
         :isAgree="false"
       />
       <div class="referendum-item__bar_status">
-        <span v-if="!this.adptVictor"
-          >通過門檻：{{ numberWithCommas(threhold) }}</span
+        <span v-if="status === 'cat'"
+          >通過門檻：{{ numberWithCommas(threhold) }} 票</span
         >
-        <span v-if="this.adptVictor === 'Y'" class="status__agree">已通過</span>
-        <span v-if="this.adptVictor === 'N'" class="status__disagree"
+        <span v-else-if="status === 'pass'" class="status__agree">已通過</span>
+        <span v-else-if="status === 'notPass'" class="status__disagree"
           >未通過</span
+        >
+        <span v-else-if="status === 'becauseThrehold'" class="status__disagree"
+          >未達最低通過門檻</span
         >
         <br />
         <span>開票進度：{{ data.prgRate }}%</span>
@@ -54,9 +57,25 @@ export default {
       default: 0,
     },
   },
+  computed: {
+    status() {
+      switch (this.data.adptVictor) {
+        case 'Y': {
+          return 'pass'
+        }
+        case 'N': {
+          if (this.data.disagreeTks > this.data.agreeTks) return 'notPass'
+          return 'becauseThrehold'
+        }
+        default: {
+          return 'cat'
+        }
+      }
+    },
+  },
   methods: {
     numberWithCommas(x) {
-      return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+      return x.toString().replace(/\B(?<!\.\d*)(?=(\d{4})+(?!\d))/g, ' 萬 ')
     },
   },
 }
