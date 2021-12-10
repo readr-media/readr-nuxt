@@ -2,6 +2,8 @@
   <div class="g-page-wrapper home">
     <RdNavbar />
 
+    <RdReferendumIframe />
+
     <RdEditorChoice
       v-if="shouldOpenEditorChoices"
       :posts="transformedEditorChoice"
@@ -74,6 +76,7 @@ import { get as axiosGet } from 'axios'
 import gqlCombineQuery from 'graphql-combine-query'
 
 import RdNavbar from '~/components/shared/RdNavbar.vue'
+import RdReferendumIframe from '~/components/shared/RdReferendumIframe.vue'
 import RdEditorChoice from '~/components/shared/RdEditorChoice.vue'
 import RdHomeCategory from '~/components/shared/RdHomeCategory.vue'
 import RdFeature from '~/components/shared/RdFeature.vue'
@@ -118,6 +121,7 @@ export default {
     RdCollaboratorWall,
     RdCollaborativeList,
     RdButtonDonate,
+    RdReferendumIframe,
   },
 
   directives: {
@@ -306,7 +310,8 @@ export default {
       }
     },
     transformedFeatures() {
-      return this.feature?.map((post) => {
+      const randomArray = this.arrayRandomFilter(4, this.feature || [])
+      return randomArray?.map((post) => {
         const { description = '' } = post || {}
         const {
           id = '',
@@ -439,6 +444,12 @@ export default {
           }
         }),
       }
+    },
+    // this is not actually random, but can fit the need for now
+    // see: https://stackoverflow.com/questions/19269545/how-to-get-a-number-of-random-elements-from-an-array
+    arrayRandomFilter(resultNum = 0, arr = []) {
+      const shuffledArr = arr.sort(() => 0.5 - Math.random())
+      return shuffledArr.slice(0, resultNum)
     },
 
     async loadMoreDatabaseItems() {
