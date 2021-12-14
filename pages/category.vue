@@ -103,6 +103,16 @@ export default {
         slug: this.$route.params?.slug || 'all',
       },
       isSlugPostLoading: false,
+      // 避免取值時為 undefined
+      breakingnewsPosts: {},
+      politicsPosts: {},
+      notePosts: {},
+      environmentPosts: {},
+      humanrightsPosts: {},
+      dataPosts: {},
+      omtPosts: {},
+      culturePosts: {},
+      educationPosts: {},
     }
   },
 
@@ -143,7 +153,7 @@ export default {
       return this.totalLatestItems < this.latestList.meta.count
     },
     totalLatestItems() {
-      return this.latestList.items.length
+      return this.latestList?.items.length
     },
   },
 
@@ -181,16 +191,22 @@ export default {
       })
     },
     getPostsByCategory(slug) {
-      return this[`${slug}Posts`]
+      const data = this[`${slug}Posts`]
+      return {
+        items: data?.items ?? [],
+        meta: data?.meta ?? { count: 0 },
+        isLoading: data?.isLoading ?? false,
+        page: data?.page ?? 0,
+      }
     },
     shouldMountSlugInfinite(slug) {
-      const currentLength = this.getPostsByCategory(slug).items?.length
+      const currentLength = this.getPostsByCategory(slug)?.items?.length
       const total = this.getPostsByCategory(slug).meta?.count
       return currentLength < total
     },
     transformPosts(items = []) {
       return (
-        items.map((post) => {
+        items?.map((post) => {
           const {
             id = '',
             title = '',
@@ -233,7 +249,7 @@ export default {
           updateQuery: (previousResult, { fetchMoreResult }) => {
             return {
               ...this.latestList,
-              items: [...previousResult.items, ...fetchMoreResult.items],
+              items: [...previousResult?.items, ...fetchMoreResult?.items],
               meta: this.latestList.meta,
             }
           },
@@ -279,7 +295,7 @@ export default {
         })
 
         const doesHaveAnyItemsLeftToLoad =
-          this[`${slug}Posts`]?.items.length < meta.count
+          this[`${slug}Posts`]?.items?.length < meta.count
 
         if (doesHaveAnyItemsLeftToLoad) {
           state.loaded()
