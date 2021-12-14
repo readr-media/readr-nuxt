@@ -1,0 +1,55 @@
+[
+  [
+
+  ],
+  [
+    {
+      "text":"提案",
+      "color":"#898989",
+      "isBold":false
+    },
+    {
+      "text":"← 退回",
+      "color":"#B79562",
+      "isBold":false
+    }
+  ],
+  [
+    {
+      "text":"一讀",
+      "color":"#985F0B",
+      "isBold":true
+    },
+    {
+      "text":"(待審)",
+      "color":"#985F0B",
+      "isBold":true
+    }
+  ],
+  [
+    {
+      "text":"委員會",
+      "color":"#898989",
+      "isBold":false
+    }
+  ],
+  [
+    {
+      "text":"二讀",
+      "color":"#985F0B",
+      "isBold":true
+    },
+    {
+      "text":"← 撤回",
+      "color":"#B79562",
+      "isBold":false
+    }
+  ],
+  [
+    {
+      "text":"三讀",
+      "color":"#985F0B",
+      "isBold":true
+    }
+  ]
+]
