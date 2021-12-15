@@ -194,15 +194,15 @@ export default {
         .filter(function filterProposalProperties([key, value]) {
           return key.endsWith('提案數')
         })
-        .filter(function todo([key, value]) {
+        .filter(function isValueInteger([key, value]) {
           return +value > 0
         })
 
-      const proposalsTotalCount = proposals.reduce(function todo(acc, curr) {
+      const proposalsTotalCount = proposals.reduce(function add(acc, curr) {
         return acc + +curr[1]
       }, 0)
 
-      return proposals.map(function todo([key, value]) {
+      return proposals.map(function mapToChartDataFormat([key, value]) {
         return {
           color: (function getColor(key) {
             const regexp = /(\D+)提案數$/
@@ -223,15 +223,15 @@ export default {
         .filter(function filterProposalProperties([key, value]) {
           return key.endsWith('排審數')
         })
-        .filter(function todo([key, value]) {
+        .filter(function isValueInteger([key, value]) {
           return +value > 0
         })
 
-      const proposalsTotalCount = proposals.reduce(function todo(acc, curr) {
+      const proposalsTotalCount = proposals.reduce(function add(acc, curr) {
         return acc + +curr[1]
       }, 0)
 
-      return proposals.map(function todo([key, value]) {
+      return proposals.map(function mapToChartDataFormat([key, value]) {
         return {
           color: (function getColor(key) {
             const regexp = /(\D+)排審數$/
