@@ -32,27 +32,26 @@
           </InfiniteLoading>
         </ClientOnly>
       </template>
-      <div v-for="category in categoryList" :key="category.slug">
-        <template v-if="category.slug === currentCategory.slug">
-          <RdArticleList
-            :posts="getPostsByCategory(category.slug).items"
-            :isLoading="getPostsByCategory(category.slug).isLoading"
-            :shouldReverseInMobile="true"
-            :shouldShowSkeleton="true"
-            :shouldHighLightReport="true"
-            :shouldSetLgBreakPoint="true"
-            class="category__post"
-          />
-          <ClientOnly v-if="shouldMountSlugInfinite(category.slug)">
-            <InfiniteLoading @infinite="loadMoreItems">
-              <div slot="spinner" />
-              <div slot="no-more" />
-              <div slot="no-results" />
-              <div slot="error" />
-            </InfiniteLoading>
-          </ClientOnly>
-        </template>
-      </div>
+      <template v-else>
+        <p v-if="shouldMountSlugLatestInfinite">我是測試lalala</p>
+        <RdArticleList
+          :posts="latestListByCategorySlug.items"
+          :isLoading="latestListByCategorySlug.isLoading"
+          :shouldReverseInMobile="true"
+          :shouldShowSkeleton="true"
+          :shouldHighLightReport="true"
+          :shouldSetLgBreakPoint="true"
+          class="category__post"
+        />
+        <ClientOnly v-if="shouldMountSlugLatestInfinite">
+          <InfiniteLoading @infinite="loadMoreItems">
+            <div slot="spinner" />
+            <div slot="no-more" />
+            <div slot="no-results" />
+            <div slot="error" />
+          </InfiniteLoading>
+        </ClientOnly>
+      </template>
     </div>
   </div>
 </template>
@@ -98,21 +97,20 @@ export default {
         },
         isLoading: false,
       },
+      latestListByCategorySlug: {
+        items: [],
+        meta: {
+          count: 0,
+        },
+        isLoading: false,
+      },
       currentCategory: {
         name: this.$route.params?.name || '',
         slug: this.$route.params?.slug || 'all',
       },
+      slugPostsPage: 0,
       isSlugPostLoading: false,
-      // 避免取值時為 undefined
-      breakingnewsPosts: {},
-      politicsPosts: {},
-      notePosts: {},
-      environmentPosts: {},
-      humanrightsPosts: {},
-      dataPosts: {},
-      omtPosts: {},
-      culturePosts: {},
-      educationPosts: {},
+      isMounted: false,
     }
   },
 
@@ -134,6 +132,25 @@ export default {
         }
       },
     },
+    latestListByCategorySlug: {
+      query: latestListByCategorySlug,
+      variables() {
+        return {
+          first: PAGE_SIZE,
+          categorySlug: this.currentCategory.slug,
+          shouldQueryMeta: true,
+        }
+      },
+      update(result) {
+        const { items, meta } = result
+
+        return {
+          ...this.latestListByCategorySlug,
+          items: this.transformPosts(items),
+          meta,
+        }
+      },
+    },
   },
 
   computed: {
@@ -141,7 +158,7 @@ export default {
       categoryList: 'category/categoryList',
     }),
     shouldShowLatest() {
-      return this.currentCategory.slug === 'all'
+      return this.isMounted && this.currentCategory.slug === 'all'
     },
     categoryText() {
       return `所有${this.currentCategory.name}報導`
@@ -155,55 +172,25 @@ export default {
     totalLatestItems() {
       return this.latestList?.items.length
     },
+    shouldMountSlugLatestInfinite() {
+      return this.totalSlugLatestItems > 0
+    },
+    doesHaveAnySlugLatestItemsLeftToLoad() {
+      return (
+        this.totalSlugLatestItems < this.latestListByCategorySlug.meta.count
+      )
+    },
+    totalSlugLatestItems() {
+      console.log('mm', this.latestListByCategorySlug?.items.length)
+      return this.latestListByCategorySlug?.items.length
+    },
   },
 
   mounted() {
-    if (this.categoryList?.length) {
-      this.fetchPostsByCategory()
-    }
+    this.isMounted = true
   },
 
   methods: {
-    fetchPostsByCategory() {
-      this.categoryList?.forEach((item) => {
-        const slug = item.slug
-        this.$apollo.addSmartQuery(`${slug}Posts`, {
-          query: latestListByCategorySlug,
-          variables: () => ({
-            first: PAGE_SIZE,
-            categorySlug: slug,
-            shouldQueryMeta: true,
-          }),
-          update: (result) => {
-            const { items, meta } = result
-
-            const data = {
-              ...this[`${slug}Posts`],
-              items: this.transformPosts(items),
-              meta,
-              isLoading: false,
-              page: 0,
-            }
-            this[`${slug}Posts`] = data
-            return data
-          },
-        })
-      })
-    },
-    getPostsByCategory(slug) {
-      const data = this[`${slug}Posts`]
-      return {
-        items: data?.items ?? [],
-        meta: data?.meta ?? { count: 0 },
-        isLoading: data?.isLoading ?? false,
-        page: data?.page ?? 0,
-      }
-    },
-    shouldMountSlugInfinite(slug) {
-      const currentLength = this.getPostsByCategory(slug)?.items?.length
-      const total = this.getPostsByCategory(slug).meta?.count
-      return currentLength < total
-    },
     transformPosts(items = []) {
       return (
         items?.map((post) => {
@@ -269,35 +256,33 @@ export default {
       }
     },
     async loadMoreItems(state) {
-      const slug = this.currentCategory.slug
-      const { items: prevItems, meta } = this[`${slug}Posts`]
-
-      if (this[`${slug}Posts`].isLoading) {
+      console.log('momo')
+      if (this.latestListByCategorySlug.isLoading) {
         return
       }
-      this[`${slug}Posts`].isLoading = true
-      this[`${slug}Posts`].page += 1
+      this.latestListByCategorySlug.isLoading = true
+      this.slugPostsPage += 1
+
+      console.log('kk', this.totalSlugLatestItems)
 
       try {
-        await this.$apollo.queries?.[`${slug}Posts`]?.fetchMore({
+        await this.$apollo.queries.latestListByCategorySlug.fetchMore({
           variables: {
+            skip: this.slugPostsPage * PAGE_SIZE,
             first: PAGE_SIZE,
-            skip: this[`${slug}Posts`].page * PAGE_SIZE,
-            categorySlug: slug,
+            categorySlug: this.currentCategory.slug,
             shouldQueryMeta: false,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            const more = this.transformPosts(fetchMoreResult.items)
-            // We have some problems of previousResult not being updated with $set,
-            // so use the current data as prevItems for temporarily
-            this.$set(this[`${slug}Posts`], 'items', [...prevItems, ...more])
+            return {
+              ...this.latestListByCategorySlug,
+              items: [...previousResult?.items, ...fetchMoreResult?.items],
+              meta: this.latestListByCategorySlug.meta,
+            }
           },
         })
 
-        const doesHaveAnyItemsLeftToLoad =
-          this[`${slug}Posts`]?.items?.length < meta.count
-
-        if (doesHaveAnyItemsLeftToLoad) {
+        if (this.doesHaveAnySlugLatestItemsLeftToLoad) {
           state.loaded()
         } else {
           state.complete()
@@ -307,12 +292,20 @@ export default {
         console.error(err)
         state.error()
       } finally {
-        this[`${slug}Posts`].isLoading = false
+        this.latestListByCategorySlug.isLoading = false
       }
     },
     refetchList({ name, slug }) {
+      this.slugPostsPage = 0
+      // this.$apollo.queries.latestListByCategorySlug.refetch({
+      //   first: PAGE_SIZE,
+      //   categorySlug: slug,
+      //   shouldQueryMeta: true,
+      // })
       this.currentCategory.name = name && name !== '不分類' ? name : ''
       this.currentCategory.slug = slug ?? ''
+      console.log('yyy', this.latestListByCategorySlug?.items.length)
+      console.log('rrr', this.shouldMountSlugLatestInfinite)
     },
   },
 
