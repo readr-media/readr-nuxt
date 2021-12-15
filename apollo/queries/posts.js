@@ -67,7 +67,9 @@ const latestList = gql`
       readingTime
     }
 
-    meta: _allPostsMeta @include(if: $shouldQueryMeta) {
+    meta: _allPostsMeta(
+      where: { state: published, style_in: [news, report, embedded, project3] }
+    ) @include(if: $shouldQueryMeta) {
       count
     }
   }
@@ -104,7 +106,13 @@ const latestListByCategorySlug = gql`
       readingTime
     }
 
-    meta: _allPostsMeta @include(if: $shouldQueryMeta) {
+    meta: _allPostsMeta(
+      where: {
+        state: published
+        style_in: [news, report, embedded, project3]
+        categories_some: { slug: $categorySlug }
+      }
+    ) @include(if: $shouldQueryMeta) {
       count
     }
   }
