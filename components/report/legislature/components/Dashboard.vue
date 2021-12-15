@@ -19,12 +19,12 @@
           黨團協商次數：{{ tooltip['黨團協商次數'] }}
         </div>
         <div style="margin-top: 8px; margin-bottom: 8px;">提案人：🚧</div>
-        <div style="margin-top: 8px; margin-bottom: 8px;">每屆審議狀態：🚧</div>
+        <div style="margin-top: 8px; margin-bottom: 8px;">每屆審議狀態：</div>
         <ChartExaminationProgressBar
           :data="dataChartExaminationProgressBar"
-          :xTickValues="xTickValuesChartExaminationProgressBar"
+          :xTickValues="chartExaminationProgressBarXTickValues"
         />
-        <div style="margin-top: 16px; margin-bottom: 8px;">提案總次數：🚧</div>
+        <div style="margin-top: 46px; margin-bottom: 8px;">提案總次數：🚧</div>
         <div style="margin-top: 8px; margin-bottom: 8px;">排審總次數：🚧</div>
         ---------
         <div style="white-space: pre;">{{ formatJson(tooltip) }}</div>
@@ -66,6 +66,7 @@ export default {
     return {
       tooltip: {},
       isTooltipVisible: false,
+      chartExaminationProgressBarXTickValues,
       windowWidth: 0,
     }
   },
@@ -78,15 +79,6 @@ export default {
         : Math.ceil(data.length / 60)
       return chunk(this.$store.state.data.data, size)
     },
-    xTickValuesChartExaminationProgressBar() {
-      return chartExaminationProgressBarXTickValues.map(
-        function transformEveryXTickValuesColor(value) {
-          return value.map(function transformColor(value) {
-            return { ...value, color: 'brown' }
-          })
-        }
-      )
-    },
     dataChartExaminationProgressBar() {
       if (!Object.keys(this.tooltip).length) {
         return undefined
@@ -97,17 +89,17 @@ export default {
             ['07屆', '08屆', '09屆', '10屆'].includes(key) && value !== 'NA'
           )
         })
-        .map(function mapToChartDataFormat([key, value]) {
+        .map(function mapToChartDataFormat([key, value], index, array) {
           return {
             session: +key.replace('屆', ''),
             progressEnd: getBillProgressEndAtSession(value),
-            barColor: 'brown',
-            hasLeftArrowIcon: ['撤回', '退回程序'].includes(
+            barColor:
+              +index === array.length - 1 ? 'black' : 'rgba(1, 1, 1, 0.4)',
+            hasLeftArrowIcon: ['撤回', '退回程序', '不予審議'].includes(
               getBillProgressEndAtSessionLastRecord(value)
             ),
             hasRightGoalIcon: [
               '一讀(待審)',
-              '不予審議',
 
               '委員會',
               '委員會審議中',
@@ -133,6 +125,7 @@ export default {
           .split(';')
           .reverse()
           .find(function lastCharNotZero(value) {
+            // todo: use regexp
             return +value[value.length - 1] !== 0
           })
         if (!step) {
@@ -150,13 +143,13 @@ export default {
         switch (step) {
           case '一讀(待審)':
           case '不予審議': {
-            return '一讀'
+            return '◆一讀'
           }
 
           case '委員會':
           case '委員會審議中':
           case '委員會審竣': {
-            return '委員會'
+            return '◆委員會'
           }
 
           case '逕付二讀':
@@ -164,19 +157,19 @@ export default {
           case '二讀逐條討論':
           case '二讀(議決)':
           case '撤回': {
-            return '二讀'
+            return '◆二讀'
           }
 
           case '三讀':
           case '覆議':
           case '三讀後復議': {
-            return '三讀'
+            return '◆三讀'
           }
 
           case '提案':
           case '退回程序':
           default: {
-            return '提案'
+            return '◆提案'
           }
         }
       }

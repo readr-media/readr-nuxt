@@ -33,13 +33,25 @@
           :key="index"
           class="x-tick"
         >
+          <div class="x-tick__tick-value x-tick__tick-value--top tick-value">
+            <p
+              v-for="word of tickValue.top"
+              :key="word.text"
+              :style="{
+                color: word.color,
+                fontWeight: word.isBold ? '900' : '400',
+              }"
+            >
+              {{ word.text }}
+            </p>
+          </div>
           <div
             class="x-tick__tick-line tick-line"
             :style="{ width: `${xTickWidth}px`, height: `${height}px` }"
           />
-          <div class="x-tick__tick-value tick-value">
+          <div class="x-tick__tick-value x-tick__tick-value--bottom tick-value">
             <p
-              v-for="word of tickValue"
+              v-for="word of tickValue.bottom"
               :key="word.text"
               :style="{
                 color: word.color,
@@ -121,7 +133,7 @@ export default {
       const proportionEachProgress = 100 / (this.xTickValues.length - 1)
       const progressEndAt = this.xTickValues.findIndex(
         function findProgressEndMatchXTick(value) {
-          const text = value?.[0]?.text
+          const text = value.top?.[0]?.text ?? ''
           return text === data.progressEnd
         }
       )
@@ -134,7 +146,7 @@ export default {
 <style scoped>
 .chart {
   display: flex;
-  padding: 16px;
+  padding: 16px 24px;
 }
 .chart__main {
   margin: 0 0 0 2px;
@@ -171,12 +183,17 @@ export default {
 }
 .x-tick__tick-value {
   position: absolute;
-  top: calc(100% + 4px);
   width: max-content;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   height: 100%;
+}
+.x-tick__tick-value--top {
+  top: -30px;
+}
+.x-tick__tick-value--bottom {
+  top: calc(100% + 8px);
 }
 
 .tick-line {

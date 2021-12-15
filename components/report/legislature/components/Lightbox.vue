@@ -15,8 +15,8 @@
     <section
       style="
         position: relative;
-        width: 70%;
-        height: 70%;
+        width: 90%;
+        height: 90%;
         background-color: white;
         overflow-y: scroll;
       "
