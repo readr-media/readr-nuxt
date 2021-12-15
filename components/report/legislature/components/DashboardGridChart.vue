@@ -57,6 +57,7 @@ import chunk from 'lodash/chunk'
 import debounce from 'lodash/debounce'
 import billCategories from '../constants/billCategories.json'
 import chartExaminationProgressBarXTickValues from '../constants/chartExaminationProgressBarXTickValues.json'
+import partyColor from '../constants/partyColor.json'
 
 import Lightbox from './Lightbox.vue'
 import ChartExaminationProgressBar from './ChartExaminationProgressBar.vue'
@@ -203,7 +204,11 @@ export default {
 
       return proposals.map(function todo([key, value]) {
         return {
-          color: 'black',
+          color: (function getColor(key) {
+            const regexp = /(\D+)提案數$/
+            const party = key.match(regexp)[1]
+            return partyColor[party]
+          })(key),
           value: +value / proposalsTotalCount,
           tooltipText: `${key}:${value}次`,
         }
@@ -228,7 +233,11 @@ export default {
 
       return proposals.map(function todo([key, value]) {
         return {
-          color: 'black',
+          color: (function getColor(key) {
+            const regexp = /(\D+)排審數$/
+            const party = key.match(regexp)[1]
+            return partyColor[party]
+          })(key),
           value: +value / proposalsTotalCount,
           tooltipText: `${key}:${value}次`,
         }

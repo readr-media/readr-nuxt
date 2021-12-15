@@ -79,7 +79,6 @@ export default {
 
 .bar {
   height: 100%;
-  border: 1px solid white;
 }
 
 .tooltip {
