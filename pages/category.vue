@@ -23,10 +23,10 @@
           :shouldSetLgBreakPoint="true"
           class="category__post"
         />
-        <ClientOnly v-if="shouldMountLatestInfinite">
+        <ClientOnly v-if="shouldMountLatestPostsInfinite">
           <InfiniteLoading
             :identifier="postsInfiniteId"
-            @infinite="loadMoreLatest"
+            @infinite="loadMoreLatestPosts"
           >
             <div slot="spinner" />
             <div slot="no-more" />
@@ -36,7 +36,6 @@
         </ClientOnly>
       </template>
       <template v-else>
-        <p v-if="shouldMountSlugLatestInfinite">我是測試lalala</p>
         <RdArticleList
           :posts="latestListByCategorySlug.items"
           :isLoading="latestListByCategorySlug.isLoading"
@@ -46,10 +45,10 @@
           :shouldSetLgBreakPoint="true"
           class="category__post"
         />
-        <ClientOnly v-if="shouldMountSlugLatestInfinite">
+        <ClientOnly v-if="shouldMountSlugPostsInfinite">
           <InfiniteLoading
             :identifier="slugPostsInfiniteId"
-            @infinite="loadMoreItems"
+            @infinite="loadMoreSlugPosts"
           >
             <div slot="spinner" />
             <div slot="no-more" />
@@ -114,12 +113,10 @@ export default {
         name: this.$route.params?.name || '',
         slug: this.$route.params?.slug || 'all',
       },
-      slugPostsPage: 0,
-      isSlugPostLoading: false,
-      isMounted: false,
       // set identifier for both infinite-loading to avoid render problems
       postsInfiniteId: 111,
       slugPostsInfiniteId: 333,
+      isMounted: false,
     }
   },
 
@@ -172,7 +169,7 @@ export default {
     categoryText() {
       return `所有${this.currentCategory.name}報導`
     },
-    shouldMountLatestInfinite() {
+    shouldMountLatestPostsInfinite() {
       return this.totalLatestItems >= 12
     },
     doesHaveAnyLatestItemsLeftToLoad() {
@@ -181,15 +178,13 @@ export default {
     totalLatestItems() {
       return this.latestList?.items.length
     },
-    shouldMountSlugLatestInfinite() {
-      return this.totalSlugLatestItems >= 12
+    shouldMountSlugPostsInfinite() {
+      return this.totalSlugItems >= 12
     },
-    doesHaveAnySlugLatestItemsLeftToLoad() {
-      return (
-        this.totalSlugLatestItems < this.latestListByCategorySlug.meta.count
-      )
+    doesHaveAnySlugItemsLeftToLoad() {
+      return this.totalSlugItems < this.latestListByCategorySlug.meta.count
     },
-    totalSlugLatestItems() {
+    totalSlugItems() {
       return this.latestListByCategorySlug?.items.length
     },
   },
@@ -228,7 +223,7 @@ export default {
         }) ?? []
       )
     },
-    async loadMoreLatest(state) {
+    async loadMoreLatestPosts(state) {
       if (this.latestList.isLoading) {
         return
       }
@@ -263,7 +258,7 @@ export default {
         this.latestList.isLoading = false
       }
     },
-    async loadMoreItems(state) {
+    async loadMoreSlugPosts(state) {
       if (this.latestListByCategorySlug.isLoading) {
         return
       }
@@ -274,7 +269,7 @@ export default {
         await this.$apollo.queries.latestListByCategorySlug.fetchMore({
           variables: {
             first: PAGE_SIZE,
-            skip: this.totalSlugLatestItems,
+            skip: this.totalSlugItems,
             categorySlug: this.currentCategory.slug,
             shouldQueryMeta: false,
           },
@@ -287,7 +282,7 @@ export default {
           },
         })
 
-        if (this.doesHaveAnySlugLatestItemsLeftToLoad) {
+        if (this.doesHaveAnySlugItemsLeftToLoad) {
           state.loaded()
         } else {
           state.complete()
