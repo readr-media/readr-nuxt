@@ -13,7 +13,7 @@
         class="category__category-nav"
         @item-clicked="refetchList"
       />
-      <template v-if="shouldShowLatest">
+      <template v-if="shouldShowLatestPosts">
         <RdArticleList
           :posts="latestList.items"
           :isLoading="latestList.isLoading"
@@ -24,7 +24,10 @@
           class="category__post"
         />
         <ClientOnly v-if="shouldMountLatestInfinite">
-          <InfiniteLoading @infinite="loadMoreLatest">
+          <InfiniteLoading
+            :identifier="postsInfiniteId"
+            @infinite="loadMoreLatest"
+          >
             <div slot="spinner" />
             <div slot="no-more" />
             <div slot="no-results" />
@@ -44,7 +47,10 @@
           class="category__post"
         />
         <ClientOnly v-if="shouldMountSlugLatestInfinite">
-          <InfiniteLoading @infinite="loadMoreItems">
+          <InfiniteLoading
+            :identifier="slugPostsInfiniteId"
+            @infinite="loadMoreItems"
+          >
             <div slot="spinner" />
             <div slot="no-more" />
             <div slot="no-results" />
@@ -111,6 +117,9 @@ export default {
       slugPostsPage: 0,
       isSlugPostLoading: false,
       isMounted: false,
+      // set identifier for both infinite-loading to avoid render problems
+      postsInfiniteId: 111,
+      slugPostsInfiniteId: 333,
     }
   },
 
@@ -157,14 +166,14 @@ export default {
     ...mapGetters({
       categoryList: 'category/categoryList',
     }),
-    shouldShowLatest() {
+    shouldShowLatestPosts() {
       return this.isMounted && this.currentCategory.slug === 'all'
     },
     categoryText() {
       return `所有${this.currentCategory.name}報導`
     },
     shouldMountLatestInfinite() {
-      return this.totalLatestItems > 0
+      return this.totalLatestItems >= 12
     },
     doesHaveAnyLatestItemsLeftToLoad() {
       return this.totalLatestItems < this.latestList.meta.count
@@ -173,7 +182,7 @@ export default {
       return this.latestList?.items.length
     },
     shouldMountSlugLatestInfinite() {
-      return this.totalSlugLatestItems > 0
+      return this.totalSlugLatestItems >= 12
     },
     doesHaveAnySlugLatestItemsLeftToLoad() {
       return (
@@ -181,7 +190,6 @@ export default {
       )
     },
     totalSlugLatestItems() {
-      console.log('mm', this.latestListByCategorySlug?.items.length)
       return this.latestListByCategorySlug?.items.length
     },
   },
@@ -229,8 +237,8 @@ export default {
       try {
         await this.$apollo.queries.latestList.fetchMore({
           variables: {
-            skip: this.totalLatestItems,
             first: PAGE_SIZE,
+            skip: this.totalLatestItems,
             shouldQueryMeta: false,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -256,20 +264,17 @@ export default {
       }
     },
     async loadMoreItems(state) {
-      console.log('momo')
       if (this.latestListByCategorySlug.isLoading) {
         return
       }
       this.latestListByCategorySlug.isLoading = true
       this.slugPostsPage += 1
 
-      console.log('kk', this.totalSlugLatestItems)
-
       try {
         await this.$apollo.queries.latestListByCategorySlug.fetchMore({
           variables: {
-            skip: this.slugPostsPage * PAGE_SIZE,
             first: PAGE_SIZE,
+            skip: this.totalSlugLatestItems,
             categorySlug: this.currentCategory.slug,
             shouldQueryMeta: false,
           },
@@ -296,16 +301,12 @@ export default {
       }
     },
     refetchList({ name, slug }) {
-      this.slugPostsPage = 0
-      // this.$apollo.queries.latestListByCategorySlug.refetch({
-      //   first: PAGE_SIZE,
-      //   categorySlug: slug,
-      //   shouldQueryMeta: true,
-      // })
       this.currentCategory.name = name && name !== '不分類' ? name : ''
       this.currentCategory.slug = slug ?? ''
-      console.log('yyy', this.latestListByCategorySlug?.items.length)
-      console.log('rrr', this.shouldMountSlugLatestInfinite)
+      // update identifer for render concern
+      // see doc: https://peachscript.github.io/vue-infinite-loading/zh/guide/use-with-filter-or-tabs.html
+      this.postsInfiniteId += 1
+      this.slugPostsInfiniteId += 1
     },
   },
 
