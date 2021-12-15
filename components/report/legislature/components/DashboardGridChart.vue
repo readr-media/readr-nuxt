@@ -24,8 +24,14 @@
           :data="dataChartExaminationProgressBar"
           :xTickValues="chartExaminationProgressBarXTickValues"
         />
-        <div style="margin-top: 46px; margin-bottom: 8px;">提案總次數：🚧</div>
-        <div style="margin-top: 8px; margin-bottom: 8px;">排審總次數：🚧</div>
+        <div style="margin-top: 46px; margin-bottom: 8px;">
+          提案總次數（手機才會顯示：長按色塊，顯示各黨團提案次數）：🚧
+          <ChartStackBar :data="dataChartStackBarProposal" />
+        </div>
+        <div style="margin-top: 8px; margin-bottom: 8px;">
+          排審總次數（手機才會顯示：長按色塊，顯示各黨團提案次數）：🚧
+          <ChartStackBar :data="dataChartStackBarExamination" />
+        </div>
         ---------
         <div style="white-space: pre;">{{ formatJson(tooltip) }}</div>
       </section>
@@ -49,15 +55,17 @@
 <script>
 import chunk from 'lodash/chunk'
 import debounce from 'lodash/debounce'
-import Lightbox from '../components/Lightbox.vue'
-import ChartExaminationProgressBar from '../components/ChartExaminationProgressBar.vue'
-import GridItem from '../components/GridItem.vue'
-
 import billCategories from '../constants/billCategories.json'
 import chartExaminationProgressBarXTickValues from '../constants/chartExaminationProgressBarXTickValues.json'
 
+import Lightbox from './Lightbox.vue'
+import ChartExaminationProgressBar from './ChartExaminationProgressBar.vue'
+import GridItem from './GridItem.vue'
+import ChartStackBar from './ChartStackBar.vue'
+
 export default {
   components: {
+    ChartStackBar,
     Lightbox,
     ChartExaminationProgressBar,
     GridItem,
@@ -173,6 +181,56 @@ export default {
           }
         }
       }
+    },
+    dataChartStackBarProposal() {
+      if (!Object.keys(this.tooltip).length) {
+        return undefined
+      }
+
+      const proposals = Object.entries(this.tooltip)
+        .filter(function filterProposalProperties([key, value]) {
+          return key.endsWith('提案數')
+        })
+        .filter(function todo([key, value]) {
+          return +value > 0
+        })
+
+      const proposalsTotalCount = proposals.reduce(function todo(acc, curr) {
+        return acc + +curr[1]
+      }, 0)
+
+      return proposals.map(function todo([key, value]) {
+        return {
+          color: 'black',
+          value: +value / proposalsTotalCount,
+          tooltipText: `${key}:${value}次`,
+        }
+      })
+    },
+    dataChartStackBarExamination() {
+      if (!Object.keys(this.tooltip).length) {
+        return undefined
+      }
+
+      const proposals = Object.entries(this.tooltip)
+        .filter(function filterProposalProperties([key, value]) {
+          return key.endsWith('排審數')
+        })
+        .filter(function todo([key, value]) {
+          return +value > 0
+        })
+
+      const proposalsTotalCount = proposals.reduce(function todo(acc, curr) {
+        return acc + +curr[1]
+      }, 0)
+
+      return proposals.map(function todo([key, value]) {
+        return {
+          color: 'black',
+          value: +value / proposalsTotalCount,
+          tooltipText: `${key}:${value}次`,
+        }
+      })
     },
   },
   async beforeMount() {
