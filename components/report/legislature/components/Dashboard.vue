@@ -24,6 +24,7 @@
         <Filters />
       </aside>
       <main>
+        <Search />
         <nav>
           <Button
             @click.native="$store.commit('data/SET_PRESET_FILTER', 'mine')"
@@ -98,6 +99,7 @@
 </template>
 
 <script>
+import Search from './Search.vue'
 import Colors from './Colors.vue'
 import Sorts from './Sorts.vue'
 import Filters from './Filters.vue'
@@ -107,6 +109,7 @@ import DashboardGridChart from './DashboardGridChart.vue'
 
 export default {
   components: {
+    Search,
     Colors,
     Sorts,
     Filters,

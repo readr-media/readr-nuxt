@@ -33,6 +33,9 @@ export default {
         {
           src: 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js',
         },
+        {
+          src: 'https://cdn.jsdelivr.net/npm/fuse.js@6.4.6',
+        },
       ],
     }
   },
