@@ -133,16 +133,18 @@ export default {
           .split(';')
           .reverse()
           .find(function lastCharNotZero(value) {
-            // todo: use regexp
-            return +value[value.length - 1] !== 0
+            const endsWithIntegerButNotZero = /[1-9]\d*$/
+            return endsWithIntegerButNotZero.test(value)
           })
+
         if (!step) {
           return '提案'
         }
-        step = step.substring(0, step.length - 1)
-
+        const stepRegexp = /(\D+)[1-9]\d*$/
+        step = step.match(stepRegexp)[1]
         return step
       }
+
       function getBillProgressEndAtSession(billProgressAtSession) {
         const step = getBillProgressEndAtSessionLastRecord(
           billProgressAtSession
