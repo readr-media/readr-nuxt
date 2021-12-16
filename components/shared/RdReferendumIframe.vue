@@ -1,6 +1,8 @@
 <template>
-  <div v-if="isDev" class="referendum-wrapper">
-    <iframe src="https://dev.readr.tw/referendum" />
+  <div v-if="isDev" class="referendum">
+    <div class="referendum__wrapper">
+      <iframe src="/referendum" />
+    </div>
   </div>
 </template>
 
@@ -16,14 +18,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.referendum-wrapper {
+.referendum {
+  height: 544px;
   width: 100%;
-  padding: 10px;
-  iframe {
-    height: 504px;
-    width: 100%;
+  @include media-breakpoint-up(md) {
+    height: 305px;
+  }
+  &__wrapper {
+    position: absolute;
+    left: 0;
+    width: 100vw;
+    padding: 0 10px;
+    transform: translate(0, 10px);
     @include media-breakpoint-up(md) {
-      height: 265px;
+      padding: 0;
+    }
+    iframe {
+      height: 524px;
+      width: 100%;
+      @include media-breakpoint-up(md) {
+        height: 285px;
+      }
     }
   }
 }

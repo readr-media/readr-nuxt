@@ -1,0 +1,79 @@
+[
+  {
+    "top": null,
+    "bottom": null
+  },
+  {
+    "top": [
+      {
+        "text": "◆提案",
+        "color": "rgba(1, 1, 1, 0.5)",
+        "isBold": false
+      }
+    ],
+    "bottom": [
+      {
+        "text": "← 退回",
+        "color": "rgba(1, 1, 1, 0.5)",
+        "isBold": false
+      }
+    ]
+  },
+  {
+    "top": [
+      {
+        "text": "◆一讀",
+        "color": "black",
+        "isBold": true
+      }
+    ],
+    "bottom": [
+      {
+        "text":"← 不予",
+        "color":"rgba(1, 1, 1, 0.5)",
+        "isBold": false
+      },
+      {
+        "text":"審議",
+        "color":"rgba(1, 1, 1, 0.5)",
+        "isBold": false
+      }
+    ]
+  },
+  {
+    "top": [
+      {
+        "text": "◆委員會",
+        "color": "black",
+        "isBold": false
+      }
+    ],
+    "bottom": null
+  },
+  {
+    "top": [
+      {
+        "text": "◆二讀",
+        "color": "black",
+        "isBold": true
+      }
+    ],
+    "bottom": [
+      {
+        "text":"← 撤回",
+        "color":"rgba(1, 1, 1, 0.5)",
+        "isBold": false
+      }
+    ]
+  },
+  {
+    "top": [
+      {
+      "text": "◆三讀",
+      "color": "black",
+      "isBold": true
+      }
+    ],
+    "bottom": null
+  }
+]
