@@ -4,17 +4,17 @@
       <img v-lazy="img" :src="'/post.svg'" :alt="title" />
     </picture>
     <div v-if="title" class="text">
-      <label v-if="description" class="label-intext">
+      <label v-show="description" class="label-intext">
         {{ description }}
       </label>
       <h4>
         <span>{{ title }}</span>
       </h4>
-      <span v-if="subtitle && isFirst" class="subtitle">
+      <span v-show="subtitle && isFirst" class="subtitle">
         {{ subtitle }}
       </span>
     </div>
-    <label v-if="description" class="label-upper">
+    <label v-show="description" class="label-upper">
       {{ description }}
     </label>
   </a>

@@ -72,17 +72,26 @@ export default {
         '/' +
         time.getDate() +
         ' ' +
-        time.getHours() +
+        this.formateDigits(time.getHours()) +
         ':' +
-        time.getMinutes()
+        this.formateDigits(time.getMinutes())
       return formattedDate
     },
+    formateDigits(input) {
+      const string = input + ''
+      if (string.length === 2) return string
+      return '0' + string
+    },
     async updateJson() {
-      const { data = [] } = await axios.get(
-        'https://storage.googleapis.com/statics.mirrormedia.mg/elections/2021referendum/result.json'
-      )
-      this.data = data
-      this.updateTime = new Date()
+      try {
+        const { data = [] } = await axios.get(
+          'https://storage.googleapis.com/statics.mirrormedia.mg/elections/2021referendum/result.json'
+        )
+        this.data = data
+        this.updateTime = new Date()
+      } catch (e) {
+        console.error(e)
+      }
     },
   },
 }

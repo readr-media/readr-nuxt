@@ -13,23 +13,50 @@
         class="category__category-nav"
         @item-clicked="refetchList"
       />
-      <RdArticleList
-        :posts="latestList.items"
-        :isLoading="latestList.isLoading"
-        :shouldReverseInMobile="true"
-        :shouldShowSkeleton="true"
-        :shouldHighLightReport="true"
-        :shouldSetLgBreakPoint="true"
-        class="category__post"
-      />
-      <ClientOnly v-if="moreResultNum">
-        <InfiniteLoading @infinite="loadMoreLatestItems">
-          <div slot="spinner" />
-          <div slot="no-more" />
-          <div slot="no-results" />
-          <div slot="error" />
-        </InfiniteLoading>
-      </ClientOnly>
+      <template v-if="shouldShowLatestPosts">
+        <RdArticleList
+          :posts="latestList.items"
+          :isLoading="latestList.isLoading"
+          :shouldReverseInMobile="true"
+          :shouldShowSkeleton="true"
+          :shouldHighLightReport="true"
+          :shouldSetLgBreakPoint="true"
+          class="category__post"
+        />
+        <ClientOnly v-if="shouldMountLatestPostsInfinite">
+          <InfiniteLoading
+            :identifier="postsInfiniteId"
+            @infinite="loadMoreLatestPosts"
+          >
+            <div slot="spinner" />
+            <div slot="no-more" />
+            <div slot="no-results" />
+            <div slot="error" />
+          </InfiniteLoading>
+        </ClientOnly>
+      </template>
+      <template v-else>
+        <RdArticleList
+          :posts="latestListByCategorySlug.items"
+          :isLoading="latestListByCategorySlug.isLoading"
+          :shouldReverseInMobile="true"
+          :shouldShowSkeleton="true"
+          :shouldHighLightReport="true"
+          :shouldSetLgBreakPoint="true"
+          class="category__post"
+        />
+        <ClientOnly v-if="shouldMountSlugPostsInfinite">
+          <InfiniteLoading
+            :identifier="slugPostsInfiniteId"
+            @infinite="loadMoreSlugPosts"
+          >
+            <div slot="spinner" />
+            <div slot="no-more" />
+            <div slot="no-results" />
+            <div slot="error" />
+          </InfiniteLoading>
+        </ClientOnly>
+      </template>
     </div>
   </div>
 </template>
@@ -53,6 +80,8 @@ import {
   SITE_URL,
 } from '~/helpers/index.js'
 
+const PAGE_SIZE = 12
+
 export default {
   name: 'Category',
 
@@ -73,60 +102,57 @@ export default {
         },
         isLoading: false,
       },
+      latestListByCategorySlug: {
+        items: [],
+        meta: {
+          count: 0,
+        },
+        isLoading: false,
+      },
       currentCategory: {
         name: this.$route.params?.name || '',
         slug: this.$route.params?.slug || 'all',
       },
-      pageNum: 16,
-      moreResultNum: 1,
+      // set identifier for both infinite-loading to avoid render problems
+      postsInfiniteId: 111,
+      slugPostsInfiniteId: 333,
+      isMounted: false,
     }
   },
 
   apollo: {
     latestList: {
-      query() {
-        return this.currentCategory.slug === 'all'
-          ? latestList
-          : latestListByCategorySlug
-      },
+      query: latestList,
       variables() {
         return {
-          first: this.pageNum,
-          categorySlug: this.currentCategory.slug,
+          first: PAGE_SIZE,
         }
       },
       update(result) {
         const { items, meta } = result
-        this.moreResultNum = items.length < this.pageNum ? 0 : 1
 
         return {
           ...this.latestList,
-          items: items.map((post) => {
-            const {
-              id = '',
-              title = '',
-              heroImage = {},
-              ogImage = {},
-              publishTime = '',
-              readingTime = 0,
-              style = '',
-            } = post || {}
+          items: this.transformPosts(items),
+          meta,
+        }
+      },
+    },
+    latestListByCategorySlug: {
+      query: latestListByCategorySlug,
+      variables() {
+        return {
+          first: PAGE_SIZE,
+          categorySlug: this.currentCategory.slug,
+          shouldQueryMeta: true,
+        }
+      },
+      update(result) {
+        const { items, meta } = result
 
-            return {
-              id,
-              title,
-              href: getHref(post),
-              img: {
-                src:
-                  heroImage?.urlTabletSized ||
-                  ogImage?.urlTabletSized ||
-                  require('~/assets/imgs/default/post.svg'),
-              },
-              readTime: formatReadTime(readingTime),
-              date: formatPostDate(publishTime),
-              isReport: isReport(style),
-            }
-          }),
+        return {
+          ...this.latestListByCategorySlug,
+          items: this.transformPosts(items),
           meta,
         }
       },
@@ -137,16 +163,67 @@ export default {
     ...mapGetters({
       categoryList: 'category/categoryList',
     }),
+    shouldShowLatestPosts() {
+      return this.isMounted && this.currentCategory.slug === 'all'
+    },
     categoryText() {
       return `所有${this.currentCategory.name}報導`
     },
+    shouldMountLatestPostsInfinite() {
+      return this.totalLatestItems >= 12
+    },
+    doesHaveAnyLatestItemsLeftToLoad() {
+      return this.totalLatestItems < this.latestList.meta.count
+    },
     totalLatestItems() {
-      return this.latestList.items.length
+      return this.latestList?.items.length
+    },
+    shouldMountSlugPostsInfinite() {
+      return this.totalSlugItems >= 12
+    },
+    doesHaveAnySlugItemsLeftToLoad() {
+      return this.totalSlugItems < this.latestListByCategorySlug.meta.count
+    },
+    totalSlugItems() {
+      return this.latestListByCategorySlug?.items.length
     },
   },
 
+  mounted() {
+    this.isMounted = true
+  },
+
   methods: {
-    async loadMoreLatestItems(state) {
+    transformPosts(items = []) {
+      return (
+        items?.map((post) => {
+          const {
+            id = '',
+            title = '',
+            heroImage = {},
+            ogImage = {},
+            publishTime = '',
+            readingTime = 0,
+            style = '',
+          } = post || {}
+          return {
+            id,
+            title,
+            href: getHref(post),
+            img: {
+              src:
+                heroImage?.urlTabletSized ||
+                ogImage?.urlTabletSized ||
+                require('~/assets/imgs/default/post.svg'),
+            },
+            readTime: formatReadTime(readingTime),
+            date: formatPostDate(publishTime),
+            isReport: isReport(style),
+          }
+        }) ?? []
+      )
+    },
+    async loadMoreLatestPosts(state) {
       if (this.latestList.isLoading) {
         return
       }
@@ -155,22 +232,20 @@ export default {
       try {
         await this.$apollo.queries.latestList.fetchMore({
           variables: {
+            first: PAGE_SIZE,
             skip: this.totalLatestItems,
-            first: this.pageNum,
-            categorySlug: this.currentCategory.slug,
-            shouldQueryMeta: true,
+            shouldQueryMeta: false,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            this.moreResultNum = fetchMoreResult.items.length
             return {
               ...this.latestList,
-              items: [...previousResult.items, ...fetchMoreResult.items],
+              items: [...previousResult?.items, ...fetchMoreResult?.items],
               meta: this.latestList.meta,
             }
           },
         })
 
-        if (this.moreResultNum) {
+        if (this.doesHaveAnyLatestItemsLeftToLoad) {
           state.loaded()
         } else {
           state.complete()
@@ -183,9 +258,50 @@ export default {
         this.latestList.isLoading = false
       }
     },
+    async loadMoreSlugPosts(state) {
+      if (this.latestListByCategorySlug.isLoading) {
+        return
+      }
+      this.latestListByCategorySlug.isLoading = true
+      this.slugPostsPage += 1
+
+      try {
+        await this.$apollo.queries.latestListByCategorySlug.fetchMore({
+          variables: {
+            first: PAGE_SIZE,
+            skip: this.totalSlugItems,
+            categorySlug: this.currentCategory.slug,
+            shouldQueryMeta: false,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            return {
+              ...this.latestListByCategorySlug,
+              items: [...previousResult?.items, ...fetchMoreResult?.items],
+              meta: this.latestListByCategorySlug.meta,
+            }
+          },
+        })
+
+        if (this.doesHaveAnySlugItemsLeftToLoad) {
+          state.loaded()
+        } else {
+          state.complete()
+        }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
+        state.error()
+      } finally {
+        this.latestListByCategorySlug.isLoading = false
+      }
+    },
     refetchList({ name, slug }) {
       this.currentCategory.name = name && name !== '不分類' ? name : ''
       this.currentCategory.slug = slug ?? ''
+      // update identifer for render concern
+      // see doc: https://peachscript.github.io/vue-infinite-loading/zh/guide/use-with-filter-or-tabs.html
+      this.postsInfiniteId += 1
+      this.slugPostsInfiniteId += 1
     },
   },
 
