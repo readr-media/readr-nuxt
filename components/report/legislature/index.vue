@@ -1,16 +1,28 @@
 <template>
   <section>
+    <Intro />
+    <DashboardStory />
+    <Article />
     <Dashboard />
+    <OtherInfo />
   </section>
 </template>
 
 <script>
 import * as storeData from './store/data'
+import Intro from './components/Intro.vue'
+import DashboardStory from './components/DashboardStory.vue'
 import Dashboard from './components/Dashboard.vue'
+import Article from './components/Article.vue'
+import OtherInfo from './components/OtherInfo.vue'
 
 export default {
   components: {
+    Intro,
+    DashboardStory,
+    Article,
     Dashboard,
+    OtherInfo,
   },
   created() {
     this.$store.registerModule('data', {
