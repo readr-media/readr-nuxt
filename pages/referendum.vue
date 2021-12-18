@@ -44,6 +44,7 @@
       />
     </div>
     <div class="referendum__title_info rwd">
+      <div v-show="shouldShow">最後更新時間：{{ formateDate(updateTime) }}</div>
       <div>最後更新時間： 2021/12/18 20:55</div>
     </div>
   </div>
@@ -64,6 +65,7 @@ export default {
       updateTime: new Date(),
       threhold: 4956367,
       data: {},
+      shouldShow: false,
     }
   },
   mounted() {
