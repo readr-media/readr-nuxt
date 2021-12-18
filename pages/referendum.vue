@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="referendum__title_info">
-        <div>最後更新時間：{{ formateDate(updateTime) }}</div>
+        <div>最後更新時間： 2021/12/18 20:55</div>
       </div>
     </div>
     <div v-if="!data.F1 && !data.F2 && !data.F3 && !data.F4" class="loading">
@@ -44,7 +44,7 @@
       />
     </div>
     <div class="referendum__title_info rwd">
-      <div>最後更新時間：{{ formateDate(updateTime) }}</div>
+      <div>最後更新時間： 2021/12/18 20:55</div>
     </div>
   </div>
 </template>
