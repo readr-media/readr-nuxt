@@ -7,7 +7,7 @@ const Koa = require('koa')
 const Router = require('koa-router')
 const { create: axiosCreate } = require('axios')
 
-const { CMS_ENDPOINT_DEPRECATED } = require('../../configs/config.js')
+const { KEYSTONE_DEV_ENDPOINT } = require('../../configs/config.js')
 const { getErrorName } = require('../../helpers/index.js')
 const { handleKoaCors: handleCors } = require('./helpers/cors.js')
 
@@ -17,8 +17,8 @@ const router = new Router()
 app.use(handleCors)
 app.use(router.routes())
 
-const cmsDeprecatedAxios = axiosCreate({
-  baseURL: CMS_ENDPOINT_DEPRECATED,
+const cmsAxios = axiosCreate({
+  baseURL: KEYSTONE_DEV_ENDPOINT,
 })
 
 const PUBLISH_STATUS_POST = {
@@ -32,7 +32,7 @@ router.get('/posts', checkPostsQueryFields, async function getPosts(ctx) {
   }
 
   try {
-    const { data, status = 200 } = await cmsDeprecatedAxios.get(ctx.url)
+    const { data, status = 200 } = await cmsAxios.get(ctx.url)
 
     ctx.status = status
     ctx.body = data
