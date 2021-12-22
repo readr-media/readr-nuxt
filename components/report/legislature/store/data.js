@@ -315,9 +315,10 @@ export const getters = {
 
 export const mutations = {
   SET_DATA(state, data) {
-    state.data = data
-    state.dataOriginal = data
-    createExtentsOfData(state.extents, data)
+    const _data = data.sort(sortComparators['屆期'].ascending)
+    state.data = _data
+    state.dataOriginal = _data
+    createExtentsOfData(state.extents, _data)
   },
   SORT_DATA(state, { sortBy = '屆期', orderBy = 'ascending' } = {}) {
     state.data = state.data.sort(sortComparators[sortBy][orderBy])
