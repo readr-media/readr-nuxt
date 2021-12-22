@@ -47,8 +47,21 @@
         :backgroundImage="getBillBackgroundImage(bill)"
         :verticalLength="Number(bill['停留屆期'])"
         @click.native="handleMouseClick(bill)"
+        @mouseover.native="handleMouseoverGridItem($event, bill)"
+        @mousemove.native="handleMousemoveGridItem"
+        @mouseout.native="handleMouseoutGridItem"
       />
     </ol>
+    <div
+      v-show="isGridItemTooltipShow"
+      class="tooltip"
+      :style="{
+        left: `${gridItemTooltipX + 10}px`,
+        top: `${gridItemTooltipY - 10}px`,
+      }"
+    >
+      {{ gridItemTooltipText }}
+    </div>
   </section>
 </template>
 
@@ -77,6 +90,11 @@ export default {
       isTooltipVisible: false,
       chartExaminationProgressBarXTickValues,
       windowWidth: 0,
+
+      isGridItemTooltipShow: false,
+      gridItemTooltipX: 0,
+      gridItemTooltipY: 0,
+      gridItemTooltipText: '',
     }
   },
   computed: {
@@ -308,6 +326,20 @@ export default {
         }
       }
     },
+
+    handleMouseoverGridItem(e, bill) {
+      this.isGridItemTooltipShow = true
+      this.gridItemTooltipX = e.clientX
+      this.gridItemTooltipY = e.clientY
+      this.gridItemTooltipText = bill['名稱']
+    },
+    handleMousemoveGridItem(e) {
+      this.gridItemTooltipX = e.clientX
+      this.gridItemTooltipY = e.clientY
+    },
+    handleMouseoutGridItem() {
+      this.isGridItemTooltipShow = false
+    },
   },
 }
 </script>
@@ -316,6 +348,11 @@ export default {
 .dashboard-wrapper {
   display: grid;
   grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.tooltip {
+  position: fixed;
+  background-color: white;
 }
 @media (min-width: 1024px) {
   .dashboard-wrapper {
