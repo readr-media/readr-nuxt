@@ -4,7 +4,12 @@
     <div
       style="max-height: 300px; overflow-y: scroll; background-color: white;"
     >
-      <div v-for="result in results" :key="result.refIndex">
+      <div
+        v-for="result in results"
+        :key="result.refIndex"
+        style="cursor: pointer;"
+        @click="handleSuggestionClick(result)"
+      >
         {{ result.item['名稱'] }}
         <br />
         ------
@@ -46,6 +51,12 @@ export default {
       const pattern = this.input
 
       return fuse.search(pattern, { limit: 10 })
+    },
+  },
+  methods: {
+    handleSuggestionClick(suggestion) {
+      this.$emit('clickBill', suggestion.item)
+      this.input = ''
     },
   },
 }

@@ -96,10 +96,20 @@ export default {
     ChartExaminationProgressBar,
     GridItem,
   },
+  props: {
+    tooltip: {
+      type: Object,
+      default: () => {},
+    },
+    isTooltipVisible: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
-      tooltip: {},
-      isTooltipVisible: false,
+      // tooltip: {},
+      // isTooltipVisible: false,
       chartExaminationProgressBarXTickValues,
       windowWidth: 0,
 
@@ -298,8 +308,7 @@ export default {
       return bill['類別'].split('、')[0]
     },
     handleMouseClick(bill) {
-      this.tooltip = bill
-      this.isTooltipVisible = true
+      this.$emit('clickGridItem', bill)
     },
     formatJson(json) {
       if (!json) {

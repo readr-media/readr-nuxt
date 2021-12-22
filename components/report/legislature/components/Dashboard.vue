@@ -24,7 +24,7 @@
         <Filters />
       </aside>
       <main>
-        <Search />
+        <Search @clickBill="handleLightBoxShow" />
         <nav>
           <Button
             @click.native="$store.commit('data/SET_PRESET_FILTER', 'mine')"
@@ -92,6 +92,9 @@
           v-for="index in 1"
           :key="index"
           style="margin-top: 10px;"
+          :tooltip="lightBoxData"
+          :isTooltipVisible="isLightBoxVisible"
+          @clickGridItem="handleLightBoxShow"
         />
       </main>
     </ClientOnly>
@@ -120,11 +123,17 @@ export default {
   data() {
     return {
       isAsideToggled: false,
+      lightBoxData: {},
+      isLightBoxVisible: false,
     }
   },
   methods: {
     handleAsideToggle() {
       this.isAsideToggled = !this.isAsideToggled
+    },
+    handleLightBoxShow(bill) {
+      this.lightBoxData = bill
+      this.isLightBoxVisible = true
     },
   },
 }
