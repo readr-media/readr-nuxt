@@ -1,6 +1,6 @@
 <template>
   <section class="dashboard-wrapper">
-    <Lightbox v-show="isTooltipVisible" @close="isTooltipVisible = false">
+    <Lightbox v-show="isTooltipVisible" @close="$emit('closeLightbox')">
       <section>
         <p style="margin-top: 16px; margin-bottom: 8px;">
           類別：{{ tooltip['類別'] }}

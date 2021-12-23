@@ -95,6 +95,7 @@
           :tooltip="lightBoxData"
           :isTooltipVisible="isLightBoxVisible"
           @clickGridItem="handleLightBoxShow"
+          @closeLightbox="isLightBoxVisible = false"
         />
       </main>
     </ClientOnly>
