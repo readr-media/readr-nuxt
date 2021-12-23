@@ -67,10 +67,7 @@
     <div
       v-show="isGridItemTooltipShow"
       class="tooltip"
-      :style="{
-        left: `${gridItemTooltipX + 10}px`,
-        top: `${gridItemTooltipY - 10}px`,
-      }"
+      :style="gridItemTooltipPosition"
     >
       {{ gridItemTooltipText }}
     </div>
@@ -114,8 +111,12 @@ export default {
       windowWidth: 0,
 
       isGridItemTooltipShow: false,
-      gridItemTooltipX: 0,
-      gridItemTooltipY: 0,
+      gridItemTooltipPosition: {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      },
       gridItemTooltipText: '',
     }
   },
@@ -357,13 +358,29 @@ export default {
 
     handleMouseoverGridItem(e, bill) {
       this.isGridItemTooltipShow = true
-      this.gridItemTooltipX = e.clientX
-      this.gridItemTooltipY = e.clientY
+      const shouldFlipTooltip = e.clientX > window.innerWidth / 2
+      this.gridItemTooltipPosition = shouldFlipTooltip
+        ? {
+            top: `${e.clientY + 10}px`,
+            right: `${window.innerWidth - e.clientX - 10}px`,
+          }
+        : {
+            top: `${e.clientY + 10}px`,
+            left: `${e.clientX + 10}px`,
+          }
       this.gridItemTooltipText = bill['名稱']
     },
     handleMousemoveGridItem(e) {
-      this.gridItemTooltipX = e.clientX
-      this.gridItemTooltipY = e.clientY
+      const shouldFlipTooltip = e.clientX > window.innerWidth / 2
+      this.gridItemTooltipPosition = shouldFlipTooltip
+        ? {
+            top: `${e.clientY + 10}px`,
+            right: `${window.innerWidth - e.clientX - 10}px`,
+          }
+        : {
+            top: `${e.clientY + 10}px`,
+            left: `${e.clientX + 10}px`,
+          }
     },
     handleMouseoutGridItem() {
       this.isGridItemTooltipShow = false
@@ -381,6 +398,10 @@ export default {
 .tooltip {
   position: fixed;
   background-color: white;
+  padding: 3px 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #985f0b;
 }
 @media (min-width: 1024px) {
   .dashboard-wrapper {
