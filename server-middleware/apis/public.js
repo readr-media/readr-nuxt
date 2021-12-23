@@ -7,18 +7,68 @@ const Koa = require('koa')
 const Router = require('koa-router')
 const { create: axiosCreate } = require('axios')
 
-const { KEYSTONE_DEV_ENDPOINT } = require('../../configs/config.js')
+const bodyParser = require('koa-bodyparser')
+const { post: axiosPost } = require('axios')
+const { reportApiErrorFromKoa } = require('../../helpers/index.js')
+const {
+  CMS_ENDPOINT,
+  CMS_ENDPOINT_DEPRECATED,
+} = require('../../configs/config.js')
 const { getErrorName } = require('../../helpers/index.js')
 const { handleKoaCors: handleCors } = require('./helpers/cors.js')
 
 const app = new Koa()
 const router = new Router()
 
-app.use(handleCors)
-app.use(router.routes())
+app.use(handleCors).use(bodyParser()).use(router.routes())
 
+// this is for new api, fetching data through graphQL (keystone)
+router.get('/latest-posts', async function requestGraphqlApi(ctx) {
+  const { sort = 'publishTime_DESC', maxResult = 4 } = ctx.request.query
+
+  const gqlPostRequest = {
+    operationName: null,
+    query:
+      'query {\n' +
+      '  latestPosts: allPosts(\n' +
+      `    first: ${maxResult}\n` +
+      '    where: {state: published, style_in: [news, report, embedded, project3]}\n' +
+      `    sortBy: [${sort}]\n` +
+      '  ) {\n' +
+      '    id\n' +
+      '    slug\n' +
+      '    title: name\n' +
+      '    style\n' +
+      '    heroImage {\n' +
+      '      urlMobileSized\n' +
+      '      urlTabletSized\n' +
+      '      __typename\n' +
+      '    }\n' +
+      '    ogImage {\n' +
+      '      urlTabletSized\n' +
+      '      __typename\n' +
+      '    }\n' +
+      '    publishTime\n' +
+      '    readingTime\n' +
+      '    __typename\n' +
+      '  }\n' +
+      '}\n',
+  }
+
+  try {
+    const { data, status = 200 } = await axiosPost(CMS_ENDPOINT, gqlPostRequest)
+
+    ctx.status = status
+    ctx.body = data
+  } catch (err) {
+    reportCmsApiError(err, ctx)
+  }
+})
+
+// this is for deprecated api, fetching data through restful (readme)
+// -- DEPRECATED API START --
 const cmsAxios = axiosCreate({
-  baseURL: KEYSTONE_DEV_ENDPOINT,
+  baseURL: CMS_ENDPOINT_DEPRECATED,
 })
 
 const PUBLISH_STATUS_POST = {
@@ -60,6 +110,12 @@ function checkPostsQueryFields(ctx, next) {
 
 function hasAllValidQueryFields(notAllowedFields = [], query = {}) {
   return !Object.keys(query).some((field) => notAllowedFields.includes(field))
+}
+
+// -- DEPRECATED API END --
+
+function reportCmsApiError(err, koaCtx) {
+  reportApiErrorFromKoa(err, koaCtx, { scope: 'CMS' })
 }
 
 Object.assign(module.exports, {
