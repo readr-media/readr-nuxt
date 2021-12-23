@@ -1,5 +1,5 @@
 <template>
-  <section style="background-color: black;">
+  <section class="dashboard" style="background-color: black;">
     <ClientOnly>
       <aside
         v-show="isAsideToggled"
@@ -139,3 +139,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.dashboard {
+  padding: 20px;
+}
+</style>
