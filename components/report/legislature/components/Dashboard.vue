@@ -23,59 +23,25 @@
         ------------
         <Filters />
       </aside>
-      <main>
+      <main class="main">
         <Search @clickBill="handleLightBoxShow" />
-        <nav>
-          <Button
-            @click.native="$store.commit('data/SET_PRESET_FILTER', 'mine')"
+        <nav class="main__preset-filters-nav preset-filters-nav">
+          <ButtonPrimary
+            v-for="[filterName, filterValue] in Object.entries(
+              $store.state.data.presetFilters
+            )"
+            :key="filterName"
+            class="preset-filters-nav__preset-filter-button"
+            :active="filterValue"
+            @click.native="$store.commit('data/SET_PRESET_FILTER', filterName)"
           >
-            地雷區
-          </Button>
-          <Button
-            @click.native="$store.commit('data/SET_PRESET_FILTER', 'argue')"
-          >
-            戰火區
-          </Button>
-          <Button
-            @click.native="
-              $store.commit(
-                'data/SET_PRESET_FILTER',
-                'executiveYuanPrioritizePass'
-              )
-            "
-          >
-            政府主推哪些優先法案通過？
-          </Button>
-          <Button
-            @click.native="
-              $store.commit(
-                'data/SET_PRESET_FILTER',
-                'executiveYuanPrioritizeFail'
-              )
-            "
-          >
-            完全執政都無法通過的法案？
-          </Button>
-          <Button
-            @click.native="
-              $store.commit('data/SET_PRESET_FILTER', 'KMTDPPPrefer')
-            "
-          >
-            國民兩黨主力法案
-          </Button>
-          <Button
-            @click.native="
-              $store.commit(
-                'data/SET_PRESET_FILTER',
-                'smallPartyPreferButNotPopular'
-              )
-            "
-          >
-            小黨難突破的法案
-          </Button>
+            {{ filterName }}
+          </ButtonPrimary>
         </nav>
         <nav style="display: flex; flex-direction: row; margin-top: 10px;">
-          <Button @click.native="handleAsideToggle"> 篩選與排序 </Button>
+          <ButtonSecondary @click.native="handleAsideToggle">
+            篩選與排序
+          </ButtonSecondary>
           <p style="color: white; margin-left: 10px;">
             你的篩選結果 共 {{ $store.state.data.data.length }} 筆
           </p>
@@ -107,7 +73,8 @@ import Search from './Search.vue'
 import Colors from './Colors.vue'
 import Sorts from './Sorts.vue'
 import Filters from './Filters.vue'
-import Button from './Button.vue'
+import ButtonPrimary from './ButtonPrimary.vue'
+import ButtonSecondary from './ButtonSecondary.vue'
 import Legends from './Legends.vue'
 import DashboardGridChart from './DashboardGridChart.vue'
 
@@ -117,7 +84,8 @@ export default {
     Colors,
     Sorts,
     Filters,
-    Button,
+    ButtonPrimary,
+    ButtonSecondary,
     Legends,
     DashboardGridChart,
   },
@@ -143,5 +111,20 @@ export default {
 <style lang="scss" scoped>
 .dashboard {
   padding: 20px;
+}
+
+.main {
+  &__preset-filters-nav {
+    margin: 17px 0 0 0;
+  }
+}
+
+.preset-filters-nav {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -2px;
+  &__preset-filter-button {
+    margin: 1px 2px;
+  }
 }
 </style>
