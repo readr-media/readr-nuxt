@@ -5,61 +5,61 @@
 
 const Koa = require('koa')
 const Router = require('koa-router')
-const { create: axiosCreate } = require('axios')
-
-const { KEYSTONE_DEV_ENDPOINT } = require('../../configs/config.js')
-const { getErrorName } = require('../../helpers/index.js')
+const bodyParser = require('koa-bodyparser')
+const { post: axiosPost } = require('axios')
+const { reportApiErrorFromKoa } = require('../../helpers/index.js')
+const { CMS_ENDPOINT } = require('../../configs/config.js')
 const { handleKoaCors: handleCors } = require('./helpers/cors.js')
 
 const app = new Koa()
 const router = new Router()
 
-app.use(handleCors)
-app.use(router.routes())
+app.use(handleCors).use(bodyParser()).use(router.routes())
 
-const cmsAxios = axiosCreate({
-  baseURL: KEYSTONE_DEV_ENDPOINT,
-})
+router.post('/posts', async function requestGraphqlApi(ctx) {
+  const { sort = 'publishTime_DESC', maxResult = 4 } = ctx.request.query
 
-const PUBLISH_STATUS_POST = {
-  published: 2,
-}
-
-router.get('/posts', checkPostsQueryFields, async function getPosts(ctx) {
-  ctx.query = {
-    ...ctx.query,
-    publish_status: `{"$in":[${PUBLISH_STATUS_POST.published}]}`,
+  const gqlPostRequest = {
+    operationName: null,
+    query:
+      'query {\n' +
+      '  latestPosts: allPosts(\n' +
+      `    first: ${maxResult}\n` +
+      '    where: {state: published, style_in: [news, report, embedded, project3]}\n' +
+      `    sortBy: [${sort}]\n` +
+      '  ) {\n' +
+      '    id\n' +
+      '    slug\n' +
+      '    title: name\n' +
+      '    style\n' +
+      '    heroImage {\n' +
+      '      urlMobileSized\n' +
+      '      urlTabletSized\n' +
+      '      __typename\n' +
+      '    }\n' +
+      '    ogImage {\n' +
+      '      urlTabletSized\n' +
+      '      __typename\n' +
+      '    }\n' +
+      '    publishTime\n' +
+      '    readingTime\n' +
+      '    __typename\n' +
+      '  }\n' +
+      '}\n',
   }
 
   try {
-    const { data, status = 200 } = await cmsAxios.get(ctx.url)
+    const { data, status = 200 } = await axiosPost(CMS_ENDPOINT, gqlPostRequest)
 
     ctx.status = status
     ctx.body = data
-  } catch ({ response = {} }) {
-    ctx.status = response.status || 500
+  } catch (err) {
+    reportCmsApiError(err, ctx)
   }
 })
 
-async function checkQueryFields(notAllowedFields, ctx, next) {
-  if (hasAllValidQueryFields(notAllowedFields, ctx.query)) {
-    await next()
-  } else {
-    ctx.status = 403
-    ctx.body = `${getErrorName()}: Not allowed query fields: [${notAllowedFields.join(
-      ', '
-    )}]`
-  }
-}
-
-const NOT_ALLOWED_QUERY_FIELDS_POSTS = ['publish_status']
-
-function checkPostsQueryFields(ctx, next) {
-  return checkQueryFields(NOT_ALLOWED_QUERY_FIELDS_POSTS, ctx, next)
-}
-
-function hasAllValidQueryFields(notAllowedFields = [], query = {}) {
-  return !Object.keys(query).some((field) => notAllowedFields.includes(field))
+function reportCmsApiError(err, koaCtx) {
+  reportApiErrorFromKoa(err, koaCtx, { scope: 'CMS' })
 }
 
 Object.assign(module.exports, {
