@@ -2,7 +2,7 @@
   <section>
     <Intro />
     <DashboardStory />
-    <Article />
+    <Article :cmsData="cmsData" />
     <Dashboard />
     <OtherInfo />
   </section>
@@ -23,6 +23,13 @@ export default {
     Article,
     Dashboard,
     OtherInfo,
+  },
+  props: {
+    cmsData: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
   },
   created() {
     this.$store.registerModule('data', {
