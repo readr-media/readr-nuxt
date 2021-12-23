@@ -23,7 +23,7 @@ const router = new Router()
 app.use(handleCors).use(bodyParser()).use(router.routes())
 
 // this is for new api, fetching data through graphQL (keystone)
-router.post('/latest-posts', async function requestGraphqlApi(ctx) {
+router.get('/latest-posts', async function requestGraphqlApi(ctx) {
   const { sort = 'publishTime_DESC', maxResult = 4 } = ctx.request.query
 
   const gqlPostRequest = {
