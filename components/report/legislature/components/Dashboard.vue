@@ -38,15 +38,22 @@
             {{ filterName }}
           </ButtonPrimary>
         </nav>
-        <nav style="display: flex; flex-direction: row; margin-top: 10px;">
-          <ButtonSecondary @click.native="handleAsideToggle">
+        <nav class="main__normal-filters-nav normal-filters-nav">
+          <ButtonSecondary
+            class="normal-filters-nav__aside-toggle aside-toggle"
+            @click.native="handleAsideToggle"
+          >
             篩選與排序
           </ButtonSecondary>
-          <p style="color: white; margin-left: 10px;">
-            你的篩選結果 共 {{ $store.state.data.data.length }} 筆
+          <p class="normal-filters-nav__result-count result-count">
+            你的篩選結果 共
+            <span class="result-count__number">
+              {{ $store.state.data.data.length }}
+            </span>
+            筆
           </p>
           <button
-            style="color: white; margin-left: 10px; text-decoration: underline;"
+            class="normal-filters-nav__reset-filter-button reset-filter-button"
             @click="$store.commit('data/RESET_DATA')"
           >
             清除篩選
@@ -117,6 +124,9 @@ export default {
   &__preset-filters-nav {
     margin: 17px 0 0 0;
   }
+  &__normal-filters-nav {
+    margin-top: 17px;
+  }
 }
 
 .preset-filters-nav {
@@ -126,5 +136,30 @@ export default {
   &__preset-filter-button {
     margin: 1px 2px;
   }
+}
+
+.normal-filters-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  &__result-count {
+    margin: 0 0 0 10px;
+  }
+}
+.result-count {
+  font-size: 12px;
+  color: white;
+  &__number {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+}
+.reset-filter-button {
+  color: white;
+  margin-left: 10px;
+  text-decoration: underline;
+  color: #b0b0b0;
+  font-size: 12px;
+  font-weight: 300;
 }
 </style>
