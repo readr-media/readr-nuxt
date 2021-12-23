@@ -4,7 +4,7 @@
     <DashboardStory />
     <Article :cmsData="cmsData" />
     <Dashboard />
-    <OtherInfo />
+    <OtherInfo :cmsData="cmsData" />
   </section>
 </template>
 
