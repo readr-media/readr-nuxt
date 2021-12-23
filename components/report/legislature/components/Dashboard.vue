@@ -59,12 +59,9 @@
             清除篩選
           </button>
         </nav>
-        <Legends />
-
+        <Legends class="main__legends" />
         <DashboardGridChart
-          v-for="index in 1"
-          :key="index"
-          style="margin-top: 10px;"
+          class="main__grid-chart"
           :tooltip="lightBoxData"
           :isTooltipVisible="isLightBoxVisible"
           @clickGridItem="handleLightBoxShow"
@@ -126,6 +123,12 @@ export default {
   }
   &__normal-filters-nav {
     margin-top: 17px;
+  }
+  &__legends {
+    margin: 17px 0 0 0;
+  }
+  &__grid-chart {
+    margin: 17px 0 0 -2px;
   }
 }
 
