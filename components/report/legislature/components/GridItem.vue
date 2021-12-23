@@ -32,8 +32,8 @@ export default {
 
 <style scoped>
 div {
-  outline: 1px solid #1b1b1b;
-  outline-offset: -1px;
+  outline: 2px solid #1b1b1b;
+  outline-offset: -2px;
   color: black;
   font-size: 46px;
   display: flex;
