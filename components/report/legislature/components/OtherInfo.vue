@@ -41,7 +41,7 @@ export default {
 $primary-color: #33aba4;
 .report-extras::v-deep {
   background: #1b1b1b !important;
-  color: #ffffff;
+  color: #ffffff !important;
   ul {
     list-style: none;
     padding: 0;

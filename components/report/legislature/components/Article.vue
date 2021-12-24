@@ -28,7 +28,7 @@ export default {
 $primary-color: #33aba4;
 .report-article::v-deep {
   background: #1b1b1b !important;
-  color: #ffffff;
+  color: #ffffff !important;
 
   h2 {
     color: $primary-color;
