@@ -389,7 +389,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .dashboard-wrapper {
   display: grid;
   grid-template-columns: repeat(10, minmax(0, 1fr));
@@ -402,6 +402,10 @@ export default {
   font-size: 14px;
   font-weight: 500;
   color: #985f0b;
+  visibility: hidden;
+  @include media-breakpoint-up(xl) {
+    visibility: visible;
+  }
 }
 @media (min-width: 1024px) {
   .dashboard-wrapper {
