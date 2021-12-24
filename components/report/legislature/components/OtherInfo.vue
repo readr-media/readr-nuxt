@@ -40,7 +40,7 @@ export default {
 <style lang="scss" scoped>
 $primary-color: #33aba4;
 .report-extras::v-deep {
-  background: #1b1b1b;
+  background: #1b1b1b !important;
   color: #ffffff;
   ul {
     list-style: none;
@@ -56,7 +56,6 @@ $primary-color: #33aba4;
     height: 6px;
     border-radius: 50%;
     background: #fff;
-    // top: 0;
   }
   a {
     color: $primary-color;
@@ -65,15 +64,6 @@ $primary-color: #33aba4;
 
 .report-credit {
   background: #1b1b1b;
-  color: #ffffff;
-}
-
-.donate-button {
-  background: #1b1b1b;
-  padding: 24px 59px 28px 55px;
-
-  @media (min-width: 768px) {
-    padding: 60px;
-  }
+  color: #ffffff !important;
 }
 </style>

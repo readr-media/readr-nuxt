@@ -27,7 +27,7 @@ export default {
 <style lang="scss" scoped>
 $primary-color: #33aba4;
 .report-article::v-deep {
-  background: #1b1b1b;
+  background: #1b1b1b !important;
   color: #ffffff;
 
   h2 {
