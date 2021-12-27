@@ -1,11 +1,16 @@
 <template>
   <section>
     <DashboardBillInfoCategory :categories="categories" :tags="tags" />
-    <DashboardBillInfoName :text="tooltip['名稱']" />
-    <DashboardBillInfoFieldInfo :fieldInfo="fieldInfo" />
-    <div style="margin-top: 8px; margin-bottom: 8px;">
-      提案人：{{ tooltip['每版本首位提案人'] }}
-    </div>
+    <DashboardBillInfoName :text="tooltip['名稱']" style="margin-top: 12px;" />
+    <DashboardBillInfoFieldInfo
+      :fieldInfo="fieldInfo"
+      style="margin-top: 20px;"
+    />
+    <DashboardBillInfoFieldInfoValueList
+      :keyName="'提案人'"
+      :data="proposals"
+      style="margin-top: 20px;"
+    />
     <div style="margin-top: 8px; margin-bottom: 8px;">每屆審議狀態：</div>
     <ChartExaminationProgressBar
       :data="dataChartExaminationProgressBar"
@@ -43,12 +48,14 @@ import ChartStackBar from './ChartStackBar.vue'
 import DashboardBillInfoCategory from './DashboardBillInfoCategory.vue'
 import DashboardBillInfoName from './DashboardBillInfoName.vue'
 import DashboardBillInfoFieldInfo from './DashboardBillInfoFieldInfo.vue'
+import DashboardBillInfoFieldInfoValueList from './DashboardBillInfoFieldInfoValueList.vue'
 
 export default {
   components: {
     DashboardBillInfoCategory,
     DashboardBillInfoName,
     DashboardBillInfoFieldInfo,
+    DashboardBillInfoFieldInfoValueList,
     ChartStackBar,
     ChartExaminationProgressBar,
   },
@@ -96,6 +103,9 @@ export default {
         停留屆期: this.tooltip['停留屆期'],
         黨團協商次數: this.tooltip['黨團協商次數'],
       }
+    },
+    proposals() {
+      return this.tooltip['每版本首位提案人']?.split('、')
     },
 
     dataChartExaminationProgressBar() {
