@@ -228,6 +228,14 @@ export const state = () => ({
     排審總次數: null,
     停留屆期: null,
   },
+  presetFilters: {
+    地雷區: false,
+    戰火區: false,
+    '政府主推哪些優先法案通過？': false,
+    '完全執政都無法通過的法案？': false,
+    國民兩黨主力法案: false,
+    小黨難突破的法案: false,
+  },
   filters: {
     是否三讀通過: {
       是: false,
@@ -315,9 +323,10 @@ export const getters = {
 
 export const mutations = {
   SET_DATA(state, data) {
-    state.data = data
-    state.dataOriginal = data
-    createExtentsOfData(state.extents, data)
+    const _data = data.sort(sortComparators['屆期'].ascending)
+    state.data = _data
+    state.dataOriginal = _data
+    createExtentsOfData(state.extents, _data)
   },
   SORT_DATA(state, { sortBy = '屆期', orderBy = 'ascending' } = {}) {
     state.data = state.data.sort(sortComparators[sortBy][orderBy])
@@ -340,6 +349,10 @@ export const mutations = {
           state.filters[filterName][optionName] = false
         }
       }
+    }
+
+    for (const key of Object.keys(state.presetFilters)) {
+      state.presetFilters[key] = false
     }
 
     createExtentsOfData(state.extents, state.data)
@@ -371,7 +384,7 @@ export const mutations = {
 
   SET_PRESET_FILTER(state, presetName) {
     switch (presetName) {
-      case 'mine': {
+      case '地雷區': {
         // const filters = {
         //   停留屆期: [filterCriterias['停留屆期']['四屆']],
         //   排審總次數: [filterCriterias['排審總次數']['0 次']],
@@ -392,7 +405,7 @@ export const mutations = {
         break
       }
 
-      case 'argue': {
+      case '戰火區': {
         const filters = {
           戰火區: [
             function (bill) {
@@ -405,7 +418,7 @@ export const mutations = {
         break
       }
 
-      case 'executiveYuanPrioritizePass': {
+      case '政府主推哪些優先法案通過？': {
         // const filters = {
         //   行政院優先法案: Object.values(filterCriterias['行政院優先法案']),
         //   是否三讀通過: [filterCriterias['是否三讀通過']['是']],
@@ -423,7 +436,7 @@ export const mutations = {
         break
       }
 
-      case 'executiveYuanPrioritizeFail': {
+      case '完全執政都無法通過的法案？': {
         // const filters = {
         //   行政院優先法案: Object.values(filterCriterias['行政院優先法案']),
         //   是否三讀通過: [filterCriterias['是否三讀通過']['否']],
@@ -441,7 +454,7 @@ export const mutations = {
         break
       }
 
-      case 'KMTDPPPrefer': {
+      case '國民兩黨主力法案': {
         // const filters = {
         //   排審數: [
         //     function (bill) {
@@ -467,7 +480,7 @@ export const mutations = {
         break
       }
 
-      case 'smallPartyPreferButNotPopular': {
+      case '小黨難突破的法案': {
         // const filters = {
         //   排審總次數: [filterCriterias['排審總次數']['0 次']],
         //   提案政黨: [
@@ -497,6 +510,9 @@ export const mutations = {
       }
     }
 
+    for (const key of Object.keys(state.presetFilters)) {
+      state.presetFilters[key] = key === presetName
+    }
     createExtentsOfData(state.extents, state.data)
   },
 }

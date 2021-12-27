@@ -1,6 +1,6 @@
 <template>
   <section class="dashboard-wrapper">
-    <Lightbox v-show="isTooltipVisible" @close="isTooltipVisible = false">
+    <Lightbox v-show="isTooltipVisible" @close="$emit('closeLightbox')">
       <section>
         <p style="margin-top: 16px; margin-bottom: 8px;">
           類別：{{ tooltip['類別'] }}
@@ -18,21 +18,32 @@
         <div style="margin-top: 8px; margin-bottom: 8px;">
           黨團協商次數：{{ tooltip['黨團協商次數'] }}
         </div>
-        <div style="margin-top: 8px; margin-bottom: 8px;">提案人：🚧</div>
+        <div style="margin-top: 8px; margin-bottom: 8px;">
+          提案人：{{ tooltip['每版本首位提案人'] }}
+        </div>
         <div style="margin-top: 8px; margin-bottom: 8px;">每屆審議狀態：</div>
         <ChartExaminationProgressBar
           :data="dataChartExaminationProgressBar"
           :xTickValues="chartExaminationProgressBarXTickValues"
         />
         <div style="margin-top: 46px; margin-bottom: 8px;">
-          提案總次數（手機才會顯示：長按色塊，顯示各黨團提案次數）：🚧
+          提案總次數（手機才會顯示：長按色塊，顯示各黨團提案次數）：
           <ChartStackBar :data="dataChartStackBarProposal" />
         </div>
         <div style="margin-top: 8px; margin-bottom: 8px;">
-          排審總次數（手機才會顯示：長按色塊，顯示各黨團提案次數）：🚧
-          <ChartStackBar :data="dataChartStackBarExamination" />
+          排審總次數（手機才會顯示：長按色塊，顯示各黨團提案次數）：
+          <span v-if="isDataChartStackBarExaminationNotExist">
+            0
+          </span>
+          <ChartStackBar v-else :data="dataChartStackBarExamination" />
+        </div>
+        <div v-if="tooltip['重點法案標注'] === 'yes'">
+          ---------
+          <br />
+          <button style="border: 1px solid black;">看文章</button>
         </div>
         ---------
+        <br />
         <div style="white-space: pre;">{{ formatJson(tooltip) }}</div>
       </section>
     </Lightbox>
@@ -46,9 +57,20 @@
         :key="bill.id"
         :backgroundImage="getBillBackgroundImage(bill)"
         :verticalLength="Number(bill['停留屆期'])"
+        :hasStarMarkIcon="bill['重點法案標注'] === 'yes'"
         @click.native="handleMouseClick(bill)"
+        @mouseover.native="handleMouseoverGridItem($event, bill)"
+        @mousemove.native="handleMousemoveGridItem"
+        @mouseout.native="handleMouseoutGridItem"
       />
     </ol>
+    <div
+      v-show="isGridItemTooltipShow"
+      class="tooltip"
+      :style="gridItemTooltipPosition"
+    >
+      {{ gridItemTooltipText }}
+    </div>
   </section>
 </template>
 
@@ -71,12 +93,31 @@ export default {
     ChartExaminationProgressBar,
     GridItem,
   },
+  props: {
+    tooltip: {
+      type: Object,
+      default: () => {},
+    },
+    isTooltipVisible: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
-      tooltip: {},
-      isTooltipVisible: false,
+      // tooltip: {},
+      // isTooltipVisible: false,
       chartExaminationProgressBarXTickValues,
       windowWidth: 0,
+
+      isGridItemTooltipShow: false,
+      gridItemTooltipPosition: {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      },
+      gridItemTooltipText: '',
     }
   },
   computed: {
@@ -214,6 +255,13 @@ export default {
         }
       })
     },
+    isDataChartStackBarExaminationNotExist() {
+      return this.dataChartStackBarExamination?.every(function checkValueExist({
+        value,
+      }) {
+        return !value
+      })
+    },
     dataChartStackBarExamination() {
       if (!Object.keys(this.tooltip).length) {
         return undefined
@@ -261,8 +309,7 @@ export default {
       return bill['類別'].split('、')[0]
     },
     handleMouseClick(bill) {
-      this.tooltip = bill
-      this.isTooltipVisible = true
+      this.$emit('clickGridItem', bill)
     },
     formatJson(json) {
       if (!json) {
@@ -308,14 +355,57 @@ export default {
         }
       }
     },
+
+    handleMouseoverGridItem(e, bill) {
+      this.isGridItemTooltipShow = true
+      const shouldFlipTooltip = e.clientX > window.innerWidth / 2
+      this.gridItemTooltipPosition = shouldFlipTooltip
+        ? {
+            top: `${e.clientY + 10}px`,
+            right: `${window.innerWidth - e.clientX - 10}px`,
+          }
+        : {
+            top: `${e.clientY + 10}px`,
+            left: `${e.clientX + 10}px`,
+          }
+      this.gridItemTooltipText = bill['名稱']
+    },
+    handleMousemoveGridItem(e) {
+      const shouldFlipTooltip = e.clientX > window.innerWidth / 2
+      this.gridItemTooltipPosition = shouldFlipTooltip
+        ? {
+            top: `${e.clientY + 10}px`,
+            right: `${window.innerWidth - e.clientX - 10}px`,
+          }
+        : {
+            top: `${e.clientY + 10}px`,
+            left: `${e.clientX + 10}px`,
+          }
+    },
+    handleMouseoutGridItem() {
+      this.isGridItemTooltipShow = false
+    },
   },
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .dashboard-wrapper {
   display: grid;
   grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.tooltip {
+  position: fixed;
+  background-color: white;
+  padding: 3px 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #985f0b;
+  visibility: hidden;
+  @include media-breakpoint-up(xl) {
+    visibility: visible;
+  }
 }
 @media (min-width: 1024px) {
   .dashboard-wrapper {

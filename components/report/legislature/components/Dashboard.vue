@@ -1,5 +1,5 @@
 <template>
-  <section style="background-color: black;">
+  <section class="dashboard" style="background-color: black;">
     <ClientOnly>
       <aside
         v-show="isAsideToggled"
@@ -23,75 +23,49 @@
         ------------
         <Filters />
       </aside>
-      <main>
-        <Search />
-        <nav>
-          <Button
-            @click.native="$store.commit('data/SET_PRESET_FILTER', 'mine')"
+      <main class="main">
+        <Search @clickBill="handleLightBoxShow" />
+        <nav class="main__preset-filters-nav preset-filters-nav">
+          <ButtonPrimary
+            v-for="[filterName, filterValue] in Object.entries(
+              $store.state.data.presetFilters
+            )"
+            :key="filterName"
+            class="preset-filters-nav__preset-filter-button"
+            :active="filterValue"
+            @click.native="$store.commit('data/SET_PRESET_FILTER', filterName)"
           >
-            地雷區
-          </Button>
-          <Button
-            @click.native="$store.commit('data/SET_PRESET_FILTER', 'argue')"
-          >
-            戰火區
-          </Button>
-          <Button
-            @click.native="
-              $store.commit(
-                'data/SET_PRESET_FILTER',
-                'executiveYuanPrioritizePass'
-              )
-            "
-          >
-            政府主推哪些優先法案通過？
-          </Button>
-          <Button
-            @click.native="
-              $store.commit(
-                'data/SET_PRESET_FILTER',
-                'executiveYuanPrioritizeFail'
-              )
-            "
-          >
-            完全執政都無法通過的法案？
-          </Button>
-          <Button
-            @click.native="
-              $store.commit('data/SET_PRESET_FILTER', 'KMTDPPPrefer')
-            "
-          >
-            國民兩黨主力法案
-          </Button>
-          <Button
-            @click.native="
-              $store.commit(
-                'data/SET_PRESET_FILTER',
-                'smallPartyPreferButNotPopular'
-              )
-            "
-          >
-            小黨難突破的法案
-          </Button>
+            {{ filterName }}
+          </ButtonPrimary>
         </nav>
-        <nav style="display: flex; flex-direction: row; margin-top: 10px;">
-          <Button @click.native="handleAsideToggle"> 篩選與排序 </Button>
-          <p style="color: white; margin-left: 10px;">
-            你的篩選結果 共 {{ $store.state.data.data.length }} 筆
+        <nav class="main__normal-filters-nav normal-filters-nav">
+          <ButtonSecondary
+            class="normal-filters-nav__aside-toggle aside-toggle"
+            @click.native="handleAsideToggle"
+          >
+            篩選與排序
+          </ButtonSecondary>
+          <p class="normal-filters-nav__result-count result-count">
+            你的篩選結果 共
+            <span class="result-count__number">
+              {{ $store.state.data.data.length }}
+            </span>
+            筆
           </p>
           <button
-            style="color: white; margin-left: 10px; text-decoration: underline;"
+            class="normal-filters-nav__reset-filter-button reset-filter-button"
             @click="$store.commit('data/RESET_DATA')"
           >
             清除篩選
           </button>
         </nav>
-        <Legends />
-
+        <Legends class="main__legends" />
         <DashboardGridChart
-          v-for="index in 1"
-          :key="index"
-          style="margin-top: 10px;"
+          class="main__grid-chart"
+          :tooltip="lightBoxData"
+          :isTooltipVisible="isLightBoxVisible"
+          @clickGridItem="handleLightBoxShow"
+          @closeLightbox="isLightBoxVisible = false"
         />
       </main>
     </ClientOnly>
@@ -103,7 +77,8 @@ import Search from './Search.vue'
 import Colors from './Colors.vue'
 import Sorts from './Sorts.vue'
 import Filters from './Filters.vue'
-import Button from './Button.vue'
+import ButtonPrimary from './ButtonPrimary.vue'
+import ButtonSecondary from './ButtonSecondary.vue'
 import Legends from './Legends.vue'
 import DashboardGridChart from './DashboardGridChart.vue'
 
@@ -113,19 +88,81 @@ export default {
     Colors,
     Sorts,
     Filters,
-    Button,
+    ButtonPrimary,
+    ButtonSecondary,
     Legends,
     DashboardGridChart,
   },
   data() {
     return {
       isAsideToggled: false,
+      lightBoxData: {},
+      isLightBoxVisible: false,
     }
   },
   methods: {
     handleAsideToggle() {
       this.isAsideToggled = !this.isAsideToggled
     },
+    handleLightBoxShow(bill) {
+      this.lightBoxData = bill
+      this.isLightBoxVisible = true
+    },
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.dashboard {
+  padding: 20px;
+}
+
+.main {
+  &__preset-filters-nav {
+    margin: 17px 0 0 0;
+  }
+  &__normal-filters-nav {
+    margin-top: 17px;
+  }
+  &__legends {
+    margin: 17px 0 0 0;
+  }
+  &__grid-chart {
+    margin: 17px 0 0 -2px;
+  }
+}
+
+.preset-filters-nav {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -2px;
+  &__preset-filter-button {
+    margin: 1px 2px;
+  }
+}
+
+.normal-filters-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  &__result-count {
+    margin: 0 0 0 10px;
+  }
+}
+.result-count {
+  font-size: 12px;
+  color: white;
+  &__number {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+}
+.reset-filter-button {
+  color: white;
+  margin-left: 10px;
+  text-decoration: underline;
+  color: #b0b0b0;
+  font-size: 12px;
+  font-weight: 300;
+}
+</style>
