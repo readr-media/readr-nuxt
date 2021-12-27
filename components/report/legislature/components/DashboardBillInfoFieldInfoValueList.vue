@@ -1,11 +1,9 @@
 <template>
   <div class="field-info">
     <p class="field-info__key">{{ keyName }}</p>
-    <div class="field-info__value-wrapper value-wrapper">
-      <ul>
-        <li v-for="item in data" :key="item">{{ item }}</li>
-      </ul>
-    </div>
+    <p class="field-info__value-wrapper value-wrapper">
+      {{ listText }}
+    </p>
   </div>
 </template>
 
@@ -16,9 +14,9 @@ export default {
       type: String,
       default: 'key',
     },
-    data: {
-      type: Array,
-      default: () => [],
+    listText: {
+      type: String,
+      default: '',
     },
   },
 }
@@ -34,20 +32,7 @@ export default {
   }
   &__value-wrapper {
     margin: 8px 0 0 0;
-  }
-}
-
-ul {
-  display: flex;
-  flex-wrap: wrap;
-  text-align: justify;
-}
-
-li {
-  &:not(:first-child) {
-    &:before {
-      content: '、';
-    }
+    text-align: justify;
   }
 }
 </style>
