@@ -1,11 +1,13 @@
 <template>
   <div class="donate">
-    <div class="donate__button" @click="handleClick">贊助 READr</div>
+    <ArticleButton content="贊助 READr" @click="handleClick" />
   </div>
 </template>
 
 <script>
+import ArticleButton from './ArticleButton.vue'
 export default {
+  components: { ArticleButton },
   methods: {
     handleClick() {
       const route = this.$router.resolve({ path: '/donate' })
@@ -37,6 +39,8 @@ export default {
     line-height: 23px;
     &:hover {
       cursor: pointer;
+      background: #5a8a87;
+      color: #4f4f4f;
     }
   }
 }

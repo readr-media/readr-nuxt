@@ -1,6 +1,20 @@
 <template>
   <section>
     <!--閱讀測驗、如果你關心這個議題等等功能-->
+    <Quiz
+      :quizTitle="cmsData.contentApiData.articleQuiz.title"
+      :quizDescription="cmsData.contentApiData.articleQuiz.description"
+      :quizOptions="cmsData.contentApiData.articleQuiz.options"
+      :quizDetailTitleCorrect="
+        cmsData.contentApiData.articleQuiz.answerDetailTitleCorrect
+      "
+      :quizDetailTitleWrong="
+        cmsData.contentApiData.articleQuiz.answerDetailTitleWrong
+      "
+      :quizDetailDescription="
+        cmsData.contentApiData.articleQuiz.answerDetailDescription
+      "
+    />
     <RdReportExtras
       :contents="cmsData.contentApiData.extras.contents"
       @sendGaEvent="sendGaEvent"
@@ -15,17 +29,17 @@
 </template>
 
 <script>
-// import RdQuiz from '~/components/RdQuiz.vue'
 import Donate from './Donate.vue'
+import Quiz from './Quiz.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 
 export default {
   components: {
-    // RdQuiz,
     RdReportExtras,
     RdReportCredit,
     Donate,
+    Quiz,
   },
   props: {
     cmsData: {
