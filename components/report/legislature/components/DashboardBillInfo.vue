@@ -1,5 +1,6 @@
 <template>
   <section>
+    <DashboardBillInfoCategory :categories="categories" :tags="[]" />
     <p style="margin-top: 16px; margin-bottom: 8px;">
       類別：{{ tooltip['類別'] }}
     </p>
@@ -49,11 +50,14 @@
 <script>
 import partyColor from '../constants/partyColor.json'
 import chartExaminationProgressBarXTickValues from '../constants/chartExaminationProgressBarXTickValues.json'
+import billCategories from '../constants/billCategories.json'
 import ChartExaminationProgressBar from './ChartExaminationProgressBar.vue'
 import ChartStackBar from './ChartStackBar.vue'
+import DashboardBillInfoCategory from './DashboardBillInfoCategory.vue'
 
 export default {
   components: {
+    DashboardBillInfoCategory,
     ChartStackBar,
     ChartExaminationProgressBar,
   },
@@ -69,6 +73,17 @@ export default {
     }
   },
   computed: {
+    categories() {
+      return this.tooltip['類別']
+        ?.split('、')
+        .map(function mapToBillCategoryTag(value) {
+          return {
+            color: billCategories[value].color,
+            text: value,
+          }
+        })
+    },
+
     dataChartExaminationProgressBar() {
       if (!Object.keys(this.tooltip).length) {
         return undefined
