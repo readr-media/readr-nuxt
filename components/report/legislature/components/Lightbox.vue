@@ -11,6 +11,7 @@
       justify-content: center;
       align-items: center;
     "
+    @click="handleCloseLightbox"
   >
     <section
       style="
@@ -20,6 +21,7 @@
         background-color: white;
         overflow-y: scroll;
       "
+      @click.stop
     >
       <p
         style="position: absolute; top: 5px; right: 5px;"
