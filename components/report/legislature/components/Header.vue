@@ -26,7 +26,7 @@ export default {
 .header {
   position: fixed;
   top: 0;
-  z-index: 200;
+  z-index: 2;
   background: #1b1b1b;
   width: 100vw;
 
