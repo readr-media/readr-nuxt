@@ -48,10 +48,14 @@
         :data="dataChartStackBarExamination"
       />
     </div>
-    <div v-if="tooltip['重點法案標注'] === 'yes'">
-      ---------
-      <br />
-      <button style="border: 1px solid black;">看文章</button>
+    <div
+      v-if="tooltip['重點法案標注'] === 'yes'"
+      class="article-anchor-button-wrapper"
+      style="margin-top: 20px;"
+    >
+      <button class="article-anchor-button">
+        看文章
+      </button>
     </div>
   </section>
 </template>
@@ -309,5 +313,19 @@ section {
       display: none;
     }
   }
+}
+
+.article-anchor-button-wrapper {
+  border-top: 1px solid black;
+  padding: 10px 0 0 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.article-anchor-button {
+  background-color: black;
+  padding: 4px;
+  color: white;
+  font-size: 12px;
+  font-weight: 900;
 }
 </style>
