@@ -1,12 +1,7 @@
 <template>
   <section>
     <DashboardBillInfoCategory :categories="categories" :tags="tags" />
-    <p style="margin-top: 16px; margin-bottom: 8px;">
-      類別：{{ tooltip['類別'] }}
-    </p>
-    <h1 style="margin-top: 8px; margin-bottom: 8px;">
-      名稱：{{ tooltip['名稱'] }}
-    </h1>
+    <DashboardBillInfoName :text="tooltip['名稱']" />
     <div style="margin-top: 8px; margin-bottom: 8px;">
       是否三讀通過：{{ tooltip['是否三讀通過'] === 'pass' ? '是' : '否' }}
     </div>
@@ -55,10 +50,12 @@ import billPresets from '../constants/billPresets.json'
 import ChartExaminationProgressBar from './ChartExaminationProgressBar.vue'
 import ChartStackBar from './ChartStackBar.vue'
 import DashboardBillInfoCategory from './DashboardBillInfoCategory.vue'
+import DashboardBillInfoName from './DashboardBillInfoName.vue'
 
 export default {
   components: {
     DashboardBillInfoCategory,
+    DashboardBillInfoName,
     ChartStackBar,
     ChartExaminationProgressBar,
   },
