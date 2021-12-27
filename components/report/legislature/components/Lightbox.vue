@@ -23,19 +23,19 @@
       "
       @click.stop
     >
-      <p
-        style="position: absolute; top: 5px; right: 5px;"
-        @click="handleCloseLightbox"
-      >
-        close
-      </p>
+      <ButtonClose
+        style="position: sticky; top: 8px; right: 8px; float: right;"
+        @click.native="handleCloseLightbox"
+      />
       <slot />
     </section>
   </div>
 </template>
 
 <script>
+import ButtonClose from './ButtonClose.vue'
 export default {
+  components: { ButtonClose },
   methods: {
     handleCloseLightbox() {
       this.$emit('close')
