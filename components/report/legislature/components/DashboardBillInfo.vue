@@ -2,16 +2,7 @@
   <section>
     <DashboardBillInfoCategory :categories="categories" :tags="tags" />
     <DashboardBillInfoName :text="tooltip['名稱']" />
-    <div style="margin-top: 8px; margin-bottom: 8px;">
-      是否三讀通過：{{ tooltip['是否三讀通過'] === 'pass' ? '是' : '否' }}
-    </div>
-    <div style="margin-top: 8px; margin-bottom: 8px;">首次提案日期：❓</div>
-    <div style="margin-top: 8px; margin-bottom: 8px;">
-      停留屆期：{{ tooltip['停留屆期'] }}
-    </div>
-    <div style="margin-top: 8px; margin-bottom: 8px;">
-      黨團協商次數：{{ tooltip['黨團協商次數'] }}
-    </div>
+    <DashboardBillInfoFieldInfo :fieldInfo="fieldInfo" />
     <div style="margin-top: 8px; margin-bottom: 8px;">
       提案人：{{ tooltip['每版本首位提案人'] }}
     </div>
@@ -51,11 +42,13 @@ import ChartExaminationProgressBar from './ChartExaminationProgressBar.vue'
 import ChartStackBar from './ChartStackBar.vue'
 import DashboardBillInfoCategory from './DashboardBillInfoCategory.vue'
 import DashboardBillInfoName from './DashboardBillInfoName.vue'
+import DashboardBillInfoFieldInfo from './DashboardBillInfoFieldInfo.vue'
 
 export default {
   components: {
     DashboardBillInfoCategory,
     DashboardBillInfoName,
+    DashboardBillInfoFieldInfo,
     ChartStackBar,
     ChartExaminationProgressBar,
   },
@@ -95,6 +88,14 @@ export default {
             text: key.replace('？', ''),
           }
         })
+    },
+    fieldInfo() {
+      return {
+        是否三讀通過: this.tooltip['是否三讀通過'] === 'pass' ? '是' : '否',
+        首次提案日期: this.tooltip['首次提案日期'],
+        停留屆期: this.tooltip['停留屆期'],
+        黨團協商次數: this.tooltip['黨團協商次數'],
+      }
     },
 
     dataChartExaminationProgressBar() {
