@@ -100,7 +100,7 @@ export default {
   width: 100%;
   height: 100%;
   padding: 3px 6px;
-  font-size: 12px;
+  font-size: 14px;
   &::placeholder {
     font-weight: 300;
     color: #c7c7c7;
@@ -116,7 +116,7 @@ export default {
 }
 .suggestion {
   padding: 3px 6px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 300;
   color: #969696;
   cursor: pointer;
