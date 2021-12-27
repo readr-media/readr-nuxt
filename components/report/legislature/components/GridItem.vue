@@ -6,7 +6,9 @@
       aspectRatio: `1 / ${verticalLength}`,
       backgroundImage: backgroundImage,
     }"
-  />
+  >
+    {{ hasStarMarkIcon ? '*' : '' }}
+  </div>
 </template>
 
 <script>
@@ -20,13 +22,22 @@ export default {
       type: Number,
       default: 1,
     },
+    hasStarMarkIcon: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
 
 <style scoped>
 div {
-  outline: 1px solid #1b1b1b;
-  outline-offset: -1px;
+  outline: 2px solid #1b1b1b;
+  outline-offset: -2px;
+  color: black;
+  font-size: 46px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
