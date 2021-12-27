@@ -72,9 +72,8 @@ export default {
 
 <style scoped>
 .chart {
-  height: 88px;
+  height: 31px;
   display: flex;
-  margin: 16px;
 }
 
 .bar {
