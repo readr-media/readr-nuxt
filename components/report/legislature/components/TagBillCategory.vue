@@ -1,5 +1,5 @@
 <template>
-  <div class="bill-category">
+  <span class="bill-category">
     <span
       class="bill-category__icon icon"
       :style="{ backgroundColor: iconColor }"
@@ -7,7 +7,7 @@
     <span class="bill-category__text text" :style="{ color: textColor }">
       {{ text }}
     </span>
-  </div>
+  </span>
 </template>
 
 <script>

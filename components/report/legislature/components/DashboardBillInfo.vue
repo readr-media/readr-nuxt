@@ -1,6 +1,6 @@
 <template>
   <section>
-    <DashboardBillInfoCategory :categories="categories" :tags="[]" />
+    <DashboardBillInfoCategory :categories="categories" :tags="tags" />
     <p style="margin-top: 16px; margin-bottom: 8px;">
       類別：{{ tooltip['類別'] }}
     </p>
@@ -51,6 +51,7 @@
 import partyColor from '../constants/partyColor.json'
 import chartExaminationProgressBarXTickValues from '../constants/chartExaminationProgressBarXTickValues.json'
 import billCategories from '../constants/billCategories.json'
+import billPresets from '../constants/billPresets.json'
 import ChartExaminationProgressBar from './ChartExaminationProgressBar.vue'
 import ChartStackBar from './ChartStackBar.vue'
 import DashboardBillInfoCategory from './DashboardBillInfoCategory.vue'
@@ -80,6 +81,21 @@ export default {
           return {
             color: billCategories[value].color,
             text: value,
+          }
+        })
+    },
+    tags() {
+      return Object.entries(this.tooltip)
+        .filter(function filterPresets([key]) {
+          return Object.keys(billPresets).includes(key)
+        })
+        .filter(function filterYes([key, value]) {
+          return value === 'yes'
+        })
+        .map(function mapToPresetTag([key]) {
+          return {
+            emoji: billPresets[key]?.emoji,
+            text: key.replace('？', ''),
           }
         })
     },
@@ -261,3 +277,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+section {
+  padding: 47px 13px;
+}
+</style>
