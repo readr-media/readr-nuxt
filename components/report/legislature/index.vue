@@ -1,5 +1,6 @@
 <template>
   <section>
+    <Header />
     <Intro />
     <DashboardStory />
     <Article :cmsData="cmsData" />
@@ -16,6 +17,7 @@ import DashboardStory from './components/DashboardStory.vue'
 import Dashboard from './components/Dashboard.vue'
 import Article from './components/Article.vue'
 import OtherInfo from './components/OtherInfo.vue'
+import Header from './components/Header.vue'
 
 export default {
   components: {
@@ -24,6 +26,7 @@ export default {
     Article,
     Dashboard,
     OtherInfo,
+    Header,
   },
   props: {
     cmsData: {
