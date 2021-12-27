@@ -1,6 +1,6 @@
 <template>
   <span class="tag-preset">
-    <span>{{ emoji }}</span>
+    <span>{{ emoji }}&nbsp;</span>
     <span class="text">{{ text }}</span>
   </span>
 </template>
