@@ -8,33 +8,51 @@
     />
     <DashboardBillInfoFieldInfoValueList
       :keyName="'提案人'"
-      :data="proposals"
+      :listText="tooltip['每版本首位提案人']"
       style="margin-top: 20px;"
     />
-    <div style="margin-top: 8px; margin-bottom: 8px;">每屆審議狀態：</div>
-    <ChartExaminationProgressBar
-      :data="dataChartExaminationProgressBar"
-      :xTickValues="chartExaminationProgressBarXTickValues"
-    />
-    <div style="margin-top: 46px; margin-bottom: 8px;">
-      提案總次數（手機才會顯示：長按色塊，顯示各黨團提案次數）：
-      <ChartStackBar :data="dataChartStackBarProposal" />
+    <div style="margin-top: 20px;">
+      <p class="key-name">每屆審議狀態</p>
+      <ChartExaminationProgressBar
+        :data="dataChartExaminationProgressBar"
+        :xTickValues="chartExaminationProgressBarXTickValues"
+        style="margin-top: 16px;"
+      />
     </div>
-    <div style="margin-top: 8px; margin-bottom: 8px;">
-      排審總次數（手機才會顯示：長按色塊，顯示各黨團提案次數）：
+    <div style="margin-top: 56px;">
+      <p class="key-name">
+        <span>提案總次數</span>
+        <span class="key-name__hint">（長按色塊，顯示各黨團提案次數）</span>
+      </p>
+      <ChartStackBar
+        style="margin-top: 12px;"
+        :data="dataChartStackBarProposal"
+      />
+    </div>
+    <div style="margin-top: 12px;">
+      <p class="key-name">
+        <span>排審總次數</span>
+        <span
+          v-if="!isDataChartStackBarExaminationNotExist"
+          class="key-name__hint"
+        >
+          （長按色塊，顯示各黨團提案次數）
+        </span>
+      </p>
       <span v-if="isDataChartStackBarExaminationNotExist">
         0
       </span>
-      <ChartStackBar v-else :data="dataChartStackBarExamination" />
+      <ChartStackBar
+        v-else
+        style="margin-top: 12px;"
+        :data="dataChartStackBarExamination"
+      />
     </div>
     <div v-if="tooltip['重點法案標注'] === 'yes'">
       ---------
       <br />
       <button style="border: 1px solid black;">看文章</button>
     </div>
-    ---------
-    <br />
-    <div style="white-space: pre;">{{ formatJson(tooltip) }}</div>
   </section>
 </template>
 
@@ -274,20 +292,22 @@ export default {
       })
     },
   },
-  methods: {
-    formatJson(json) {
-      if (!json) {
-        return
-      }
-
-      return JSON.stringify(json, null, 2)
-    },
-  },
 }
 </script>
 
 <style lang="scss" scoped>
 section {
   padding: 47px 13px;
+}
+
+.key-name {
+  font-size: 12px;
+  font-weight: 900;
+  &__hint {
+    font-weight: normal;
+    @include media-breakpoint-up(xl) {
+      display: none;
+    }
+  }
 }
 </style>
