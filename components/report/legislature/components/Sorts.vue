@@ -1,20 +1,23 @@
 <template>
-  <section class="flex flex-col">
+  <section class="sorts">
     <h1>排列按照：</h1>
-    <button class="flex" @click="handleSortButtonClick('類別')">
-      類別 {{ getOrderIcon('類別') }}
-    </button>
-    <button class="flex" @click="handleSortButtonClick('屆期')">
-      屆期 {{ getOrderIcon('屆期') }}
-    </button>
-    <button class="flex" @click="handleSortButtonClick('提案總次數')">
-      提案總次數 {{ getOrderIcon('提案總次數') }}
-    </button>
-    <button class="flex" @click="handleSortButtonClick('排審總次數')">
-      排審總次數 {{ getOrderIcon('排審總次數') }}
-    </button>
-    <button class="flex" @click="handleSortButtonClick('停留屆期')">
-      停留屆期 {{ getOrderIcon('停留屆期') }}
+    <button
+      v-for="sortName in Object.keys($store.state.data.sorts)"
+      :key="sortName"
+      :class="[
+        'sorts__sort-button',
+        'sort-button',
+        { 'sort-button--bold': !!getSortOrder(sortName) },
+      ]"
+      @click="handleSortButtonClick(sortName)"
+    >
+      <span>{{ sortName }}</span>
+      <img
+        v-show="getOrderIcon(sortName) !== ''"
+        class="sort-button__order-icon"
+        :src="getOrderIcon(sortName)"
+        alt="sort-order-icon"
+      />
     </button>
   </section>
 </template>
@@ -38,13 +41,15 @@ export default {
         orderBy: getNextOrderOf(orderName),
       })
     },
+    getSortOrder(orderName) {
+      return this.$store.state.data.sorts[orderName]
+    },
     getOrderIcon(orderName) {
-      const order = this.$store.state.data.sorts[orderName]
-      switch (order) {
+      switch (this.getSortOrder(orderName)) {
         case 'ascending':
-          return '⬆️'
+          return require('~/assets/imgs/report/legislature/arrow-sort.svg')
         case 'descending':
-          return '⬇️'
+          return require('~/assets/imgs/report/legislature/arrow-sort-down.svg')
         default:
           return ''
       }
@@ -53,15 +58,32 @@ export default {
 }
 </script>
 
-<style scoped>
-.flex {
+<style lang="scss" scoped>
+.sorts {
   display: flex;
-}
-.flex-col {
   flex-direction: column;
+  &__sort-button {
+    margin: 8px 0 0 0;
+  }
+}
+
+.sort-button {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #1b1b1b;
+  &--bold {
+    font-weight: 900;
+  }
+
+  &__order-icon {
+    margin: 0 0 0 6px;
+  }
 }
 
 h1 {
-  font-size: 22px;
+  font-size: 12px;
+  color: #1b1b1b;
+  font-weight: 900;
 }
 </style>
