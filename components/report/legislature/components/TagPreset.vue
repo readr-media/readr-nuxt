@@ -1,7 +1,7 @@
 <template>
   <span class="tag-preset">
     <span>{{ emoji }}&nbsp;</span>
-    <span class="text">{{ text }}</span>
+    <span class="text" :style="{ color: textColor }">{{ text }}</span>
   </span>
 </template>
 
@@ -15,6 +15,10 @@ export default {
     text: {
       type: String,
       default: 'text',
+    },
+    textColor: {
+      type: String,
+      default: 'white',
     },
   },
 }
