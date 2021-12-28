@@ -26,8 +26,11 @@
     />
     <Donate @clickButton="$ga.event('projects', 'click', 'donate')" />
     <RdNewsLetterBtn />
+
     <LazyRenderer class="latest-coverages">
-      <readr-latest-coverages />
+      <div style="background: #1b1b1b;">
+        <readr-latest-coverages />
+      </div>
     </LazyRenderer>
   </section>
 </template>
@@ -100,10 +103,7 @@ $primary-color: #33aba4;
   }
 }
 
-lazyrenderer::v-deep {
-  .latest-coverages {
-    background: rgb(153, 49, 49) !important;
-  }
+::v-deep .latest-coverages {
   .hydrated {
     max-width: 600px;
     margin: 0 auto;
