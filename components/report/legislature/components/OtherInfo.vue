@@ -25,6 +25,10 @@
       :canSendGaEvent="true"
     />
     <Donate @clickButton="$ga.event('projects', 'click', 'donate')" />
+    <RdNewsLetterBtn />
+    <LazyRenderer class="latest-coverages">
+      <readr-latest-coverages />
+    </LazyRenderer>
   </section>
 </template>
 
@@ -33,6 +37,7 @@ import Donate from './Donate.vue'
 import Quiz from './Quiz.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
+import RdNewsLetterBtn from '~/components/shared/RdNewsLetterBtn.vue'
 
 export default {
   components: {
@@ -40,6 +45,7 @@ export default {
     RdReportCredit,
     Donate,
     Quiz,
+    RdNewsLetterBtn,
   },
   props: {
     cmsData: {
@@ -53,6 +59,7 @@ export default {
 
 <style lang="scss" scoped>
 $primary-color: #33aba4;
+
 .report-extras::v-deep {
   background: #1b1b1b !important;
   color: #ffffff !important;
@@ -79,5 +86,35 @@ $primary-color: #33aba4;
 .report-credit {
   background: #1b1b1b;
   color: #ffffff !important;
+}
+
+.news-letter::v-deep {
+  background: #1b1b1b;
+  a {
+    color: $primary-color;
+    border: 2px solid $primary-color;
+    max-width: 476px;
+    &:hover {
+      background: #000000;
+    }
+  }
+}
+
+lazyrenderer::v-deep {
+  .latest-coverages {
+    background: rgb(153, 49, 49) !important;
+  }
+  .hydrated {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 0 40px 0;
+    h2 {
+      background: #fff;
+      color: rgba(27, 27, 27, 1);
+    }
+    h3 {
+      color: #fff;
+    }
+  }
 }
 </style>
