@@ -19,11 +19,15 @@
           </div>
           <button
             class="aside__reset-filter-button reset-filter-button"
+            style="color: #979797; margin-top: 12px;"
             @click="$store.commit('data/RESET_DATA')"
           >
             清除選取
           </button>
-          <nav class="aside__aside-preset-filters-nav preset-filters-nav">
+          <nav
+            class="aside__aside-preset-filters-nav preset-filters-nav"
+            style="margin-top: 12px;"
+          >
             <TagPreset
               v-for="tag in tags"
               :key="tag.text"
@@ -34,10 +38,10 @@
               @click.native="handleClickAsidePresetFilter(tag.text)"
             />
           </nav>
+          <Sorts style="margin: 9px 0 0 0;" />
+          <div class="divider" />
           <Colors />
-          ------------
-          <Sorts />
-          ------------
+          <div class="divider" />
           <Filters />
         </div>
       </aside>
@@ -173,7 +177,7 @@ export default {
   height: 100vh;
   background-color: white;
   overflow-y: scroll;
-  padding: 20px;
+  padding: 16px 28px;
 }
 
 .aside-preset-filters-nav {
@@ -239,5 +243,11 @@ export default {
   color: #b0b0b0;
   font-size: 12px;
   font-weight: 300;
+}
+
+.divider {
+  height: 1px;
+  background-color: black;
+  margin: 13px 0;
 }
 </style>
