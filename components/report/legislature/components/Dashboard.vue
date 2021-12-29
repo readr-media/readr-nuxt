@@ -1,5 +1,9 @@
 <template>
-  <section class="dashboard" style="background-color: black;">
+  <section
+    v-observe-visibility="handleDashboardVisibilityChange"
+    class="dashboard"
+    style="background-color: black;"
+  >
     <ClientOnly>
       <aside v-show="isAsideToggled" class="dashboard__aside aside">
         <ButtonClose
@@ -47,7 +51,11 @@
         </div>
       </aside>
       <main class="dashboard__main main">
-        <Search @clickBill="handleLightBoxShow" />
+        <Search
+          id="search-of-the-dashboard"
+          v-observe-visibility="handleSearchVisibilityChange"
+          @clickBill="handleLightBoxShow"
+        />
         <nav class="main__preset-filters-nav preset-filters-nav">
           <ButtonPrimary
             v-for="[filterName, filterValue] in Object.entries(
@@ -91,11 +99,29 @@
           @closeLightbox="isLightBoxVisible = false"
         />
       </main>
+      <button
+        v-show="shouldShowScroller"
+        class="scroller-button"
+        @click="handleScrollerButtonClick"
+      >
+        <img
+          src="~/assets/imgs/report/legislature/arrow-dashboard-scroller.svg"
+          alt="scroller-icon"
+          :style="{
+            transition: 'transform 0.25s ease-out',
+            transform: `rotate(${
+              scrollerIconDirection === 'down' ? '180deg' : '0'
+            })`,
+          }"
+        />
+      </button>
+      <div id="bottom-of-the-dashboard"></div>
     </ClientOnly>
   </section>
 </template>
 
 <script>
+import scrollIntoView from 'scroll-into-view'
 import billPresets from '../constants/billPresets.json'
 import Search from './Search.vue'
 import Colors from './Colors.vue'
@@ -126,6 +152,8 @@ export default {
       isAsideToggled: false,
       lightBoxData: {},
       isLightBoxVisible: false,
+      shouldShowScroller: false,
+      scrollerIconDirection: 'down',
     }
   },
   computed: {
@@ -155,6 +183,21 @@ export default {
     handleClickAsidePresetFilter(filterName) {
       this.$store.commit('data/SET_PRESET_FILTER', filterName)
       this.handleCloseAside()
+    },
+    handleSearchVisibilityChange(isVisible) {
+      if (isVisible) {
+        this.scrollerIconDirection = 'down'
+      } else {
+        this.scrollerIconDirection = 'up'
+      }
+    },
+    handleDashboardVisibilityChange(isVisible) {
+      this.shouldShowScroller = isVisible
+    },
+    handleScrollerButtonClick() {
+      const element =
+        this.scrollerIconDirection === 'down' ? 'bottom' : 'search'
+      scrollIntoView(document.querySelector(`#${element}-of-the-dashboard`))
     },
   },
 }
@@ -250,5 +293,11 @@ export default {
   height: 1px;
   background-color: black;
   margin: 13px 0;
+}
+
+.scroller-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 </style>
