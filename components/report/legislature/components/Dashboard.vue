@@ -5,12 +5,21 @@
     style="background-color: black;"
   >
     <ClientOnly>
-      <aside v-show="isAsideToggled" class="dashboard__aside aside">
-        <ButtonClose
-          style="position: sticky; top: 4px; right: 4px; align-self: flex-end;"
-          @click.native="handleCloseAside"
-        />
-        <div>
+      <aside
+        v-show="isAsideToggled"
+        class="dashboard__aside-wrapper aside-wrapper"
+        @click="handleCloseAside"
+      >
+        <section class="aside-wrapper__aside aside" @click.stop>
+          <ButtonClose
+            style="
+              position: sticky;
+              top: 4px;
+              right: 4px;
+              align-self: flex-end;
+            "
+            @click.native="handleCloseAside"
+          />
           <div class="result-count result-count--black result-count--bold">
             <p>你的篩選結果</p>
             <p>
@@ -48,7 +57,7 @@
           <Colors />
           <div class="divider" />
           <Filters />
-        </div>
+        </section>
       </aside>
       <main class="dashboard__main main">
         <Search
@@ -206,7 +215,7 @@ export default {
 <style lang="scss" scoped>
 .dashboard {
   padding: 20px;
-  &__aside {
+  &__aside-wrapper {
     position: fixed;
     top: 0;
     left: 0;
@@ -214,11 +223,15 @@ export default {
   }
 }
 
+.aside-wrapper {
+  height: 100vh;
+}
 .aside {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   width: 75%;
-  height: 100vh;
+  height: 100%;
   background-color: white;
   overflow-y: scroll;
   padding: 16px 28px;
@@ -290,7 +303,8 @@ export default {
 }
 
 .divider {
-  height: 1px;
+  width: 100%;
+  min-height: 1px;
   background-color: black;
   margin: 13px 0;
 }
