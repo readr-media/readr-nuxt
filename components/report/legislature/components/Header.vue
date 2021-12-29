@@ -5,21 +5,24 @@
       @shareFacebookLinkClick="sendGaClickEvent('share to fb')"
       @shareLineLinkClick="sendGaClickEvent('share to line')"
     />
-    <div class="header__anchors">
+    <div class="header__anchors_mobile">
+      <a v-for="anchor in mobileAnchors" :key="anchor">{{ anchor }}</a>
+    </div>
+    <div class="header__anchors_desktop">
       <img src="../../../../assets/imgs/report/legislature/arrow.svg" />
       <Anchor :title="anchors.story" />
       <Anchor :title="anchors.dashboard" :isActive="true" />
       <Anchor
         v-for="anchor in anchors.article"
-        :title="anchor.title"
         :key="anchor.title"
+        :title="anchor.title"
       />
     </div>
   </div>
 </template>
 
 <script>
-import Anchor from './Anchor.vue'
+import Anchor from './HeaderAnchor.vue'
 export default {
   components: {
     Anchor,
@@ -28,6 +31,15 @@ export default {
     anchors: {
       type: Object,
       default: () => {},
+    },
+  },
+  computed: {
+    mobileAnchors() {
+      return [
+        this.anchors.story,
+        this.anchors.dashboard,
+        ...this.anchors.article.map((article) => article.title),
+      ]
     },
   },
 }
@@ -59,21 +71,57 @@ export default {
   }
 
   &__anchors {
-    padding: 15px 0 24px 0;
-    margin: 0 20px;
-    border-bottom: 0.5px solid #ffffff;
-    display: flex;
-    @include media-breakpoint-up(md) {
-      border-bottom: 0;
-      position: absolute;
-      top: 12px;
-      right: 90px;
-    }
-    img {
-      margin-right: 8px;
-      display: none;
+    &_mobile {
+      border-bottom: 0.5px solid #ffffff;
+      padding: 15px 0 24px 0;
+      margin: 0 20px;
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 32px;
+      color: #33aba4;
+      text-decoration: underline;
       @include media-breakpoint-up(md) {
-        display: inherit;
+        display: none;
+      }
+      a + a {
+        margin-left: 3px;
+      }
+
+      a {
+        &:before {
+          content: '';
+          display: inline-block;
+          transform: translate(0, -4px);
+          margin: 0 5px;
+          width: 3px;
+          height: 3px;
+          border-radius: 50%;
+          background: #33aba4;
+        }
+      }
+    }
+    &_desktop {
+      display: none;
+      padding: 15px 0 24px 0;
+      margin: 0 20px;
+      flex-flow: wrap;
+      gap: 8px;
+      position: absolute;
+      top: 0px;
+      right: 90px;
+      margin-left: 90px;
+      @include media-breakpoint-up(md) {
+        display: flex;
+      }
+      @include media-breakpoint-up(lg) {
+        top: 12px;
+      }
+      img {
+        margin-right: 8px;
+        display: none;
+        @include media-breakpoint-up(md) {
+          display: inherit;
+        }
       }
     }
   }

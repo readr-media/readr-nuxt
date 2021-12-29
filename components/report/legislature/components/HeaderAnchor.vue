@@ -1,5 +1,5 @@
 <template>
-  <button class="anchor" :class="{ active: isActive }">{{ title }}</button>
+  <a class="anchor" :class="{ active: isActive }">{{ title }}</a>
 </template>
 
 <script>
@@ -26,10 +26,13 @@ export default {
   line-height: 23px;
   color: #ffffff;
   background: #33aba4;
+  width: fit-content;
+  display: inline;
 
-  & + & {
-    margin-left: 8px;
-  }
+  // margin-bottom: 8px;
+  // & + & {
+  //   margin-left: 8px;
+  // }
 }
 
 .active {
