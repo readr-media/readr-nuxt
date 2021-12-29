@@ -11,6 +11,7 @@
       <GridItem
         v-for="bill in chunk"
         :key="bill.id"
+        :data-bill-name="bill['名稱']"
         :backgroundImage="getBillBackgroundImage(bill)"
         :verticalLength="Number(bill['停留屆期'])"
         :hasStarMarkIcon="bill['重點法案標注'] === 'yes'"
