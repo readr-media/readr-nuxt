@@ -4,8 +4,9 @@
       <img v-lazy="img" :src="'/post.svg'" :alt="title" />
     </picture>
     <div v-if="title" class="text">
-      <label v-show="description" class="label-intext">
-        {{ description }}
+      <label v-show="textWithoutEmoji" class="label-intext">
+        <span v-show="emoji" class="emoji">{{ emoji }}</span>
+        <span class="desc">{{ textWithoutEmoji }}</span>
       </label>
       <h4>
         <span>{{ title }}</span>
@@ -14,8 +15,9 @@
         {{ subtitle }}
       </span>
     </div>
-    <label v-show="description" class="label-upper">
-      {{ description }}
+    <label v-show="textWithoutEmoji" class="label-upper">
+      <span v-show="emoji" class="emoji">{{ emoji }}</span>
+      <span class="desc">{{ textWithoutEmoji }}</span>
     </label>
   </a>
 </template>
@@ -50,6 +52,14 @@ export default {
       default: false,
     },
   },
+  computed: {
+    emoji() {
+      return this.description?.split(' ')[0]
+    },
+    textWithoutEmoji() {
+      return this.description?.split(' ')[1]
+    },
+  },
 }
 </script>
 
@@ -57,6 +67,17 @@ export default {
 a {
   position: relative;
   display: block;
+  // for properly render emoji color in windows
+  .label-intext,
+  .label-upper {
+    .emoji {
+      font-weight: normal;
+      padding: 0 4px 0 0;
+    }
+    .desc {
+      font-weight: 700;
+    }
+  }
   picture {
     position: relative;
     display: block;
@@ -98,11 +119,6 @@ a {
       display: block;
       padding-top: 52.5%;
     }
-  }
-  // for properly render emoji color in windows
-  .label-intext,
-  .label-upper {
-    font-family: Segoe UI Emoji;
   }
   .text {
     position: absolute;
@@ -171,7 +187,6 @@ a {
     left: 0;
     z-index: 70;
     font-size: 16px;
-    font-weight: 700;
     line-height: 1.5;
     letter-spacing: 0.03em;
     color: #000928;
@@ -196,7 +211,6 @@ a {
         .label-intext {
           display: inline-block;
           font-size: 18px;
-          font-weight: 700;
           line-height: 1.5;
           letter-spacing: 0.03em;
           color: #000928;
