@@ -1,6 +1,6 @@
 <template>
   <section>
-    <Header />
+    <Header :anchors="cmsData.contentApiData.tag[0]" />
     <Intro :intro="cmsData.contentApiData.intro" />
     <DashboardStory />
     <Article :cmsData="cmsData" />

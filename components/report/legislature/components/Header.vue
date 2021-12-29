@@ -7,8 +7,13 @@
     />
     <div class="header__anchors">
       <img src="../../../../assets/imgs/report/legislature/arrow.svg" />
-      <Anchor title="看立法院專題報導" />
-      <Anchor title="看法案資料" :isActive="true" />
+      <Anchor :title="anchors.story" />
+      <Anchor :title="anchors.dashboard" :isActive="true" />
+      <Anchor
+        v-for="anchor in anchors.article"
+        :title="anchor.title"
+        :key="anchor.title"
+      />
     </div>
   </div>
 </template>
@@ -18,6 +23,12 @@ import Anchor from './Anchor.vue'
 export default {
   components: {
     Anchor,
+  },
+  props: {
+    anchors: {
+      type: Object,
+      default: () => {},
+    },
   },
 }
 </script>
