@@ -1,12 +1,34 @@
 <template>
-  <div class="container">
+  <div v-observe-visibility="handleDashboardVisibilityChange" class="container">
+    <div id="start-of-the-dashboard-story"></div>
     <div id="animation" ref="animation" v-intersect="animationEventObserver">
       <div id="b55dd62a-e932-436f-8447-2e85856f137c"></div>
     </div>
+    <button
+      v-show="shouldShowScroller"
+      class="scroller-button"
+      @click="handleScrollerButtonClick"
+    >
+      <img
+        src="~/assets/imgs/report/legislature/arrow-dashboard-scroller.svg"
+        alt="scroller-icon"
+        :style="{
+          transition: 'transform 0.25s ease-out',
+          transform: `rotate(${
+            scrollerIconDirection === 'down' ? '180deg' : '0'
+          })`,
+        }"
+      />
+    </button>
+    <div
+      v-observe-visibility="handleSearchVisibilityChange"
+      id="bottom-of-the-dashboard-story"
+    ></div>
   </div>
 </template>
 
 <script>
+import scrollIntoView from 'scroll-into-view'
 import { mapGetters } from 'vuex'
 import { intersect } from '~/helpers/vue/directives/index.js'
 
@@ -30,6 +52,8 @@ export default {
       hasSendGa: false,
       prevScroll: 0,
       isScrollDown: false,
+      scrollerIconDirection: 'down',
+      shouldShowScroller: false,
     }
   },
 
@@ -48,6 +72,16 @@ export default {
   },
 
   methods: {
+    handleSearchVisibilityChange(isVisible) {
+      if (isVisible) {
+        this.scrollerIconDirection = 'up'
+      } else {
+        this.scrollerIconDirection = 'down'
+      }
+    },
+    handleDashboardVisibilityChange(isVisible) {
+      this.shouldShowScroller = isVisible
+    },
     async setupAnimationEventObserver() {
       this.animationEventObserver = await setupIntersectionObserver(
         (entries) => {
@@ -94,6 +128,14 @@ export default {
       this.isLoaded = elHeight > 2000
       window.scroll(0, this.prevScroll)
     },
+    handleScrollerButtonClick() {
+      console.log('click')
+      const element = this.scrollerIconDirection === 'down' ? 'bottom' : 'start'
+      console.log(element)
+      scrollIntoView(
+        document.querySelector(`#${element}-of-the-dashboard-story`)
+      )
+    },
   },
 
   head() {
@@ -133,7 +175,17 @@ export default {
 <style lang="scss" scoped>
 #animation {
   background-color: rgb(0 0 0 / 18%);
+  z-index: 3000;
+  position: relative;
   #b55dd62a-e932-436f-8447-2e85856f137c {
+    z-index: 3000;
   }
+}
+
+.scroller-button {
+  position: fixed;
+  z-index: 4000;
+  bottom: 20px;
+  right: 20px;
 }
 </style>
