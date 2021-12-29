@@ -60,6 +60,9 @@ export default {
         document.body.removeEventListener('click', el.clickOutsideEvent)
       },
     })
+
+    // eslint-disable-next-line no-undef
+    Vue.use(VueObserveVisibility)
   },
   destroyed() {
     this.$store.unregisterModule('data')
@@ -75,6 +78,10 @@ export default {
         },
         {
           src: 'https://cdn.jsdelivr.net/npm/fuse.js@6.4.6',
+        },
+        {
+          src:
+            'https://unpkg.com/vue-observe-visibility/dist/vue-observe-visibility.min.js',
         },
       ],
     }
