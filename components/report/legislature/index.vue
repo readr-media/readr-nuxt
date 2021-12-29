@@ -1,7 +1,7 @@
 <template>
   <section>
     <Header />
-    <Intro />
+    <Intro :intro="cmsData.contentApiData.intro" />
     <DashboardStory />
     <Article :cmsData="cmsData" />
     <Dashboard />
