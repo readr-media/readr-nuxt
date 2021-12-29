@@ -32,6 +32,7 @@
               v-for="tag in tags"
               :key="tag.text"
               class="aside-preset-filters-nav__filter"
+              style="cursor: pointer;"
               :emoji="tag.emoji"
               :text="tag.text"
               :textColor="tag.textColor"

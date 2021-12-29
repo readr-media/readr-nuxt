@@ -48,6 +48,7 @@ export default {
   color: #1b1b1b;
   display: flex;
   align-items: center;
+  cursor: pointer;
   &__text {
     margin: 0 0 0 10px;
     display: flex;
