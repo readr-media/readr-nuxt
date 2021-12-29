@@ -372,6 +372,10 @@ export const mutations = {
   },
 
   SET_FILTER_OPTION(state, { filterName, optionName }) {
+    for (const key of Object.keys(state.presetFilters)) {
+      state.presetFilters[key] = false
+    }
+
     state.filters[filterName][optionName] = !state.filters[filterName][
       optionName
     ]
@@ -512,6 +516,14 @@ export const mutations = {
 
     for (const key of Object.keys(state.presetFilters)) {
       state.presetFilters[key] = key === presetName
+    }
+
+    for (const [filterName, filterOptions] of Object.entries(state.filters)) {
+      for (const [optionName, optionValue] of Object.entries(filterOptions)) {
+        if (optionValue) {
+          state.filters[filterName][optionName] = false
+        }
+      }
     }
     createExtentsOfData(state.extents, state.data)
   },
