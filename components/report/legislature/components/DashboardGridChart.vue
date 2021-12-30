@@ -21,18 +21,8 @@
           :verticalLength="Number(bill['停留屆期'])"
           :hasStarMarkIcon="bill['重點法案標注'] === 'yes'"
           @click.native="handleMouseClick(bill)"
-          @mouseover.native="handleMouseoverGridItem($event, bill)"
-          @mousemove.native="handleMousemoveGridItem"
-          @mouseout.native="handleMouseoutGridItem"
         />
       </ol>
-      <div
-        v-show="isGridItemTooltipShow"
-        class="tooltip"
-        :style="gridItemTooltipPosition"
-      >
-        {{ gridItemTooltipText }}
-      </div>
     </main>
     <aside class="dashboard-wrapper__aside aside">
       <DashboardBillInfo
@@ -46,7 +36,6 @@
 
 <script>
 import chunk from 'lodash/chunk'
-import debounce from 'lodash/debounce'
 import billCategories from '../constants/billCategories.json'
 
 import Lightbox from './Lightbox.vue'
@@ -68,22 +57,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  data() {
-    return {
-      // tooltip: {},
-      // isTooltipVisible: false,
-      windowWidth: 0,
-
-      isGridItemTooltipShow: false,
-      gridItemTooltipPosition: {
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-      },
-      gridItemTooltipText: '',
-    }
   },
   computed: {
     columnsNumber() {
@@ -108,15 +81,6 @@ export default {
   },
   async beforeMount() {
     await this.$store.dispatch('data/FETCH_DATA')
-  },
-  mounted() {
-    this.windowWidth = window.innerWidth
-    window.addEventListener(
-      'resize',
-      debounce(() => {
-        this.windowWidth = window.innerWidth
-      }, 1000)
-    )
   },
   methods: {
     getFirstCategory(bill) {
@@ -162,36 +126,6 @@ export default {
         }
       }
     },
-
-    handleMouseoverGridItem(e, bill) {
-      this.isGridItemTooltipShow = true
-      const shouldFlipTooltip = e.clientX > window.innerWidth / 2
-      this.gridItemTooltipPosition = shouldFlipTooltip
-        ? {
-            top: `${e.clientY + 10}px`,
-            right: `${window.innerWidth - e.clientX - 10}px`,
-          }
-        : {
-            top: `${e.clientY + 10}px`,
-            left: `${e.clientX + 10}px`,
-          }
-      this.gridItemTooltipText = bill['名稱']
-    },
-    handleMousemoveGridItem(e) {
-      const shouldFlipTooltip = e.clientX > window.innerWidth / 2
-      this.gridItemTooltipPosition = shouldFlipTooltip
-        ? {
-            top: `${e.clientY + 10}px`,
-            right: `${window.innerWidth - e.clientX - 10}px`,
-          }
-        : {
-            top: `${e.clientY + 10}px`,
-            left: `${e.clientX + 10}px`,
-          }
-    },
-    handleMouseoutGridItem() {
-      this.isGridItemTooltipShow = false
-    },
   },
 }
 </script>
@@ -221,19 +155,6 @@ main {
   grid-template-columns: repeat(10, minmax(0, 1fr));
   @include media-breakpoint-up(xl) {
     grid-template-columns: repeat(100, minmax(0, 1fr));
-  }
-}
-
-.tooltip {
-  position: fixed;
-  background-color: white;
-  padding: 3px 6px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #985f0b;
-  visibility: hidden;
-  @include media-breakpoint-up(xl) {
-    visibility: visible;
   }
 }
 

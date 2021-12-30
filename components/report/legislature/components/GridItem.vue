@@ -6,8 +6,18 @@
       aspectRatio: `1 / ${verticalLength}`,
       backgroundImage: backgroundImage,
     }"
+    @mouseover="handleMouseoverGridItem"
+    @mousemove="handleMousemoveGridItem"
+    @mouseout="handleMouseoutGridItem"
   >
     {{ hasStarMarkIcon ? '*' : '' }}
+    <div
+      v-show="isGridItemTooltipShow"
+      class="tooltip"
+      :style="gridItemTooltipPosition"
+    >
+      {{ dataBillName }}
+    </div>
   </div>
 </template>
 
@@ -25,6 +35,51 @@ export default {
     hasStarMarkIcon: {
       type: Boolean,
       default: false,
+    },
+    dataBillName: {
+      type: String,
+      default: '',
+    },
+  },
+  data() {
+    return {
+      isGridItemTooltipShow: false,
+      gridItemTooltipPosition: {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      },
+    }
+  },
+  methods: {
+    handleMouseoverGridItem(e) {
+      this.isGridItemTooltipShow = true
+      const shouldFlipTooltip = e.clientX > window.innerWidth / 2
+      this.gridItemTooltipPosition = shouldFlipTooltip
+        ? {
+            top: `${e.clientY + 10}px`,
+            right: `${window.innerWidth - e.clientX - 10}px`,
+          }
+        : {
+            top: `${e.clientY + 10}px`,
+            left: `${e.clientX + 10}px`,
+          }
+    },
+    handleMousemoveGridItem(e) {
+      const shouldFlipTooltip = e.clientX > window.innerWidth / 2
+      this.gridItemTooltipPosition = shouldFlipTooltip
+        ? {
+            top: `${e.clientY + 10}px`,
+            right: `${window.innerWidth - e.clientX - 10}px`,
+          }
+        : {
+            top: `${e.clientY + 10}px`,
+            left: `${e.clientX + 10}px`,
+          }
+    },
+    handleMouseoutGridItem() {
+      this.isGridItemTooltipShow = false
     },
   },
 }
@@ -44,6 +99,20 @@ div {
     outline: 2px solid #1b1b1b;
     outline-offset: -1px;
     font-size: 36px;
+  }
+}
+
+.tooltip {
+  position: fixed;
+  background-color: white;
+  padding: 3px 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #985f0b;
+  visibility: hidden;
+  width: max-content !important;
+  @include media-breakpoint-up(xl) {
+    visibility: visible;
   }
 }
 </style>
