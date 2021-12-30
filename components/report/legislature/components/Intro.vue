@@ -3,22 +3,22 @@
     <img
       src="~/assets/imgs/report/legislature/intro/01.png"
       class="intro__background rellax"
-      data-rellax-speed="10"
+      data-rellax-speed="100"
     />
     <img
       src="~/assets/imgs/report/legislature/intro/02.png"
       class="intro__background rellax"
-      data-rellax-speed="7"
+      data-rellax-speed="70"
     />
     <img
       src="~/assets/imgs/report/legislature/intro/03.png"
       class="intro__background rellax"
-      data-rellax-speed="3"
+      data-rellax-speed="30"
     />
     <img
       src="~/assets/imgs/report/legislature/intro/04.png"
       class="intro__background rellax"
-      data-rellax-speed="1"
+      data-rellax-speed="10"
     />
     <img
       src="~/assets/imgs/report/legislature/intro/05.png"
