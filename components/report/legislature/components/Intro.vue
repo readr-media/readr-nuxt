@@ -1,5 +1,25 @@
 <template>
-  <section>
+  <div class="container">
+    <img
+      src="~/assets/imgs/report/legislature/intro/01.png"
+      class="intro__background"
+    />
+    <img
+      src="~/assets/imgs/report/legislature/intro/02.png"
+      class="intro__background"
+    />
+    <img
+      src="~/assets/imgs/report/legislature/intro/03.png"
+      class="intro__background"
+    />
+    <img
+      src="~/assets/imgs/report/legislature/intro/04.png"
+      class="intro__background"
+    />
+    <img
+      src="~/assets/imgs/report/legislature/intro/05.png"
+      class="intro__background"
+    />
     <div class="intro">
       <div class="intro__title">{{ intro.title1 }}<br />{{ intro.title2 }}</div>
       <div class="intro__desc">{{ intro.description }}</div>
@@ -15,7 +35,7 @@
         </li>
       </ul>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -36,15 +56,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.intro {
-  height: 100vh;
+.container {
   background: #1b1b1b;
+  height: 293.47vw;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  img {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+  }
+}
+.intro {
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   padding: 30px;
+  position: relative;
+  height: 100vh;
+  margin: 0 auto;
   * {
     max-width: 669px;
   }
