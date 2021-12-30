@@ -30,7 +30,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 div {
   outline: 2px solid #1b1b1b;
   outline-offset: -2px;
@@ -39,5 +39,11 @@ div {
   display: flex;
   justify-content: center;
   align-items: center;
+  @include media-breakpoint-up(xl) {
+    width: 16px !important;
+    outline: 2px solid #1b1b1b;
+    outline-offset: -1px;
+    font-size: 36px;
+  }
 }
 </style>

@@ -302,6 +302,9 @@ export default {
 <style lang="scss" scoped>
 section {
   padding: 47px 13px;
+  @include media-breakpoint-up(xl) {
+    padding: 20px 10px;
+  }
 }
 
 .key-name {

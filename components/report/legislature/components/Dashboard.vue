@@ -2,7 +2,6 @@
   <section
     v-observe-visibility="handleDashboardVisibilityChange"
     class="dashboard"
-    style="background-color: black;"
   >
     <ClientOnly>
       <aside
@@ -63,6 +62,7 @@
         <Search
           id="search-of-the-dashboard"
           v-observe-visibility="handleSearchVisibilityChange"
+          class="main__search-mobile"
           @clickBill="handleLightBoxShow"
         />
         <nav class="main__preset-filters-nav preset-filters-nav">
@@ -83,8 +83,18 @@
             class="normal-filters-nav__aside-toggle aside-toggle"
             @click.native="handleAsideToggle"
           >
-            篩選與排序
+            <span class="mobile">
+              篩選與排序
+            </span>
+            <span class="desktop">
+              所有篩選器
+            </span>
           </ButtonSecondary>
+          <Search
+            v-observe-visibility="handleSearchVisibilityChange"
+            class="main__search-desktop"
+            @clickBill="handleLightBoxShow"
+          />
           <p class="normal-filters-nav__result-count result-count">
             你的篩選結果 共
             <span class="result-count__number">
@@ -215,7 +225,9 @@ export default {
 <style lang="scss" scoped>
 .dashboard {
   padding: 20px;
+  background-color: #1b1b1b;
   &__aside-wrapper {
+    width: 100%;
     position: fixed;
     top: 0;
     left: 0;
@@ -235,6 +247,9 @@ export default {
   background-color: white;
   overflow-y: scroll;
   padding: 16px 28px;
+  @include media-breakpoint-up(xl) {
+    width: 35%;
+  }
 }
 
 .aside-preset-filters-nav {
@@ -246,11 +261,29 @@ export default {
 }
 
 .main {
+  &__search-mobile {
+    @include media-breakpoint-up(xl) {
+      display: none;
+    }
+  }
+  &__search-desktop {
+    display: none;
+    @include media-breakpoint-up(xl) {
+      display: initial;
+      margin: 0 0 0 8px;
+    }
+  }
   &__preset-filters-nav {
     margin: 17px 0 0 0;
+    @include media-breakpoint-up(xl) {
+      display: none !important;
+    }
   }
   &__normal-filters-nav {
     margin-top: 17px;
+    @include media-breakpoint-up(xl) {
+      margin-top: 0;
+    }
   }
   &__legends {
     margin: 17px 0 0 0;
@@ -313,5 +346,18 @@ export default {
   position: fixed;
   bottom: 20px;
   right: 20px;
+}
+
+.mobile {
+  display: initial;
+  @include media-breakpoint-up(xl) {
+    display: none;
+  }
+}
+.desktop {
+  display: none;
+  @include media-breakpoint-up(xl) {
+    display: initial;
+  }
 }
 </style>

@@ -1,33 +1,46 @@
 <template>
   <section class="dashboard-wrapper">
-    <Lightbox v-show="isTooltipVisible" @close="$emit('closeLightbox')">
+    <Lightbox
+      v-show="isTooltipVisible"
+      class="dashboard-wrapper__lightbox"
+      @close="$emit('closeLightbox')"
+    >
       <DashboardBillInfo :tooltip="tooltip" />
     </Lightbox>
-    <ol
-      v-for="(chunk, index) in dataChunk"
-      :key="index"
-      style="display: flex; flex-direction: column;"
-    >
-      <GridItem
-        v-for="bill in chunk"
-        :key="bill.id"
-        :data-bill-name="bill['名稱']"
-        :backgroundImage="getBillBackgroundImage(bill)"
-        :verticalLength="Number(bill['停留屆期'])"
-        :hasStarMarkIcon="bill['重點法案標注'] === 'yes'"
-        @click.native="handleMouseClick(bill)"
-        @mouseover.native="handleMouseoverGridItem($event, bill)"
-        @mousemove.native="handleMousemoveGridItem"
-        @mouseout.native="handleMouseoutGridItem"
+    <main :style="{ gridTemplateColumns: gridTemplateColumns }">
+      <ol
+        v-for="(chunk, index) in dataChunk"
+        :key="index"
+        style="display: flex; flex-direction: column;"
+      >
+        <GridItem
+          v-for="bill in chunk"
+          :key="bill.id"
+          :data-bill-name="bill['名稱']"
+          :backgroundImage="getBillBackgroundImage(bill)"
+          :verticalLength="Number(bill['停留屆期'])"
+          :hasStarMarkIcon="bill['重點法案標注'] === 'yes'"
+          @click.native="handleMouseClick(bill)"
+          @mouseover.native="handleMouseoverGridItem($event, bill)"
+          @mousemove.native="handleMousemoveGridItem"
+          @mouseout.native="handleMouseoutGridItem"
+        />
+      </ol>
+      <div
+        v-show="isGridItemTooltipShow"
+        class="tooltip"
+        :style="gridItemTooltipPosition"
+      >
+        {{ gridItemTooltipText }}
+      </div>
+    </main>
+    <aside class="dashboard-wrapper__aside aside">
+      <DashboardBillInfo
+        v-show="isTooltipVisible"
+        class="aside__bill-info"
+        :tooltip="tooltip"
       />
-    </ol>
-    <div
-      v-show="isGridItemTooltipShow"
-      class="tooltip"
-      :style="gridItemTooltipPosition"
-    >
-      {{ gridItemTooltipText }}
-    </div>
+    </aside>
   </section>
 </template>
 
@@ -73,13 +86,24 @@ export default {
     }
   },
   computed: {
+    columnsNumber() {
+      if (this.$store.state.viewport.width < 1200) {
+        return 10
+      } else {
+        const asideWidth = 326
+        const asideMargin = 32
+        const containerWidth =
+          this.$store.state.viewport.width - asideWidth - asideMargin
+        return Math.floor(containerWidth / 16)
+      }
+    },
     dataChunk() {
-      const isMobile = this.windowWidth < 1024
       const data = this.$store.state.data.data
-      const size = isMobile
-        ? Math.ceil(data.length / 10)
-        : Math.ceil(data.length / 60)
+      const size = Math.ceil(data.length / this.columnsNumber)
       return chunk(this.$store.state.data.data, size)
+    },
+    gridTemplateColumns() {
+      return `repeat(${this.columnsNumber}, minmax(0, 1fr))`
     },
   },
   async beforeMount() {
@@ -174,8 +198,30 @@ export default {
 
 <style lang="scss" scoped>
 .dashboard-wrapper {
+  @include media-breakpoint-up(xl) {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__lightbox {
+    @include media-breakpoint-up(xl) {
+      display: none !important;
+    }
+  }
+  &__aside {
+    display: none;
+    @include media-breakpoint-up(xl) {
+      display: block;
+      margin: 0 0 0 32px;
+    }
+  }
+}
+
+main {
   display: grid;
   grid-template-columns: repeat(10, minmax(0, 1fr));
+  @include media-breakpoint-up(xl) {
+    grid-template-columns: repeat(100, minmax(0, 1fr));
+  }
 }
 
 .tooltip {
@@ -190,9 +236,16 @@ export default {
     visibility: visible;
   }
 }
-@media (min-width: 1024px) {
-  .dashboard-wrapper {
-    grid-template-columns: repeat(60, minmax(0, 1fr));
+
+.aside {
+  width: 326px;
+  position: relative;
+  &__bill-info {
+    background-color: white;
+    position: sticky;
+    top: 90px;
+    max-height: calc(100vh - 80px);
+    overflow-y: scroll;
   }
 }
 </style>
