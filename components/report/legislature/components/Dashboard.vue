@@ -90,6 +90,12 @@
               所有篩選器
             </span>
           </ButtonSecondary>
+          <Select
+            class="main__select-preset-filters"
+            :defaultText="'綜合指標 ▼'"
+            :options="optionsPresetFilters"
+            @clickOption="handleSelectPresetFilterOptionClick"
+          />
           <Search
             v-observe-visibility="handleSearchVisibilityChange"
             class="main__search-desktop"
@@ -152,6 +158,7 @@ import Legends from './Legends.vue'
 import DashboardGridChart from './DashboardGridChart.vue'
 import TagPreset from './TagPreset.vue'
 import ButtonClose from './ButtonClose.vue'
+import Select from './Select.vue'
 
 export default {
   components: {
@@ -165,6 +172,7 @@ export default {
     DashboardGridChart,
     TagPreset,
     ButtonClose,
+    Select,
   },
   data() {
     return {
@@ -186,6 +194,15 @@ export default {
           }
         }
       )
+    },
+    optionsPresetFilters() {
+      return this.tags.map((value) => {
+        return {
+          emoji: value.emoji,
+          text: value.text,
+          isActive: !!this.$store.state.data.presetFilters[value.text],
+        }
+      })
     },
   },
   methods: {
@@ -217,6 +234,9 @@ export default {
       const element =
         this.scrollerIconDirection === 'down' ? 'bottom' : 'search'
       scrollIntoView(document.querySelector(`#${element}-of-the-dashboard`))
+    },
+    handleSelectPresetFilterOptionClick(option) {
+      this.$store.commit('data/SET_PRESET_FILTER', option.text)
     },
   },
 }
@@ -267,6 +287,13 @@ export default {
     }
   }
   &__search-desktop {
+    display: none;
+    @include media-breakpoint-up(xl) {
+      display: initial;
+      margin: 0 0 0 8px;
+    }
+  }
+  &__select-preset-filters {
     display: none;
     @include media-breakpoint-up(xl) {
       display: initial;
