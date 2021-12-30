@@ -4,13 +4,13 @@
       <div class="intro__title">{{ intro.title1 }}<br />{{ intro.title2 }}</div>
       <div class="intro__desc">{{ intro.description }}</div>
       <ul class="intro__anchor">
-        <li>
+        <li @click="handleAnchorClick('story')">
           {{ intro.anchor.story }}
         </li>
-        <li>
+        <li @click="handleAnchorClick('dashboard')">
           {{ intro.anchor.dashboard }}
         </li>
-        <li>
+        <li @click="handleAnchorClick('article')">
           {{ intro.anchor.article }}
         </li>
       </ul>
@@ -19,11 +19,17 @@
 </template>
 
 <script>
+import scrollIntoView from 'scroll-into-view'
 export default {
   props: {
     intro: {
       type: Object,
       default: () => {},
+    },
+  },
+  methods: {
+    handleAnchorClick(section) {
+      scrollIntoView(document.querySelector(`#${section}`))
     },
   },
 }

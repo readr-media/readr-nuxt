@@ -10,8 +10,16 @@
     </div>
     <div class="header__anchors_desktop">
       <img src="../../../../assets/imgs/report/legislature/arrow.svg" />
-      <Anchor :title="anchors.story" />
-      <Anchor :title="anchors.dashboard" :isActive="true" />
+      <Anchor
+        :title="anchors.story"
+        :isActive="nowSection === 'story'"
+        @click.native="handleAnchorClick('story')"
+      />
+      <Anchor
+        :title="anchors.dashboard"
+        :isActive="nowSection === 'dashboard'"
+        @click.native="handleAnchorClick('dashboard')"
+      />
       <Anchor
         v-for="anchor in anchors.article"
         :key="anchor.title"
@@ -22,6 +30,7 @@
 </template>
 
 <script>
+import scrollIntoView from 'scroll-into-view'
 import Anchor from './HeaderAnchor.vue'
 export default {
   components: {
@@ -32,6 +41,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    nowSection: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     mobileAnchors() {
@@ -40,6 +53,11 @@ export default {
         this.anchors.dashboard,
         ...this.anchors.article.map((article) => article.title),
       ]
+    },
+  },
+  methods: {
+    handleAnchorClick(section) {
+      scrollIntoView(document.querySelector(`#${section}`))
     },
   },
 }
