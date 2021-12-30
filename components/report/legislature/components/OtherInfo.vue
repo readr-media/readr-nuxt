@@ -98,7 +98,7 @@ $primary-color: #33aba4;
     border: 2px solid $primary-color;
     max-width: 476px;
     &:hover {
-      background: #000000;
+      background: #000000 !important;
     }
   }
 }
