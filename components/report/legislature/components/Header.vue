@@ -100,7 +100,7 @@ export default {
       line-height: 32px;
       color: #33aba4;
       text-decoration: underline;
-      @include media-breakpoint-up(md) {
+      @include media-breakpoint-up(lg) {
         display: none;
       }
       a + a {
@@ -127,19 +127,16 @@ export default {
       flex-flow: wrap;
       gap: 8px;
       position: absolute;
-      top: 0px;
+      top: 12px;
       right: 90px;
       margin-left: 90px;
-      @include media-breakpoint-up(md) {
-        display: flex;
-      }
       @include media-breakpoint-up(lg) {
-        top: 12px;
+        display: flex;
       }
       img {
         margin-right: 8px;
         display: none;
-        @include media-breakpoint-up(md) {
+        @include media-breakpoint-up(lg) {
           display: inherit;
         }
       }
