@@ -5,7 +5,7 @@
       @shareFacebookLinkClick="sendGaClickEvent('share to fb')"
       @shareLineLinkClick="sendGaClickEvent('share to line')"
     />
-    <section v-show="nowSection !== 'intro'">
+    <section v-show="shouldShowAnchors">
       <div class="header__anchors_mobile">
         <a v-for="anchor in mobileAnchors" :key="anchor">{{ anchor }}</a>
       </div>
@@ -48,6 +48,14 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      isMounted: false,
+    }
+  },
+  mounted() {
+    this.isMounted = true
+  },
   computed: {
     mobileAnchors() {
       return [
@@ -55,6 +63,9 @@ export default {
         this.anchors.dashboard,
         ...this.anchors.article.map((article) => article.title),
       ]
+    },
+    shouldShowAnchors() {
+      return this.isMounted && this.nowSection !== 'intro'
     },
   },
   methods: {
