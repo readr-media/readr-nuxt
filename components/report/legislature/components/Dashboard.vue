@@ -91,7 +91,7 @@
             </span>
           </ButtonSecondary>
           <Select
-            class="main__select-preset-filters"
+            class="normal-filters-nav__select-preset-filters"
             :defaultText="'綜合指標 ▼'"
             :options="optionsPresetFilters"
             @clickOption="handleSelectPresetFilterOptionClick"
@@ -114,6 +114,7 @@
           >
             清除篩選
           </button>
+          <SelectSorts class="normal-filters-nav__select-sorts" />
         </nav>
         <Legends class="main__legends" />
         <DashboardGridChart
@@ -159,6 +160,7 @@ import DashboardGridChart from './DashboardGridChart.vue'
 import TagPreset from './TagPreset.vue'
 import ButtonClose from './ButtonClose.vue'
 import Select from './Select.vue'
+import SelectSorts from './SelectSorts.vue'
 
 export default {
   components: {
@@ -173,6 +175,7 @@ export default {
     TagPreset,
     ButtonClose,
     Select,
+    SelectSorts,
   },
   data() {
     return {
@@ -293,13 +296,6 @@ export default {
       margin: 0 0 0 8px;
     }
   }
-  &__select-preset-filters {
-    display: none;
-    @include media-breakpoint-up(xl) {
-      display: initial;
-      margin: 0 0 0 8px;
-    }
-  }
   &__preset-filters-nav {
     margin: 17px 0 0 0;
     @include media-breakpoint-up(xl) {
@@ -333,11 +329,26 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+  &__select-preset-filters {
+    display: none;
+    @include media-breakpoint-up(xl) {
+      display: initial;
+      margin: 0 0 0 8px;
+    }
+  }
   &__result-count {
     margin: 0 0 0 10px;
   }
   &__reset-filter-button {
     margin-left: 10px;
+  }
+  &__select-sorts {
+    display: none;
+    @include media-breakpoint-up(xl) {
+      display: initial;
+      margin-left: auto;
+      margin-right: 350px;
+    }
   }
 }
 .result-count {
