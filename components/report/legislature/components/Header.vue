@@ -5,27 +5,29 @@
       @shareFacebookLinkClick="sendGaClickEvent('share to fb')"
       @shareLineLinkClick="sendGaClickEvent('share to line')"
     />
-    <div class="header__anchors_mobile">
-      <a v-for="anchor in mobileAnchors" :key="anchor">{{ anchor }}</a>
-    </div>
-    <div class="header__anchors_desktop">
-      <img src="../../../../assets/imgs/report/legislature/arrow.svg" />
-      <Anchor
-        :title="anchors.story"
-        :isActive="nowSection === 'story'"
-        @click.native="handleAnchorClick('story')"
-      />
-      <Anchor
-        :title="anchors.dashboard"
-        :isActive="nowSection === 'dashboard'"
-        @click.native="handleAnchorClick('dashboard')"
-      />
-      <Anchor
-        v-for="anchor in anchors.article"
-        :key="anchor.title"
-        :title="anchor.title"
-      />
-    </div>
+    <section v-show="nowSection !== 'intro'">
+      <div class="header__anchors_mobile">
+        <a v-for="anchor in mobileAnchors" :key="anchor">{{ anchor }}</a>
+      </div>
+      <div class="header__anchors_desktop">
+        <img src="../../../../assets/imgs/report/legislature/arrow.svg" />
+        <Anchor
+          :title="anchors.story"
+          :isActive="nowSection === 'story'"
+          @click.native="handleAnchorClick('story')"
+        />
+        <Anchor
+          :title="anchors.dashboard"
+          :isActive="nowSection === 'dashboard'"
+          @click.native="handleAnchorClick('dashboard')"
+        />
+        <Anchor
+          v-for="anchor in anchors.article"
+          :key="anchor.title"
+          :title="anchor.title"
+        />
+      </div>
+    </section>
   </div>
 </template>
 
