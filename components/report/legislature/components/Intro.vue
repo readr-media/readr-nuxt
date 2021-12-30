@@ -2,19 +2,23 @@
   <div class="container">
     <img
       src="~/assets/imgs/report/legislature/intro/01.png"
-      class="intro__background"
+      class="intro__background rellax"
+      data-rellax-speed="10"
     />
     <img
       src="~/assets/imgs/report/legislature/intro/02.png"
-      class="intro__background"
+      class="intro__background rellax"
+      data-rellax-speed="7"
     />
     <img
       src="~/assets/imgs/report/legislature/intro/03.png"
-      class="intro__background"
+      class="intro__background rellax"
+      data-rellax-speed="3"
     />
     <img
       src="~/assets/imgs/report/legislature/intro/04.png"
-      class="intro__background"
+      class="intro__background rellax"
+      data-rellax-speed="1"
     />
     <img
       src="~/assets/imgs/report/legislature/intro/05.png"
@@ -39,6 +43,8 @@
 </template>
 
 <script>
+/* global Rellax */
+/* eslint no-undef: "error" */
 import scrollIntoView from 'scroll-into-view'
 export default {
   props: {
@@ -46,6 +52,10 @@ export default {
       type: Object,
       default: () => {},
     },
+  },
+  mounted() {
+    const rellax = new Rellax('.rellax')
+    console.log(rellax)
   },
   methods: {
     handleAnchorClick(section) {

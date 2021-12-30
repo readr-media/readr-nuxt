@@ -111,6 +111,10 @@ export default {
           src:
             'https://unpkg.com/vue-observe-visibility/dist/vue-observe-visibility.min.js',
         },
+        {
+          src:
+            'https://cdn.jsdelivr.net/gh/dixonandmoe/rellax@master/rellax.min.js',
+        },
       ],
     }
   },
