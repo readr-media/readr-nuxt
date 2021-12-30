@@ -13,9 +13,14 @@
     >
       <span>{{ sortName }}</span>
       <img
-        v-show="getOrderIcon(sortName) !== ''"
+        v-show="!!getSortOrder(sortName)"
         class="sort-button__order-icon"
-        :src="getOrderIcon(sortName)"
+        :style="{
+          transform: `rotate(${
+            getSortOrder(sortName) === 'descending' ? '180deg' : '0deg'
+          })`,
+        }"
+        src="~/assets/imgs/report/legislature/arrow-sort.svg"
         alt="sort-order-icon"
       />
     </button>
@@ -43,16 +48,6 @@ export default {
     },
     getSortOrder(orderName) {
       return this.$store.state.data.sorts[orderName]
-    },
-    getOrderIcon(orderName) {
-      switch (this.getSortOrder(orderName)) {
-        case 'ascending':
-          return require('~/assets/imgs/report/legislature/arrow-sort.svg')
-        case 'descending':
-          return require('~/assets/imgs/report/legislature/arrow-sort-down.svg')
-        default:
-          return ''
-      }
     },
   },
 }
