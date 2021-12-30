@@ -92,7 +92,7 @@ $primary-color: #33aba4;
 }
 
 .news-letter::v-deep {
-  background: #1b1b1b;
+  background: #1b1b1b !important;
   a {
     color: $primary-color;
     border: 2px solid $primary-color;

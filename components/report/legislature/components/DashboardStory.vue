@@ -131,7 +131,6 @@ export default {
     handleScrollerButtonClick() {
       console.log('click')
       const element = this.scrollerIconDirection === 'down' ? 'bottom' : 'start'
-      console.log(element)
       scrollIntoView(
         document.querySelector(`#${element}-of-the-dashboard-story`)
       )
