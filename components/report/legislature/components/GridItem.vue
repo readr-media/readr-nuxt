@@ -16,7 +16,7 @@
       class="tooltip"
       :style="gridItemTooltipPosition"
     >
-      {{ dataBillName }}
+      {{ billName }}
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    dataBillName: {
+    billName: {
       type: String,
       default: '',
     },
