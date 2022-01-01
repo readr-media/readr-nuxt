@@ -20,10 +20,16 @@
       class="intro__background rellax"
       data-rellax-speed="10"
     />
-    <img
-      src="~/assets/imgs/report/legislature/intro/05.png"
-      class="intro__background"
-    />
+    <div class="examples">
+      <IntroExample
+        v-for="item in example"
+        :key="item.id"
+        :pictureId="item.id"
+        :description="item.description"
+        :lawName="item.lawName"
+        :color="item.color"
+      />
+    </div>
     <div class="intro">
       <div class="intro__title">{{ intro.title1 }}<br />{{ intro.title2 }}</div>
       <div class="intro__desc">{{ intro.description }}</div>
@@ -46,12 +52,41 @@
 /* global Rellax */
 /* eslint no-undef: "error" */
 import scrollIntoView from 'scroll-into-view'
+import IntroExample from './IntroExample.vue'
 export default {
+  components: {
+    IntroExample,
+  },
   props: {
     intro: {
       type: Object,
       default: () => {},
     },
+  },
+  data() {
+    return {
+      example: [
+        {
+          id: '01',
+          description: '當大火悲劇不斷重演，消防安全立法卻持續卡關',
+          lawName: '《消防設備人員法》',
+          color: '#62AD61',
+        },
+        {
+          id: '02',
+          description:
+            '太陽花學運抗爭者訴訟官司打 7 年，關乎民眾抗議權利的集會遊行自由修法仍原地踏步',
+          lawName: '《集會遊行法》',
+          color: '#33ABA4',
+        },
+        {
+          id: '03',
+          description: '當開發案不斷入侵傳統領域，原住民的土地正義在哪裡？',
+          lawName: '《原住民族土地及海域法》',
+          color: '#5C18B1',
+        },
+      ],
+    }
   },
   mounted() {
     const rellax = new Rellax('.rellax')
@@ -72,11 +107,15 @@ export default {
   position: relative;
   display: flex;
   align-items: flex-end;
+  flex-direction: column;
   img {
     position: absolute;
     top: 0;
     width: 100vw;
   }
+}
+.examples {
+  flex: 1;
 }
 .intro {
   color: #fff;
