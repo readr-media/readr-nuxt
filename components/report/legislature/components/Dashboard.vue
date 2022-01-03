@@ -305,7 +305,7 @@ export default {
 .main {
   &__search-mobile {
     @include media-breakpoint-up(xl) {
-      display: none;
+      display: none !important;
     }
   }
   &__search-desktop {
