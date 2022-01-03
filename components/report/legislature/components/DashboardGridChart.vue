@@ -31,10 +31,6 @@
         class="aside__bill-info"
         :tooltip="tooltip"
       />
-      <PresetFilterInfo
-        v-else-if="isPresetFilterToggled"
-        class="aside__preset-filter-info"
-      />
     </aside>
   </section>
 </template>
@@ -46,14 +42,12 @@ import billCategories from '../constants/billCategories.json'
 import Lightbox from './Lightbox.vue'
 import GridItem from './GridItem.vue'
 import DashboardBillInfo from './DashboardBillInfo.vue'
-import PresetFilterInfo from './PresetFilterInfo.vue'
 
 export default {
   components: {
     Lightbox,
     DashboardBillInfo,
     GridItem,
-    PresetFilterInfo,
   },
   props: {
     tooltip: {
@@ -84,15 +78,6 @@ export default {
     },
     gridTemplateColumns() {
       return `repeat(${this.columnsNumber}, minmax(0, 1fr))`
-    },
-    isPresetFilterToggled() {
-      return (
-        Object.entries(this.$store.state.data.presetFilters).filter(
-          function getTruthyFilterValue([filterName, filterValue]) {
-            return filterValue === true
-          }
-        ).length !== 0
-      )
     },
   },
   async beforeMount() {

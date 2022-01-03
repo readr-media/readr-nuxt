@@ -252,8 +252,9 @@ export default {
       scrollIntoView(document.querySelector(`#${element}-of-the-dashboard`))
     },
     handleSelectPresetFilterOptionClick(option) {
-      this.$store.commit('data/SET_PRESET_FILTER', option.text)
+      this.isPresetFilterLightboxVisible = true
       this.isLightBoxVisible = false
+      this.$store.commit('data/SET_PRESET_FILTER', option.text)
     },
 
     handleOpenPresetFilterLightbox(filterName) {
@@ -339,7 +340,9 @@ export default {
   }
   &__lightbox {
     @include media-breakpoint-up(xl) {
-      display: none !important;
+      ::v-deep > section {
+        width: 50% !important;
+      }
     }
   }
 }

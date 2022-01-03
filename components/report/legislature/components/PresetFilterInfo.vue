@@ -80,10 +80,12 @@
         <p>
           立法院國民黨、民進黨握有召委排審權，小黨各自關心的法案，時常出現排不進議案困境，因此出現該法案被提案多次，排審次數卻為零，例如時代力量提案的公職人員選舉罷免法，希望禁止公職人員帶職參選，即便連續兩屆提案，卻都無法順利排審。
         </p>
-        <img
-          src="~/assets/imgs/report/legislature/preset-filter/05.png"
-          alt="preset-filter-static-chart"
-        />
+        <div id="everviz-peLy3u-oz" class="everviz-peLy3u-oz">
+          <script
+            src="https://app.everviz.com/inject/peLy3u-oz/"
+            defer="defer"
+          />
+        </div>
       </div>
     </template>
   </section>
@@ -128,6 +130,9 @@ section {
 }
 
 div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   & > * {
     margin: 28px 0 0 0;
   }
@@ -138,5 +143,11 @@ p {
   line-height: 2;
   font-size: 16px;
   font-weight: 300;
+}
+
+img {
+  @include media-breakpoint-up(xl) {
+    width: 50%;
+  }
 }
 </style>
