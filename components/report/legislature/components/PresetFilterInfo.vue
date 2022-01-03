@@ -2,7 +2,7 @@
   <section>
     <TagPreset :emoji="tag.emoji" :text="tag.text" />
     <template v-if="currentActiveFilterName === '冷凍法案'">
-      <div>
+      <article>
         <p>
           從 2008 年至今，已歷經四屆立法委員更迭，在這過程中，持續有立委針對這
           11 項法案提案，希望修改法案內容，卻遲遲未進入實質審查階段，排審次數為
@@ -13,10 +13,10 @@
           src="~/assets/imgs/report/legislature/preset-filter/01.png"
           alt="preset-filter-static-chart"
         />
-      </div>
+      </article>
     </template>
     <template v-else-if="currentActiveFilterName === '爭議法案'">
-      <div>
+      <article>
         <p>
           在近四屆立法院裡，有 52
           筆法案，連續四屆有立委提案、排審，卻遲遲無法三讀通過，代表該議題具有一定重要性，卻爭議過大，至今仍沒有共識，其中《中華民國憲法增修條文》第十條條文修正草案，就排審高達
@@ -26,10 +26,10 @@
           src="~/assets/imgs/report/legislature/preset-filter/02.png"
           alt="preset-filter-static-chart"
         />
-      </div>
+      </article>
     </template>
     <template v-else-if="currentActiveFilterName === '執政黨優先法案'">
-      <div>
+      <article>
         <p>
           行政院每會期皆會定調優先法案，希望立法院優先審議該項法案，統計 07-09
           屆優先法案，包含馬政府及蔡政府時代，從數據可見被列為行政院優先法案的法案，三讀通過機率高達
@@ -45,10 +45,10 @@
           src="~/assets/imgs/report/legislature/preset-filter/03.png"
           alt="preset-filter-static-chart"
         />
-      </div>
+      </article>
     </template>
     <template v-else-if="currentActiveFilterName === '沒通過的優先法案'">
-      <div>
+      <article>
         <p>
           行政院每會期皆會定調優先法案，希望立法院優先審議該項法案，統計 07-09
           屆優先法案，包含馬政府及蔡政府時代，從數據可見被列為行政院優先法案的法案，不通過機率為
@@ -61,18 +61,18 @@
           src="~/assets/imgs/report/legislature/preset-filter/04.png"
           alt="preset-filter-static-chart"
         />
-      </div>
+      </article>
     </template>
     <template v-else-if="currentActiveFilterName === '國民兩黨主力法案'">
-      <div>
+      <article>
         <p>
           要推進法案往前，「排審」與否成為關鍵，而握有排審權的召集委員，按照各政黨關心議題，將相關法案排入議程，排審次數多寡就顯示出各政黨關心議題。國民黨就針對「食品安全衛生管理法」排審
           15 次；民進黨則針對「刑事訴訟法」排審 17 次。
         </p>
-      </div>
+      </article>
     </template>
     <template v-else-if="currentActiveFilterName === '小黨難突破的法案'">
-      <div>
+      <article>
         <p>
           立法院國民黨、民進黨握有召委排審權，小黨各自關心的法案，時常出現排不進議案困境，因此出現該法案被提案多次，排審次數卻為零，例如時代力量提案的公職人員選舉罷免法，希望禁止公職人員帶職參選，即便連續兩屆提案，卻都無法順利排審。
         </p>
@@ -82,7 +82,7 @@
             defer="defer"
           />
         </div>
-      </div>
+      </article>
     </template>
   </section>
 </template>
@@ -117,6 +117,8 @@ export default {
 
 <style lang="scss" scoped>
 section {
+  width: 100%;
+  height: 100%;
   background-color: #555555;
   color: white;
   padding: 28px 12px;
@@ -125,7 +127,7 @@ section {
   align-items: center;
 }
 
-div {
+article {
   display: flex;
   flex-direction: column;
   align-items: center;

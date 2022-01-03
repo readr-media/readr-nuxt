@@ -64,7 +64,9 @@
           class="main__lightbox"
           @close="handleClosePresetFilterLightbox"
         >
-          <PresetFilterInfo />
+          <div style="background-color: #555555;">
+            <PresetFilterInfo />
+          </div>
         </Lightbox>
         <Search
           id="search-of-the-dashboard"
