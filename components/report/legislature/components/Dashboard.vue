@@ -311,7 +311,7 @@ export default {
   &__search-desktop {
     display: none;
     @include media-breakpoint-up(xl) {
-      display: initial;
+      display: flex;
       margin: 0 0 0 8px;
     }
   }
