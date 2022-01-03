@@ -73,6 +73,7 @@ export default {
 <style lang="scss" scoped>
 .select-wrapper {
   position: relative;
+  min-width: max-content;
   &__options-wrapper {
     position: absolute;
     top: 28px;

@@ -309,9 +309,9 @@ export default {
     }
   }
   &__search-desktop {
-    display: none;
+    display: none !important;
     @include media-breakpoint-up(xl) {
-      display: flex;
+      display: flex !important;
       margin: 0 0 0 8px;
     }
   }
