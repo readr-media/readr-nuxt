@@ -400,7 +400,7 @@ export const mutations = {
         const filters = {
           冷凍法案: [
             function (bill) {
-              return bill['冷凍法案'] === 'yes'
+              return bill['地雷區'] === 'yes'
             },
           ],
         }
@@ -413,7 +413,7 @@ export const mutations = {
         const filters = {
           爭議法案: [
             function (bill) {
-              return bill['爭議法案'] === 'yes'
+              return bill['戰火區'] === 'yes'
             },
           ],
         }
@@ -431,7 +431,7 @@ export const mutations = {
         const filters = {
           執政黨優先法案: [
             function (bill) {
-              return bill['執政黨優先法案'] === 'yes'
+              return bill['政府主推哪些優先法案通過？'] === 'yes'
             },
           ],
         }
@@ -449,7 +449,7 @@ export const mutations = {
         const filters = {
           沒通過的優先法案: [
             function (bill) {
-              return bill['沒通過的優先法案'] === 'yes'
+              return bill['完全執政都無法通過的法案？'] === 'yes'
             },
           ],
         }
