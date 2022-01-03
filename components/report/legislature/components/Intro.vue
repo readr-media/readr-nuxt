@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="isMobile" class="background">
+    <div class="background mobile">
       <img
         src="../../../../assets/imgs/report/legislature/intro/01_mobile.png"
         class="intro__background rellax"
@@ -26,7 +26,7 @@
         class="intro__background rellax"
       />
     </div>
-    <div v-else class="background">
+    <div class="background desktop">
       <img
         src="../../../../assets/imgs/report/legislature/intro/01.png"
         class="intro__background rellax"
@@ -159,6 +159,17 @@ export default {
       position: absolute;
       top: 0;
       width: 100vw;
+    }
+  }
+  .mobile {
+    @include media-breakpoint-up(md) {
+      display: none;
+    }
+  }
+  .desktop {
+    display: none;
+    @include media-breakpoint-up(md) {
+      display: inherit;
     }
   }
 }
