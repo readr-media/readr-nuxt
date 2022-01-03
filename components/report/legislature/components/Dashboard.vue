@@ -34,7 +34,7 @@
             style="color: #979797; margin-top: 12px;"
             @click="$store.commit('data/RESET_DATA')"
           >
-            清除選取
+            清除篩選
           </button>
           <nav
             class="aside__aside-preset-filters-nav preset-filters-nav"
@@ -90,12 +90,7 @@
             class="normal-filters-nav__aside-toggle aside-toggle"
             @click.native="handleAsideToggle"
           >
-            <span class="mobile">
-              篩選與排序
-            </span>
-            <span class="desktop">
-              所有篩選器
-            </span>
+            展開所有篩選器
           </ButtonSecondary>
           <Select
             class="normal-filters-nav__select-preset-filters"

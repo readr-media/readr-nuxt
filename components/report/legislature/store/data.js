@@ -229,10 +229,10 @@ export const state = () => ({
     停留屆期: null,
   },
   presetFilters: {
-    地雷區: false,
-    戰火區: false,
-    '政府主推哪些優先法案通過？': false,
-    '完全執政都無法通過的法案？': false,
+    冷凍法案: false,
+    爭議法案: false,
+    執政黨優先法案: false,
+    沒通過的優先法案: false,
     國民兩黨主力法案: false,
     小黨難突破的法案: false,
   },
@@ -388,7 +388,7 @@ export const mutations = {
 
   SET_PRESET_FILTER(state, presetName) {
     switch (presetName) {
-      case '地雷區': {
+      case '冷凍法案': {
         // const filters = {
         //   停留屆期: [filterCriterias['停留屆期']['四屆']],
         //   排審總次數: [filterCriterias['排審總次數']['0 次']],
@@ -398,9 +398,9 @@ export const mutations = {
         // state.data = filterArray(state.dataOriginal, filters)
 
         const filters = {
-          地雷區: [
+          冷凍法案: [
             function (bill) {
-              return bill['地雷區'] === 'yes'
+              return bill['冷凍法案'] === 'yes'
             },
           ],
         }
@@ -409,11 +409,11 @@ export const mutations = {
         break
       }
 
-      case '戰火區': {
+      case '爭議法案': {
         const filters = {
-          戰火區: [
+          爭議法案: [
             function (bill) {
-              return bill['戰火區'] === 'yes'
+              return bill['爭議法案'] === 'yes'
             },
           ],
         }
@@ -422,16 +422,16 @@ export const mutations = {
         break
       }
 
-      case '政府主推哪些優先法案通過？': {
+      case '執政黨優先法案': {
         // const filters = {
         //   行政院優先法案: Object.values(filterCriterias['行政院優先法案']),
         //   是否三讀通過: [filterCriterias['是否三讀通過']['是']],
         // }
         // state.data = filterArray(state.dataOriginal, filters)
         const filters = {
-          '政府主推哪些優先法案通過？': [
+          執政黨優先法案: [
             function (bill) {
-              return bill['政府主推哪些優先法案通過？'] === 'yes'
+              return bill['執政黨優先法案'] === 'yes'
             },
           ],
         }
@@ -440,16 +440,16 @@ export const mutations = {
         break
       }
 
-      case '完全執政都無法通過的法案？': {
+      case '沒通過的優先法案': {
         // const filters = {
         //   行政院優先法案: Object.values(filterCriterias['行政院優先法案']),
         //   是否三讀通過: [filterCriterias['是否三讀通過']['否']],
         // }
         // state.data = filterArray(state.dataOriginal, filters)
         const filters = {
-          '完全執政都無法通過的法案？': [
+          沒通過的優先法案: [
             function (bill) {
-              return bill['完全執政都無法通過的法案？'] === 'yes'
+              return bill['沒通過的優先法案'] === 'yes'
             },
           ],
         }

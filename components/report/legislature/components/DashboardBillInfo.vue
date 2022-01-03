@@ -7,7 +7,7 @@
       style="margin-top: 20px;"
     />
     <DashboardBillInfoFieldInfoValueList
-      :keyName="'提案人'"
+      :keyName="'各版本首位提案人'"
       :listText="tooltip['每版本首位提案人']"
       style="margin-top: 20px;"
     />
@@ -22,7 +22,7 @@
     <div style="margin-top: 56px;">
       <p class="key-name">
         <span>提案總次數</span>
-        <span class="key-name__hint">（長按色塊，顯示各黨團提案次數）</span>
+        <span class="key-name__hint">（點擊看政黨／次數）</span>
       </p>
       <ChartStackBar
         style="margin-top: 12px;"
@@ -36,7 +36,7 @@
           v-if="!isDataChartStackBarExaminationNotExist"
           class="key-name__hint"
         >
-          （長按色塊，顯示各黨團提案次數）
+          （點擊看政黨／次數）
         </span>
       </p>
       <span v-if="isDataChartStackBarExaminationNotExist">

@@ -1,7 +1,7 @@
 <template>
   <section>
     <TagPreset :emoji="tag.emoji" :text="tag.text" />
-    <template v-if="currentActiveFilterName === '地雷區'">
+    <template v-if="currentActiveFilterName === '冷凍法案'">
       <div>
         <p>
           從 2008 年至今，已歷經四屆立法委員更迭，在這過程中，持續有立委針對這
@@ -15,7 +15,7 @@
         />
       </div>
     </template>
-    <template v-else-if="currentActiveFilterName === '戰火區'">
+    <template v-else-if="currentActiveFilterName === '爭議法案'">
       <div>
         <p>
           在近四屆立法院裡，有 52
@@ -28,9 +28,7 @@
         />
       </div>
     </template>
-    <template
-      v-else-if="currentActiveFilterName === '政府主推哪些優先法案通過？'"
-    >
+    <template v-else-if="currentActiveFilterName === '執政黨優先法案'">
       <div>
         <p>
           行政院每會期皆會定調優先法案，希望立法院優先審議該項法案，統計 07-09
@@ -49,9 +47,7 @@
         />
       </div>
     </template>
-    <template
-      v-else-if="currentActiveFilterName === '完全執政都無法通過的法案？'"
-    >
+    <template v-else-if="currentActiveFilterName === '沒通過的優先法案'">
       <div>
         <p>
           行政院每會期皆會定調優先法案，希望立法院優先審議該項法案，統計 07-09
@@ -106,7 +102,7 @@ export default {
           function getTruthyFilterValue([filterName, filterValue]) {
             return filterValue === true
           }
-        )?.[0] ?? '地雷區'
+        )?.[0] ?? '冷凍法案'
       )
     },
     tag() {
