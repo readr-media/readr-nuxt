@@ -1,33 +1,17 @@
 <template>
   <section>
-    <Header :anchors="cmsData.contentApiData.tag[0]" :nowSection="nowSection" />
+    <Header
+      :anchors="cmsData.contentApiData.tag[0]"
+      :isNavVisible="isNavVisible"
+    />
     <Intro
-      v-observe-visibility="{
-        callback: (isVisible, entries) =>
-          setNowSection(isVisible, entries, 'intro'),
-        intersection,
-      }"
+      v-observe-visibility="handleIntroVisibilityChange"
       :intro="cmsData.contentApiData.intro"
     />
-    <DashboardStory
-      id="story"
-      v-observe-visibility="
-        (isVisible, entries) => setNowSection(isVisible, entries, 'story')
-      "
-    />
+    <DashboardStory id="story" />
     <Article id="article" :cmsData="cmsData" />
-    <Dashboard
-      id="dashboard"
-      v-observe-visibility="
-        (isVisible, entries) => setNowSection(isVisible, entries, 'dashboard')
-      "
-    />
-    <OtherInfo
-      v-observe-visibility="
-        (isVisible, entries) => setNowSection(isVisible, entries, 'other-info')
-      "
-      :cmsData="cmsData"
-    />
+    <Dashboard id="dashboard" />
+    <OtherInfo :cmsData="cmsData" />
   </section>
 </template>
 
@@ -61,6 +45,7 @@ export default {
     return {
       nowSection: '',
       intersection: { rootMargin: '80px 0px 0px 0px' },
+      isNavVisible: false,
     }
   },
   created() {
@@ -95,6 +80,11 @@ export default {
   destroyed() {
     this.$store.unregisterModule('data')
   },
+  methods: {
+    handleIntroVisibilityChange(isVisible) {
+      this.isNavVisible = !isVisible
+    },
+  },
   head() {
     return {
       script: [
@@ -117,11 +107,6 @@ export default {
         },
       ],
     }
-  },
-  methods: {
-    setNowSection(isVisible, entries, section) {
-      if (isVisible) this.nowSection = section
-    },
   },
 }
 </script>

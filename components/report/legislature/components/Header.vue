@@ -5,7 +5,7 @@
       @shareFacebookLinkClick="sendGaClickEvent('share to fb')"
       @shareLineLinkClick="sendGaClickEvent('share to line')"
     />
-    <section v-show="shouldShowAnchors">
+    <section v-show="isNavVisible">
       <div class="header__anchors_mobile">
         <a v-for="anchor in mobileAnchors" :key="anchor">{{ anchor }}</a>
       </div>
@@ -47,14 +47,15 @@ export default {
       type: String,
       default: '',
     },
+    isNavVisible: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       isMounted: false,
     }
-  },
-  mounted() {
-    this.isMounted = true
   },
   computed: {
     mobileAnchors() {
