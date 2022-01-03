@@ -59,6 +59,13 @@
         </section>
       </aside>
       <main class="dashboard__main main">
+        <Lightbox
+          v-show="isPresetFilterLightboxVisible"
+          class="main__lightbox"
+          @close="handleClosePresetFilterLightbox"
+        >
+          <PresetFilterInfo />
+        </Lightbox>
         <Search
           id="search-of-the-dashboard"
           v-observe-visibility="handleSearchVisibilityChange"
@@ -73,7 +80,7 @@
             :key="filterName"
             class="preset-filters-nav__preset-filter-button"
             :active="filterValue"
-            @click.native="$store.commit('data/SET_PRESET_FILTER', filterName)"
+            @click.native="handleOpenPresetFilterLightbox(filterName)"
           >
             {{ filterName }}
           </ButtonPrimary>
@@ -161,6 +168,8 @@ import TagPreset from './TagPreset.vue'
 import ButtonClose from './ButtonClose.vue'
 import Select from './Select.vue'
 import SelectSorts from './SelectSorts.vue'
+import Lightbox from './Lightbox.vue'
+import PresetFilterInfo from './PresetFilterInfo.vue'
 
 export default {
   components: {
@@ -176,6 +185,8 @@ export default {
     ButtonClose,
     Select,
     SelectSorts,
+    Lightbox,
+    PresetFilterInfo,
   },
   data() {
     return {
@@ -184,6 +195,8 @@ export default {
       isLightBoxVisible: false,
       shouldShowScroller: false,
       scrollerIconDirection: 'down',
+
+      isPresetFilterLightboxVisible: false,
     }
   },
   computed: {
@@ -220,7 +233,7 @@ export default {
       this.isLightBoxVisible = true
     },
     handleClickAsidePresetFilter(filterName) {
-      this.$store.commit('data/SET_PRESET_FILTER', filterName)
+      this.handleOpenPresetFilterLightbox(filterName)
       this.handleCloseAside()
     },
     handleSearchVisibilityChange(isVisible) {
@@ -240,6 +253,16 @@ export default {
     },
     handleSelectPresetFilterOptionClick(option) {
       this.$store.commit('data/SET_PRESET_FILTER', option.text)
+      this.isLightBoxVisible = false
+    },
+
+    handleOpenPresetFilterLightbox(filterName) {
+      this.isPresetFilterLightboxVisible = true
+      this.isLightBoxVisible = false
+      this.$store.commit('data/SET_PRESET_FILTER', filterName)
+    },
+    handleClosePresetFilterLightbox() {
+      this.isPresetFilterLightboxVisible = false
     },
   },
 }
@@ -313,6 +336,11 @@ export default {
   }
   &__grid-chart {
     margin: 17px 0 0 -2px;
+  }
+  &__lightbox {
+    @include media-breakpoint-up(xl) {
+      display: none !important;
+    }
   }
 }
 

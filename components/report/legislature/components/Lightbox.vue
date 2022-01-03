@@ -17,7 +17,7 @@
       style="
         position: relative;
         width: 90%;
-        height: 90%;
+        max-height: 90%;
         background-color: white;
         overflow-y: scroll;
       "
