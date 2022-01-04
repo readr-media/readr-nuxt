@@ -161,7 +161,6 @@ export default {
       switch (this.currentActiveSelectOption) {
         case '提案人名稱': {
           this.$emit('clickPeople', suggestion.item)
-          this.shouldShowSuggestions = false
           break
         }
         default:
@@ -169,6 +168,9 @@ export default {
           this.$emit('clickBill', suggestion.item)
         }
       }
+
+      this.shouldShowSuggestions = false
+      this.input = suggestion.item['名稱']
     },
     handleClickOutside() {
       this.shouldShowSuggestions = false
