@@ -268,11 +268,7 @@ export default {
     handleSearchPeople(people) {
       this.$store.commit('data/FILTER_BY_PEOPLE', people['名稱'])
       if (this.$store.state.viewport.width < 1200) {
-        scrollIntoView(document.querySelector('.main__grid-chart'), {
-          align: {
-            top: 0.5,
-          },
-        })
+        scrollIntoView(document.querySelector('.main__legends'))
       }
     },
   },
