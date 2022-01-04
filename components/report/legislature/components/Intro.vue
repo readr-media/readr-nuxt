@@ -77,9 +77,6 @@
         </div>
         <div class="intro__desc">{{ intro.description }}</div>
         <ul class="intro__anchor">
-          <li @click="handleAnchorClick('story')">
-            {{ intro.anchor.story }}
-          </li>
           <li @click="handleAnchorClick('dashboard')">
             {{ intro.anchor.dashboard }}
           </li>
@@ -87,6 +84,12 @@
             {{ intro.anchor.article }}
           </li>
         </ul>
+        <div class="intro__more">
+          <div>往下滑看我們發現了什麼</div>
+          <img
+            src="../../../../assets/imgs/report/legislature/intro/scroll-more.svg"
+          />
+        </div>
       </div>
     </div>
   </section>
@@ -176,7 +179,7 @@ export default {
 }
 .container {
   background: #1b1b1b;
-  height: 300vh;
+  height: 450vh;
   position: relative;
   display: flex;
   align-items: flex-end;
@@ -208,17 +211,32 @@ export default {
 .examples {
   flex: 1;
   width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  @include media-breakpoint-up(md) {
+    position: absolute;
+    display: inherit;
+    top: 0;
+    left: 0;
+  }
   #example01 {
-    transform: translate(10vw, 40vh);
+    @include media-breakpoint-up(md) {
+      transform: translate(10vw, 40vh);
+    }
   }
   #example02 {
-    transform: translate(60vw, 50vh);
+    @include media-breakpoint-up(md) {
+      transform: translate(60vw, 50vh);
+    }
   }
   #example03 {
-    transform: translate(40vw, 90vh);
+    // transform: translate(40vw, 90vh);
+    @include media-breakpoint-up(md) {
+      transform: translate(60vw, 50vh);
+    }
   }
 }
 .intro {
@@ -280,6 +298,25 @@ export default {
       @include media-breakpoint-up(md) {
         margin: 0 0 0 20px;
       }
+    }
+  }
+  &__more {
+    color: white;
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 23px;
+    @include media-breakpoint-up(md) {
+      margin-top: 100px;
+    }
+    img {
+      margin-top: 16px;
+      width: 35px;
+      height: 35px;
     }
   }
 }
