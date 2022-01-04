@@ -1,10 +1,25 @@
 <template>
   <div class="article">
     <RdReportArticle
-      v-for="(section, i) in paragraph"
-      :key="i"
-      :id="`article${i + 1}`"
-      :contents="section"
+      v-observe-visibility="handleArticle1VisibilityChange"
+      :id="`article1`"
+      :contents="paragraph[0]"
+      :slug="'legislature'"
+      :isPart="true"
+      @sendGaEvent="sendGaEvent"
+    />
+    <RdReportArticle
+      v-observe-visibility="handleArticle2VisibilityChange"
+      :id="`article2`"
+      :contents="paragraph[1]"
+      :slug="'legislature'"
+      :isPart="true"
+      @sendGaEvent="sendGaEvent"
+    />
+    <RdReportArticle
+      v-observe-visibility="handleArticle3VisibilityChange"
+      :id="`article3`"
+      :contents="paragraph[2]"
       :slug="'legislature'"
       :isPart="true"
       @sendGaEvent="sendGaEvent"
@@ -23,6 +38,18 @@ export default {
       type: Object,
       required: true,
       default: () => ({}),
+    },
+    handleArticle1VisibilityChange: {
+      type: Function,
+      defaule: () => {},
+    },
+    handleArticle2VisibilityChange: {
+      type: Function,
+      defaule: () => {},
+    },
+    handleArticle3VisibilityChange: {
+      type: Function,
+      defaule: () => {},
     },
   },
   data() {

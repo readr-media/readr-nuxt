@@ -3,6 +3,7 @@
     <Header
       :anchors="cmsData.contentApiData.tag[0]"
       :isNavVisible="isNavVisible"
+      :nowSection="nowSection"
     />
     <Intro
       v-observe-visibility="handleIntroVisibilityChange"
@@ -12,7 +13,13 @@
       v-observe-visibility="handleDashboardStoryVisibilityChange"
       id="story"
     />
-    <Article id="article" :cmsData="cmsData" />
+    <Article
+      id="article"
+      :cmsData="cmsData"
+      :handleArticle1VisibilityChange="handleArticle1VisibilityChange"
+      :handleArticle2VisibilityChange="handleArticle2VisibilityChange"
+      :handleArticle3VisibilityChange="handleArticle3VisibilityChange"
+    />
     <Dashboard
       id="dashboard"
       v-observe-visibility="handleDashboardVisibilityChange"
@@ -102,16 +109,16 @@ export default {
     },
     intoNextSection(section) {
       const index = this.sectionList.indexOf(section) + 1
-      this.section = this.sectionList[index]
-      console.log(this.section)
+      this.nowSection = this.sectionList[index]
+      console.log(this.nowSection)
     },
     sencerSection(isVisible, section) {
       if (this.isScrollingDown && !isVisible) {
         this.intoNextSection(section)
       }
       if (!this.isScrollingDown && isVisible) {
-        this.section = section
-        console.log(this.section)
+        this.nowSection = section
+        console.log(this.nowSection)
       }
     },
     handleDashboardStoryVisibilityChange(isVisible, entries) {
@@ -119,6 +126,15 @@ export default {
     },
     handleDashboardVisibilityChange(isVisible, entries) {
       this.sencerSection(isVisible, 'dashboard')
+    },
+    handleArticle1VisibilityChange(isVisible, entries) {
+      this.sencerSection(isVisible, `article1`)
+    },
+    handleArticle2VisibilityChange(isVisible, entries) {
+      this.sencerSection(isVisible, `article2`)
+    },
+    handleArticle3VisibilityChange(isVisible, entries) {
+      this.sencerSection(isVisible, `article3`)
     },
   },
   head() {
