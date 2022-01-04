@@ -16,64 +16,57 @@
         <img
           src="../../../../assets/imgs/report/legislature/intro/01_mobile.png"
           class="intro__background rellax"
-          data-rellax-speed="100"
+          data-rellax-speed="50"
         />
         <img
           src="../../../../assets/imgs/report/legislature/intro/02_mobile.png"
           class="intro__background rellax"
-          data-rellax-speed="70"
+          data-rellax-speed="35"
         />
         <img
           src="../../../../assets/imgs/report/legislature/intro/03_mobile.png"
           class="intro__background rellax"
-          data-rellax-speed="30"
+          data-rellax-speed="15"
         />
         <img
           src="../../../../assets/imgs/report/legislature/intro/04_mobile.png"
           class="intro__background rellax"
-          data-rellax-speed="10"
-        />
-        <img
-          src="../../../../assets/imgs/report/legislature/intro/05_mobile.png"
-          class="intro__background rellax"
+          data-rellax-speed="5"
         />
       </div>
       <div class="background desktop">
         <img
           src="../../../../assets/imgs/report/legislature/intro/01.png"
           class="intro__background rellax"
-          data-rellax-speed="100"
+          data-rellax-speed="50"
         />
         <img
           src="../../../../assets/imgs/report/legislature/intro/02.png"
           class="intro__background rellax"
-          data-rellax-speed="70"
+          data-rellax-speed="35"
         />
         <img
           src="../../../../assets/imgs/report/legislature/intro/03.png"
           class="intro__background rellax"
-          data-rellax-speed="30"
+          data-rellax-speed="15"
         />
         <img
           src="../../../../assets/imgs/report/legislature/intro/04.png"
           class="intro__background rellax"
-          data-rellax-speed="10"
-        />
-        <img
-          src="../../../../assets/imgs/report/legislature/intro/05.png"
-          class="intro__background rellax"
+          data-rellax-speed="5"
         />
       </div>
-      <!-- <div class="examples">
-      <IntroExample
-        v-for="item in example"
-        :key="item.id"
-        :pictureId="item.id"
-        :description="item.description"
-        :lawName="item.lawName"
-        :color="item.color"
-      />
-    </div> -->
+      <div class="examples">
+        <IntroExample
+          v-for="item in example"
+          :key="item.id"
+          :id="`example${item.id}`"
+          :pictureId="item.id"
+          :description="item.description"
+          :lawName="item.lawName"
+          :color="item.color"
+        />
+      </div>
       <div class="intro">
         <div class="intro__title">
           {{ intro.title1 }}<br />{{ intro.title2 }}
@@ -100,11 +93,11 @@
 /* eslint no-undef: "error" */
 import { mapGetters } from 'vuex'
 import scrollIntoView from 'scroll-into-view'
-// import IntroExample from './IntroExample.vue'
+import IntroExample from './IntroExample.vue'
 
 export default {
   components: {
-    // IntroExample,
+    IntroExample,
   },
   props: {
     intro: {
@@ -114,27 +107,27 @@ export default {
   },
   data() {
     return {
-      // example: [
-      //   {
-      //     id: '01',
-      //     description: '當大火悲劇不斷重演，消防安全立法卻持續卡關',
-      //     lawName: '《消防設備人員法》',
-      //     color: '#62AD61',
-      //   },
-      //   {
-      //     id: '02',
-      //     description:
-      //       '太陽花學運抗爭者訴訟官司打 7 年，關乎民眾抗議權利的集會遊行自由修法仍原地踏步',
-      //     lawName: '《集會遊行法》',
-      //     color: '#33ABA4',
-      //   },
-      //   {
-      //     id: '03',
-      //     description: '當開發案不斷入侵傳統領域，原住民的土地正義在哪裡？',
-      //     lawName: '《原住民族土地及海域法》',
-      //     color: '#5C18B1',
-      //   },
-      // ],
+      example: [
+        {
+          id: '01',
+          description: '當大火悲劇不斷重演，消防安全立法卻持續卡關',
+          lawName: '《消防設備人員法》',
+          color: '#62AD61',
+        },
+        {
+          id: '02',
+          description:
+            '太陽花學運抗爭者訴訟官司打 7 年，關乎民眾抗議權利的集會遊行自由修法仍原地踏步',
+          lawName: '《集會遊行法》',
+          color: '#33ABA4',
+        },
+        {
+          id: '03',
+          description: '當開發案不斷入侵傳統領域，原住民的土地正義在哪裡？',
+          lawName: '《原住民族土地及海域法》',
+          color: '#5C18B1',
+        },
+      ],
     }
   },
   computed: {
@@ -172,18 +165,17 @@ export default {
 }
 .container {
   background: #1b1b1b;
-  height: 300vw;
+  height: 300vh;
   position: relative;
   display: flex;
   align-items: flex-end;
   flex-direction: column;
   justify-content: flex-end;
-  @include media-breakpoint-up(xl) {
-    height: 300vw;
-  }
   .background {
     width: 100vw;
     height: 100%;
+    position: absolute;
+    top: 0;
     img {
       position: absolute;
       top: 0;
@@ -204,6 +196,19 @@ export default {
 }
 .examples {
   flex: 1;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  #example01 {
+    transform: translate(10vw, 40vh);
+  }
+  #example02 {
+    transform: translate(60vw, 50vh);
+  }
+  #example03 {
+    transform: translate(40vw, 90vh);
+  }
 }
 .intro {
   color: #fff;
