@@ -1,58 +1,70 @@
 <template>
-  <div class="container">
-    <div class="background mobile">
+  <section>
+    <div class="hint">
       <img
-        src="../../../../assets/imgs/report/legislature/intro/01_mobile.png"
-        class="intro__background rellax"
-        data-rellax-speed="100"
+        src="../../../../assets/imgs/report/legislature/intro/hint_mobile.svg"
+        class="mobile"
       />
       <img
-        src="../../../../assets/imgs/report/legislature/intro/02_mobile.png"
-        class="intro__background rellax"
-        data-rellax-speed="70"
+        src="../../../../assets/imgs/report/legislature/intro/hint_desktop.svg"
+        class="desktop"
       />
-      <img
-        src="../../../../assets/imgs/report/legislature/intro/03_mobile.png"
-        class="intro__background rellax"
-        data-rellax-speed="30"
-      />
-      <img
-        src="../../../../assets/imgs/report/legislature/intro/04_mobile.png"
-        class="intro__background rellax"
-        data-rellax-speed="10"
-      />
-      <img
-        src="../../../../assets/imgs/report/legislature/intro/05_mobile.png"
-        class="intro__background rellax"
-      />
+      <div class="hint__word">往下滑動，提示或引言提示或引言</div>
     </div>
-    <div class="background desktop">
-      <img
-        src="../../../../assets/imgs/report/legislature/intro/01.png"
-        class="intro__background rellax"
-        data-rellax-speed="100"
-      />
-      <img
-        src="../../../../assets/imgs/report/legislature/intro/02.png"
-        class="intro__background rellax"
-        data-rellax-speed="70"
-      />
-      <img
-        src="../../../../assets/imgs/report/legislature/intro/03.png"
-        class="intro__background rellax"
-        data-rellax-speed="30"
-      />
-      <img
-        src="../../../../assets/imgs/report/legislature/intro/04.png"
-        class="intro__background rellax"
-        data-rellax-speed="10"
-      />
-      <img
-        src="../../../../assets/imgs/report/legislature/intro/05.png"
-        class="intro__background rellax"
-      />
-    </div>
-    <!-- <div class="examples">
+    <div class="container">
+      <div class="background mobile">
+        <img
+          src="../../../../assets/imgs/report/legislature/intro/01_mobile.png"
+          class="intro__background rellax"
+          data-rellax-speed="100"
+        />
+        <img
+          src="../../../../assets/imgs/report/legislature/intro/02_mobile.png"
+          class="intro__background rellax"
+          data-rellax-speed="70"
+        />
+        <img
+          src="../../../../assets/imgs/report/legislature/intro/03_mobile.png"
+          class="intro__background rellax"
+          data-rellax-speed="30"
+        />
+        <img
+          src="../../../../assets/imgs/report/legislature/intro/04_mobile.png"
+          class="intro__background rellax"
+          data-rellax-speed="10"
+        />
+        <img
+          src="../../../../assets/imgs/report/legislature/intro/05_mobile.png"
+          class="intro__background rellax"
+        />
+      </div>
+      <div class="background desktop">
+        <img
+          src="../../../../assets/imgs/report/legislature/intro/01.png"
+          class="intro__background rellax"
+          data-rellax-speed="100"
+        />
+        <img
+          src="../../../../assets/imgs/report/legislature/intro/02.png"
+          class="intro__background rellax"
+          data-rellax-speed="70"
+        />
+        <img
+          src="../../../../assets/imgs/report/legislature/intro/03.png"
+          class="intro__background rellax"
+          data-rellax-speed="30"
+        />
+        <img
+          src="../../../../assets/imgs/report/legislature/intro/04.png"
+          class="intro__background rellax"
+          data-rellax-speed="10"
+        />
+        <img
+          src="../../../../assets/imgs/report/legislature/intro/05.png"
+          class="intro__background rellax"
+        />
+      </div>
+      <!-- <div class="examples">
       <IntroExample
         v-for="item in example"
         :key="item.id"
@@ -62,22 +74,25 @@
         :color="item.color"
       />
     </div> -->
-    <div class="intro">
-      <div class="intro__title">{{ intro.title1 }}<br />{{ intro.title2 }}</div>
-      <div class="intro__desc">{{ intro.description }}</div>
-      <ul class="intro__anchor">
-        <li @click="handleAnchorClick('story')">
-          {{ intro.anchor.story }}
-        </li>
-        <li @click="handleAnchorClick('dashboard')">
-          {{ intro.anchor.dashboard }}
-        </li>
-        <li @click="handleAnchorClick('article')">
-          {{ intro.anchor.article }}
-        </li>
-      </ul>
+      <div class="intro">
+        <div class="intro__title">
+          {{ intro.title1 }}<br />{{ intro.title2 }}
+        </div>
+        <div class="intro__desc">{{ intro.description }}</div>
+        <ul class="intro__anchor">
+          <li @click="handleAnchorClick('story')">
+            {{ intro.anchor.story }}
+          </li>
+          <li @click="handleAnchorClick('dashboard')">
+            {{ intro.anchor.dashboard }}
+          </li>
+          <li @click="handleAnchorClick('article')">
+            {{ intro.anchor.article }}
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -141,16 +156,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.hint {
+  background: #1b1b1b;
+  height: 66vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__word {
+    color: #fff;
+    margin-top: 23px;
+  }
+}
 .container {
   background: #1b1b1b;
-  height: 1084vw;
+  height: 300vw;
   position: relative;
   display: flex;
   align-items: flex-end;
   flex-direction: column;
   justify-content: flex-end;
   @include media-breakpoint-up(xl) {
-    height: 293.47vw;
+    height: 300vw;
   }
   .background {
     width: 100vw;
@@ -161,16 +190,16 @@ export default {
       width: 100vw;
     }
   }
-  .mobile {
-    @include media-breakpoint-up(md) {
-      display: none;
-    }
-  }
-  .desktop {
+}
+.mobile {
+  @include media-breakpoint-up(md) {
     display: none;
-    @include media-breakpoint-up(md) {
-      display: inherit;
-    }
+  }
+}
+.desktop {
+  display: none;
+  @include media-breakpoint-up(md) {
+    display: inherit;
   }
 }
 .examples {
