@@ -73,6 +73,7 @@
           v-observe-visibility="handleSearchVisibilityChange"
           class="main__search-mobile"
           @clickBill="handleLightBoxShow"
+          @clickPeople="handleSearchPeople"
         />
         <nav class="main__preset-filters-nav preset-filters-nav">
           <ButtonPrimary
@@ -104,6 +105,7 @@
             v-observe-visibility="handleSearchVisibilityChange"
             class="main__search-desktop"
             @clickBill="handleLightBoxShow"
+            @clickPeople="handleSearchPeople"
           />
           <p class="normal-filters-nav__result-count result-count">
             你的篩選結果 共
@@ -261,6 +263,10 @@ export default {
     },
     handleClosePresetFilterLightbox() {
       this.isPresetFilterLightboxVisible = false
+    },
+
+    handleSearchPeople(people) {
+      this.$store.commit('data/FILTER_BY_PEOPLE', people['名稱'])
     },
   },
 }

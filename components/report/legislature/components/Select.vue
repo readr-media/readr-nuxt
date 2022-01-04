@@ -1,7 +1,12 @@
 <template>
   <div v-click-outside="handleCloseOptions" class="select-wrapper">
     <button class="select-wrapper__button button" @click="handleButtonClick">
-      {{ optionActive ? getOptionRenderedText(optionActive) : defaultText }}
+      <span>
+        {{ optionActive ? getOptionRenderedText(optionActive) : defaultText }}
+      </span>
+      <span v-if="shouldAlwaysShowToggleIcon">
+        ▼
+      </span>
     </button>
     <div
       v-show="isOptionsToggled"
@@ -39,6 +44,10 @@ export default {
         },
       ],
     },
+    shouldAlwaysShowToggleIcon: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -54,7 +63,7 @@ export default {
   },
   methods: {
     getOptionRenderedText(option) {
-      return `${option.emoji} ${option.text}`
+      return `${option.emoji || ''} ${option.text}`
     },
     handleButtonClick() {
       this.isOptionsToggled = !this.isOptionsToggled

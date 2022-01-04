@@ -527,6 +527,29 @@ export const mutations = {
     }
     createExtentsOfData(state.extents, state.data)
   },
+
+  FILTER_BY_PEOPLE(state, peopleName) {
+    for (const key of Object.keys(state.presetFilters)) {
+      state.presetFilters[key] = false
+    }
+    for (const [filterName, filterOptions] of Object.entries(state.filters)) {
+      for (const [optionName, optionValue] of Object.entries(filterOptions)) {
+        if (optionValue) {
+          state.filters[filterName][optionName] = false
+        }
+      }
+    }
+
+    const filters = {
+      people: [
+        function (bill) {
+          return bill['每版本首位提案人'].includes(peopleName)
+        },
+      ],
+    }
+    state.data = filterArray(state.dataOriginal, filters)
+    createExtentsOfData(state.extents, state.data)
+  },
 }
 
 export const actions = {
