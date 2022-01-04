@@ -247,7 +247,7 @@ export default {
   flex-direction: column;
   padding: 30px;
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0 auto;
   * {
     max-width: 669px;
