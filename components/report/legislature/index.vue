@@ -1,30 +1,38 @@
 <template>
   <section>
-    <Header
-      :anchors="cmsData.contentApiData.tag[0]"
-      :isNavVisible="isNavVisible"
-      :nowSection="nowSection"
-    />
-    <Intro
-      v-observe-visibility="handleIntroVisibilityChange"
-      :intro="cmsData.contentApiData.intro"
-    />
-    <DashboardStory
-      v-observe-visibility="handleDashboardStoryVisibilityChange"
-      id="story"
-    />
-    <Article
-      id="article"
-      :cmsData="cmsData"
-      :handleArticle1VisibilityChange="handleArticle1VisibilityChange"
-      :handleArticle2VisibilityChange="handleArticle2VisibilityChange"
-      :handleArticle3VisibilityChange="handleArticle3VisibilityChange"
-    />
-    <Dashboard
-      id="dashboard"
-      v-observe-visibility="handleDashboardVisibilityChange"
-    />
-    <OtherInfo :cmsData="cmsData" />
+    <section v-if="$route.query.dashboard">
+      <Dashboard
+        id="dashboard"
+        v-observe-visibility="handleDashboardVisibilityChange"
+      />
+    </section>
+    <section v-else>
+      <Header
+        :anchors="cmsData.contentApiData.tag[0]"
+        :isNavVisible="isNavVisible"
+        :nowSection="nowSection"
+      />
+      <Intro
+        v-observe-visibility="handleIntroVisibilityChange"
+        :intro="cmsData.contentApiData.intro"
+      />
+      <DashboardStory
+        id="story"
+        v-observe-visibility="handleDashboardStoryVisibilityChange"
+      />
+      <Article
+        id="article"
+        :cmsData="cmsData"
+        :handleArticle1VisibilityChange="handleArticle1VisibilityChange"
+        :handleArticle2VisibilityChange="handleArticle2VisibilityChange"
+        :handleArticle3VisibilityChange="handleArticle3VisibilityChange"
+      />
+      <Dashboard
+        id="dashboard"
+        v-observe-visibility="handleDashboardVisibilityChange"
+      />
+      <OtherInfo :cmsData="cmsData" />
+    </section>
   </section>
 </template>
 
@@ -99,6 +107,11 @@ export default {
 
     // eslint-disable-next-line no-undef
     Vue.use(VueObserveVisibility)
+  },
+  mounted() {
+    if (this.$route.query.dashboard) {
+      document.querySelector('#default-footer').remove()
+    }
   },
   destroyed() {
     this.$store.unregisterModule('data')
