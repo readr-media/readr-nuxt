@@ -179,12 +179,15 @@ export default {
 }
 .container {
   background: #1b1b1b;
-  height: 450vh;
+  height: 400vh;
   position: relative;
   display: flex;
   align-items: flex-end;
   flex-direction: column;
   justify-content: flex-end;
+  @include media-breakpoint-up(md) {
+    height: 350vh;
+  }
   .background {
     width: 100vw;
     height: 100%;
@@ -218,7 +221,7 @@ export default {
   align-items: center;
   @include media-breakpoint-up(md) {
     position: absolute;
-    display: inherit;
+    display: block;
     top: 0;
     left: 0;
   }
@@ -233,9 +236,8 @@ export default {
     }
   }
   #example03 {
-    // transform: translate(40vw, 90vh);
     @include media-breakpoint-up(md) {
-      transform: translate(60vw, 50vh);
+      transform: translate(40vw, 90vh);
     }
   }
 }
