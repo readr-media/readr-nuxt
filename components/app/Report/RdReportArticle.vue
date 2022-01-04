@@ -214,7 +214,7 @@ export default {
 
   render() {
     return (
-      <article class="report-article">
+      <article class={`${this.isPart ? 'part' : ''} report-article`}>
         <div class={`${this.isPart ? '' : 'notPart'} container`}>
           {this.contents.map(this.buildContent)}
         </div>
@@ -225,6 +225,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.part {
+  padding: 0px 20px !important;
+}
+
 .report-article {
   padding: 48px 20px;
   color: #2b2b2b;

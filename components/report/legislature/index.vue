@@ -8,15 +8,22 @@
       v-observe-visibility="handleIntroVisibilityChange"
       :intro="cmsData.contentApiData.intro"
     />
-    <DashboardStory id="story" />
+    <DashboardStory
+      v-observe-visibility="handleDashboardStoryVisibilityChange"
+      id="story"
+    />
     <Article id="article" :cmsData="cmsData" />
-    <Dashboard id="dashboard" />
+    <Dashboard
+      id="dashboard"
+      v-observe-visibility="handleDashboardVisibilityChange"
+    />
     <OtherInfo :cmsData="cmsData" />
   </section>
 </template>
 
 <script>
 import Vue from 'vue'
+import { scrollDirection } from '../../../components/helpers/vue/mixins/index.js'
 import * as storeData from './store/data'
 import Intro from './components/Intro.vue'
 import DashboardStory from './components/DashboardStory.vue'
@@ -34,6 +41,7 @@ export default {
     OtherInfo,
     Header,
   },
+  mixins: [scrollDirection],
   props: {
     cmsData: {
       type: Object,
@@ -46,6 +54,14 @@ export default {
       nowSection: '',
       intersection: { rootMargin: '80px 0px 0px 0px' },
       isNavVisible: false,
+      sectionList: [
+        'story',
+        'article1',
+        'article2',
+        'article3',
+        'dashboard',
+        '',
+      ],
     }
   },
   created() {
@@ -83,6 +99,26 @@ export default {
   methods: {
     handleIntroVisibilityChange(isVisible) {
       this.isNavVisible = !isVisible
+    },
+    intoNextSection(section) {
+      const index = this.sectionList.indexOf(section) + 1
+      this.section = this.sectionList[index]
+      console.log(this.section)
+    },
+    sencerSection(isVisible, section) {
+      if (this.isScrollingDown && !isVisible) {
+        this.intoNextSection(section)
+      }
+      if (!this.isScrollingDown && isVisible) {
+        this.section = section
+        console.log(this.section)
+      }
+    },
+    handleDashboardStoryVisibilityChange(isVisible, entries) {
+      this.sencerSection(isVisible, 'story')
+    },
+    handleDashboardVisibilityChange(isVisible, entries) {
+      this.sencerSection(isVisible, 'dashboard')
     },
   },
   head() {

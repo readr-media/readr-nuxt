@@ -22,9 +22,11 @@
           @click.native="handleAnchorClick('dashboard')"
         />
         <Anchor
-          v-for="anchor in anchors.article"
+          v-for="(anchor, i) in anchors.article"
           :key="anchor.title"
+          :isActive="nowSection === `article${i + 1}`"
           :title="anchor.title"
+          @click.native="handleAnchorClick(`article${i + 1}`)"
         />
       </div>
     </section>
