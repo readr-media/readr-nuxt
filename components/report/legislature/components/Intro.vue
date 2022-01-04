@@ -1,6 +1,10 @@
 <template>
   <section>
-    <div class="hint">
+    <div
+      v-show="showHint"
+      class="hint"
+      v-observe-visibility="handleHintVisibilityChange"
+    >
       <img
         src="../../../../assets/imgs/report/legislature/intro/hint_mobile.svg"
         class="mobile"
@@ -107,6 +111,7 @@ export default {
   },
   data() {
     return {
+      showHint: true,
       example: [
         {
           id: '01',
@@ -143,6 +148,12 @@ export default {
   methods: {
     handleAnchorClick(section) {
       scrollIntoView(document.querySelector(`#${section}`))
+    },
+    handleHintVisibilityChange(isVisible) {
+      if (!isVisible) {
+        this.showHint = false
+        window.scroll(0, -this.viewportHeight)
+      }
     },
   },
 }
