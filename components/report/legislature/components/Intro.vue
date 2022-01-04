@@ -152,7 +152,7 @@ export default {
     handleHintVisibilityChange(isVisible) {
       if (!isVisible) {
         this.showHint = false
-        window.scroll(0, -this.viewportHeight)
+        window.scroll(0, -this.viewportHeight * 0.66)
       }
     },
   },
