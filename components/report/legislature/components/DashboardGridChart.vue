@@ -1,5 +1,8 @@
 <template>
-  <section class="dashboard-wrapper">
+  <section
+    v-observe-visibility="handleChartVisibilityChange"
+    class="dashboard-wrapper"
+  >
     <Lightbox
       v-show="isTooltipVisible"
       class="dashboard-wrapper__lightbox"
@@ -7,7 +10,10 @@
     >
       <DashboardBillInfo :tooltip="tooltip" />
     </Lightbox>
-    <main :style="{ gridTemplateColumns: gridTemplateColumns }">
+    <main
+      v-show="shouldShowChart"
+      :style="{ gridTemplateColumns: gridTemplateColumns }"
+    >
       <ol
         v-for="(chunk, index) in dataChunk"
         :key="index"
@@ -58,6 +64,11 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      shouldShowChart: false,
+    }
   },
   computed: {
     columnsNumber() {
@@ -126,6 +137,10 @@ export default {
           )} 100%)`
         }
       }
+    },
+
+    handleChartVisibilityChange(isVisible) {
+      this.shouldShowChart = isVisible
     },
   },
 }
