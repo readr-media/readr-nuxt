@@ -140,7 +140,9 @@ export default {
     },
 
     handleChartVisibilityChange(isVisible) {
-      this.shouldShowChart = isVisible
+      if (isVisible && !this.shouldShowChart) {
+        this.shouldShowChart = true
+      }
     },
   },
 }
