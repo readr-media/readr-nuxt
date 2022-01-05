@@ -263,6 +263,7 @@ export default {
     font-size: 32px;
     line-height: 46px;
     margin-bottom: 48px;
+    text-align: center;
     @include media-breakpoint-up(md) {
       margin-bottom: 24px;
     }
