@@ -27,7 +27,10 @@
     <Donate @clickButton="$ga.event('projects', 'click', 'donate')" />
     <RdNewsLetterBtn />
 
-    <LatestPost />
+    <LazyRenderer class="latest-coverages">
+      <RelatedPost :relatedPosts="cmsData.relatedPosts" />
+      <LatestPost />
+    </LazyRenderer>
   </section>
 </template>
 
@@ -35,6 +38,7 @@
 import Donate from './Donate.vue'
 import Quiz from './Quiz.vue'
 import LatestPost from './LatestPost.vue'
+import RelatedPost from './RelatedPost.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 import RdNewsLetterBtn from '~/components/shared/RdNewsLetterBtn.vue'
@@ -47,6 +51,7 @@ export default {
     Quiz,
     RdNewsLetterBtn,
     LatestPost,
+    RelatedPost,
   },
   props: {
     cmsData: {
