@@ -171,6 +171,7 @@ export default {
 
       this.shouldShowSuggestions = false
       this.input = suggestion.item['名稱']
+      this.$ga.event('projects', 'click', `搜尋 ${this.input}`)
     },
     handleClickOutside() {
       this.shouldShowSuggestions = false

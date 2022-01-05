@@ -59,6 +59,7 @@
         </section>
       </aside>
       <main class="dashboard__main main">
+        <div id="top-of-the-dashboard" />
         <Lightbox
           v-show="isPresetFilterLightboxVisible"
           class="main__lightbox"
@@ -147,7 +148,10 @@
           }"
         />
       </button>
-      <div id="bottom-of-the-dashboard"></div>
+      <div
+        id="bottom-of-the-dashboard"
+        v-observe-visibility="handleBottomOfTheDashboardVisibilityChanged"
+      />
     </ClientOnly>
   </section>
 </template>
@@ -196,6 +200,8 @@ export default {
       scrollerIconDirection: 'down',
 
       isPresetFilterLightboxVisible: false,
+
+      isScrollToBottomOfTheDashboardAlready: false,
     }
   },
   computed: {
@@ -223,6 +229,7 @@ export default {
   methods: {
     handleAsideToggle() {
       this.isAsideToggled = !this.isAsideToggled
+      this.$ga.event('project', 'click', 'Dashboard展開所有篩選器')
     },
     handleCloseAside() {
       this.isAsideToggled = false
@@ -230,10 +237,12 @@ export default {
     handleLightBoxShow(bill) {
       this.lightBoxData = bill
       this.isLightBoxVisible = true
+      this.$ga.event('project', 'click', `Dashboard方塊點擊 ${bill['名稱']}`)
     },
     handleClickAsidePresetFilter(filterName) {
       this.handleOpenPresetFilterLightbox(filterName)
       this.handleCloseAside()
+      this.$ga.event('project', 'click', `Dashboard綜合指標 ${filterName}`)
     },
     handleSearchVisibilityChange(isVisible) {
       if (isVisible) {
@@ -246,14 +255,15 @@ export default {
       this.shouldShowScroller = isVisible
     },
     handleScrollerButtonClick() {
-      const element =
-        this.scrollerIconDirection === 'down' ? 'bottom' : 'search'
+      const element = this.scrollerIconDirection === 'down' ? 'bottom' : 'top'
       scrollIntoView(document.querySelector(`#${element}-of-the-dashboard`))
+      this.$ga.event('project', 'click', `Dashboard 捲動箭頭 to ${element}`)
     },
     handleSelectPresetFilterOptionClick(option) {
       this.isPresetFilterLightboxVisible = true
       this.isLightBoxVisible = false
       this.$store.commit('data/SET_PRESET_FILTER', option.text)
+      this.$ga.event('project', 'click', `Dashboard綜合指標 ${option.text}`)
     },
 
     handleOpenPresetFilterLightbox(filterName) {
@@ -269,6 +279,17 @@ export default {
       this.$store.commit('data/FILTER_BY_PEOPLE', people['名稱'])
       if (this.$store.state.viewport.width < 1200) {
         scrollIntoView(document.querySelector('.main__legends'))
+      }
+    },
+
+    handleBottomOfTheDashboardVisibilityChanged(isVisible) {
+      if (
+        isVisible &&
+        this.$store.state.data.data.length &&
+        !this.isScrollToBottomOfTheDashboardAlready
+      ) {
+        this.$ga.event('project', 'scroll', 'Dashboard文末')
+        this.isScrollToBottomOfTheDashboardAlready = true
       }
     },
   },

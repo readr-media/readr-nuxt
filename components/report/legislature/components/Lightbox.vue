@@ -11,7 +11,7 @@
       justify-content: center;
       align-items: center;
     "
-    @click="handleCloseLightbox"
+    @click="handleCloseLightbox('dimmed')"
   >
     <section
       style="
@@ -25,7 +25,7 @@
     >
       <ButtonClose
         style="position: sticky; top: 8px; right: 8px; float: right;"
-        @click.native="handleCloseLightbox"
+        @click.native="handleCloseLightbox('closeButton')"
       />
       <slot />
     </section>
@@ -37,8 +37,19 @@ import ButtonClose from './ButtonClose.vue'
 export default {
   components: { ButtonClose },
   methods: {
-    handleCloseLightbox() {
+    handleCloseLightbox(area) {
       this.$emit('close')
+
+      switch (area) {
+        case 'closeButton': {
+          this.$ga.event('project', 'click', 'Dashboard infobox打叉跳出')
+          break
+        }
+        default:
+        case 'dimmed': {
+          this.$ga.event('project', 'click', 'Dashboard 點擊旁邊跳出infobox')
+        }
+      }
     },
   },
 }
