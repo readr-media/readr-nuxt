@@ -2,17 +2,20 @@
   <section>
     <div
       v-show="showHint"
-      class="hint"
       v-observe-visibility="handleHintVisibilityChange"
+      class="hint"
     >
-      <img
-        src="../../../../assets/imgs/report/legislature/intro/hint_mobile.svg"
-        class="mobile"
-      />
-      <img
-        src="../../../../assets/imgs/report/legislature/intro/hint_desktop.svg"
-        class="desktop"
-      />
+      <picture>
+        <source
+          srcset="~/assets/imgs/report/legislature/intro/hint_desktop.svg"
+          media="(min-width: 768px)"
+        />
+        <img
+          class="landing__img"
+          src="~/assets/imgs/report/legislature/intro/hint_mobile.svg"
+          alt="hint"
+        />
+      </picture>
       <div class="hint__word">往下滑動，提示或引言提示或引言</div>
     </div>
     <div class="container">
@@ -63,8 +66,8 @@
       <div class="examples">
         <IntroExample
           v-for="item in example"
-          :key="item.id"
           :id="`example${item.id}`"
+          :key="item.id"
           :pictureId="item.id"
           :description="item.description"
           :lawName="item.lawName"
