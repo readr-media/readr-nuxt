@@ -10,6 +10,7 @@
         <a
           v-for="anchor in mobileAnchors"
           :key="anchor.name"
+          :class="{ active: nowSection === anchor.name }"
           @click="handleAnchorClick(anchor.name)"
           >{{ anchor.title }}</a
         >
@@ -146,6 +147,13 @@ export default {
           height: 3px;
           border-radius: 50%;
           background: #33aba4;
+        }
+      }
+
+      .active {
+        color: #c9c9c9;
+        &:before {
+          background: #c9c9c9;
         }
       }
     }
