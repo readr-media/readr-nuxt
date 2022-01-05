@@ -85,6 +85,15 @@ export default {
   },
   methods: {
     handleAnchorClick(section) {
+      const sectionList = [
+        'story',
+        'dashboard',
+        'article1',
+        'article2',
+        'article3',
+      ]
+      const index = sectionList.indexOf(section) + 1
+      this.$ga.event('projects', 'click', `索引標籤${index}`)
       scrollIntoView(document.querySelector(`#${section}`), {
         align: {
           topOffset: 200,

@@ -150,6 +150,8 @@ export default {
   },
   methods: {
     handleAnchorClick(section) {
+      const label = section === 'dashboard' ? '動畫選項A' : '動畫選項B'
+      this.$ga.event('projects', 'click', label)
       scrollIntoView(document.querySelector(`#${section}`), {
         align: {
           topOffset: 200,
