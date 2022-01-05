@@ -228,7 +228,7 @@ export default {
 }
 
 .article-button {
-  width: 280px;
-  margin-top: 36px;
+  max-width: 280px;
+  margin-top: 36px !important;
 }
 </style>
