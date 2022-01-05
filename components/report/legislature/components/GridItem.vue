@@ -120,6 +120,7 @@ export default {
   color: #985f0b;
   visibility: hidden;
   width: max-content !important;
+  z-index: 9999;
   @include media-breakpoint-up(xl) {
     visibility: visible;
   }
