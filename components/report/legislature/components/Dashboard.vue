@@ -32,9 +32,16 @@
           <button
             class="aside__reset-filter-button reset-filter-button"
             style="color: #979797; margin-top: 12px;"
-            @click="$store.commit('data/RESET_DATA')"
+            @click="handleReset"
           >
-            清除篩選
+            <span>
+              清除篩選
+            </span>
+            <img
+              v-show="isResetLoading"
+              src="~/assets/imgs/report/legislature/loading.gif"
+              alt="reset-loading-icon"
+            />
           </button>
           <nav
             class="aside__aside-preset-filters-nav preset-filters-nav"
@@ -117,9 +124,16 @@
           </p>
           <button
             class="normal-filters-nav__reset-filter-button reset-filter-button"
-            @click="$store.commit('data/RESET_DATA')"
+            @click="handleReset"
           >
-            清除篩選
+            <span>
+              清除篩選
+            </span>
+            <img
+              v-show="isResetLoading"
+              src="~/assets/imgs/report/legislature/loading.gif"
+              alt="reset-loading-icon"
+            />
           </button>
           <SelectSorts class="normal-filters-nav__select-sorts" />
         </nav>
@@ -202,6 +216,8 @@ export default {
       isPresetFilterLightboxVisible: false,
 
       isScrollToBottomOfTheDashboardAlready: false,
+
+      isResetLoading: false,
     }
   },
   computed: {
@@ -291,6 +307,14 @@ export default {
         this.$ga.event('project', 'scroll', 'Dashboard文末')
         this.isScrollToBottomOfTheDashboardAlready = true
       }
+    },
+
+    handleReset() {
+      this.isResetLoading = true
+      setTimeout(() => {
+        this.$store.commit('data/RESET_DATA')
+        this.isResetLoading = false
+      }, 0)
     },
   },
 }
@@ -429,6 +453,11 @@ export default {
   color: #b0b0b0;
   font-size: 12px;
   font-weight: 300;
+  display: flex;
+  align-items: center;
+  img {
+    height: 16px;
+  }
 }
 
 .divider {
