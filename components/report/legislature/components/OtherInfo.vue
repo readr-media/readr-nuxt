@@ -25,7 +25,9 @@
       :canSendGaEvent="true"
     />
     <Donate @clickButton="$ga.event('projects', 'click', 'donate')" />
-    <RdNewsLetterBtn />
+    <RdNewsLetterBtn
+      @click.native="$ga.event('projects', 'click', `訂閱電子報`)"
+    />
 
     <LazyRenderer class="latest-coverages">
       <RelatedPost :relatedPosts="cmsData.relatedPosts" />
