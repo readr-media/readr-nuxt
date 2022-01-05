@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="['w-full', 'aspect-w-1', `aspect-h-${verticalLength}`]"
+    :class="['grid', 'w-full', 'aspect-w-1', `aspect-h-${verticalLength}`]"
     :style="{
       width: '100%',
       aspectRatio: `1 / ${verticalLength}`,
@@ -10,7 +10,9 @@
     @mousemove="handleMousemoveGridItem"
     @mouseout="handleMouseoutGridItem"
   >
-    {{ hasStarMarkIcon ? '*' : '' }}
+    <span class="star">
+      {{ hasStarMarkIcon ? '*' : '' }}
+    </span>
     <div
       v-show="isGridItemTooltipShow"
       class="tooltip"
@@ -86,7 +88,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div {
+.grid {
   outline: 2px solid #1b1b1b;
   outline-offset: -2px;
   color: black;
@@ -94,12 +96,19 @@ div {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   @include media-breakpoint-up(xl) {
     width: 16px !important;
     outline: 2px solid #1b1b1b;
     outline-offset: -1px;
     font-size: 36px;
   }
+}
+
+.star {
+  position: absolute;
+  top: 50%;
+  line-height: 0.5;
 }
 
 .tooltip {
