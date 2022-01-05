@@ -6,7 +6,7 @@
       @shareLineLinkClick="sendGaClickEvent('share to line')"
     />
     <section v-show="isNavVisible">
-      <div class="header__anchors_mobile">
+      <div v-show="!isScrollingDown" class="header__anchors_mobile">
         <a
           v-for="anchor in mobileAnchors"
           :key="anchor.name"
@@ -40,11 +40,13 @@
 
 <script>
 import scrollIntoView from 'scroll-into-view'
+import { scrollDirection } from '../../../../components/helpers/vue/mixins/index.js'
 import Anchor from './HeaderAnchor.vue'
 export default {
   components: {
     Anchor,
   },
+  mixins: [scrollDirection],
   props: {
     anchors: {
       type: Object,
