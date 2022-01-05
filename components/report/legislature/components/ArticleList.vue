@@ -11,6 +11,9 @@
         :shouldReverseInMobile="false"
         :shouldHighLightReport="false"
         :shouldHideBottomInfos="false"
+        @click.native="
+          () => $ga.event('projects', 'click', `${title}：${item.title}`)
+        "
       />
     </li>
     <div v-if="!isLoading" class="position-correct" />
@@ -52,6 +55,10 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
+    },
+    title: {
+      type: String,
+      default: '',
     },
   },
   computed: {

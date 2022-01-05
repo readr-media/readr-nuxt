@@ -3,6 +3,7 @@
     <div class="container">
       <ListHeading title="最新報導" class="heading" />
       <ArticleList
+        title="最新報導"
         :posts="transformedLatestPosts"
         :filterNum="4"
         class="list"
