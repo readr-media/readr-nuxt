@@ -84,7 +84,11 @@ export default {
   },
   methods: {
     handleAnchorClick(section) {
-      scrollIntoView(document.querySelector(`#${section}`))
+      scrollIntoView(document.querySelector(`#${section}`), {
+        align: {
+          topOffset: 200,
+        },
+      })
     },
   },
 }
