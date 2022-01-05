@@ -23,28 +23,50 @@
         src="~/assets/imgs/report/legislature/arrow-sort.svg"
         alt="sort-order-icon"
       />
+      <img
+        v-show="isLoading[sortName]"
+        class="loading"
+        src="~/assets/imgs/report/legislature/loading.gif"
+        alt="reset-loading-icon"
+      />
     </button>
   </section>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      isLoading: {
+        類別: false,
+        屆期: false,
+        提案總次數: false,
+        排審總次數: false,
+        停留屆期: false,
+      },
+    }
+  },
   methods: {
     handleSortButtonClick(orderName) {
-      const getNextOrderOf = (orderName) => {
-        const order = this.$store.state.data.sorts[orderName]
-        switch (order) {
-          case 'ascending':
-            return 'descending'
-          case 'descending':
-          default:
-            return 'ascending'
+      this.isLoading[orderName] = true
+      setTimeout(() => {
+        const getNextOrderOf = (orderName) => {
+          const order = this.$store.state.data.sorts[orderName]
+          switch (order) {
+            case 'ascending':
+              return 'descending'
+            case 'descending':
+            default:
+              return 'ascending'
+          }
         }
-      }
-      this.$store.commit('data/SORT_DATA', {
-        sortBy: orderName,
-        orderBy: getNextOrderOf(orderName),
-      })
+        this.$store.commit('data/SORT_DATA', {
+          sortBy: orderName,
+          orderBy: getNextOrderOf(orderName),
+        })
+
+        this.isLoading[orderName] = false
+      }, 0)
     },
     getSortOrder(orderName) {
       return this.$store.state.data.sorts[orderName]
@@ -80,5 +102,9 @@ h1 {
   font-size: 12px;
   color: #1b1b1b;
   font-weight: 900;
+}
+
+.loading {
+  height: 16px;
 }
 </style>
