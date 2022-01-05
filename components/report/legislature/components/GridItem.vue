@@ -115,4 +115,21 @@ div {
     visibility: visible;
   }
 }
+
+.aspect-h-1 {
+  height: 0;
+  padding-top: 100%;
+}
+.aspect-h-2 {
+  height: 0;
+  padding-top: 200%;
+}
+.aspect-h-3 {
+  height: 0;
+  padding-top: 300%;
+}
+.aspect-h-4 {
+  height: 0;
+  padding-top: 400%;
+}
 </style>
