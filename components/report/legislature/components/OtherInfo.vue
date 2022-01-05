@@ -27,17 +27,14 @@
     <Donate @clickButton="$ga.event('projects', 'click', 'donate')" />
     <RdNewsLetterBtn />
 
-    <LazyRenderer class="latest-coverages">
-      <div style="background: #1b1b1b;">
-        <readr-latest-coverages />
-      </div>
-    </LazyRenderer>
+    <LatestPost />
   </section>
 </template>
 
 <script>
 import Donate from './Donate.vue'
 import Quiz from './Quiz.vue'
+import LatestPost from './LatestPost.vue'
 import RdReportExtras from '~/components/app/Report/RdReportExtras.vue'
 import RdReportCredit from '~/components/app/Report/RdReportCredit.vue'
 import RdNewsLetterBtn from '~/components/shared/RdNewsLetterBtn.vue'
@@ -49,6 +46,7 @@ export default {
     Donate,
     Quiz,
     RdNewsLetterBtn,
+    LatestPost,
   },
   props: {
     cmsData: {
@@ -99,21 +97,6 @@ $primary-color: #33aba4;
     max-width: 476px;
     &:hover {
       background: #000000 !important;
-    }
-  }
-}
-
-::v-deep .latest-coverages {
-  .hydrated {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 0 0 40px 0;
-    h2 {
-      background: #fff;
-      color: rgba(27, 27, 27, 1);
-    }
-    h3 {
-      color: #fff;
     }
   }
 }
