@@ -7,7 +7,12 @@
     />
     <section v-show="isNavVisible">
       <div class="header__anchors_mobile">
-        <a v-for="anchor in mobileAnchors" :key="anchor">{{ anchor }}</a>
+        <a
+          v-for="anchor in mobileAnchors"
+          :key="anchor.name"
+          @click="handleAnchorClick(anchor.name)"
+          >{{ anchor.title }}</a
+        >
       </div>
       <div class="header__anchors_desktop">
         <img src="../../../../assets/imgs/report/legislature/arrow.svg" />
@@ -61,11 +66,15 @@ export default {
   },
   computed: {
     mobileAnchors() {
-      return [
-        this.anchors.story,
-        this.anchors.dashboard,
-        ...this.anchors.article.map((article) => article.title),
+      console.log('anchors', this.anchors)
+      const anchors = [
+        { name: 'story', title: this.anchors.story },
+        { name: 'dashboard', title: this.anchors.dashboard },
       ]
+      this.anchors.article.map((article, i) => {
+        anchors.push({ name: `article${i + 1}`, title: article.title })
+      })
+      return anchors
     },
     shouldShowAnchors() {
       return this.isMounted && this.nowSection !== 'intro'
