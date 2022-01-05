@@ -1,7 +1,10 @@
 <template>
   <div class="article">
     <RdReportArticle
-      v-observe-visibility="handleArticle1VisibilityChange"
+      v-observe-visibility="{
+        callback: handleArticle1VisibilityChange,
+        intersection,
+      }"
       :id="`article1`"
       :contents="paragraph[0]"
       :slug="'legislature'"
@@ -9,7 +12,10 @@
       @sendGaEvent="sendGaEvent"
     />
     <RdReportArticle
-      v-observe-visibility="handleArticle2VisibilityChange"
+      v-observe-visibility="{
+        callback: handleArticle2VisibilityChange,
+        intersection,
+      }"
       :id="`article2`"
       :contents="paragraph[1]"
       :slug="'legislature'"
@@ -17,7 +23,10 @@
       @sendGaEvent="sendGaEvent"
     />
     <RdReportArticle
-      v-observe-visibility="handleArticle3VisibilityChange"
+      v-observe-visibility="{
+        callback: handleArticle3VisibilityChange,
+        intersection,
+      }"
       :id="`article3`"
       :contents="paragraph[2]"
       :slug="'legislature'"
@@ -50,6 +59,10 @@ export default {
     handleArticle3VisibilityChange: {
       type: Function,
       defaule: () => {},
+    },
+    intersection: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {

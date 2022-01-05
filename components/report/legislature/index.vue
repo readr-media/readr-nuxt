@@ -3,7 +3,10 @@
     <section v-if="$route.query.dashboard">
       <Dashboard
         id="dashboard"
-        v-observe-visibility="handleDashboardVisibilityChange"
+        v-observe-visibility="{
+          callback: handleDashboardVisibilityChange,
+          intersection,
+        }"
       />
     </section>
     <section v-else>
@@ -13,12 +16,18 @@
         :nowSection="nowSection"
       />
       <Intro
-        v-observe-visibility="handleIntroVisibilityChange"
+        v-observe-visibility="{
+          callback: handleIntroVisibilityChange,
+          intersection,
+        }"
         :intro="cmsData.contentApiData.intro"
       />
       <DashboardStory
         id="story"
-        v-observe-visibility="handleDashboardStoryVisibilityChange"
+        v-observe-visibility="{
+          callback: handleDashboardStoryVisibilityChange,
+          intersection,
+        }"
       />
       <Article
         id="article"
@@ -26,10 +35,14 @@
         :handleArticle1VisibilityChange="handleArticle1VisibilityChange"
         :handleArticle2VisibilityChange="handleArticle2VisibilityChange"
         :handleArticle3VisibilityChange="handleArticle3VisibilityChange"
+        :intersection="intersection"
       />
       <Dashboard
         id="dashboard"
-        v-observe-visibility="handleDashboardVisibilityChange"
+        v-observe-visibility="{
+          callback: handleDashboardVisibilityChange,
+          intersection,
+        }"
       />
       <OtherInfo :cmsData="cmsData" />
     </section>
@@ -67,7 +80,7 @@ export default {
   data() {
     return {
       nowSection: '',
-      intersection: { rootMargin: '80px 0px 0px 0px' },
+      intersection: { rootMargin: '-200px 0px 200px 0px' },
       isNavVisible: false,
       sectionList: [
         'story',
