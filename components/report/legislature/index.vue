@@ -22,13 +22,13 @@
         }"
         :intro="cmsData.contentApiData.intro"
       />
-      <DashboardStory
+      <!-- <DashboardStory
         id="story"
         v-observe-visibility="{
           callback: handleDashboardStoryVisibilityChange,
           intersection,
         }"
-      />
+      /> -->
       <Article
         id="article"
         :cmsData="cmsData"
@@ -54,7 +54,7 @@ import Vue from 'vue'
 import { scrollDirection } from '../../../components/helpers/vue/mixins/index.js'
 import * as storeData from './store/data'
 import Intro from './components/Intro.vue'
-import DashboardStory from './components/DashboardStory.vue'
+// import DashboardStory from './components/DashboardStory.vue'
 import Dashboard from './components/Dashboard.vue'
 import Article from './components/Article.vue'
 import OtherInfo from './components/OtherInfo.vue'
@@ -63,7 +63,7 @@ import Header from './components/Header.vue'
 export default {
   components: {
     Intro,
-    DashboardStory,
+    // DashboardStory,
     Article,
     Dashboard,
     OtherInfo,
