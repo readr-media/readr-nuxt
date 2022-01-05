@@ -22,13 +22,13 @@
         }"
         :intro="cmsData.contentApiData.intro"
       />
-      <!-- <DashboardStory
+      <DashboardStory
         id="story"
         v-observe-visibility="{
           callback: handleDashboardStoryVisibilityChange,
           intersection,
         }"
-      /> -->
+      />
       <Article
         id="article"
         :cmsData="cmsData"
@@ -54,7 +54,7 @@ import Vue from 'vue'
 import { scrollDirection } from '../../../components/helpers/vue/mixins/index.js'
 import * as storeData from './store/data'
 import Intro from './components/Intro.vue'
-// import DashboardStory from './components/DashboardStory.vue'
+import DashboardStory from './components/DashboardStory.vue'
 import Dashboard from './components/Dashboard.vue'
 import Article from './components/Article.vue'
 import OtherInfo from './components/OtherInfo.vue'
@@ -63,7 +63,7 @@ import Header from './components/Header.vue'
 export default {
   components: {
     Intro,
-    // DashboardStory,
+    DashboardStory,
     Article,
     Dashboard,
     OtherInfo,
@@ -90,6 +90,7 @@ export default {
         'dashboard',
         '',
       ],
+      hasSendGa: [false, false, false, false, false],
     }
   },
   created() {
@@ -121,6 +122,17 @@ export default {
     // eslint-disable-next-line no-undef
     Vue.use(VueObserveVisibility)
   },
+  watch: {
+    nowSection(section) {
+      if (section === 'dashboard') return
+      const index = this.sectionList.indexOf(section)
+      const titleList = ['導覽', '文章：第一段', '文章：第二段', '文章：第三段']
+      if (!this.hasSendGa[index]) {
+        this.$ga.event('projects', 'scroll', titleList[index])
+        this.hasSendGa[index] = true
+      }
+    },
+  },
   mounted() {
     if (this.$route.query.dashboard) {
       document.querySelector('#default-footer').remove()
@@ -136,7 +148,6 @@ export default {
     intoNextSection(section) {
       const index = this.sectionList.indexOf(section) + 1
       this.nowSection = this.sectionList[index]
-      console.log(this.nowSection)
     },
     sencerSection(isVisible, section) {
       if (this.isScrollingDown && !isVisible) {
@@ -144,7 +155,6 @@ export default {
       }
       if (!this.isScrollingDown && isVisible) {
         this.nowSection = section
-        console.log(this.nowSection)
       }
     },
     handleDashboardStoryVisibilityChange(isVisible, entries) {

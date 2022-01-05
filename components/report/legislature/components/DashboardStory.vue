@@ -2,7 +2,7 @@
   <div v-observe-visibility="handleDashboardVisibilityChange" class="container">
     <div id="start-of-the-dashboard-story"></div>
     <div id="animation" ref="animation" v-intersect="animationEventObserver">
-      <div id="7794ad0b-ed3c-41a0-b450-33d1c68e9f5e"></div>
+      <!-- <div id="7794ad0b-ed3c-41a0-b450-33d1c68e9f5e"></div> -->
     </div>
     <button
       v-show="shouldShowScroller"
