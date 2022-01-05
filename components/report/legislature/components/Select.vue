@@ -108,6 +108,7 @@ export default {
   flex-direction: column;
   background-color: #555555;
   color: white;
+  z-index: 9999;
 }
 
 .option {

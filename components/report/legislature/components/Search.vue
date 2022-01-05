@@ -247,6 +247,7 @@ export default {
   overflow-y: scroll;
   padding: 13px 0;
   width: 100%;
+  z-index: 9999;
 }
 .suggestion {
   padding: 3px 6px;
