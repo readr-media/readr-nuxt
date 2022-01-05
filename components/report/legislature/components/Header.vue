@@ -91,6 +91,9 @@ export default {
         },
       })
     },
+    sendGaClickEvent(label) {
+      this.$ga.event('projects', 'click', label)
+    },
   },
 }
 </script>
