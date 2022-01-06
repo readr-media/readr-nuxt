@@ -208,6 +208,8 @@ export default {
       position: absolute;
       top: 0;
       width: 100vw;
+      height: 100%;
+      object-fit: cover;
     }
   }
 }
