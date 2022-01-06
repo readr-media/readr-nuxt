@@ -22,13 +22,15 @@
         }"
         :intro="cmsData.contentApiData.intro"
       />
-      <DashboardStory
-        id="story"
-        v-observe-visibility="{
-          callback: handleDashboardStoryVisibilityChange,
-          intersection,
-        }"
-      />
+      <LazyRenderer>
+        <DashboardStory
+          id="story"
+          v-observe-visibility="{
+            callback: handleDashboardStoryVisibilityChange,
+            intersection,
+          }"
+        />
+      </LazyRenderer>
       <Article
         id="article"
         :cmsData="cmsData"
