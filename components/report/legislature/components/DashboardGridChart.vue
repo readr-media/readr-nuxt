@@ -4,6 +4,7 @@
     class="dashboard-wrapper"
   >
     <Lightbox
+      v-if="$store.state.viewport.width < 1200"
       v-show="isTooltipVisible"
       class="dashboard-wrapper__lightbox"
       @close="$emit('closeLightbox')"
