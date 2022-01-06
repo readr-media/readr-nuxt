@@ -19,49 +19,51 @@
       <div class="hint__word">往下滑動，提示或引言提示或引言</div>
     </div>
     <div class="container">
-      <div class="background mobile">
-        <img
-          src="../../../../assets/imgs/report/legislature/intro/01_mobile.png"
-          class="intro__background rellax"
-          data-rellax-speed="50"
-        />
-        <img
-          src="../../../../assets/imgs/report/legislature/intro/02_mobile.png"
-          class="intro__background rellax"
-          data-rellax-speed="35"
-        />
-        <img
-          src="../../../../assets/imgs/report/legislature/intro/03_mobile.png"
-          class="intro__background rellax"
-          data-rellax-speed="15"
-        />
-        <img
-          src="../../../../assets/imgs/report/legislature/intro/04_mobile.png"
-          class="intro__background rellax"
-          data-rellax-speed="5"
-        />
-      </div>
-      <div class="background desktop">
-        <img
-          src="../../../../assets/imgs/report/legislature/intro/01.png"
-          class="intro__background rellax"
-          data-rellax-speed="50"
-        />
-        <img
-          src="../../../../assets/imgs/report/legislature/intro/02.png"
-          class="intro__background rellax"
-          data-rellax-speed="35"
-        />
-        <img
-          src="../../../../assets/imgs/report/legislature/intro/03.png"
-          class="intro__background rellax"
-          data-rellax-speed="15"
-        />
-        <img
-          src="../../../../assets/imgs/report/legislature/intro/04.png"
-          class="intro__background rellax"
-          data-rellax-speed="5"
-        />
+      <div class="background">
+        <picture>
+          <source
+            srcset="~/assets/imgs/report/legislature/intro/01.png"
+            media="(min-width: 768px)"
+          />
+          <img
+            src="~/assets/imgs/report/legislature/intro/01_mobile.png"
+            class="intro__background rellax"
+            data-rellax-speed="50"
+          />
+        </picture>
+        <picture>
+          <source
+            srcset="~/assets/imgs/report/legislature/intro/02.png"
+            media="(min-width: 768px)"
+          />
+          <img
+            src="~/assets/imgs/report/legislature/intro/02_mobile.png"
+            class="intro__background rellax"
+            data-rellax-speed="35"
+          />
+        </picture>
+        <picture>
+          <source
+            srcset="~/assets/imgs/report/legislature/intro/03.png"
+            media="(min-width: 768px)"
+          />
+          <img
+            src="~/assets/imgs/report/legislature/intro/03_mobile.png"
+            class="intro__background rellax"
+            data-rellax-speed="15"
+          />
+        </picture>
+        <picture>
+          <source
+            srcset="~/assets/imgs/report/legislature/intro/04.png"
+            media="(min-width: 768px)"
+          />
+          <img
+            src="~/assets/imgs/report/legislature/intro/04_mobile.png"
+            class="intro__background rellax"
+            data-rellax-speed="5"
+          />
+        </picture>
       </div>
       <div class="examples">
         <IntroExample
