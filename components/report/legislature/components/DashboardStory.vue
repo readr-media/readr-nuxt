@@ -129,7 +129,11 @@ export default {
       window.scroll(0, this.prevScroll)
     },
     handleScrollerButtonClick() {
-      console.log('click')
+      this.$ga.event(
+        'projects',
+        'click',
+        `捲動式影片箭頭${this.scrollerIconDirection}`
+      )
       const element = this.scrollerIconDirection === 'down' ? 'bottom' : 'start'
       scrollIntoView(
         document.querySelector(`#${element}-of-the-dashboard-story`)

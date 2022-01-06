@@ -24,7 +24,7 @@
       :publishedAt="cmsData.contentApiData.publishedAt"
       :canSendGaEvent="true"
     />
-    <Donate @clickButton="$ga.event('projects', 'click', 'donate')" />
+    <Donate />
     <RdNewsLetterBtn
       @click.native="$ga.event('projects', 'click', `訂閱電子報`)"
     />

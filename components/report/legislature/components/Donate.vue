@@ -1,6 +1,6 @@
 <template>
   <div class="donate">
-    <ArticleButton content="贊助 READr" @click="handleClick" />
+    <ArticleButton content="贊助 READr" @click.native="handleClick" />
   </div>
 </template>
 
@@ -10,6 +10,7 @@ export default {
   components: { ArticleButton },
   methods: {
     handleClick() {
+      this.$ga.event('projects', 'click', 'donate')
       const route = this.$router.resolve({ path: '/donate' })
       window.open(route.href)
     },
