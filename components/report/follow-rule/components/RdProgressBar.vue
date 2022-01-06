@@ -134,7 +134,6 @@ export default {
         if (this.trackedStatus !== 'moving') this.trackedStatus = 'stand'
       }
       if (d < this.minDistance - 1) {
-        console.log(d, this.minDistance)
         this.handleScroll()
       }
     },

@@ -24,7 +24,7 @@ export default {
         import(`~/components/report/${this.transformedReport.slug}/index.vue`)
     },
     transformedReport() {
-      const { slug, contentApiData } = this.report
+      const { slug, contentApiData, relatedPosts } = this.report
 
       const aml = JSON.parse(contentApiData)
         .filter(function isNeededType(item) {
@@ -39,6 +39,7 @@ export default {
       return {
         slug,
         contentApiData: json,
+        relatedPosts,
       }
     },
   },

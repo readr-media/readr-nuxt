@@ -12,14 +12,7 @@
       @mousemove="handleMousemove"
       @mouseout="handleMouseout"
     />
-    <div
-      v-show="isTooltipShow"
-      class="tooltip"
-      :style="{
-        left: `${tooltipX + 10}px`,
-        top: `${tooltipY - 10}px`,
-      }"
-    >
+    <div v-show="isTooltipShow" class="tooltip" :style="tooltipPosition">
       {{ tooltipText }}
     </div>
   </div>
@@ -47,21 +40,43 @@ export default {
   data() {
     return {
       isTooltipShow: false,
-      tooltipX: 0,
-      tooltipY: 0,
+      tooltipPosition: {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      },
       tooltipText: '',
     }
   },
   methods: {
     handleMouseover(e, data) {
       this.isTooltipShow = true
-      this.tooltipX = e.clientX
-      this.tooltipY = e.clientY
+
+      const shouldFlipTooltip = e.clientX > window.innerWidth / 2
+      this.tooltipPosition = shouldFlipTooltip
+        ? {
+            top: `${e.clientY + 10}px`,
+            right: `${window.innerWidth - e.clientX - 10}px`,
+          }
+        : {
+            top: `${e.clientY + 10}px`,
+            left: `${e.clientX + 10}px`,
+          }
+
       this.tooltipText = data.tooltipText
     },
     handleMousemove(e) {
-      this.tooltipX = e.clientX
-      this.tooltipY = e.clientY
+      const shouldFlipTooltip = e.clientX > window.innerWidth / 2
+      this.tooltipPosition = shouldFlipTooltip
+        ? {
+            top: `${e.clientY + 10}px`,
+            right: `${window.innerWidth - e.clientX - 10}px`,
+          }
+        : {
+            top: `${e.clientY + 10}px`,
+            left: `${e.clientX + 10}px`,
+          }
     },
     handleMouseout() {
       this.isTooltipShow = false
@@ -72,9 +87,8 @@ export default {
 
 <style scoped>
 .chart {
-  height: 88px;
+  height: 31px;
   display: flex;
-  margin: 16px;
 }
 
 .bar {
@@ -84,5 +98,10 @@ export default {
 .tooltip {
   position: fixed;
   background-color: white;
+  font-size: 16px;
+  background: #eeeeee;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  padding: 1px 3px;
 }
 </style>

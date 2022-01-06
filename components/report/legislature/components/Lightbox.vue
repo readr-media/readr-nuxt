@@ -4,39 +4,52 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       z-index: 50;
       display: flex;
       justify-content: center;
       align-items: center;
     "
+    @click="handleCloseLightbox('dimmed')"
   >
     <section
       style="
         position: relative;
         width: 90%;
-        height: 90%;
+        max-height: 90%;
         background-color: white;
         overflow-y: scroll;
       "
+      @click.stop
     >
-      <p
-        style="position: absolute; top: 5px; right: 5px;"
-        @click="handleCloseLightbox"
-      >
-        close
-      </p>
+      <ButtonClose
+        style="position: sticky; top: 8px; right: 8px; float: right;"
+        @click.native="handleCloseLightbox('closeButton')"
+      />
       <slot />
     </section>
   </div>
 </template>
 
 <script>
+import ButtonClose from './ButtonClose.vue'
 export default {
+  components: { ButtonClose },
   methods: {
-    handleCloseLightbox() {
+    handleCloseLightbox(area) {
       this.$emit('close')
+
+      switch (area) {
+        case 'closeButton': {
+          this.$ga.event('project', 'click', 'Dashboard infobox打叉跳出')
+          break
+        }
+        default:
+        case 'dimmed': {
+          this.$ga.event('project', 'click', 'Dashboard 點擊旁邊跳出infobox')
+        }
+      }
     },
   },
 }
