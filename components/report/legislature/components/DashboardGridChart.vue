@@ -31,6 +31,9 @@
         />
       </ol>
     </main>
+    <ButtonPrimary class="loadmore-button" @click.native="handleLoadMore">
+      顯示更多法案
+    </ButtonPrimary>
     <aside class="dashboard-wrapper__aside aside">
       <DashboardBillInfo
         v-if="isTooltipVisible"
@@ -48,12 +51,14 @@ import billCategories from '../constants/billCategories.json'
 import Lightbox from './Lightbox.vue'
 import GridItem from './GridItem.vue'
 import DashboardBillInfo from './DashboardBillInfo.vue'
+import ButtonPrimary from './ButtonPrimary.vue'
 
 export default {
   components: {
     Lightbox,
     DashboardBillInfo,
     GridItem,
+    ButtonPrimary,
   },
   props: {
     tooltip: {
@@ -68,6 +73,7 @@ export default {
   data() {
     return {
       shouldShowChart: false,
+      dataLimit: 500,
     }
   },
   computed: {
@@ -83,9 +89,9 @@ export default {
       }
     },
     dataChunk() {
-      const data = this.$store.state.data.data
+      const data = this.$store.state.data.data?.slice(0, this.dataLimit)
       const size = Math.ceil(data.length / this.columnsNumber)
-      return chunk(this.$store.state.data.data, size)
+      return chunk(data, size)
     },
     gridTemplateColumns() {
       return `repeat(${this.columnsNumber}, minmax(0, 1fr))`
@@ -144,12 +150,16 @@ export default {
         this.shouldShowChart = true
       }
     },
+    handleLoadMore() {
+      this.dataLimit += 500
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
 .dashboard-wrapper {
+  position: relative;
   @include media-breakpoint-up(xl) {
     display: flex;
     justify-content: space-between;
@@ -174,6 +184,7 @@ main {
   @include media-breakpoint-up(xl) {
     grid-template-columns: repeat(100, minmax(0, 1fr));
   }
+  margin: 0 0 40px 0;
 }
 
 .aside {
@@ -192,5 +203,11 @@ main {
     max-height: calc(100vh - 80px);
     overflow-y: scroll;
   }
+}
+
+.loadmore-button {
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
 </style>
