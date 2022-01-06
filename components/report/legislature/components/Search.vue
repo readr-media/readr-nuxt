@@ -200,6 +200,7 @@ export default {
 
 .select {
   ::v-deep .button {
+    height: 22px;
     background-color: #eeeeee;
     color: #1b1b1b;
     font-weight: 500;
@@ -219,7 +220,7 @@ export default {
 }
 
 .input-wrapper {
-  height: 20px;
+  height: 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -233,10 +234,10 @@ export default {
   width: 100%;
   height: 100%;
   //padding: 3px 6px;
-  font-size: 14px;
+  font-size: 16px;
   border-radius: 0;
   &::placeholder {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 300;
     color: #c7c7c7;
   }
