@@ -137,6 +137,7 @@ export default {
     if (this.$route.query.dashboard) {
       document.querySelector('#default-footer').remove()
     }
+    window.scrollTo(0, 0)
   },
   destroyed() {
     this.$store.unregisterModule('data')
