@@ -27,9 +27,10 @@
           callback: handleDashboardStoryVisibilityChange,
           intersection,
         }"
+        id="story"
       >
         <LazyRenderer v-if="viewportWidth > 768">
-          <DashboardStory id="story" />
+          <DashboardStory />
         </LazyRenderer>
         <DashboardStoryMobile
           v-else
