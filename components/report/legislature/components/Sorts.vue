@@ -66,7 +66,7 @@ export default {
         })
 
         this.isLoading[orderName] = false
-      }, 0)
+      }, 100)
     },
     getSortOrder(orderName) {
       return this.$store.state.data.sorts[orderName]

@@ -314,7 +314,7 @@ export default {
       setTimeout(() => {
         this.$store.commit('data/RESET_DATA')
         this.isResetLoading = false
-      }, 0)
+      }, 100)
     },
   },
 }
