@@ -96,6 +96,17 @@ export default {
       hasSendGa: [false, false, false, false, false],
     }
   },
+  watch: {
+    nowSection(section) {
+      if (section === 'dashboard') return
+      const index = this.sectionList.indexOf(section)
+      const titleList = ['導覽', '文章：第一段', '文章：第二段', '文章：第三段']
+      if (!this.hasSendGa[index]) {
+        this.$ga.event('projects', 'scroll', titleList[index])
+        this.hasSendGa[index] = true
+      }
+    },
+  },
   created() {
     this.$store.registerModule('data', {
       namespaced: true,
@@ -125,17 +136,7 @@ export default {
     // eslint-disable-next-line no-undef
     Vue.use(VueObserveVisibility)
   },
-  watch: {
-    nowSection(section) {
-      if (section === 'dashboard') return
-      const index = this.sectionList.indexOf(section)
-      const titleList = ['導覽', '文章：第一段', '文章：第二段', '文章：第三段']
-      if (!this.hasSendGa[index]) {
-        this.$ga.event('projects', 'scroll', titleList[index])
-        this.hasSendGa[index] = true
-      }
-    },
-  },
+
   mounted() {
     if (this.$route.query.dashboard) {
       document.querySelector('#default-footer').remove()

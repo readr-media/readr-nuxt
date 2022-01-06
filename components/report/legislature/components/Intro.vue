@@ -169,8 +169,8 @@ export default {
     },
   },
   mounted() {
-    const rellax = new Rellax('.rellax')
-    console.log(rellax)
+    /* eslint-disable no-new */
+    new Rellax('.rellax')
   },
   methods: {
     handleAnchorClick(section) {

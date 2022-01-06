@@ -149,7 +149,6 @@ export default {
       this.toggleFull(e.type)
     },
     getSlideWidth(height) {
-      console.log(height, this.$refs.slide.clientWidth)
       this.slideWidth =
         this.$refs.slide.clientWidth > height
           ? height

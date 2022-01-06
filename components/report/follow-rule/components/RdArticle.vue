@@ -86,7 +86,6 @@ export default {
           triggerElement: `#section-${i + 1}`,
         })
           .on('enter', () => {
-            console.log('enter paragraph to', i + 1)
             this.$emit('chaneParagraph', i + 1)
           })
           .on('start end', (e) => {

@@ -1,7 +1,7 @@
 <template>
   <div
-    v-observe-visibility="handleDashboardVisibilityChange"
     ref="animation"
+    v-observe-visibility="handleDashboardVisibilityChange"
     class="container"
   >
     <div id="start-of-the-dashboard-story"></div>
@@ -29,8 +29,8 @@
       />
     </button>
     <div
-      v-observe-visibility="handleBottomVisibilityChange"
       id="bottom-of-the-dashboard-story"
+      v-observe-visibility="handleBottomVisibilityChange"
     ></div>
   </div>
 </template>

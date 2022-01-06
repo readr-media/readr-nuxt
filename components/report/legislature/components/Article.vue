@@ -1,33 +1,33 @@
 <template>
   <div class="article">
     <RdReportArticle
+      id="article1"
       v-observe-visibility="{
         callback: handleArticle1VisibilityChange,
         intersection,
       }"
-      :id="`article1`"
       :contents="paragraph[0]"
       :slug="'legislature'"
       :isPart="true"
       @sendGaEvent="sendGaEvent"
     />
     <RdReportArticle
+      id="article2"
       v-observe-visibility="{
         callback: handleArticle2VisibilityChange,
         intersection,
       }"
-      :id="`article2`"
       :contents="paragraph[1]"
       :slug="'legislature'"
       :isPart="true"
       @sendGaEvent="sendGaEvent"
     />
     <RdReportArticle
+      id="article3"
       v-observe-visibility="{
         callback: handleArticle3VisibilityChange,
         intersection,
       }"
-      :id="`article3`"
       :contents="paragraph[2]"
       :slug="'legislature'"
       :isPart="true"
