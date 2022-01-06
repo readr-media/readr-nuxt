@@ -7,13 +7,15 @@
       backgroundImage: backgroundImage,
     }"
     @mouseover="handleMouseoverGridItem"
+    @mousemove="handleMousemoveGridItem"
     @mouseout="handleMouseoutGridItem"
   >
-    <span v-if="hasStarMarkIcon" class="star">
-      *
+    <span class="star">
+      {{ hasStarMarkIcon ? '*' : '' }}
     </span>
     <div
-      :class="['tooltip', { 'tooltip--hide': !isGridItemTooltipShow }]"
+      v-show="isGridItemTooltipShow"
+      class="tooltip"
       :style="gridItemTooltipPosition"
     >
       {{ billName }}
@@ -58,13 +60,12 @@ export default {
       const shouldFlipTooltip = e.clientX > window.innerWidth / 2
       this.gridItemTooltipPosition = shouldFlipTooltip
         ? {
-            top: `${e.offsetY + 10}px`,
-            left: 'auto',
-            right: `${e.offsetX - 10}px`,
+            top: `${e.clientY + 10}px`,
+            right: `${window.innerWidth - e.clientX - 10}px`,
           }
         : {
-            top: `${e.offsetY + 10}px`,
-            left: `${e.offsetX + 10}px`,
+            top: `${e.clientY + 10}px`,
+            left: `${e.clientX + 10}px`,
           }
     },
     handleMousemoveGridItem(e) {
@@ -111,30 +112,17 @@ export default {
 }
 
 .tooltip {
-  position: absolute;
-  bottom: 30px;
-  left: 30px;
-  height: 26px;
+  position: fixed;
   background-color: white;
   padding: 3px 6px;
   font-size: 14px;
   font-weight: 500;
   color: #985f0b;
   visibility: hidden;
-  pointer-events: none;
   width: max-content !important;
-  overflow-x: visible;
   z-index: 9999;
-  opacity: 0;
   @include media-breakpoint-up(xl) {
-    pointer-events: auto;
     visibility: visible;
-    opacity: 1;
-  }
-
-  &--hide {
-    opacity: 0;
-    pointer-events: none;
   }
 }
 
