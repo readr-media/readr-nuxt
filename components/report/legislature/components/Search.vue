@@ -232,7 +232,7 @@ export default {
 .input {
   width: 100%;
   height: 100%;
-  padding: 3px 6px;
+  //padding: 3px 6px;
   font-size: 14px;
   border-radius: 0;
   &::placeholder {
