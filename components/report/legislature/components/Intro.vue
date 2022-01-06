@@ -16,7 +16,7 @@
           alt="hint"
         />
       </picture>
-      <div class="hint__word">往下滑動，提示或引言提示或引言</div>
+      <div class="hint__word">往下滑動</div>
     </div>
     <div class="container">
       <div class="background rellax" data-rellax-speed="50">
