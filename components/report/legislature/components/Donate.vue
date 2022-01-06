@@ -1,13 +1,16 @@
 <template>
   <div class="donate">
-    <div class="donate__button" @click="handleClick">贊助 READr</div>
+    <ArticleButton content="贊助 READr" @click.native="handleClick" />
   </div>
 </template>
 
 <script>
+import ArticleButton from './ArticleButton.vue'
 export default {
+  components: { ArticleButton },
   methods: {
     handleClick() {
+      this.$ga.event('projects', 'click', 'donate')
       const route = this.$router.resolve({ path: '/donate' })
       window.open(route.href)
     },
@@ -37,6 +40,8 @@ export default {
     line-height: 23px;
     &:hover {
       cursor: pointer;
+      background: #5a8a87;
+      color: #4f4f4f;
     }
   }
 }

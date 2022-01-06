@@ -186,6 +186,17 @@ export default {
           )
         }
 
+        case 'highchart': {
+          return (
+            <iframe
+              class="everviz-iframe"
+              src="https://app.everviz.com/embed/peLy3u-oz/"
+              title="Chart: "
+              style="border: 0; width: 100%; height: 500px"
+            ></iframe>
+          )
+        }
+
         default:
           return (
             <p
@@ -214,7 +225,7 @@ export default {
 
   render() {
     return (
-      <article class="report-article">
+      <article class={`${this.isPart ? 'part' : ''} report-article`}>
         <div class={`${this.isPart ? '' : 'notPart'} container`}>
           {this.contents.map(this.buildContent)}
         </div>
@@ -225,6 +236,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.part {
+  padding: 0px 20px !important;
+}
+
 .report-article {
   padding: 48px 20px;
   color: #2b2b2b;

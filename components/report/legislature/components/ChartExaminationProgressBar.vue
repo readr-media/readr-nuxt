@@ -146,7 +146,7 @@ export default {
 <style scoped>
 .chart {
   display: flex;
-  padding: 16px 24px;
+  padding: 16px 24px 16px 0;
 }
 .chart__main {
   margin: 0 0 0 2px;
@@ -190,7 +190,7 @@ export default {
   height: 100%;
 }
 .x-tick__tick-value--top {
-  top: -30px;
+  top: -24px;
 }
 .x-tick__tick-value--bottom {
   top: calc(100% + 8px);
@@ -201,7 +201,7 @@ export default {
 }
 
 .tick-value {
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .bar-wrapper {
