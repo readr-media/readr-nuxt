@@ -1,9 +1,14 @@
 <template>
-  <div v-observe-visibility="handleDashboardVisibilityChange" class="container">
+  <div
+    v-observe-visibility="handleDashboardVisibilityChange"
+    ref="animation"
+    class="container"
+  >
     <div id="start-of-the-dashboard-story"></div>
-    <div id="animation" ref="animation" v-intersect="animationEventObserver">
+    <div id="animation" ref="animation">
       <div
         v-if="!$route.query.hideStory"
+        v-show="shouldShowAnimation"
         id="7891ad4d-5740-45d9-80cd-c176e36bf92f"
       ></div>
     </div>
@@ -24,7 +29,7 @@
       />
     </button>
     <div
-      v-observe-visibility="handleSearchVisibilityChange"
+      v-observe-visibility="handleBottomVisibilityChange"
       id="bottom-of-the-dashboard-story"
     ></div>
   </div>
@@ -33,18 +38,9 @@
 <script>
 import scrollIntoView from 'scroll-into-view'
 import { mapGetters } from 'vuex'
-import { intersect } from '~/helpers/vue/directives/index.js'
-
-import {
-  setupIntersectionObserver,
-  cleanupIntersectionObserver,
-} from '~/helpers/index.js'
 
 export default {
   layout: 'empty',
-  directives: {
-    intersect,
-  },
   props: {
     cmsData: {
       type: Object,
@@ -54,92 +50,44 @@ export default {
   },
   data() {
     return {
-      startLoaded: false,
-      animationEventObserver: undefined,
-      gaEventObserver: undefined,
-      isLoaded: false,
-      shouldShowAnimation: false,
-      hasSendGa: false,
-      prevScroll: 0,
       isScrollDown: false,
       scrollerIconDirection: 'down',
       shouldShowScroller: false,
+      hasUnfold: false,
+      isWatching: false,
     }
   },
 
   computed: {
     ...mapGetters('viewport', ['viewportHeight']),
+    shouldShowAnimation() {
+      return this.isWatching || this.hasUnfold
+    },
     mobileContent() {
       return this.cmsData.contentApiData.alternative
     },
   },
 
   mounted() {
-    this.setupAnimationEventObserver()
-    this.setupGaEventObserver()
-    window.addEventListener('scroll', this.handleScroll)
-  },
-
-  beforeDestroy() {
-    this.cleanupObserver()
+    const script = document.createElement('script')
+    script.src =
+      'https://unpkg.com/@twreporter/scrollable-video@1.0.1/dist/main.abb2610d2c16acab4a4c.bundle.js'
+    document.body.appendChild(script)
   },
 
   methods: {
-    handleSearchVisibilityChange(isVisible) {
-      if (isVisible) {
-        this.scrollerIconDirection = 'up'
-      } else {
-        this.scrollerIconDirection = 'down'
-      }
+    handleBottomVisibilityChange(isVisible) {
+      this.scrollerIconDirection = isVisible ? 'up' : 'down'
     },
     handleDashboardVisibilityChange(isVisible) {
       this.shouldShowScroller = isVisible
-    },
-    async setupAnimationEventObserver() {
-      this.animationEventObserver = await setupIntersectionObserver(
-        (entries) => {
-          entries.forEach(({ intersectionRatio }) => {
-            if (intersectionRatio >= 0.2) {
-              this.shouldShowAnimation = true
-            }
-            if (intersectionRatio && !this.startLoaded) {
-              const script = document.createElement('script')
-              script.src =
-                'https://unpkg.com/@twreporter/scrollable-video@1.0.1/dist/main.abb2610d2c16acab4a4c.bundle.js'
-              document.body.appendChild(script)
-              this.startLoaded = true
-            }
-          })
-        },
-        { threshold: [0, 0.2, 1] }
-      )
-    },
-    async setupGaEventObserver() {
-      this.gaEventObserver = await setupIntersectionObserver((entries) => {
-        entries.forEach(({ intersectionRatio }) => {
-          if (
-            intersectionRatio &&
-            this.isLoaded &&
-            !this.hasSendGa &&
-            this.isScrollDown
-          ) {
-            this.$ga.event('projects', 'scroll', '滑到動畫結束')
-            this.hasSendGa = true
-          }
+      this.isWatching = isVisible
+      if (isVisible && !this.hasUnfold) {
+        this.$nextTick(function () {
+          this.hasUnfold =
+            this.$refs.animation.clientHeight > this.viewportHeight
         })
-      })
-    },
-    cleanupObserver() {
-      cleanupIntersectionObserver(this, 'animationEventObserver')
-      cleanupIntersectionObserver(this, 'gaEventObserver')
-    },
-    handleScroll() {
-      this.isScrollDown = window.scrollY > this.prevScroll
-      this.prevScroll = window.scrollY
-      if (this.isLoaded) return
-      const elHeight = this.$el.getBoundingClientRect().height
-      this.isLoaded = elHeight > 2000
-      window.scroll(0, this.prevScroll)
+      }
     },
     handleScrollerButtonClick() {
       this.$ga.event(
@@ -189,13 +137,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  min-height: 100vh;
+  background: grey;
+}
 #animation {
   background-color: rgb(0 0 0 / 18%);
   z-index: 3000;
   position: relative;
-  #b55dd62a-e932-436f-8447-2e85856f137c {
-    z-index: 3000;
-  }
 }
 
 .scroller-button {
