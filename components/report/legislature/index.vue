@@ -29,6 +29,7 @@
             callback: handleDashboardStoryVisibilityChange,
             intersection,
           }"
+          :cmsData="cmsData"
         />
       </LazyRenderer>
       <Article

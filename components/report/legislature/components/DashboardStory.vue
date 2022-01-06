@@ -45,6 +45,13 @@ export default {
   directives: {
     intersect,
   },
+  props: {
+    cmsData: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       startLoaded: false,
@@ -62,6 +69,9 @@ export default {
 
   computed: {
     ...mapGetters('viewport', ['viewportHeight']),
+    mobileContent() {
+      return this.cmsData.contentApiData.alternative
+    },
   },
 
   mounted() {

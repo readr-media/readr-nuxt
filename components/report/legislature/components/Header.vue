@@ -69,7 +69,6 @@ export default {
   },
   computed: {
     mobileAnchors() {
-      console.log('anchors', this.anchors)
       const anchors = [
         { name: 'story', title: this.anchors.story },
         { name: 'dashboard', title: this.anchors.dashboard },
