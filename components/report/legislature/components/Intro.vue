@@ -19,51 +19,69 @@
       <div class="hint__word">往下滑動，提示或引言提示或引言</div>
     </div>
     <div class="container">
-      <div class="background">
-        <picture>
-          <source
-            srcset="~/assets/imgs/report/legislature/intro/01.png"
-            media="(min-width: 768px)"
-          />
-          <img
-            src="~/assets/imgs/report/legislature/intro/01_mobile.png"
-            class="intro__background rellax"
-            data-rellax-speed="50"
-          />
-        </picture>
-        <picture>
-          <source
-            srcset="~/assets/imgs/report/legislature/intro/02.png"
-            media="(min-width: 768px)"
-          />
-          <img
-            src="~/assets/imgs/report/legislature/intro/02_mobile.png"
-            class="intro__background rellax"
-            data-rellax-speed="35"
-          />
-        </picture>
-        <picture>
-          <source
-            srcset="~/assets/imgs/report/legislature/intro/03.png"
-            media="(min-width: 768px)"
-          />
-          <img
-            src="~/assets/imgs/report/legislature/intro/03_mobile.png"
-            class="intro__background rellax"
-            data-rellax-speed="15"
-          />
-        </picture>
-        <picture>
-          <source
-            srcset="~/assets/imgs/report/legislature/intro/04.png"
-            media="(min-width: 768px)"
-          />
-          <img
-            src="~/assets/imgs/report/legislature/intro/04_mobile.png"
-            class="intro__background rellax"
-            data-rellax-speed="5"
-          />
-        </picture>
+      <div class="background rellax" data-rellax-speed="50">
+        <img
+          v-for="number in 5"
+          :key="number"
+          :src="
+            require(`~/assets/imgs/report/legislature/intro/seed${
+              Math.floor(Math.random() * 5) + 1
+            }.png`)
+          "
+          :style="{
+            transform: `translateX(
+              ${random(number * 80 * -1, number * 80)}px
+            )`,
+          }"
+        />
+      </div>
+      <div class="background rellax" data-rellax-speed="35">
+        <img
+          v-for="number in 5"
+          :key="number"
+          :src="
+            require(`~/assets/imgs/report/legislature/intro/seed${
+              Math.floor(Math.random() * 5) + 1
+            }.png`)
+          "
+          :style="{
+            transform: `translateX(
+              ${random(number * 80 * -1, number * 80)}px
+            )`,
+          }"
+        />
+      </div>
+      <div class="background rellax" data-rellax-speed="15">
+        <img
+          v-for="number in 5"
+          :key="number"
+          :src="
+            require(`~/assets/imgs/report/legislature/intro/seed${
+              Math.floor(Math.random() * 5) + 1
+            }.png`)
+          "
+          :style="{
+            transform: `translateX(
+              ${random(number * 80 * -1, number * 80)}px
+            )`,
+          }"
+        />
+      </div>
+      <div class="background rellax" data-rellax-speed="5">
+        <img
+          v-for="number in 5"
+          :key="number"
+          :src="
+            require(`~/assets/imgs/report/legislature/intro/seed${
+              Math.floor(Math.random() * 5) + 1
+            }.png`)
+          "
+          :style="{
+            transform: `translateX(
+              ${random(number * 80 * -1, number * 80)}px
+            )`,
+          }"
+        />
       </div>
       <div class="examples">
         <IntroExample
@@ -169,6 +187,10 @@ export default {
         window.scroll(0, -this.viewportHeight * 0.66)
       }
     },
+
+    random(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min
+    },
   },
 }
 </script>
@@ -196,6 +218,7 @@ export default {
   align-items: flex-end;
   flex-direction: column;
   justify-content: flex-end;
+  overflow: hidden;
   @include media-breakpoint-up(md) {
     height: 350vh;
   }
@@ -204,12 +227,12 @@ export default {
     height: 100%;
     position: absolute;
     top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     img {
-      position: absolute;
-      top: 0;
       width: 100vw;
-      height: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
   }
 }
