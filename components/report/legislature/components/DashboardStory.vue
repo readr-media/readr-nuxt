@@ -41,13 +41,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   layout: 'empty',
-  props: {
-    cmsData: {
-      type: Object,
-      required: true,
-      default: () => ({}),
-    },
-  },
+
   data() {
     return {
       isScrollDown: false,
@@ -62,9 +56,6 @@ export default {
     ...mapGetters('viewport', ['viewportHeight']),
     shouldShowAnimation() {
       return this.isWatching || this.hasUnfold
-    },
-    mobileContent() {
-      return this.cmsData.contentApiData.alternative
     },
   },
 

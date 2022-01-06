@@ -22,16 +22,24 @@
         }"
         :intro="cmsData.contentApiData.intro"
       />
-      <LazyRenderer>
-        <DashboardStory
-          id="story"
+      <section
+        v-observe-visibility="{
+          callback: handleDashboardStoryVisibilityChange,
+          intersection,
+        }"
+      >
+        <LazyRenderer v-if="viewportWidth > 768">
+          <DashboardStory id="story" />
+        </LazyRenderer>
+        <DashboardStoryMobile
+          v-else
           v-observe-visibility="{
             callback: handleDashboardStoryVisibilityChange,
             intersection,
           }"
           :cmsData="cmsData"
         />
-      </LazyRenderer>
+      </section>
       <Article
         id="article"
         :cmsData="cmsData"
@@ -54,10 +62,12 @@
 
 <script>
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import { scrollDirection } from '../../../components/helpers/vue/mixins/index.js'
 import * as storeData from './store/data'
 import Intro from './components/Intro.vue'
 import DashboardStory from './components/DashboardStory.vue'
+import DashboardStoryMobile from './components/DashboardStoryMobile.vue'
 import Dashboard from './components/Dashboard.vue'
 import Article from './components/Article.vue'
 import OtherInfo from './components/OtherInfo.vue'
@@ -71,6 +81,7 @@ export default {
     Dashboard,
     OtherInfo,
     Header,
+    DashboardStoryMobile,
   },
   mixins: [scrollDirection],
   props: {
@@ -95,6 +106,9 @@ export default {
       ],
       hasSendGa: [false, false, false, false, false],
     }
+  },
+  computed: {
+    ...mapGetters('viewport', ['viewportWidth']),
   },
   watch: {
     nowSection(section) {
