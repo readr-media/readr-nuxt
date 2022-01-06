@@ -84,7 +84,7 @@
         />
       </div>
       <div class="examples">
-        <div v-if="isMobile" class="examples__spacer" />
+        <div v-if="isMobile" class="examples__spacer mobile" />
         <IntroExample
           v-for="item in example"
           :id="`example${item.id}`"
