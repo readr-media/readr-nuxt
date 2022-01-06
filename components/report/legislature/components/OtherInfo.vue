@@ -2,6 +2,10 @@
   <section>
     <!--閱讀測驗、如果你關心這個議題等等功能-->
     <Quiz
+      v-observe-visibility="{
+        callback: quizVisibilityChanged,
+        once: true,
+      }"
       :quizTitle="cmsData.contentApiData.articleQuiz.title"
       :quizDescription="cmsData.contentApiData.articleQuiz.description"
       :quizOptions="cmsData.contentApiData.articleQuiz.options"
@@ -26,12 +30,27 @@
     />
     <Donate />
     <RdNewsLetterBtn
+      v-observe-visibility="{
+        callback: letterVisibilityChanged,
+        once: true,
+      }"
       @click.native="$ga.event('projects', 'click', `訂閱電子報`)"
     />
 
     <LazyRenderer class="latest-coverages">
-      <RelatedPost :relatedPosts="cmsData.relatedPosts" />
-      <LatestPost />
+      <RelatedPost
+        v-observe-visibility="{
+          callback: relatedVisibilityChanged,
+          once: true,
+        }"
+        :relatedPosts="cmsData.relatedPosts"
+      />
+      <LatestPost
+        v-observe-visibility="{
+          callback: latestVisibilityChanged,
+          once: true,
+        }"
+      />
     </LazyRenderer>
   </section>
 </template>
@@ -60,6 +79,23 @@ export default {
       type: Object,
       required: true,
       default: () => ({}),
+    },
+  },
+  methods: {
+    sendGaEvent(object) {
+      this.$ga.event('projects', object.action, object.label)
+    },
+    quizVisibilityChanged(isVisible) {
+      if (isVisible) this.sendGaEvent({ action: 'scroll', label: '閱讀測驗' })
+    },
+    letterVisibilityChanged(isVisible) {
+      if (isVisible) this.sendGaEvent({ action: 'scroll', label: '訂閱電子報' })
+    },
+    relatedVisibilityChanged(isVisible) {
+      if (isVisible) this.sendGaEvent({ action: 'scroll', label: '相關文章' })
+    },
+    latestVisibilityChanged(isVisible) {
+      if (isVisible) this.sendGaEvent({ action: 'scroll', label: '最新文章' })
     },
   },
 }
