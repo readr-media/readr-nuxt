@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div id="55e136d3-4fb1-45f4-ace4-f4c550f8cbe8"></div>
+    <div id="55e136d3-4fb1-45f4-ace4-f4c550f8cbe"></div>
   </section>
 </template>
 
