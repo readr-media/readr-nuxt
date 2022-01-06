@@ -53,7 +53,7 @@
       class="article-anchor-button-wrapper"
       style="margin-top: 20px;"
     >
-      <button class="article-anchor-button">
+      <button class="article-anchor-button" @click="handleScrollToArticle">
         看文章
       </button>
     </div>
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import scrollIntoView from 'scroll-into-view'
 import partyColor from '../constants/partyColor.json'
 import chartExaminationProgressBarXTickValues from '../constants/chartExaminationProgressBarXTickValues.json'
 import billCategories from '../constants/billCategories.json'
@@ -294,6 +295,36 @@ export default {
           tooltipText: `${key}:${value}次`,
         }
       })
+    },
+  },
+  methods: {
+    handleScrollToArticle() {
+      switch (this.tooltip['名稱']) {
+        case '消防設備人員法/消防設備人員法草案': {
+          scrollIntoView(document.querySelector('#article1'), {
+            align: {
+              topOffset: 200,
+            },
+          })
+          break
+        }
+        case '集會遊行法/集會遊行法修正草案': {
+          scrollIntoView(document.querySelector('#article2'), {
+            align: {
+              topOffset: 200,
+            },
+          })
+          break
+        }
+        default:
+        case '原住民族土地及海域法/原住民族土地及海域法草案': {
+          scrollIntoView(document.querySelector('#article3'), {
+            align: {
+              topOffset: 200,
+            },
+          })
+        }
+      }
     },
   },
 }
