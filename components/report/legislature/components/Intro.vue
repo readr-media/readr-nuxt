@@ -84,6 +84,7 @@
         />
       </div>
       <div class="examples">
+        <div v-if="isMobile" class="examples__spacer" />
         <IntroExample
           v-for="item in example"
           :id="`example${item.id}`"
@@ -212,7 +213,7 @@ export default {
 }
 .container {
   background: #1b1b1b;
-  height: 400vh;
+  height: 450vh;
   position: relative;
   display: flex;
   align-items: flex-end;
@@ -261,12 +262,19 @@ export default {
     top: 0;
     left: 0;
   }
+
+  &__spacer {
+    height: 100vh;
+    width: 100vw;
+  }
   #example01 {
+    transform: translate(-40px, 0);
     @include media-breakpoint-up(md) {
       transform: translate(10vw, 40vh);
     }
   }
   #example02 {
+    transform: translate(30px, 0);
     @include media-breakpoint-up(md) {
       transform: translate(60vw, 50vh);
     }
