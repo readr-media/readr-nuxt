@@ -192,7 +192,7 @@ export default {
               class="everviz-iframe"
               src="https://app.everviz.com/embed/peLy3u-oz/"
               title="Chart: "
-              style="border: 0; width: 100%; height: 500px"
+              style="border: 0; width: 100%; height: 650px"
             ></iframe>
           )
         }
