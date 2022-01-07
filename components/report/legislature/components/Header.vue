@@ -1,9 +1,9 @@
 <template>
   <div class="header">
     <readr-header
-      @readrLogoLinkClick="sendGaClickEvent('back to home')"
-      @shareFacebookLinkClick="sendGaClickEvent('share to fb')"
-      @shareLineLinkClick="sendGaClickEvent('share to line')"
+      @readrLogoLinkClick="sendGaClickEvent('立院 - back to home')"
+      @shareFacebookLinkClick="sendGaClickEvent('立院 - share to fb')"
+      @shareLineLinkClick="sendGaClickEvent('立院 - share to line')"
     />
     <section v-show="isNavVisible">
       <div v-show="!isScrollingDown" class="header__anchors_mobile">
