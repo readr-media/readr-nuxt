@@ -29,7 +29,7 @@
         }"
         id="story"
       >
-        <LazyRenderer v-if="viewportWidth > 768">
+        <LazyRenderer v-if="isMounted && viewportWidth > 768">
           <DashboardStory />
         </LazyRenderer>
         <DashboardStoryMobile
@@ -106,6 +106,7 @@ export default {
         '',
       ],
       hasSendGa: [false, false, false, false, false],
+      isMounted: false,
     }
   },
   computed: {
@@ -157,6 +158,7 @@ export default {
       document.querySelector('#default-footer').remove()
     }
     window.scrollTo(0, 0)
+    this.isMounted = true
   },
   destroyed() {
     this.$store.unregisterModule('data')
