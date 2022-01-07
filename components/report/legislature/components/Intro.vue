@@ -174,7 +174,8 @@ export default {
   },
   methods: {
     handleAnchorClick(section) {
-      const label = section === 'dashboard' ? '動畫選項A' : '動畫選項B'
+      const label =
+        section === 'dashboard' ? '立院 - 動畫選項A' : '立院 - 動畫選項B'
       this.$ga.event('projects', 'click', label)
       scrollIntoView(document.querySelector(`#${section}`), {
         align: {

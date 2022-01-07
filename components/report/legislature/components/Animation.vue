@@ -2,7 +2,7 @@
   <section class="section" style="background-color: black;">
     <AnimationVideo v-if="shouldShowVideo" />
     <div v-show="!shouldShowVideo" class="layer">
-      <button @click="shouldShowVideo = true">
+      <button @click="handleClickButton">
         點我看影片
       </button>
     </div>
@@ -19,6 +19,12 @@ export default {
     return {
       shouldShowVideo: false,
     }
+  },
+  methods: {
+    handleClickButton() {
+      this.shouldShowVideo = true
+      this.$ga.event('projects', 'click', '立院 - 展開影片')
+    },
   },
 }
 </script>
