@@ -74,7 +74,7 @@ export default {
     if (!this.cmsData.contentApiData?.article) return
     let temp = []
     this.cmsData.contentApiData.article.map((line) => {
-      if (line.type === 'title' && temp.length) {
+      if (line.type === 'title' && temp.length > 2) {
         this.paragraph.push(temp)
         temp = []
       }
