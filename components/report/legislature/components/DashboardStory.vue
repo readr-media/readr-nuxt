@@ -6,7 +6,7 @@
   >
     <div id="start-of-the-dashboard-story"></div>
     <div id="animation" ref="animation">
-      <Animation v-if="!$route.query.hideStory && shouldShowAnimation" />
+      <Animation v-if="shouldShowAnimation" />
     </div>
     <button
       v-show="shouldShowScroller"
@@ -68,7 +68,7 @@ export default {
     handleDashboardVisibilityChange(isVisible) {
       this.shouldShowScroller = isVisible
       this.isWatching = isVisible
-      if (isVisible && !this.hasUnfold) {
+      if (!isVisible && !this.hasUnfold) {
         this.$nextTick(function () {
           this.hasUnfold =
             this.$refs.animation.clientHeight > this.viewportHeight
