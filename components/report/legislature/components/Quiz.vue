@@ -100,7 +100,7 @@ export default {
       this.$ga.event(
         'projects',
         'click',
-        `閱讀測驗${['A', 'B', 'C', 'D'][index]}`
+        `立院測驗${['A', 'B', 'C', 'D'][index]}`
       )
     },
     getQuizButtonState(option) {

@@ -91,8 +91,15 @@ export default {
         'article2',
         'article3',
       ]
-      const index = sectionList.indexOf(section) + 1
-      this.$ga.event('projects', 'click', `索引標籤${index}`)
+      const sectionName = [
+        '我們發現了什麼',
+        '法案時光機',
+        '消防',
+        '集會',
+        '土地',
+      ]
+      const index = sectionList.indexOf(section)
+      this.$ga.event('projects', 'click', `索引標籤-${sectionName[index]}`)
       scrollIntoView(document.querySelector(`#${section}`), {
         align: {
           topOffset: 200,
