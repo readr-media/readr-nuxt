@@ -3,7 +3,7 @@
     <AnimationVideo v-if="shouldShowVideo" />
     <div v-show="!shouldShowVideo" class="layer">
       <button @click="shouldShowVideo = true">
-        點我看滾動式影片
+        點我看影片
       </button>
     </div>
   </section>
