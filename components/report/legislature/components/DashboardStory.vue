@@ -6,7 +6,7 @@
   >
     <div id="start-of-the-dashboard-story"></div>
     <div id="animation" ref="animation">
-      <Animation v-if="shouldShowAnimation" />
+      <Animation />
     </div>
     <button
       v-show="shouldShowScroller"
