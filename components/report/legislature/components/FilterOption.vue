@@ -49,6 +49,8 @@ export default {
   display: flex;
   align-items: center;
   cursor: pointer;
+  height: 18px;
+  min-height: 18px;
   &__text {
     margin: 0 0 0 10px;
     display: flex;
