@@ -64,6 +64,7 @@
 <script>
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
+import scrollIntoView from 'scroll-into-view'
 import { scrollDirection } from '../../../components/helpers/vue/mixins/index.js'
 import * as storeData from './store/data'
 import Intro from './components/Intro.vue'
@@ -107,6 +108,7 @@ export default {
       ],
       hasSendGa: [false, false, false, false, false],
       isMounted: false,
+      titleList: ['#fire-fighting', '#demonstration', '#aboriginal-justice'],
     }
   },
   computed: {
@@ -157,8 +159,16 @@ export default {
     if (this.$route.query.dashboard) {
       document.querySelector('#default-footer').remove()
     }
-    window.scrollTo(0, 0)
     this.isMounted = true
+    const hash = this.$route.hash
+    const index = this.titleList.indexOf(hash)
+    console.log(index)
+    if (index < 0) return window.scrollTo(0, 0)
+    scrollIntoView(document.querySelector(`#article${index + 1}`), {
+      align: {
+        topOffset: 100,
+      },
+    })
   },
   destroyed() {
     this.$store.unregisterModule('data')
