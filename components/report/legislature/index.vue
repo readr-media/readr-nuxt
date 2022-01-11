@@ -166,7 +166,7 @@ export default {
     if (index < 0) return window.scrollTo(0, 0)
     scrollIntoView(document.querySelector(`#article${index + 1}`), {
       align: {
-        topOffset: 200,
+        topOffset: 100,
       },
     })
   },

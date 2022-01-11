@@ -102,7 +102,7 @@ export default {
       this.$ga.event('projects', 'click', `索引標籤-${sectionName[index]}`)
       scrollIntoView(document.querySelector(`#${section}`), {
         align: {
-          topOffset: 200,
+          topOffset: 100,
         },
       })
     },
