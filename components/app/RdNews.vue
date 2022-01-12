@@ -6,8 +6,8 @@
       :videoSrc="transformedNews.heroVideo.src"
       :videoCap="transformedNews.heroCaption"
       :poster="videoPoster"
-      :shouldAutoPlay="false"
-      :shouldLoop="false"
+      :shouldAutoPlay="true"
+      :shouldLoop="true"
       class="news__cover"
     />
     <RdCoverImage
