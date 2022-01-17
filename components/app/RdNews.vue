@@ -8,6 +8,7 @@
       :poster="videoPoster"
       :shouldAutoPlay="true"
       :shouldLoop="true"
+      :shouldShowControls="false"
       class="news__cover"
     />
     <RdCoverImage

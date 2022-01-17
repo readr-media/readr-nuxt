@@ -5,7 +5,7 @@
         :autoplay="shouldAutoPlay"
         :loop="shouldLoop"
         :poster="poster"
-        controls
+        :controls="shouldShowControls"
         preload="metadata"
         controlsList="nodownload"
         playsinline
@@ -42,6 +42,10 @@ export default {
     shouldLoop: {
       type: Boolean,
       default: false,
+    },
+    shouldShowControls: {
+      type: Boolean,
+      default: true,
     },
   },
 }
