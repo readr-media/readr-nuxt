@@ -87,6 +87,8 @@ export default {
 
 <style lang="scss" scoped>
 $primary-color: #33aba4;
+$secondary-color: #d9a87b;
+
 .article {
   background: #1b1b1b !important;
   padding: 48px 0;
@@ -120,6 +122,33 @@ $primary-color: #33aba4;
 
   .annotation {
     background: $primary-color;
+  }
+}
+
+#article2::v-deep {
+  background: #484848 !important;
+
+  h2 {
+    color: $secondary-color;
+  }
+
+  .report-article__picture_description {
+    color: #fff !important;
+  }
+
+  a {
+    color: $secondary-color;
+  }
+
+  .annotated {
+    color: #fff;
+    .toggle {
+      background: $secondary-color;
+    }
+  }
+
+  .annotation {
+    background: $secondary-color;
   }
 }
 </style>
