@@ -43,8 +43,12 @@ export default {
 }
 button {
   background-color: white;
-  padding: 4px;
+  padding: 5px 11px;
   border-radius: 5px;
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 23px;
+  color: #1b1b1b;
 }
 .video-wrapper {
   position: absolute;
