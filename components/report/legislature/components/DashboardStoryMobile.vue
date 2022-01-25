@@ -54,6 +54,8 @@ $primary-color: #d9a87b;
 .report-article::v-deep {
   background: #484848 !important;
   color: #ffffff !important;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
 
   h2 {
     color: $primary-color;

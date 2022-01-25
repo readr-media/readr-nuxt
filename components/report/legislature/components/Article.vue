@@ -127,6 +127,8 @@ $secondary-color: #d9a87b;
 
 #article2::v-deep {
   background: #484848 !important;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
 
   h2 {
     color: $secondary-color;
