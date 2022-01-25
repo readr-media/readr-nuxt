@@ -51,6 +51,7 @@
       />
       <Dashboard
         id="dashboard"
+        :cmsData="cmsData"
         v-observe-visibility="{
           callback: handleDashboardVisibilityChange,
           intersection,

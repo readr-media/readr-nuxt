@@ -3,6 +3,14 @@
     v-observe-visibility="handleDashboardVisibilityChange"
     class="dashboard"
   >
+    <div v-if="cmsData.contentApiData.dashboard">
+      <div class="dashboard__title">
+        {{ cmsData.contentApiData.dashboard.title }}
+      </div>
+      <div class="dashboard__description">
+        {{ cmsData.contentApiData.dashboard.description }}
+      </div>
+    </div>
     <ClientOnly>
       <aside
         v-show="isAsideToggled"
@@ -205,6 +213,13 @@ export default {
     Lightbox,
     PresetFilterInfo,
   },
+  props: {
+    cmsData: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       isAsideToggled: false,
@@ -330,6 +345,20 @@ export default {
     top: 0;
     left: 0;
     z-index: 50;
+  }
+  &__title {
+    font-weight: 900;
+    font-size: 32px;
+    line-height: 46px;
+    color: #ffffff;
+  }
+
+  &__description {
+    font-weight: 350;
+    font-size: 18px;
+    line-height: 26px;
+    color: #ffffff;
+    margin-bottom: 20px;
   }
 }
 

@@ -31,9 +31,9 @@
         />
       </ol>
     </main>
-    <ButtonPrimary class="loadmore-button" @click.native="handleLoadMore">
-      顯示更多法案
-    </ButtonPrimary>
+    <button class="loadmore-button" @click="handleLoadMore">
+      顯示更多法案 <span class="loadmore-button__green">▼</span>
+    </button>
     <aside class="dashboard-wrapper__aside aside">
       <DashboardBillInfo
         v-if="isTooltipVisible"
@@ -51,14 +51,12 @@ import billCategories from '../constants/billCategories.json'
 import Lightbox from './Lightbox.vue'
 import GridItem from './GridItem.vue'
 import DashboardBillInfo from './DashboardBillInfo.vue'
-import ButtonPrimary from './ButtonPrimary.vue'
 
 export default {
   components: {
     Lightbox,
     DashboardBillInfo,
     GridItem,
-    ButtonPrimary,
   },
   props: {
     tooltip: {
@@ -207,7 +205,20 @@ main {
 
 .loadmore-button {
   position: absolute;
-  left: 0;
+  left: calc(50% - 316px);
   bottom: 0;
+  transform: translate(-50%, 100%);
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 26px;
+  display: flex;
+  align-items: center;
+  color: #dddddd;
+  border: 1px solid #33aba4;
+  padding: 4px 10px;
+  &__green {
+    color: #33aba4;
+    margin-left: 7px;
+  }
 }
 </style>

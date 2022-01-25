@@ -10,6 +10,7 @@
         <a
           v-for="anchor in mobileAnchors"
           :key="anchor.name"
+          :id="anchor.name"
           :class="{ active: nowSection === anchor.name }"
           @click="handleAnchorClick(anchor.name)"
           >{{ anchor.title }}</a
@@ -147,7 +148,6 @@ export default {
       font-size: 14px;
       line-height: 32px;
       color: #33aba4;
-      text-decoration: underline;
       @include media-breakpoint-up(lg) {
         display: none;
       }
@@ -156,6 +156,7 @@ export default {
       }
 
       a {
+        text-decoration: underline;
         &:before {
           content: '';
           display: inline-block;
@@ -172,6 +173,33 @@ export default {
         color: #c9c9c9;
         &:before {
           background: #c9c9c9;
+        }
+      }
+
+      #story,
+      #dashboard {
+        font-weight: 900;
+        font-size: 14px;
+        line-height: 20px;
+        color: #1b1b1b;
+        padding: 1px 12px;
+        background: #d9a87b;
+        border: 1px solid #d9a87b;
+        text-decoration: none !important;
+        &:before {
+          content: none;
+        }
+        &.active {
+          color: #d9a87b;
+          background: #1b1b1b;
+        }
+      }
+
+      #dashboard {
+        background: #33aba4;
+        border: 1px solid #33aba4;
+        &.active {
+          color: #33aba4;
         }
       }
     }

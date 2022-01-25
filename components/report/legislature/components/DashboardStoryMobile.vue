@@ -44,16 +44,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$primary-color: #33aba4;
+$primary-color: #d9a87b;
 .mobile-story {
-  background: #1b1b1b !important;
+  background: #484848 !important;
   padding-top: 48px;
   padding-bottom: 32px;
 }
 
 .report-article::v-deep {
-  background: #1b1b1b !important;
+  background: #484848 !important;
   color: #ffffff !important;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
 
   h2 {
     color: $primary-color;
