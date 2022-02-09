@@ -10,7 +10,7 @@
         <a
           v-for="anchor in mobileAnchors"
           :key="anchor.name"
-          :id="anchor.name"
+          :id="anchor"
           :class="{ active: nowSection === anchor.name }"
           @click="handleAnchorClick(anchor.name)"
           >{{ anchor.title }}</a
