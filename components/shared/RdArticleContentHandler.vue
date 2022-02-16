@@ -40,30 +40,31 @@ export default {
         const tag = type === 'header-one' ? 'h1' : 'h2'
         return <tag class="g-article-heading" domPropsInnerHTML={content} />
       }
-      case 'ordered-list-item': {
-        // 由於 summary 的 ordered-list 資料結構有誤，暫時先以此寫法
-        const data = props.isSummary ? props.paragraph.content : content
-        if (typeof data === 'string') {
+      case 'ordered-list-item':
+        if (typeof content === 'string') {
           return (
             <ol class="g-article-list order-list">
-              <li domPropsInnerHTML={data} />
+              {props.paragraph.content.map((item) => {
+                return <li domPropsInnerHTML={item} />
+              })}
             </ol>
           )
         } else {
           return (
             <ol class="g-article-list order-list">
-              {data.map((item) => {
+              {content.map((item) => {
                 return <li domPropsInnerHTML={item} />
               })}
             </ol>
           )
         }
-      }
       case 'unordered-list-item':
         if (typeof content === 'string') {
           return (
             <ul class="g-article-list unorder-list">
-              <li domPropsInnerHTML={content} />
+              {props.paragraph.content.map((item) => {
+                return <li domPropsInnerHTML={item} />
+              })}
             </ul>
           )
         } else {
@@ -75,6 +76,7 @@ export default {
             </ul>
           )
         }
+
       case 'embeddedcode':
         return (
           <RdEmbeddedCode class="g-article-embedded-code" content={content} />
