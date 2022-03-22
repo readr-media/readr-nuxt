@@ -63,6 +63,7 @@ export default {
         const src = item.attribs?.src ?? ''
         const s = document.createElement('script')
         s.setAttribute('src', src)
+        s.text = item.text || ''
         document.body.appendChild(s)
       })
     },
