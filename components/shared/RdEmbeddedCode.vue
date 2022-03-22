@@ -62,7 +62,9 @@ export default {
       this.scripts?.forEach((item) => {
         const src = item.attribs?.src ?? ''
         const s = document.createElement('script')
-        s.setAttribute('src', src)
+        if (src) {
+          s.setAttribute('src', src)
+        }
         s.text = item.text || ''
         document.body.appendChild(s)
       })
