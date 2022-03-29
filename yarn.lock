@@ -3606,10 +3606,10 @@
   resolved "https://registry.yarnpkg.com/@readr-media/old-news-project-slugs/-/old-news-project-slugs-1.1.1.tgz#e3fc56166c213b10d217c6c9d75e9c0e65ac35fc"
   integrity sha512-bdfYgoTFsmbpPlyQay6EQGIHwombFB1+w6gq9/gEeyy+9fA9u6W2ah+gX2XQ9SnMIFvLfbWauPiI4xb4C5I64A==
 
-"@readr-media/web-components@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@readr-media/web-components/-/web-components-2.2.0.tgz#f0bcb333dfaa5cce78efc15765697b0267698c7b"
-  integrity sha512-MeVPyY85W546wEi8WWhD4T1rtFouTeH3XE8KCYMIUa+4hpFNqOVBdY4FZRXb5SPbZDuDwM5W4riFNMmbuOMblw==
+"@readr-media/web-components@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@readr-media/web-components/-/web-components-2.4.0.tgz#23a216e9033055e86c52234ddef360a9041146c7"
+  integrity sha512-FDHQy2+ZjXl+/TU6NOocEeYbb0Oqd9LjRagt7eoQIOD5Gmiw5xbehy1FoLLl9n86eKCkUuPetZEBKA84KPGmKQ==
   dependencies:
     "@readr-media/old-news-project-slugs" "^1.1.1"
     "@stencil/core" "^2.3.0"
