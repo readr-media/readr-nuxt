@@ -31,7 +31,21 @@ export default {
     },
   },
   mounted() {
-    if (
+    if (this.chartId === '8313645' || this.chartId === '8316624') {
+      const d = document.getElementsByTagName('script')[0]
+      const o = document.createElement('script')
+      o.async = true
+      o.id = `flourish-async-${this.chartId}`
+      o.src = 'https://public.flourish.studio/resources/embed.js'
+      if (window.chartCount) {
+        window.chartCount += 1
+        if (window.chartCount === 2) {
+          d.appendChild(o)
+        }
+      } else {
+        window.chartCount = 1
+      }
+    } else if (
       !window.flourishEmbedded &&
       !document.getElementById('flourish-async')
     ) {
