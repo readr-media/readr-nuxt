@@ -32,31 +32,19 @@ export default {
     },
   },
   mounted() {
-    /*
     if (!document.getElementById(`flourish-async-${this.chartId}`)) {
       console.log('fetch flourish js')
-      const d = document.getElementsByTagName('script')[0]
+      if (window.chartCount) {
+        window.chartCount++
+      } else {
+        window.chartCount = 1
+      }
+      const d = document.getElementsByTagName('script')[window.chartCount - 1]
       const o = document.createElement('script')
       o.async = true
       o.id = `flourish-async-${this.chartId}`
       o.src = 'https://public.flourish.studio/resources/embed.js'
       d.parentNode.insertBefore(o, d)
-    }
-    */
-    console.log('chartId', this.chartId)
-    const d = document.getElementById(this.chartId)
-    const o = document.createElement('script')
-    o.async = true
-    o.id = `flourish-async-${this.chartId}`
-    o.src = 'https://public.flourish.studio/resources/embed.js'
-
-    if (window.chartCount) {
-      window.chartCount += 1
-      if (window.chartCount === 2) {
-        d.appendChild(o)
-      }
-    } else {
-      window.chartCount = 1
     }
   },
 }
