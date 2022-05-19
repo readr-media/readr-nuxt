@@ -18,7 +18,7 @@ function getHref({ style, id, slug } = {}) {
 }
 
 function formatDate(datetime = '') {
-  return dayjs(datetime).format('MMM D, YYYY')
+  return dayjs(datetime).format('YYYY.MM.DD')
 }
 
 function handleApiData(apiData = '') {
