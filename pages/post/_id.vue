@@ -1,5 +1,6 @@
 <template>
   <div class="post-and-report-wrapper">
+    <RdFrame v-if="shouldMountFrame" :post="post" />
     <RdNews v-if="shouldMountNews" :news="post" />
     <RdReport v-if="shouldMountEmbeddedReport" :report="post" />
   </div>
@@ -10,14 +11,14 @@
 import { post } from '~/apollo/queries/post.js'
 import { SITE_TITLE, SITE_URL } from '~/helpers/index.js'
 
-const validStyles = ['news', 'embedded', 'project3', 'report']
+const validStyles = ['news', 'embedded', 'project3', 'report', 'frame']
 
 export default {
   name: 'Post',
-
   components: {
     RdNews: () => import('~/components/app/RdNews.vue'),
     RdReport: () => import('~/components/app/Report/RdReport.vue'),
+    RdFrame: () => import('~/components/app/Frame/RdFrame.vue'),
   },
 
   apollo: {
@@ -82,6 +83,9 @@ export default {
     },
     shouldMountEmbeddedReport() {
       return this.postStyle === 'embedded'
+    },
+    shouldMountFrame() {
+      return this.postStyle === 'frame'
     },
   },
   mounted() {
