@@ -20,9 +20,7 @@
 
     <section class="frame__content">
       <RdFrameHeading
-        :title="transformedNews.title"
         :categories="transformedNews.categories"
-        :creditList="credits"
         class="frame__heading"
       />
       <RdArticleSummary
@@ -156,7 +154,6 @@ export default {
     },
     transformedNews() {
       const {
-        title = '',
         heroVideo = {},
         heroImage = {},
         heroCaption = '',
@@ -167,7 +164,6 @@ export default {
       } = this.post
 
       return {
-        title,
         categories,
         heroCaption,
         heroVideo: {
