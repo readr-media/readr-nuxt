@@ -19,11 +19,9 @@
     />
 
     <section class="frame__content">
-      <RdArticleHeading
+      <RdFrameHeading
         :title="transformedNews.title"
-        :date="transformedNews.date"
         :categories="transformedNews.categories"
-        :readTimeText="transformedNews.readTime"
         :creditList="credits"
         class="frame__heading"
       />
@@ -35,7 +33,7 @@
 
       <article id="post" class="frame__article">
         <template v-if="isContentString">
-          {{ 123 }}
+          {{ content }}
         </template>
         <template v-else>
           <RdArticleContentHandler
@@ -54,7 +52,7 @@
       class="frame__action-list"
     />
 
-    <RdArticleSocialList class="frame__social-list" />
+    <RdButtonDonate class="frame__donate" />
 
     <RdArticleCitation
       v-if="doesHaveCitation"
@@ -63,32 +61,37 @@
     />
     <section class="frame__tag-list-wrapper">
       <RdArticleTagList :tags="tags" class="tag" />
-      <RdArticleSocialList class="social" />
     </section>
+
+    <RdNewsLetterBtn />
+    <RdNewsLetter v-if="shouldShowNewsLetter" class="frame__news-letter" />
+    <RdFrameCredit :credits="credits" :publishedAt="transformedNews.date" />
   </div>
 </template>
 
 <script>
 import RdFrameHeader from './RdFrameHeader.vue'
+import RdFrameHeading from './RdFrameHeading.vue'
+import RdFrameCredit from './RdFrameCredit.vue'
 import RdArticleVideo from '~/components/shared/RdArticleVideo.vue'
 import RdCoverImage from '~/components/shared/RdCoverImage.vue'
-import RdArticleHeading from '~/components/shared/RdArticleHeading.vue'
 import RdArticleSummary from '~/components/shared/RdArticleSummary.vue'
 import RdArticleContentHandler from '~/components/shared/RdArticleContentHandler.vue'
 import RdArticleActionList from '~/components/shared/RdArticleActionList.vue'
+import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
+
 import RdArticleCitation from '~/components/shared/RdArticleCitation.vue'
 import RdArticleTagList from '~/components/shared/RdArticleTagList.vue'
-
-import RdArticleSocialList from '~/components/shared/RdArticleSocialList.vue'
+import RdNewsLetterBtn from '~/components/shared/RdNewsLetterBtn.vue'
+import RdNewsLetter from '~/components/shared/RdNewsLetter.vue'
 import { latestPosts } from '~/apollo/queries/posts.js'
 
 import {
-  getHref,
   formatReadTime,
-  formatPostDate,
   isReport,
   handleApiData,
   doesHaveApiDataContent,
+  formatDate,
 } from '~/helpers/index.js'
 
 const CREDIT_KEYS = [
@@ -102,19 +105,22 @@ const CREDIT_KEYS = [
 ]
 
 export default {
-  name: 'RdNews',
+  name: 'RdFrame',
 
   components: {
     RdFrameHeader,
     RdArticleVideo,
     RdCoverImage,
-    RdArticleHeading,
+    RdFrameHeading,
     RdArticleSummary,
     RdArticleContentHandler,
     RdArticleActionList,
+    RdButtonDonate,
     RdArticleCitation,
     RdArticleTagList,
-    RdArticleSocialList,
+    RdNewsLetterBtn,
+    RdNewsLetter,
+    RdFrameCredit,
   },
 
   props: {
@@ -179,72 +185,9 @@ export default {
           },
         },
         readTime: formatReadTime(readingTime),
-        date: formatPostDate(publishTime),
+        date: formatDate(publishTime),
         isReport: isReport(style),
       }
-    },
-    transformedRelatedPosts() {
-      return (
-        this.post?.relatedPosts?.map((post) => {
-          const {
-            id = '',
-            name = '',
-            publishTime = '',
-            readingTime = 0,
-            heroImage = {},
-            style = '',
-          } = post
-
-          return {
-            id,
-            title: name,
-            type: 'recommend',
-            href: getHref(post),
-            date: formatPostDate(publishTime),
-            readTime: formatReadTime(readingTime),
-            isReport: isReport(style),
-            img: {
-              src:
-                heroImage?.urlMobileSized ||
-                heroImage?.urlTabletSized ||
-                require('~/assets/imgs/default/post.svg'),
-            },
-            content: [
-              {
-                name,
-                href: getHref(post),
-              },
-            ],
-          }
-        }) ?? []
-      )
-    },
-    transformedLatestPosts() {
-      return this.latestPosts?.map((post) => {
-        const {
-          id = '',
-          title = '',
-          heroImage = {},
-          readingTime = 0,
-          publishTime = '',
-          style = '',
-        } = post || {}
-
-        return {
-          id,
-          title,
-          href: getHref(post),
-          date: formatPostDate(publishTime),
-          readTime: formatReadTime(readingTime),
-          isReport: isReport(style),
-          img: {
-            src:
-              heroImage?.urlMobileSized ||
-              heroImage?.urlTabletSized ||
-              require('~/assets/imgs/default/post.svg'),
-          },
-        }
-      })
     },
 
     credits() {
@@ -318,12 +261,6 @@ export default {
     shouldOpenRelatedPart() {
       return this.doesHaveLatestPosts || this.doesHaveRelatedPosts
     },
-  },
-  mounted() {
-    const { contentApiData, relatedPosts } = this.post
-    console.log(this.post)
-    console.log(contentApiData)
-    console.log(relatedPosts)
   },
 
   methods: {
@@ -487,6 +424,7 @@ export default {
   }
   &__donate {
     margin: 48px 20px 52px;
+
     max-width: 396px;
     @media (min-width: 436px) {
       margin: 60px auto 64px;
