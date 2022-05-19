@@ -5,7 +5,6 @@
       :list="categories"
       class="heading__category"
     />
-    <h1>{{ title }}</h1>
   </div>
 </template>
 
@@ -25,10 +24,6 @@ export default {
     },
 
     categories: {
-      type: Array,
-      default: () => [],
-    },
-    creditList: {
       type: Array,
       default: () => [],
     },
