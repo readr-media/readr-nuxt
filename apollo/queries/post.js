@@ -106,7 +106,7 @@ const post = gql`
       relatedPosts(
         where: {
           state: published
-          style_in: [news, report, embedded, project3]
+          style_in: [news, report, embedded, project3, frame]
         }
       ) {
         id

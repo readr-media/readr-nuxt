@@ -9,7 +9,7 @@ const categories = gql`
     $reportSkip: Int
     $shouldQueryRelatedPost: Boolean = false
     $shouldQueryRelatedReport: Boolean = false
-    $relatedPostTypes: [PostStyleType] = [news]
+    $relatedPostTypes: [PostStyleType] = [news, frame]
     $relatedReportTypes: [PostStyleType] = [embedded, project3, report]
   ) {
     categories: allCategories(
