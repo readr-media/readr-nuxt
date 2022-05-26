@@ -4,7 +4,10 @@ const latestPosts = gql`
   query($first: Int! = 3) {
     latestPosts: allPosts(
       first: $first
-      where: { state: published, style_in: [news, report, embedded, project3] }
+      where: {
+        state: published
+        style_in: [news, report, embedded, project3, frame]
+      }
       sortBy: [publishTime_DESC]
     ) {
       id
@@ -28,7 +31,10 @@ const latestPostsInErrorPage = gql`
   query {
     latestPosts: allPosts(
       first: 4
-      where: { state: published, style_in: [news, report, embedded, project3] }
+      where: {
+        state: published
+        style_in: [news, report, embedded, project3, frame]
+      }
       sortBy: [publishTime_DESC]
     ) {
       id
@@ -50,7 +56,10 @@ const latestList = gql`
     items: allPosts(
       first: $first
       skip: $skip
-      where: { state: published, style_in: [news, report, embedded, project3] }
+      where: {
+        state: published
+        style_in: [news, report, embedded, project3, frame]
+      }
       sortBy: [publishTime_DESC]
     ) {
       id
@@ -68,7 +77,10 @@ const latestList = gql`
     }
 
     meta: _allPostsMeta(
-      where: { state: published, style_in: [news, report, embedded, project3] }
+      where: {
+        state: published
+        style_in: [news, report, embedded, project3, frame]
+      }
     ) @include(if: $shouldQueryMeta) {
       count
     }
@@ -87,7 +99,7 @@ const latestListByCategorySlug = gql`
       skip: $skip
       where: {
         state: published
-        style_in: [news, report, embedded, project3]
+        style_in: [news, report, embedded, project3, frame]
         categories_some: { slug: $categorySlug }
       }
       sortBy: [publishTime_DESC]
@@ -109,7 +121,7 @@ const latestListByCategorySlug = gql`
     meta: _allPostsMeta(
       where: {
         state: published
-        style_in: [news, report, embedded, project3]
+        style_in: [news, report, embedded, project3, frame]
         categories_some: { slug: $categorySlug }
       }
     ) @include(if: $shouldQueryMeta) {
@@ -130,7 +142,7 @@ const latestListByTagName = gql`
       skip: $skip
       where: {
         state: published
-        style_in: [news, report, embedded, project3]
+        style_in: [news, report, embedded, project3, frame]
         tags_some: { name: $tagName }
       }
       sortBy: [publishTime_DESC]
@@ -151,7 +163,7 @@ const latestListByTagName = gql`
     meta: _allPostsMeta(
       where: {
         state: published
-        style_in: [news, report, embedded, project3]
+        style_in: [news, report, embedded, project3, frame]
         tags_some: { name: $tagName }
       }
     ) @include(if: $shouldQueryMeta) {

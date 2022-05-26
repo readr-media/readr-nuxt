@@ -5,8 +5,8 @@ const SITE_URL = 'https://www.readr.tw'
 function getHref({ style, id, slug } = {}) {
   switch (style) {
     case 'news':
-      return `/post/${id}`
     case 'embedded':
+    case 'frame':
       return `/post/${id}`
     case 'report':
       return `${SITE_URL}/project/${slug}`
@@ -18,7 +18,7 @@ function getHref({ style, id, slug } = {}) {
 }
 
 function formatDate(datetime = '') {
-  return dayjs(datetime).format('MMM D, YYYY')
+  return dayjs(datetime).format('YYYY.MM.DD')
 }
 
 function handleApiData(apiData = '') {
