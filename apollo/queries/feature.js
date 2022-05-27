@@ -15,6 +15,7 @@ const feature = gql`
           urlTabletSized
         }
         ogImage {
+          urlMobileSized
           urlTabletSized
         }
       }

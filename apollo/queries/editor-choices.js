@@ -7,6 +7,10 @@ const editorChoices = gql`
       first: 3
       where: { state: published }
     ) {
+      heroImage {
+        urlTabletSized
+        urlMobileSized
+      }
       choice {
         id
         title: name
@@ -15,6 +19,10 @@ const editorChoices = gql`
         heroImage {
           urlTabletSized
           urlMobileSized
+        }
+        ogImage {
+          urlMobileSized
+          urlDesktopSized
         }
         publishTime
         readingTime
