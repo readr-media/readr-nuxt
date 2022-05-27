@@ -63,7 +63,7 @@
 
     <RdNewsLetterBtn />
     <RdNewsLetter v-if="shouldShowNewsLetter" class="frame__news-letter" />
-    <section v-if="shouldOpenRelatedPart" class="frame__related-list-wrapper">
+    <section v-if="doesHaveRelatedPosts" class="frame__related-list-wrapper">
       <RdListHeading title="相關報導" color="#fff" class="heading" />
       <RdArticleList
         :posts="transformedRelatedPosts"
