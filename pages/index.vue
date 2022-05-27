@@ -243,6 +243,7 @@ export default {
     },
     transformedEditorChoice() {
       return this.editorChoices?.map((post) => {
+        const EditorHeroImage = post?.heroImage
         const {
           id = '',
           title = '',
@@ -250,8 +251,11 @@ export default {
           readingTime = 0,
           style = '',
           heroImage = {},
+          ogImage = {},
           publishTime = '',
         } = post?.choice || {}
+
+        const image = EditorHeroImage || heroImage
 
         return {
           id,
@@ -262,8 +266,10 @@ export default {
           isReport: isReport(style),
           img: {
             src:
-              heroImage?.urlTabletSized ||
-              heroImage?.urlMobileSized ||
+              image?.urlTabletSized ||
+              image?.urlMobileSized ||
+              ogImage?.urlTabletSized ||
+              ogImage?.urlMobileSized ||
               require('~/assets/imgs/default/post.svg'),
           },
         }
@@ -316,6 +322,7 @@ export default {
           slug = '',
           style = '',
           heroImage = {},
+          ogImage = {},
         } = post?.featuredPost || {}
 
         return {
@@ -328,6 +335,8 @@ export default {
             src:
               heroImage?.urlTabletSized ||
               heroImage?.urlMobileSized ||
+              ogImage?.urlTabletSized ||
+              ogImage?.urlMobileSized ||
               require('~/assets/imgs/default/post.svg'),
           },
         }

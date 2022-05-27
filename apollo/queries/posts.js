@@ -19,6 +19,7 @@ const latestPosts = gql`
         urlTabletSized
       }
       ogImage {
+        urlMobileSized
         urlTabletSized
       }
       publishTime
@@ -43,9 +44,11 @@ const latestPostsInErrorPage = gql`
       style
       heroImage {
         urlMobileSized
+        urlTabletSized
       }
       ogImage {
         urlMobileSized
+        urlTabletSized
       }
     }
   }
@@ -67,9 +70,11 @@ const latestList = gql`
       title: name
       style
       heroImage {
+        urlMobileSized
         urlTabletSized
       }
       ogImage {
+        urlMobileSized
         urlTabletSized
       }
       publishTime
@@ -109,9 +114,11 @@ const latestListByCategorySlug = gql`
       title: name
       style
       heroImage {
+        urlMobileSized
         urlTabletSized
       }
       ogImage {
+        urlMobileSized
         urlTabletSized
       }
       publishTime
@@ -152,9 +159,11 @@ const latestListByTagName = gql`
       title: name
       style
       heroImage {
+        urlMobileSized
         urlTabletSized
       }
       ogImage {
+        urlMobileSized
         urlTabletSized
       }
       publishTime
