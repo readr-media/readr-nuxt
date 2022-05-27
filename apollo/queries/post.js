@@ -12,6 +12,7 @@ const report = gql`
       ogTitle
       ogDescription
       ogImage {
+        urlMobileSized
         urlDesktopSized
       }
       tags {

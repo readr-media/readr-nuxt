@@ -63,6 +63,18 @@
 
     <RdNewsLetterBtn />
     <RdNewsLetter v-if="shouldShowNewsLetter" class="frame__news-letter" />
+    <section v-if="doesHaveRelatedPosts" class="frame__related-list-wrapper">
+      <RdListHeading title="相關報導" color="#fff" class="heading" />
+      <RdArticleList
+        :posts="transformedRelatedPosts"
+        :shouldReverseInMobile="false"
+        :shouldShowSkeleton="false"
+        :shouldHighLightReport="false"
+        :filterNum="4"
+        class="list"
+      />
+    </section>
+
     <RdFrameCredit :credits="credits" :publishedAt="transformedNews.date" />
   </div>
 </template>
@@ -82,14 +94,19 @@ import RdArticleCitation from '~/components/shared/RdArticleCitation.vue'
 import RdArticleTagList from '~/components/shared/RdArticleTagList.vue'
 import RdNewsLetterBtn from '~/components/shared/RdNewsLetterBtn.vue'
 import RdNewsLetter from '~/components/shared/RdNewsLetter.vue'
+import RdListHeading from '~/components/shared/RdListHeading.vue'
+import RdArticleList from '~/components/shared/RdArticleList.vue'
+
 import { latestPosts } from '~/apollo/queries/posts.js'
 
 import {
+  getHref,
   formatReadTime,
   isReport,
   handleApiData,
   doesHaveApiDataContent,
   formatDate,
+  formatPostDate,
 } from '~/helpers/index.js'
 
 const CREDIT_KEYS = [
@@ -118,6 +135,8 @@ export default {
     RdArticleTagList,
     RdNewsLetterBtn,
     RdNewsLetter,
+    RdListHeading,
+    RdArticleList,
     RdFrameCredit,
   },
 
@@ -185,7 +204,42 @@ export default {
         isReport: isReport(style),
       }
     },
+    transformedRelatedPosts() {
+      return (
+        this.post?.relatedPosts?.map((post) => {
+          const {
+            id = '',
+            name = '',
+            publishTime = '',
+            readingTime = 0,
+            heroImage = {},
+            style = '',
+          } = post
 
+          return {
+            id,
+            title: name,
+            type: 'recommend',
+            href: getHref(post),
+            date: formatPostDate(publishTime),
+            readTime: formatReadTime(readingTime),
+            isReport: isReport(style),
+            img: {
+              src:
+                heroImage?.urlMobileSized ||
+                heroImage?.urlTabletSized ||
+                require('~/assets/imgs/default/post.svg'),
+            },
+            content: [
+              {
+                name,
+                href: getHref(post),
+              },
+            ],
+          }
+        }) ?? []
+      )
+    },
     credits() {
       return Object.keys(this.post || {})
         .filter(
