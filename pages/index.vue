@@ -243,6 +243,7 @@ export default {
     },
     transformedEditorChoice() {
       return this.editorChoices?.map((post) => {
+        const EditorHeroImage = post?.heroImage
         const {
           id = '',
           title = '',
@@ -253,6 +254,8 @@ export default {
           publishTime = '',
         } = post?.choice || {}
 
+        const image = EditorHeroImage || heroImage
+
         return {
           id,
           title,
@@ -262,8 +265,8 @@ export default {
           isReport: isReport(style),
           img: {
             src:
-              heroImage?.urlTabletSized ||
-              heroImage?.urlMobileSized ||
+              image?.urlTabletSized ||
+              image?.urlMobileSized ||
               require('~/assets/imgs/default/post.svg'),
           },
         }
