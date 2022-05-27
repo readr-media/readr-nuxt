@@ -251,6 +251,7 @@ export default {
           readingTime = 0,
           style = '',
           heroImage = {},
+          ogImage = {},
           publishTime = '',
         } = post?.choice || {}
 
@@ -267,6 +268,8 @@ export default {
             src:
               image?.urlTabletSized ||
               image?.urlMobileSized ||
+              ogImage?.urlTabletSized ||
+              ogImage?.urlMobileSized ||
               require('~/assets/imgs/default/post.svg'),
           },
         }
@@ -319,6 +322,7 @@ export default {
           slug = '',
           style = '',
           heroImage = {},
+          ogImage = {},
         } = post?.featuredPost || {}
 
         return {
@@ -331,6 +335,8 @@ export default {
             src:
               heroImage?.urlTabletSized ||
               heroImage?.urlMobileSized ||
+              ogImage?.urlTabletSized ||
+              ogImage?.urlMobileSized ||
               require('~/assets/imgs/default/post.svg'),
           },
         }

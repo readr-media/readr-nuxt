@@ -20,6 +20,10 @@ const editorChoices = gql`
           urlTabletSized
           urlMobileSized
         }
+        ogImage {
+          urlMobileSized
+          urlDesktopSized
+        }
         publishTime
         readingTime
       }
