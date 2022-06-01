@@ -142,6 +142,8 @@ export default {
       line-height: 1.5;
       display: flex;
       margin: 0 10px;
+      flex-wrap: wrap;
+      justify-content: center;
       @include media-breakpoint-up(md) {
         font-size: 16px;
       }
