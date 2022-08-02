@@ -21,7 +21,7 @@ steps:
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - gcr.io/$PROJECT_ID/readr-nuxt
+      - gcr.io/$PROJECT_ID/readr-nuxt:${BRANCH_NAME}_${SHORT_SHA}
   - name: launcher.gcr.io/google/ubuntu1604
     args:
       - '-c'
