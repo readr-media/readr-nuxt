@@ -125,8 +125,7 @@ Object.assign(module.exports, {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    '~/plugins/vue-plugins/lazyload.client.js',
-    '~/plugins/vue-plugins/youtube.client.js',
+    '~/plugins/vue-plugins/vuePluginsGlobal.js',
     '~/plugins/vue-plugins/web-components.client.js',
   ],
 
