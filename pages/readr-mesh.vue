@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { ENV } from '~/configs/config'
 import LargeArrowSvg from '~/assets/imgs/mesh/arrow-large.svg?inline'
 import MsHeader from '~/components/mesh/MsHeader'
 import MsLandingTitle from '~/components/mesh/MsLandingTitle.vue'
@@ -21,6 +22,11 @@ export default {
     LargeArrowSvg,
     MsHeader,
     MsLandingTitle,
+  },
+  mounted() {
+    if (ENV === 'prod' || ENV === 'staging') {
+      this.$nuxt.error({ statusCode: 404 })
+    }
   },
 }
 </script>
