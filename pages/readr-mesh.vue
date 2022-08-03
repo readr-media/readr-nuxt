@@ -14,7 +14,7 @@
 <script>
 import { ENV } from '~/configs/config'
 import LargeArrowSvg from '~/assets/imgs/mesh/arrow-large.svg?inline'
-import MsHeader from '~/components/mesh/MsHeader'
+import MsHeader from '~/components/mesh/MsHeader.vue'
 import MsLandingTitle from '~/components/mesh/MsLandingTitle.vue'
 export default {
   name: 'ReadrMesh',
