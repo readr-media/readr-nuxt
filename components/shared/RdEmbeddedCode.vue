@@ -1,10 +1,12 @@
 <template>
   <div
-    class="embedded"
-    :class="{ is__reporter__scroll: caption === 'reporter-scroll-video' }"
+    ref="embeddedcode"
+    class="embeddedcode"
+    :class="{ 'full-height': caption === 'reporter-scroll-video' }"
   >
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="embeddedCodeWithoutScript" />
+    <LazyRenderer @load="insertScriptsInBody(embeddedCode)">
+      <p v-if="caption" class="caption">{{ caption }}</p>
+    </LazyRenderer>
   </div>
 </template>
 
@@ -22,62 +24,50 @@ export default {
     caption() {
       return this.content?.caption ?? ''
     },
-    scripts() {
-      return this.content?.scripts ?? []
+    embeddedCode() {
+      return this.content?.embeddedCode ?? ''
     },
-    embeddedCodeWithoutScript() {
-      return this.content?.embeddedCodeWithoutScript ?? ''
-    },
-  },
-  mounted() {
-    this.insertScriptsInBody()
   },
   methods: {
-    insertScriptsInBody() {
-      if (process.browser) {
-        if (this.caption === 'reporter-scroll-video') {
-          this.handleReporterScrollVideoScripts()
-        } else {
-          this.handleScripts()
-        }
-      }
-    },
-    handleReporterScrollVideoScripts() {
-      const src1 = this.scripts?.[0]?.text ?? ''
-      const src2 = this.scripts?.[0]?.attribs?.src ?? ''
-      const s1 = document.createElement('script')
-      s1.type = 'text/javascript'
-      s1.async = true
-      s1.appendChild(document.createTextNode(src1))
-      document.head.appendChild(s1)
-      // t.text = src2
-      // document.head.appendChild(t)
-      const s2 = document.createElement('script')
-      s2.type = 'text/javascript'
-      s2.crossorigin = true
-      s2.src = src2
-      document.body.appendChild(s2)
-    },
-    handleScripts() {
-      this.scripts?.forEach((item) => {
-        const src = item.attribs?.src ?? ''
-        const s = document.createElement('script')
-        if (src) {
-          s.setAttribute('src', src)
-        }
-        s.text = item.text || ''
-        document.body.appendChild(s)
+    insertScriptsInBody(embeddedCode) {
+      const fragment = document.createDocumentFragment()
+
+      const parser = new DOMParser()
+      const embeddedCodeString = `<div id="draft-embed">${embeddedCode}</div>`
+      const ele = parser.parseFromString(embeddedCodeString, 'text/html')
+
+      const scripts = ele.querySelectorAll('script')
+      const nonScripts = ele.querySelectorAll('div#draft-embed > :not(script)')
+
+      nonScripts.forEach((ele) => {
+        fragment.appendChild(ele)
       })
+
+      scripts.forEach((s) => {
+        const scriptEle = document.createElement('script')
+        const attrs = s.attributes
+        for (let i = 0; i < attrs.length; i++) {
+          scriptEle.setAttribute(attrs[i].name, attrs[i].value)
+        }
+        scriptEle.text = s.text || ''
+        fragment.appendChild(scriptEle)
+      })
+
+      this.$refs.embeddedcode.appendChild(fragment)
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.embedded {
+.full-height {
   position: relative;
-}
-.is__reporter__scroll {
   z-index: 1000;
+}
+.caption {
+  margin-top: 10px;
+  color: rgba(#000, 0.498);
+  font-size: 15px;
+  line-height: 1.7;
 }
 </style>
