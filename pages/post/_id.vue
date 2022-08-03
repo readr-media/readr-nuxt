@@ -1,5 +1,6 @@
 <template>
   <div class="post-and-report-wrapper">
+    <RdBlank v-if="shouldMountBlank" :post="post" />
     <RdFrame v-if="shouldMountFrame" :post="post" />
     <RdNews v-if="shouldMountNews" :news="post" />
     <RdReport v-if="shouldMountEmbeddedReport" :report="post" />
@@ -11,7 +12,7 @@
 import { post } from '~/apollo/queries/post.js'
 import { SITE_TITLE, SITE_URL } from '~/helpers/index.js'
 
-const validStyles = ['news', 'embedded', 'project3', 'report', 'frame']
+const validStyles = ['news', 'embedded', 'project3', 'report', 'frame', 'blank']
 
 export default {
   name: 'Post',
@@ -19,8 +20,8 @@ export default {
     RdNews: () => import('~/components/app/RdNews.vue'),
     RdReport: () => import('~/components/app/Report/RdReport.vue'),
     RdFrame: () => import('~/components/app/Frame/RdFrame.vue'),
+    RdBlank: () => import('~/components/app/Blank/RdBlank.vue'),
   },
-
   apollo: {
     post: {
       query() {
@@ -86,6 +87,9 @@ export default {
     },
     shouldMountFrame() {
       return this.postStyle === 'frame'
+    },
+    shouldMountBlank() {
+      return this.postStyle === 'blank'
     },
   },
   mounted() {
