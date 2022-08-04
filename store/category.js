@@ -34,7 +34,14 @@ const actions = {
         first: 6,
         shouldQueryRelatedPost: true,
         relatedPostFirst: 5,
-        relatedPostTypes: ['news', 'embedded', 'project3', 'report', 'frame'],
+        relatedPostTypes: [
+          'news',
+          'embedded',
+          'project3',
+          'report',
+          'frame',
+          'blank',
+        ],
       },
     })
     return response?.data?.categories ?? []
@@ -45,7 +52,14 @@ const actions = {
       variables: {
         shouldQueryRelatedPost: true,
         relatedPostFirst: 1,
-        relatedPostTypes: ['news', 'embedded', 'project3', 'report', 'frame'],
+        relatedPostTypes: [
+          'news',
+          'embedded',
+          'project3',
+          'report',
+          'frame',
+          'blank',
+        ],
       },
     })
     return response?.data?.categories ?? []
