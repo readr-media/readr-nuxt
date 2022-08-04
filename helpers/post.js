@@ -7,6 +7,7 @@ function getHref({ style, id, slug } = {}) {
     case 'news':
     case 'embedded':
     case 'frame':
+    case 'blank':
       return `/post/${id}`
     case 'report':
       return `${SITE_URL}/project/${slug}`

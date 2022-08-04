@@ -32,7 +32,7 @@ router.get('/latest-posts', async function requestGraphqlApi(ctx) {
       'query {\n' +
       '  latestPosts: allPosts(\n' +
       `    first: ${maxResult}\n` +
-      '    where: {state: published, style_in: [news, report, embedded, project3, frame]}\n' +
+      '    where: {state: published, style_in: [news, report, embedded, project3, frame, blank]}\n' +
       `    sortBy: [${sort}]\n` +
       '  ) {\n' +
       '    id\n' +
