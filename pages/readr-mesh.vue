@@ -2,6 +2,7 @@
   <div class="mesh">
     <MsHeader />
     <MsLandingTitle />
+    <MsLandingSwiper />
     <div class="mesh__discord">
       <div class="mesh__discord--left">
         <LargeArrowSvg /><span>Discord</span>
@@ -16,12 +17,14 @@ import { ENV } from '~/configs/config'
 import LargeArrowSvg from '~/assets/imgs/mesh/arrow-large.svg?inline'
 import MsHeader from '~/components/mesh/MsHeader.vue'
 import MsLandingTitle from '~/components/mesh/MsLandingTitle.vue'
+import MsLandingSwiper from '~/components/mesh/MsLandingSwiper.vue'
 export default {
   name: 'ReadrMesh',
   components: {
     LargeArrowSvg,
     MsHeader,
     MsLandingTitle,
+    MsLandingSwiper,
   },
   mounted() {
     if (ENV === 'prod' || ENV === 'staging') {
