@@ -6,7 +6,7 @@ const latestPosts = gql`
       first: $first
       where: {
         state: published
-        style_in: [news, report, embedded, project3, frame]
+        style_in: [news, report, embedded, project3, frame, blank]
       }
       sortBy: [publishTime_DESC]
     ) {
@@ -34,7 +34,7 @@ const latestPostsInErrorPage = gql`
       first: 4
       where: {
         state: published
-        style_in: [news, report, embedded, project3, frame]
+        style_in: [news, report, embedded, project3, frame, blank]
       }
       sortBy: [publishTime_DESC]
     ) {
@@ -61,7 +61,7 @@ const latestList = gql`
       skip: $skip
       where: {
         state: published
-        style_in: [news, report, embedded, project3, frame]
+        style_in: [news, report, embedded, project3, frame, blank]
       }
       sortBy: [publishTime_DESC]
     ) {
@@ -84,7 +84,7 @@ const latestList = gql`
     meta: _allPostsMeta(
       where: {
         state: published
-        style_in: [news, report, embedded, project3, frame]
+        style_in: [news, report, embedded, project3, frame, blank]
       }
     ) @include(if: $shouldQueryMeta) {
       count
@@ -104,7 +104,7 @@ const latestListByCategorySlug = gql`
       skip: $skip
       where: {
         state: published
-        style_in: [news, report, embedded, project3, frame]
+        style_in: [news, report, embedded, project3, frame, blank]
         categories_some: { slug: $categorySlug }
       }
       sortBy: [publishTime_DESC]
@@ -128,7 +128,7 @@ const latestListByCategorySlug = gql`
     meta: _allPostsMeta(
       where: {
         state: published
-        style_in: [news, report, embedded, project3, frame]
+        style_in: [news, report, embedded, project3, frame, blank]
         categories_some: { slug: $categorySlug }
       }
     ) @include(if: $shouldQueryMeta) {
@@ -149,7 +149,7 @@ const latestListByTagName = gql`
       skip: $skip
       where: {
         state: published
-        style_in: [news, report, embedded, project3, frame]
+        style_in: [news, report, embedded, project3, frame, blank]
         tags_some: { name: $tagName }
       }
       sortBy: [publishTime_DESC]
@@ -172,7 +172,7 @@ const latestListByTagName = gql`
     meta: _allPostsMeta(
       where: {
         state: published
-        style_in: [news, report, embedded, project3, frame]
+        style_in: [news, report, embedded, project3, frame, blank]
         tags_some: { name: $tagName }
       }
     ) @include(if: $shouldQueryMeta) {

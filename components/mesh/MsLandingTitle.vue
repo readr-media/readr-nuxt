@@ -8,10 +8,12 @@
       <img
         src="~/assets/imgs/mesh/download-google.png"
         class="container__download--btn"
+        @click="handleClickGoogleBtn"
       />
       <img
         src="~/assets/imgs/mesh/download-apple.png"
         class="container__download--btn"
+        @click="handleClickAppleBtn"
       />
     </div>
   </div>
@@ -20,6 +22,20 @@
 <script>
 export default {
   name: 'MsLandingTitle',
+  methods: {
+    handleClickGoogleBtn() {
+      window.open(
+        'https://play.google.com/store/apps/details?id=com.readr.news',
+        '_blank'
+      )
+    },
+    handleClickAppleBtn() {
+      window.open(
+        'https://apps.apple.com/tw/app/readr-mesh/id1596246729',
+        '_blank'
+      )
+    },
+  },
 }
 </script>
 
