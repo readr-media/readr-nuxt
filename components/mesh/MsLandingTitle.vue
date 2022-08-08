@@ -41,6 +41,7 @@ export default {
 
 <style lang="scss" scoped>
 .container {
+  z-index: 100;
   .words {
     color: #04295e;
     letter-spacing: 0.01em;
