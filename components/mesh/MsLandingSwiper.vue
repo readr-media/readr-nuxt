@@ -216,11 +216,13 @@ export default {
         z-index: 5;
         position: relative;
         max-height: calc(100% - 40px);
+        filter: drop-shadow(0px 1px 12px rgba(0, 9, 40, 0.2));
+        border-radius: 12px;
         @include media-breakpoint-up(md) {
-          max-height: calc(100vw - 80px);
+          max-height: calc(100% - 80px);
         }
         @include media-breakpoint-up(xl) {
-          max-height: calc(100vw - 160px);
+          max-height: calc(756px - 160px);
         }
       }
     }

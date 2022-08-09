@@ -1,109 +1,40 @@
 <template>
   <div ref="wrapper" class="container">
-    <div class="background">
-      <div class="background__title">
-        <span class="background__title--daily">MY DAILY</span
-        ><span class="background__title--date">6/16</span>
+    <div class="container__back">
+      <div class="background">
+        <div class="background__title">
+          <span class="background__title--daily">MY DAILY</span
+          ><span class="background__title--date">6/16</span>
+        </div>
       </div>
+      <section>
+        <MsLandingTitle />
+      </section>
     </div>
-    <MsLandingTitle />
     <div class="draggers">
       <vue-draggable-resizable
+        v-for="(item, i) in locationArray"
+        :key="i"
         :resizable="false"
         h="auto"
-        w="fit-content"
+        w="auto"
         :parent="true"
         className="draggers--item"
+        :x="locationArray[i][0]"
+        :y="locationArray[i][1]"
       >
-        <img src="../../assets/imgs/mesh/Mobile_Illustration_1.svg" />
-      </vue-draggable-resizable>
-      <vue-draggable-resizable
-        :resizable="false"
-        h="auto"
-        w="fit-content"
-        :parent="true"
-        className="draggers--item"
-        :x="100"
-        :y="200"
-      >
-        <img src="../../assets/imgs/mesh/Mobile_Illustration_2.svg" />
-      </vue-draggable-resizable>
-      <vue-draggable-resizable
-        :resizable="false"
-        h="auto"
-        w="fit-content"
-        :parent="true"
-        className="draggers--item"
-        :x="300"
-        :y="400"
-      >
-        <img src="../../assets/imgs/mesh/Mobile_Illustration_3.svg" />
-      </vue-draggable-resizable>
-      <vue-draggable-resizable
-        :resizable="false"
-        h="auto"
-        w="fit-content"
-        :parent="true"
-        className="draggers--item"
-        :x="150"
-        :y="450"
-      >
-        <img src="../../assets/imgs/mesh/Mobile_Illustration_4.svg" />
-      </vue-draggable-resizable>
-      <vue-draggable-resizable
-        :resizable="false"
-        h="auto"
-        w="fit-content"
-        :parent="true"
-        className="draggers--item"
-        :x="100"
-        :y="500"
-      >
-        <img src="../../assets/imgs/mesh/Mobile_Illustration_5.svg" />
-      </vue-draggable-resizable>
-      <vue-draggable-resizable
-        :resizable="false"
-        h="auto"
-        w="fit-content"
-        :parent="true"
-        className="draggers--item"
-        :x="300"
-        :y="100"
-      >
-        <img src="../../assets/imgs/mesh/Mobile_Illustration_6.svg" />
-      </vue-draggable-resizable>
-      <vue-draggable-resizable
-        :resizable="false"
-        h="auto"
-        w="fit-content"
-        :parent="true"
-        className="draggers--item"
-        :x="100"
-        :y="300"
-      >
-        <img src="../../assets/imgs/mesh/Mobile_Illustration_7.svg" />
-      </vue-draggable-resizable>
-      <vue-draggable-resizable
-        :resizable="false"
-        h="auto"
-        w="fit-content"
-        :parent="true"
-        className="draggers--item"
-        :x="300"
-        :y="600"
-      >
-        <img src="../../assets/imgs/mesh/Mobile_Illustration_8.svg" />
-      </vue-draggable-resizable>
-      <vue-draggable-resizable
-        :resizable="false"
-        h="auto"
-        w="fit-content"
-        :parent="true"
-        className="draggers--item"
-        :x="400"
-        :y="200"
-      >
-        <img src="../../assets/imgs/mesh/Mobile_Illustration_9.svg" />
+        <img
+          v-if="viewportWidth < 768"
+          :src="
+            require(`../../assets/imgs/mesh/Mobile_Illustration_${i + 1}.svg`)
+          "
+        />
+        <img
+          v-else
+          :src="
+            require(`../../assets/imgs/mesh/Desktop_Illustration_${i + 1}.svg`)
+          "
+        />
       </vue-draggable-resizable>
     </div>
   </div>
@@ -119,8 +50,53 @@ export default {
     viewportWidth() {
       return this.$store.getters['viewport/viewportWidth']
     },
-    isDesktop() {
-      return this.viewportWidth > 768
+    locationArray() {
+      const viewportWidth = this.viewportWidth
+      let porperties
+      if (viewportWidth < 768) {
+        porperties = [
+          [(205 / 320) * viewportWidth, 97],
+          [(21 / 320) * viewportWidth, 352],
+          [(69 / 320) * viewportWidth, 260],
+          [(-50 / 320) * viewportWidth, 46],
+          [(178 / 320) * viewportWidth, 222],
+          [(56 / 320) * viewportWidth, 141],
+          [(43 / 320) * viewportWidth, 200],
+          [(158 / 320) * viewportWidth, 379],
+          [(202 / 320) * viewportWidth, 399],
+          [(24 / 320) * viewportWidth, 220],
+          [(216 / 320) * viewportWidth, 279],
+        ]
+      } else if (viewportWidth < 1200) {
+        porperties = [
+          [(117 / 768) * viewportWidth, 6],
+          [(507 / 768) * viewportWidth, 16],
+          [(104 / 768) * viewportWidth, 372],
+          [(458 / 768) * viewportWidth, 383],
+          [(254 / 768) * viewportWidth, 179],
+          [(48 / 768) * viewportWidth, 544],
+          [(6 / 768) * viewportWidth, 507],
+          [(91 / 768) * viewportWidth, 301],
+          [(148 / 768) * viewportWidth, 166],
+          [(367 / 768) * viewportWidth, 233],
+          [(615 / 768) * viewportWidth, 278],
+        ]
+      } else {
+        porperties = [
+          [(68 / 1200) * viewportWidth, 65],
+          [(758 / 1200) * viewportWidth, 41],
+          [(714 / 1200) * viewportWidth, 481],
+          [(23 / 1200) * viewportWidth, 556],
+          [(878 / 1200) * viewportWidth, 207],
+          [(841 / 1200) * viewportWidth, 410],
+          [(272 / 1200) * viewportWidth, 579],
+          [(306 / 1200) * viewportWidth, 81],
+          [(416 / 1200) * viewportWidth, 117],
+          [(503 / 1200) * viewportWidth, 620],
+          [(1009 / 1200) * viewportWidth, 157],
+        ]
+      }
+      return porperties
     },
   },
 }
@@ -129,6 +105,16 @@ export default {
 <style lang="scss" scoped>
 .container {
   position: relative;
+  width: 100vw;
+  &__back {
+    margin: 0 auto;
+    @include media-breakpoint-up(xl) {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }
 .background {
   width: calc(100vw - 20px);
@@ -142,6 +128,13 @@ export default {
   margin-bottom: 60px;
   @include media-breakpoint-up(md) {
     margin-bottom: 46px;
+  }
+  @include media-breakpoint-up(xl) {
+    width: 400px;
+    margin-top: 80px;
+    margin-bottom: 80px;
+    margin-left: 135px;
+    margin-right: 0;
   }
   &__title {
     padding: 2px 12px;
@@ -185,13 +178,14 @@ export default {
   width: 100vw;
   height: calc((100vw - 20px) * 1.5 + 48px);
   max-height: 648px;
-  &--item {
+  &--item::v-deep {
     width: fit-content !important;
     position: absolute;
     top: 0;
     left: 0;
     &:hover {
       cursor: pointer;
+      box-shadow: 0px 4px 24px 0px #007aff4d;
     }
   }
 }
