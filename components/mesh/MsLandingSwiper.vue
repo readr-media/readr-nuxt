@@ -20,6 +20,8 @@
           class="pagination__dot"
           :class="{ active: index === currentSlide }"
           @click="setSlide(index)"
+          @mouseover="setIsPaused(true)"
+          @mouseleave="setIsPaused(false)"
         />
       </div>
     </div>
@@ -28,11 +30,15 @@
         :src="require(`../../assets/imgs/mesh/arrow.svg`)"
         class="slides__desc--arrow left"
         @click="addCurrentSlide(-1)"
+        @mouseover="setIsPaused(true)"
+        @mouseleave="setIsPaused(false)"
       />
       <img
         :src="require(`../../assets/imgs/mesh/arrow.svg`)"
         class="slides__desc--arrow right"
         @click="addCurrentSlide(1)"
+        @mouseover="setIsPaused(true)"
+        @mouseleave="setIsPaused(false)"
       />
       <div class="slides__desc--wrapper" :style="descCssProps">
         <div
@@ -54,6 +60,8 @@
           class="pagination__dot"
           :class="{ active: index === currentSlide }"
           @click="setSlide(index)"
+          @mouseover="setIsPaused(true)"
+          @mouseleave="setIsPaused(false)"
         />
       </div>
     </div>
@@ -88,6 +96,7 @@ export default {
         },
       ],
       currentSlide: 0,
+      isPaused: false,
     }
   },
   computed: {
@@ -110,6 +119,7 @@ export default {
   },
   methods: {
     autoChangeSlide() {
+      if (this.isPaused) return
       this.currentSlide++
       if (this.currentSlide > this.slidesLength - 1) {
         this.currentSlide = 0
@@ -125,6 +135,9 @@ export default {
     },
     setSlide(value) {
       this.currentSlide = value
+    },
+    setIsPaused(value) {
+      this.isPaused = value
     },
   },
 }
