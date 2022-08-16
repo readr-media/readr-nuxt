@@ -4,9 +4,7 @@
     class="embeddedcode"
     :class="{ 'full-height': caption === 'reporter-scroll-video' }"
   >
-    <LazyRenderer @load="insertScriptsInBody(embeddedCode)">
-      <p v-if="caption" class="caption">{{ caption }}</p>
-    </LazyRenderer>
+    <p v-if="caption" class="caption">{{ caption }}</p>
   </div>
 </template>
 
@@ -27,6 +25,9 @@ export default {
     embeddedCode() {
       return this.content?.embeddedCode ?? ''
     },
+  },
+  mounted() {
+    this.insertScriptsInBody(this.embeddedCode)
   },
   methods: {
     insertScriptsInBody(embeddedCode) {

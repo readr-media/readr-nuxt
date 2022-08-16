@@ -2,10 +2,10 @@
   <div class="header">
     <img class="header__logo" src="~/assets/imgs/mesh/logo.svg" />
     <div class="header__right">
-      <div class="header__right--button android" @click="handleClickAppleBtn">
+      <div class="header__right--button android" @click="handleClickGoogleBtn">
         Android 下載
       </div>
-      <div class="header__right--button ios" @click="handleClickGoogleBtn">
+      <div class="header__right--button ios" @click="handleClickAppleBtn">
         iOS 下載
       </div>
     </div>

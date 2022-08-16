@@ -1,0 +1,22 @@
+<svg width="174" height="188" viewBox="0 0 174 188" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2 2H172V186H2V2Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M171 3H3V185H171V3ZM2 2V186H172V2H2Z" fill="#007AFF"/>
+<path d="M0 0H5V5H0V0Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4 1H1V4H4V1ZM0 0V5H5V0H0Z" fill="#007AFF"/>
+<path d="M169 0H174V5H169V0Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M173 1H170V4H173V1ZM169 0V5H174V0H169Z" fill="#007AFF"/>
+<path d="M0 92H5V97H0V92Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4 93H1V96H4V93ZM0 92V97H5V92H0Z" fill="#007AFF"/>
+<path d="M169 92H174V97H169V92Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M173 93H170V96H173V93ZM169 92V97H174V92H169Z" fill="#007AFF"/>
+<path d="M169 183H174V188H169V183Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M173 184H170V187H173V184ZM169 183V188H174V183H169Z" fill="#007AFF"/>
+<path d="M84 183H89V188H84V183Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M88 184H85V187H88V184ZM84 183V188H89V183H84Z" fill="#007AFF"/>
+<path d="M84 0H89V5H84V0Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M88 1H85V4H88V1ZM84 0V5H89V0H84Z" fill="#007AFF"/>
+<path d="M0 183H5V188H0V183Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4 184H1V187H4V184ZM0 183V188H5V183H0Z" fill="#007AFF"/>
+<path d="M17.4142 95.4142C16.6332 94.6332 16.6332 93.3668 17.4142 92.5858L85.2965 24.7035C86.0775 23.9225 87.3438 23.9225 88.1249 24.7035L156.007 92.5858C156.788 93.3668 156.788 94.6332 156.007 95.4142L88.1249 163.296C87.3438 164.078 86.0775 164.078 85.2965 163.296L17.4142 95.4142Z" fill="#007AFF"/>
+<path d="M60.4142 95.4142C59.6332 94.6332 59.6332 93.3668 60.4142 92.5858L85.8701 67.1299C86.6511 66.3489 87.9174 66.3489 88.6985 67.1299L114.154 92.5858C114.935 93.3668 114.935 94.6332 114.154 95.4142L88.6985 120.87C87.9174 121.651 86.6511 121.651 85.8701 120.87L60.4142 95.4142Z" fill="#EBF02C"/>
+</svg>

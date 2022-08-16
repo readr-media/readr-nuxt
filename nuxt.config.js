@@ -127,6 +127,7 @@ Object.assign(module.exports, {
   plugins: [
     '~/plugins/vue-plugins/vuePluginsGlobal.js',
     '~/plugins/vue-plugins/web-components.client.js',
+    { src: '~/plugins/vue-plugins/vue-draggable-resizable.js', mode: 'client' },
   ],
 
   serverMiddleware: [

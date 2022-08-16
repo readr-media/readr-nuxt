@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="title-container">
     <div class="container__words words">
       <h1 class="words__title">做自己的新聞編輯台</h1>
       <p class="words__description">發覺那些被演算法淹沒的好報導</p>
@@ -7,12 +7,12 @@
     <div class="container__download">
       <img
         src="~/assets/imgs/mesh/download-google.png"
-        class="container__download--btn"
+        class="container__download--btn google"
         @click="handleClickGoogleBtn"
       />
       <img
         src="~/assets/imgs/mesh/download-apple.png"
-        class="container__download--btn"
+        class="container__download--btn apple"
         @click="handleClickAppleBtn"
       />
     </div>
@@ -40,14 +40,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.title-container {
+  z-index: 100;
+  position: relative;
   .words {
     color: #04295e;
     letter-spacing: 0.01em;
-    text-align: center;
+
     &__title {
       font-size: 24px;
       line-height: 130%;
+      text-align: center;
       @include media-breakpoint-up(md) {
         font-size: 60px;
       }
@@ -57,14 +60,18 @@ export default {
       color: rgba(0, 9, 40, 0.5);
       font-size: 16px;
       line-height: 24px;
+      text-align: center;
       @include media-breakpoint-up(md) {
         font-size: 24px;
         line-height: 32px;
       }
+      @include media-breakpoint-up(xl) {
+        text-align: left;
+      }
     }
   }
 
-  &__download {
+  .container__download {
     margin-top: 40px;
     margin-bottom: 60px;
     @include media-breakpoint-up(md) {
@@ -72,13 +79,12 @@ export default {
       width: fit-content;
       margin: 40px auto;
     }
+    @include media-breakpoint-up(xl) {
+      margin: 40px 0;
+    }
     &--btn {
       margin: 0 auto;
       width: fit-content;
-      transform: scale(0.8);
-      @include media-breakpoint-up(md) {
-        transform: scale(1);
-      }
       &:not(:first-child) {
         margin-top: 20px;
         @include media-breakpoint-up(md) {
@@ -88,6 +94,18 @@ export default {
       }
       &:hover {
         cursor: pointer;
+      }
+      &.google {
+        width: 162.1px;
+        @include media-breakpoint-up(md) {
+          width: 202.63px;
+        }
+      }
+      &.apple {
+        width: 128.24px;
+        @include media-breakpoint-up(md) {
+          width: 160.29px;
+        }
       }
     }
   }
