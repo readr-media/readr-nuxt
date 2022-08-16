@@ -59,6 +59,7 @@
     "scroll-into-view": "^1.15.0",
     "uuid": "^8.3.0",
     "validator": "^10.11.0",
+    "vue-draggable-resizable": "^2.3.0",
     "vue-infinite-loading": "^2.4.5",
     "vue-lazy-renderer": "^1.2.1",
     "vue-lazyload": "^1.3.3",
