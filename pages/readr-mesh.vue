@@ -1,7 +1,7 @@
 <template>
-  <div class="mesh">
+  <div class="mesh" @touchmove="handleScroll">
     <MsHeader />
-    <MsLandingCanvas />
+    <MsLandingCanvas @setCanScroll="setCanScroll" />
     <MsLandingSwiper />
     <div class="mesh__discord">
       <div class="mesh__discord--left">
@@ -26,10 +26,25 @@ export default {
     MsLandingSwiper,
     MsLandingCanvas,
   },
+  data() {
+    return {
+      canScroll: true,
+    }
+  },
   mounted() {
     if (ENV === 'prod' || ENV === 'staging') {
       this.$nuxt.error({ statusCode: 404 })
     }
+  },
+  methods: {
+    handleScroll(e) {
+      if (!this.canScroll) {
+        e.preventDefault()
+      }
+    },
+    setCanScroll(value) {
+      this.canScroll = value
+    },
   },
 }
 </script>
