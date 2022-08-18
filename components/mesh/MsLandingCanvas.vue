@@ -22,6 +22,8 @@
         className="draggers--item"
         :x="locationArray[i][0]"
         :y="locationArray[i][1]"
+        @dragging="onDragging"
+        @dragstop="onDragStop"
       >
         <img
           v-if="viewportWidth < 768"
@@ -97,6 +99,18 @@ export default {
         ]
       }
       return porperties
+    },
+  },
+  methods: {
+    onDragging() {
+      if (this.viewportWidth < 768) {
+        this.$emit('setCanScroll', false)
+      }
+    },
+    onDragStop() {
+      if (this.viewportWidth < 768) {
+        this.$emit('setCanScroll', true)
+      }
     },
   },
 }

@@ -70,5 +70,6 @@ export default {
   color: rgba(#000, 0.498);
   font-size: 15px;
   line-height: 1.7;
+  opacity: 0;
 }
 </style>
