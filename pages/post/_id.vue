@@ -79,6 +79,10 @@ export default {
     postStyle() {
       return this.post?.style ?? ''
     },
+    /**
+     * 如果文章樣式為 news、embedded、frame 或 blank，
+     * 要個別用對應的元件呈現
+     */
     shouldMountNews() {
       return this.postStyle === 'news' || this.postStyle === ''
     },
@@ -99,6 +103,9 @@ export default {
     if (this.has500Err) {
       this.$nuxt.error({ statusCode: 500 })
     }
+    /**
+     * 如果文章樣式為 report 或 project3，則要導向特定網址
+     */
     if (
       (this.postStyle === 'report' || this.postStyle === 'project3') &&
       window
