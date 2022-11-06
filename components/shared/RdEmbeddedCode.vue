@@ -4,7 +4,10 @@
     class="embeddedcode"
     :class="{ 'full-height': caption === 'reporter-scroll-video' }"
   >
-    <p v-if="caption" class="caption">{{ caption }}</p>
+    <LazyRenderer v-if="!isFlourish" @load="insertScriptsInBody(embeddedCode)">
+      <p v-if="caption" class="caption">{{ caption }}</p>
+    </LazyRenderer>
+    <p v-if="isFlourish && caption" class="caption">{{ caption }}</p>
   </div>
 </template>
 
@@ -25,9 +28,14 @@ export default {
     embeddedCode() {
       return this.content?.embeddedCode ?? ''
     },
+    isFlourish() {
+      return this.embeddedCode?.includes('flourish')
+    },
   },
   mounted() {
-    this.insertScriptsInBody(this.embeddedCode)
+    if (this.isFlourish) {
+      this.insertScriptsInBody(this.embeddedCode)
+    }
   },
   methods: {
     insertScriptsInBody(embeddedCode) {
