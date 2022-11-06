@@ -28,7 +28,28 @@
     >
       <div class="container container--quote">
         <RdListHeading title="協作專區" color="#ebf02c" class="quote-heading" />
-        <RdQuoteSlide :quotes="quotes" />
+        <!-- banner of open-relation project -->
+        <a
+          href="https://whoareyou.readr.tw/"
+          target="_blank"
+          rel="noreferrer noopenner"
+        >
+          <picture>
+            <source
+              srcset="~/assets/imgs/open-relation/desktop_1096x241.png"
+              media="(min-width: 1200px)"
+            />
+            <source
+              srcset="~/assets/imgs/open-relation/tablet_710x215.png"
+              media="(min-width: 768px)"
+            />
+            <img
+              src="~/assets/imgs/open-relation/mobile_280x172.png"
+              alt="open-relation-banner"
+            /> </picture
+        ></a>
+        <!-- original component, replaced by banner of open-relation -->
+        <!-- <RdQuoteSlide :quotes="quotes" /> -->
       </div>
       <div class="container container--wall">
         <RdCollaboratorWall
@@ -79,7 +100,7 @@ import RdHomeCategory from '~/components/shared/RdHomeCategory.vue'
 import RdFeature from '~/components/shared/RdFeature.vue'
 import RdListHeading from '~/components/shared/RdListHeading.vue'
 import RdDatabaseList from '~/components/app/RdDatabaseList.vue'
-import RdQuoteSlide from '~/components/app/RdQuoteSlide.vue'
+// import RdQuoteSlide from '~/components/app/RdQuoteSlide.vue'
 import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
 import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
@@ -114,7 +135,7 @@ export default {
     RdFeature,
     RdListHeading,
     RdDatabaseList,
-    RdQuoteSlide,
+    // RdQuoteSlide,
     RdCollaboratorWall,
     RdCollaborativeList,
     RdButtonDonate,

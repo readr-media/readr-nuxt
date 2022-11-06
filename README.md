@@ -30,6 +30,7 @@
 │   ├── app/
 │   ├── helpers/
 │   ├── report/
+│   ├── mesh/
 │   └── shared/
 ├── configs/
 ├── helpers/
@@ -101,11 +102,10 @@
 
 ## 部署
 
-採用 [Drone](https://www.drone.io/) 自動化部署，設定寫在 [.drone.yml](./.drone.yml)。注意 `getDevConfig` 和 `getProdConfig`，drone 會在這兩個步驟去拿儲存在 Cloud Source Repositories 的 config，其中可看見 drone 拿 config 的路徑（`cp -R source destination`）和觸發此步驟的時機（`when`）。
+目前採用 Cloud Build 進行自動化部署，共有 dev、staging、prod 三個分支，須以發 PR 的方式合併分支。
 
-當你將 commit 推到 dev 分支，drone 會開始構建專案，並在構建完後更新測試機（你會在 Slack 的 jenkins 頻道看見通知）。
-
-若要將專案推到正式機，須經 PM（產品經理）確認，再從 dev 分支發 PR（pull request）合併（merge）到 staging 分支，drone 同樣會開始構建專案，接著再發 PR 至 prod 分支。當 prod 構建完後，需通知後端該部署哪一版本的專案（版本可從 jenkins 頻道的訊息得知）。部署完後，正式機便更新了。
+當功能已在 feature branch 開發完畢，即可發 PR 並 merge 進 dev 分支，便會觸發自動化部署並更新測試機。
+若要將專案推到正式機，須經 PM（產品經理）確認，再從 dev 分支發 PR merge到 staging 分支，確認 staging 功能正常後，接著再發 PR 至 prod 分支。其中，正式機的部署目前需要手動核准。
 
 ## 命名規範
 
