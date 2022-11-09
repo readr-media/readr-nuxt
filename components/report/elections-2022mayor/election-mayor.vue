@@ -32,11 +32,6 @@ export default {
     },
   },
 
-  data() {
-    return {
-      name: 'bibo',
-    }
-  },
   mounted() {
     console.log(this.polling, 'election')
   },
