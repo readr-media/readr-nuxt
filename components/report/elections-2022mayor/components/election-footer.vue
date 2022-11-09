@@ -42,8 +42,8 @@ export default {
 
 <style lang="scss" scoped>
 .footerWrapper {
-  height: 80px;
-  padding: 20px 40px;
+  height: 89px;
+  padding: 12px 0px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -52,12 +52,14 @@ export default {
   color: #9b9b9b;
 
   @include media-breakpoint-up(md) {
+    height: 60px;
     justify-content: space-between;
     flex-direction: row;
     align-items: flex-end;
   }
   @include media-breakpoint-up(xl) {
-    /* height: 301px; */
+    height: 60px;
+    width: 922px;
   }
   .link {
     color: #4a4a4a;

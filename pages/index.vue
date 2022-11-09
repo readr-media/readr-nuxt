@@ -245,6 +245,7 @@ export default {
       return { polling: [] }
     }
     const data = await axios.get(
+      // 'https://whoareyou-gcs.readr.tw/elections-dev/2022/mayor/special_municipality.json'
       'https://whoareyou-gcs.readr.tw/elections-dev/2022/mayor/special_municipality.json'
     )
     console.log(data.data?.updatedAt)

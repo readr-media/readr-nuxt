@@ -1,21 +1,20 @@
 <template>
   <div class="wrapper">
-    <div class="content">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita esse ut
-      quia alias incidunt omnis! Dolorem, non est excepturi repellendus eaque
-      voluptate iure vel doloribus aperiam ab modi quisquam laboriosam!
-    </div>
+    <CarouselPc :polling="polling" />
     <ElectionFooter :updatedAt="updatedAt" />
   </div>
 </template>
 
 <script>
-import ElectionFooter from '~/components/report/elections-2022mayor/components/election-footer.vue'
+import ElectionFooter from './components/election-footer.vue'
+import CarouselPc from './components/carousel-pc.vue'
+
 export default {
   name: 'ElectionMayor',
 
   components: {
     ElectionFooter,
+    CarouselPc,
   },
 
   props: {
@@ -48,6 +47,7 @@ export default {
 .wrapper {
   display: flex;
   flex-direction: column;
+  align-items: center;
   background: #dddddd;
   height: 358px;
   @include media-breakpoint-up(md) {
@@ -56,9 +56,5 @@ export default {
   @include media-breakpoint-up(xl) {
     height: 301px;
   }
-}
-
-.content {
-  /* height: calc(100%-80px); */
 }
 </style>
