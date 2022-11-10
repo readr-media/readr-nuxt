@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
 export default {
   name: 'ElectionFooter',
   props: {
@@ -27,7 +26,7 @@ export default {
   },
   computed: {
     formattedDate() {
-      return dayjs(this.updatedAt).format('YYYY/MM/DD HH:MM')
+      return this.updatedAt.slice(0, -3).replace('-', '/').replace('-', '/')
     },
   },
 }
