@@ -36,7 +36,6 @@ const inDevEnv = process.env.NODE_ENV === 'development'
 Object.assign(module.exports, {
   env: {
     BASE_URL,
-    ELECTION_MAYOR_FEATURE_TOGGLE: process.env.ELECTION_MAYOR_FEATURE_TOGGLE,
   },
   /*
    ** Headers of the page

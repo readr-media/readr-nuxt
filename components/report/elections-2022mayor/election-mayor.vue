@@ -35,9 +35,9 @@ export default {
     },
   },
 
-  mounted() {
-    console.log(this.polling, 'election')
-  },
+  // mounted() {
+  //   console.log(this.polling, 'election')
+  // },
 }
 </script>
 
