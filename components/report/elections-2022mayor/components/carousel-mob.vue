@@ -1,14 +1,27 @@
 <template>
   <div class="CarouselWrapper">
+    <!-- slide1 -->
     <div class="slide" :class="{ isActive: slideIndex === 0 }">
       <div class="indicator">
-        <button class="button" @click="setIndex2">
-          &#9664; 台南市/高雄市
+        <button class="button" @click="setIndex5">
+          &#9664; 高雄市
         </button>
         <p class="title">六都市長開票進度</p>
         <button class="button" @click="setIndex1">
-          桃園市/台中市 &#9654;
+          新北市 &#9654;
         </button>
+      </div>
+      <div class="indicator-mo">
+        <p class="title">六都市長開票進度</p>
+        <div class="buttonsWrapper">
+          <button class="button" @click="setIndex5">
+            &#9664;
+          </button>
+          <p class="current-city">{{ polling[0].city }}</p>
+          <button class="button" @click="setIndex1">
+            &#9654;
+          </button>
+        </div>
       </div>
       <div class="city">
         <div class="title">{{ polling[0].city }}</div>
@@ -27,6 +40,7 @@
               <div class="tks">
                 {{ candidate.tks.toLocaleString('en-US') }}
               </div>
+              <div class="tks-rate-number">{{ candidate.tksRate }}%</div>
               <div
                 class="tks-rate"
                 :style="{ width: candidate.tksRate + '%' }"
@@ -35,6 +49,31 @@
           </div>
         </div>
       </div>
+    </div>
+    <!-- slide2 -->
+    <div class="slide" :class="{ isActive: slideIndex === 1 }">
+      <div class="indicator">
+        <button class="button" @click="setIndex0">
+          &#9664; 台北市
+        </button>
+        <p class="title">六都市長開票進度</p>
+        <button class="button" @click="setIndex2">
+          桃園市 &#9654;
+        </button>
+      </div>
+      <div class="indicator-mo">
+        <p class="title">六都市長開票進度</p>
+        <div class="buttonsWrapper">
+          <button class="button" @click="setIndex0">
+            &#9664;
+          </button>
+          <p class="current-city">{{ polling[1].city }}</p>
+          <button class="button" @click="setIndex2">
+            &#9654;
+          </button>
+        </div>
+      </div>
+
       <div class="city">
         <div class="title">{{ polling[1].city }}</div>
         <div class="candidates-wrapper">
@@ -52,6 +91,7 @@
               <div class="tks">
                 {{ candidate.tks.toLocaleString('en-US') }}
               </div>
+              <div class="tks-rate-number">{{ candidate.tksRate }}%</div>
               <div
                 class="tks-rate"
                 :style="{ width: candidate.tksRate + '%' }"
@@ -61,11 +101,28 @@
         </div>
       </div>
     </div>
-    <div class="slide" :class="{ isActive: slideIndex === 1 }">
+    <!-- slide3 -->
+    <div class="slide" :class="{ isActive: slideIndex === 2 }">
       <div class="indicator">
-        <button class="button" @click="setIndex0">&#9664; 台北市/新北市</button>
+        <button class="button" @click="setIndex1">
+          &#9664; 新北市
+        </button>
         <p class="title">六都市長開票進度</p>
-        <button class="button" @click="setIndex2">台南市/高雄市 &#9654;</button>
+        <button class="button" @click="setIndex3">
+          台中市 &#9654;
+        </button>
+      </div>
+      <div class="indicator-mo">
+        <p class="title">六都市長開票進度</p>
+        <div class="buttonsWrapper">
+          <button class="button" @click="setIndex1">
+            &#9664;
+          </button>
+          <p class="current-city">{{ polling[2].city }}</p>
+          <button class="button" @click="setIndex3">
+            &#9654;
+          </button>
+        </div>
       </div>
       <div class="city">
         <div class="title">{{ polling[2].city }}</div>
@@ -84,12 +141,37 @@
               <div class="tks">
                 {{ candidate.tks.toLocaleString('en-US') }}
               </div>
+              <div class="tks-rate-number">{{ candidate.tksRate }}%</div>
               <div
                 class="tks-rate"
                 :style="{ width: candidate.tksRate + '%' }"
               ></div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <!-- slide4 -->
+    <div class="slide" :class="{ isActive: slideIndex === 3 }">
+      <div class="indicator">
+        <button class="button" @click="setIndex2">
+          &#9664; 桃園市
+        </button>
+        <p class="title">六都市長開票進度</p>
+        <button class="button" @click="setIndex4">
+          台南市 &#9654;
+        </button>
+      </div>
+      <div class="indicator-mo">
+        <p class="title">六都市長開票進度</p>
+        <div class="buttonsWrapper">
+          <button class="button" @click="setIndex2">
+            &#9664;
+          </button>
+          <p class="current-city">{{ polling[3].city }}</p>
+          <button class="button" @click="setIndex4">
+            &#9654;
+          </button>
         </div>
       </div>
       <div class="city">
@@ -109,6 +191,7 @@
               <div class="tks">
                 {{ candidate.tks.toLocaleString('en-US') }}
               </div>
+              <div class="tks-rate-number">{{ candidate.tksRate }}%</div>
               <div
                 class="tks-rate"
                 :style="{ width: candidate.tksRate + '%' }"
@@ -118,11 +201,28 @@
         </div>
       </div>
     </div>
-    <div class="slide" :class="{ isActive: slideIndex === 2 }">
+    <!-- slide5 -->
+    <div class="slide" :class="{ isActive: slideIndex === 4 }">
       <div class="indicator">
-        <button class="button" @click="setIndex1">&#9664; 桃園市/台中市</button>
+        <button class="button" @click="setIndex3">
+          &#9664; 台中市
+        </button>
         <p class="title">六都市長開票進度</p>
-        <button class="button" @click="setIndex0">台北市/新北市 &#9654;</button>
+        <button class="button" @click="setIndex5">
+          高雄市 &#9654;
+        </button>
+      </div>
+      <div class="indicator-mo">
+        <p class="title">六都市長開票進度</p>
+        <div class="buttonsWrapper">
+          <button class="button" @click="setIndex3">
+            &#9664;
+          </button>
+          <p class="current-city">{{ polling[4].city }}</p>
+          <button class="button" @click="setIndex5">
+            &#9654;
+          </button>
+        </div>
       </div>
       <div class="city">
         <div class="title">{{ polling[4].city }}</div>
@@ -141,12 +241,37 @@
               <div class="tks">
                 {{ candidate.tks.toLocaleString('en-US') }}
               </div>
+              <div class="tks-rate-number">{{ candidate.tksRate }}%</div>
               <div
                 class="tks-rate"
                 :style="{ width: candidate.tksRate + '%' }"
               ></div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <!-- slide6 -->
+    <div class="slide" :class="{ isActive: slideIndex === 5 }">
+      <div class="indicator">
+        <button class="button" @click="setIndex4">
+          &#9664; 台南市
+        </button>
+        <p class="title">六都市長開票進度</p>
+        <button class="button" @click="setIndex0">
+          台北市 &#9654;
+        </button>
+      </div>
+      <div class="indicator-mo">
+        <p class="title">六都市長開票進度</p>
+        <div class="buttonsWrapper">
+          <button class="button" @click="setIndex4">
+            &#9664;
+          </button>
+          <p class="current-city">{{ polling[5].city }}</p>
+          <button class="button" @click="setIndex0">
+            &#9654;
+          </button>
         </div>
       </div>
       <div class="city">
@@ -166,6 +291,7 @@
               <div class="tks">
                 {{ candidate.tks.toLocaleString('en-US') }}
               </div>
+              <div class="tks-rate-number">{{ candidate.tksRate }}%</div>
               <div
                 class="tks-rate"
                 :style="{ width: candidate.tksRate + '%' }"
@@ -180,7 +306,7 @@
 
 <script>
 export default {
-  name: 'CarouselPc',
+  name: 'CarouselMob',
 
   props: {
     polling: {
@@ -212,6 +338,15 @@ export default {
     setIndex0() {
       this.slideIndex = 0
     },
+    setIndex3() {
+      this.slideIndex = 3
+    },
+    setIndex4() {
+      this.slideIndex = 4
+    },
+    setIndex5() {
+      this.slideIndex = 5
+    },
   },
 }
 </script>
@@ -220,13 +355,17 @@ export default {
 .CarouselWrapper {
   position: relative;
   height: 241px;
-  width: 922px;
+  width: 268px;
   display: flex;
   font-size: 16px;
-  display: none;
+  display: block;
+
+  @include media-breakpoint-up(md) {
+    width: 668px;
+  }
 
   @include media-breakpoint-up(xl) {
-    display: block;
+    display: none;
   }
 }
 
@@ -242,12 +381,31 @@ export default {
 }
 
 .indicator {
-  width: 922px;
+  width: 268px;
   height: 45px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: none;
+
+  @include media-breakpoint-up(md) {
+    display: flex;
+    width: 668px;
+  }
+}
+
+.indicator-mo {
+  width: 268px;
+  height: 53px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  @include media-breakpoint-up(md) {
+    display: none;
+  }
 }
 
 .title {
@@ -263,22 +421,24 @@ export default {
 }
 
 .city {
-  /* display: flex; */
-  /* flex-direction: column; */
-  border-bottom: 2px solid #ffffff;
-  padding: 6px 0;
+  padding: 10px 0;
 }
 .candidates-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   :not(:last-child) {
-    padding-right: 13px;
+    padding-right: 16px;
+  }
+
+  @include media-breakpoint-up(md) {
+    flex-direction: row;
   }
 }
 .candidate {
   display: flex;
   flex-direction: column;
+  padding-bottom: 5px;
 }
 .name-party-wrapper {
   display: flex;
@@ -290,10 +450,13 @@ export default {
 }
 .progress-bar {
   position: relative;
-  width: 298px;
+  width: 268px;
   height: 24px;
   background: #ffffff;
   border-radius: 4px;
+  @include media-breakpoint-up(md) {
+    width: 212px;
+  }
 }
 .tks-rate {
   width: 10%;
@@ -313,5 +476,25 @@ export default {
   font-size: 14px;
   line-height: 20px;
   color: #04295e;
+}
+.tks-rate-number {
+  position: absolute;
+  top: 2px;
+  right: -5px;
+  z-index: 9;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #04295e;
+  @include media-breakpoint-up(md) {
+    display: none;
+  }
+}
+.current-city {
+  color: #f34b4b;
+}
+.buttonsWrapper {
+  display: flex;
+  gap: 10px;
 }
 </style>

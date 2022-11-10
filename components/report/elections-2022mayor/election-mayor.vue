@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
     <CarouselPc :polling="polling" />
+    <CarouselMob :polling="polling" />
     <ElectionFooter :updatedAt="updatedAt" />
   </div>
 </template>
@@ -8,6 +9,7 @@
 <script>
 import ElectionFooter from './components/election-footer.vue'
 import CarouselPc from './components/carousel-pc.vue'
+import CarouselMob from './components/carousel-mob.vue'
 
 export default {
   name: 'ElectionMayor',
@@ -15,6 +17,7 @@ export default {
   components: {
     ElectionFooter,
     CarouselPc,
+    CarouselMob,
   },
 
   props: {

@@ -30,20 +30,13 @@ export default {
       return dayjs(this.updatedAt).format('YYYY/MM/DD HH:MM')
     },
   },
-
-  // methods: {
-  //   formattedDate() {
-  //     const newDate = this.updatedAt.slice(0, -3).replaceAll('-', '/')
-  //     return newDate
-  //   },
-  // },
 }
 </script>
 
 <style lang="scss" scoped>
 .footerWrapper {
-  height: 89px;
-  padding: 12px 0px;
+  height: 125px;
+  padding: 8px 0px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -56,6 +49,7 @@ export default {
     justify-content: space-between;
     flex-direction: row;
     align-items: flex-end;
+    width: 668px;
   }
   @include media-breakpoint-up(xl) {
     height: 60px;
