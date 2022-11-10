@@ -492,6 +492,8 @@ export default {
 }
 .current-city {
   color: #f34b4b;
+  font-weight: 600;
+  font-size: 14px;
 }
 .buttonsWrapper {
   display: flex;
