@@ -2,6 +2,12 @@
   <div class="g-page-wrapper home">
     <RdNavbar />
 
+    <ElectionMayor
+      v-if="polling.length"
+      :polling="polling"
+      :updatedAt="updatedAt"
+    />
+
     <RdEditorChoice
       v-if="shouldOpenEditorChoices"
       :posts="transformedEditorChoice"
@@ -90,6 +96,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapGetters } from 'vuex'
 import { get as axiosGet } from 'axios'
 import gqlCombineQuery from 'graphql-combine-query'
@@ -104,6 +111,7 @@ import RdDatabaseList from '~/components/app/RdDatabaseList.vue'
 import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
 import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
+import ElectionMayor from '~/components/report/elections-2022mayor/election-mayor.vue'
 
 import { intersect } from '~/helpers/vue/directives/index.js'
 
@@ -139,6 +147,7 @@ export default {
     RdCollaboratorWall,
     RdCollaborativeList,
     RdButtonDonate,
+    ElectionMayor,
   },
 
   directives: {
@@ -231,6 +240,21 @@ export default {
     },
   },
 
+  async asyncData({ env }) {
+    if (env.ELECTION_MAYOR_FEATURE_TOGGLE !== 'on') {
+      return { polling: [] }
+    }
+    const data = await axios.get(
+      // 'https://whoareyou-gcs.readr.tw/elections-dev/2022/mayor/special_municipality.json'
+      'https://whoareyou-gcs.readr.tw/elections-dev/2022/mayor/special_municipality.json'
+    )
+    console.log(data.data?.updatedAt)
+    return {
+      polling: data.data?.polling || [],
+      updatedAt: data.data?.updatedAt || '',
+    }
+  },
+
   data() {
     return {
       editorChoices: [],
@@ -251,12 +275,16 @@ export default {
 
       isLoadingCategoryLists: false,
       scrollDepthObserver: undefined,
+      polling: [],
+      updatedAt: '',
     }
   },
+
   computed: {
     ...mapGetters('viewport', ['viewportWidth']),
 
     isViewportWidthUpMd() {
+      console.log(this.polling)
       return this.viewportWidth >= this.breakpointMd
     },
     breakpointMd() {
