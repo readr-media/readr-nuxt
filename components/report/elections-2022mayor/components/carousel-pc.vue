@@ -1,13 +1,14 @@
 <template>
   <div class="CarouselWrapper">
+    <!-- slide1 -->
     <div class="slide" :class="{ isActive: slideIndex === 0 }">
       <div class="indicator">
         <button class="button" @click="setIndex2">
-          &#9664; 台南市/高雄市
+          <img :src="prevArrow()" /> <span>台南市/高雄市</span>
         </button>
         <p class="title">六都市長開票進度</p>
         <button class="button" @click="setIndex1">
-          桃園市/台中市 &#9654;
+          <span>桃園市/台中市</span><img :src="nextArrow()" />
         </button>
       </div>
       <div class="city">
@@ -19,9 +20,14 @@
             class="candidate"
           >
             <div class="name-party-wrapper">
-              <div>{{ candidate.candNo }} {{ candidate.name }}</div>
-              <div>{{ candidate.party.slice(0, 1) }}</div>
-              <div v-show="candidate.candVictor">⭕</div>
+              <div>{{ candidate.candNo }}</div>
+              <div>{{ candidate.name }}</div>
+              <img
+                v-if="getPartySvg(candidate.party)"
+                :src="getPartySvg(candidate.party)"
+              />
+              <span v-else>{{ candidate.party }}</span>
+              <img v-show="candidate.candVictor" :src="getWinSvg()" />
             </div>
             <div class="progress-bar">
               <div class="tks">
@@ -44,9 +50,14 @@
             class="candidate"
           >
             <div class="name-party-wrapper">
-              <div>{{ candidate.candNo }} {{ candidate.name }}</div>
-              <div>{{ candidate.party.slice(0, 1) }}</div>
-              <div v-show="candidate.candVictor">⭕</div>
+              <div>{{ candidate.candNo }}</div>
+              <div>{{ candidate.name }}</div>
+              <img
+                v-if="getPartySvg(candidate.party)"
+                :src="getPartySvg(candidate.party)"
+              />
+              <span v-else>{{ candidate.party }}</span>
+              <img v-show="candidate.candVictor" :src="getWinSvg()" />
             </div>
             <div class="progress-bar">
               <div class="tks">
@@ -61,11 +72,16 @@
         </div>
       </div>
     </div>
+    <!-- slide2 -->
     <div class="slide" :class="{ isActive: slideIndex === 1 }">
       <div class="indicator">
-        <button class="button" @click="setIndex0">&#9664; 台北市/新北市</button>
+        <button class="button" @click="setIndex0">
+          <img :src="prevArrow()" /> <span>台北市/新北市</span>
+        </button>
         <p class="title">六都市長開票進度</p>
-        <button class="button" @click="setIndex2">台南市/高雄市 &#9654;</button>
+        <button class="button" @click="setIndex2">
+          <span>台南市/高雄市</span><img :src="nextArrow()" />
+        </button>
       </div>
       <div class="city">
         <div class="title">{{ polling[2].city }}</div>
@@ -76,9 +92,14 @@
             class="candidate"
           >
             <div class="name-party-wrapper">
-              <div>{{ candidate.candNo }} {{ candidate.name }}</div>
-              <div>{{ candidate.party.slice(0, 1) }}</div>
-              <div v-show="candidate.candVictor">⭕</div>
+              <div>{{ candidate.candNo }}</div>
+              <div>{{ candidate.name }}</div>
+              <img
+                v-if="getPartySvg(candidate.party)"
+                :src="getPartySvg(candidate.party)"
+              />
+              <span v-else>{{ candidate.party }}</span>
+              <img v-show="candidate.candVictor" :src="getWinSvg()" />
             </div>
             <div class="progress-bar">
               <div class="tks">
@@ -101,9 +122,14 @@
             class="candidate"
           >
             <div class="name-party-wrapper">
-              <div>{{ candidate.candNo }} {{ candidate.name }}</div>
-              <div>{{ candidate.party.slice(0, 1) }}</div>
-              <div v-show="candidate.candVictor">⭕</div>
+              <div>{{ candidate.candNo }}</div>
+              <div>{{ candidate.name }}</div>
+              <img
+                v-if="getPartySvg(candidate.party)"
+                :src="getPartySvg(candidate.party)"
+              />
+              <span v-else>{{ candidate.party }}</span>
+              <img v-show="candidate.candVictor" :src="getWinSvg()" />
             </div>
             <div class="progress-bar">
               <div class="tks">
@@ -118,11 +144,16 @@
         </div>
       </div>
     </div>
+    <!-- slide3 -->
     <div class="slide" :class="{ isActive: slideIndex === 2 }">
       <div class="indicator">
-        <button class="button" @click="setIndex1">&#9664; 桃園市/台中市</button>
+        <button class="button" @click="setIndex1">
+          <img :src="prevArrow()" /> <span>桃園市/台中市</span>
+        </button>
         <p class="title">六都市長開票進度</p>
-        <button class="button" @click="setIndex0">台北市/新北市 &#9654;</button>
+        <button class="button" @click="setIndex0">
+          <span>台北市/新北市</span><img :src="nextArrow()" />
+        </button>
       </div>
       <div class="city">
         <div class="title">{{ polling[4].city }}</div>
@@ -133,9 +164,14 @@
             class="candidate"
           >
             <div class="name-party-wrapper">
-              <div>{{ candidate.candNo }} {{ candidate.name }}</div>
-              <div>{{ candidate.party.slice(0, 1) }}</div>
-              <div v-show="candidate.candVictor">⭕</div>
+              <div>{{ candidate.candNo }}</div>
+              <div>{{ candidate.name }}</div>
+              <img
+                v-if="getPartySvg(candidate.party)"
+                :src="getPartySvg(candidate.party)"
+              />
+              <span v-else>{{ candidate.party }}</span>
+              <img v-show="candidate.candVictor" :src="getWinSvg()" />
             </div>
             <div class="progress-bar">
               <div class="tks">
@@ -158,9 +194,14 @@
             class="candidate"
           >
             <div class="name-party-wrapper">
-              <div>{{ candidate.candNo }} {{ candidate.name }}</div>
-              <div>{{ candidate.party.slice(0, 1) }}</div>
-              <div v-show="candidate.candVictor">⭕</div>
+              <div>{{ candidate.candNo }}</div>
+              <div>{{ candidate.name }}</div>
+              <img
+                v-if="getPartySvg(candidate.party)"
+                :src="getPartySvg(candidate.party)"
+              />
+              <span v-else>{{ candidate.party }}</span>
+              <img v-show="candidate.candVictor" :src="getWinSvg()" />
             </div>
             <div class="progress-bar">
               <div class="tks">
@@ -179,6 +220,14 @@
 </template>
 
 <script>
+import kmtSvg from '../assets/kmt.svg'
+import tmdSvg from '../assets/tmd.svg'
+import ddpSvg from '../assets/ddp.svg'
+import noParty from '../assets/noparty.svg'
+import prevArrow from '../assets/prev.svg'
+import nextArrow from '../assets/next.svg'
+import win from '../assets/win.svg'
+
 export default {
   name: 'CarouselPc',
 
@@ -211,6 +260,29 @@ export default {
     },
     setIndex0() {
       this.slideIndex = 0
+    },
+    getPartySvg(partyName) {
+      switch (partyName) {
+        case '中國國民黨':
+          return kmtSvg
+        case '民主進步黨':
+          return ddpSvg
+        case '台灣民眾黨':
+          return tmdSvg
+        case '無':
+          return noParty
+        default:
+          return null
+      }
+    },
+    getWinSvg() {
+      return win
+    },
+    prevArrow() {
+      return prevArrow
+    },
+    nextArrow() {
+      return nextArrow
     },
   },
 }
@@ -257,6 +329,9 @@ export default {
 }
 
 .button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 600;
   font-size: 14px;
   color: #f34b4b;
@@ -286,7 +361,7 @@ export default {
   font-size: 16px;
   line-height: 22px;
   color: #4a4a4a;
-  padding: 6px 0;
+  padding: 6px 0px;
 }
 .progress-bar {
   position: relative;
