@@ -254,6 +254,13 @@ export default {
     }
   },
 
+  //   const pollingMillisecond = 1 * 60 * 1000
+  // setInterval(() => {
+  //  axios.get(dataUrl)
+  //   .then(({data}) => {setData(data)})
+  //   .catch(error => console.error(error))
+  // }, pollingMillisecond)
+
   data() {
     return {
       editorChoices: [],
@@ -441,6 +448,20 @@ export default {
     this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
+    const pollingMillisecond = 1 * 60 * 1000
+
+    setInterval(() => {
+      axios
+        .get(
+          'https://whoareyou-gcs.readr.tw/elections-dev/2022/mayor/special_municipality.json'
+        )
+        .then(({ data }) => {
+          this.polling = data?.polling || this.polling
+          this.updatedAt = data?.updatedAt || this.updatedAt
+          // console.log(data)
+        })
+        .catch((error) => console.error(error))
+    }, pollingMillisecond)
   },
 
   beforeDestroy() {
