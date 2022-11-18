@@ -96,9 +96,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { mapGetters } from 'vuex'
-import { get as axiosGet } from 'axios'
+import axios, { get as axiosGet } from 'axios'
 import gqlCombineQuery from 'graphql-combine-query'
 
 import RdNavbar from '~/components/shared/RdNavbar.vue'
@@ -251,15 +250,9 @@ export default {
     return {
       polling: data.data?.polling || [],
       updatedAt: data.data?.updatedAt || '',
+      isRunning: data.data?.is_running || false,
     }
   },
-
-  //   const pollingMillisecond = 1 * 60 * 1000
-  // setInterval(() => {
-  //  axios.get(dataUrl)
-  //   .then(({data}) => {setData(data)})
-  //   .catch(error => console.error(error))
-  // }, pollingMillisecond)
 
   data() {
     return {
@@ -283,6 +276,7 @@ export default {
       scrollDepthObserver: undefined,
       polling: [],
       updatedAt: '',
+      isRunning: false,
     }
   },
 
@@ -290,7 +284,6 @@ export default {
     ...mapGetters('viewport', ['viewportWidth']),
 
     isViewportWidthUpMd() {
-      console.log(this.polling)
       return this.viewportWidth >= this.breakpointMd
     },
     breakpointMd() {
@@ -448,20 +441,22 @@ export default {
     this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
-    const pollingMillisecond = 1 * 60 * 1000
 
-    setInterval(() => {
-      axios
-        .get(
-          'https://whoareyou-gcs.readr.tw/elections-dev/2022/mayor/special_municipality.json'
-        )
-        .then(({ data }) => {
-          this.polling = data?.polling || this.polling
-          this.updatedAt = data?.updatedAt || this.updatedAt
-          // console.log(data)
-        })
-        .catch((error) => console.error(error))
-    }, pollingMillisecond)
+    if (this.isRunning) {
+      const pollingMillisecond = 1 * 60 * 1000
+
+      setInterval(() => {
+        axios
+          .get(
+            'https://whoareyou-gcs.readr.tw/elections-dev/2022/mayor/special_municipality.json'
+          )
+          .then(({ data }) => {
+            this.polling = data?.polling || this.polling
+            this.updatedAt = data?.updatedAt || this.updatedAt
+          })
+          .catch((error) => console.error(error))
+      }, pollingMillisecond)
+    }
   },
 
   beforeDestroy() {

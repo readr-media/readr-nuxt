@@ -19,5 +19,6 @@ module.exports = {
   rules: {
     'nuxt/no-cjs-in-config': 'off',
     'vue/attribute-hyphenation': ['error', 'never'],
+    camelcase: [1, { properties: 'never' }],
   },
 }
