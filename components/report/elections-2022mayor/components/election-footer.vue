@@ -7,6 +7,8 @@
     <a
       class="link"
       href="https://www.readr.tw/project/3/election2022/index.html"
+      rel="noopener noreferrer"
+      target="_blank"
       >完整開票內容</a
     >
   </div>
