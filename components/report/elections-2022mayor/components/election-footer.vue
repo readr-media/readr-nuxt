@@ -4,7 +4,11 @@
       <p>最後更新時間：{{ formattedDate }}</p>
       <p>資料來源：中央選舉委員會</p>
     </div>
-    <a class="link" href="">完整開票內容</a>
+    <a
+      class="link"
+      href="https://www.readr.tw/project/3/election2022/index.html"
+      >完整開票內容</a
+    >
   </div>
 </template>
 
