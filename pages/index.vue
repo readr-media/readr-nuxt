@@ -451,7 +451,6 @@ export default {
     const startTime = new Date(Date.UTC(2022, 10, 26, 7, 30))
     const endTime = new Date(Date.UTC(2022, 10, 27, 16))
     const now = new Date()
-    console.log(startTime, endTime)
 
     if (this.isRunning && startTime < now && endTime > now) {
       const pollingMillisecond = 1 * 60 * 1000
