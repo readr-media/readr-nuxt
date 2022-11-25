@@ -129,7 +129,9 @@ Object.assign(module.exports, {
     '~/plugins/vue-plugins/web-components.client.js',
     { src: '~/plugins/vue-plugins/vue-draggable-resizable.js', mode: 'client' },
   ],
-
+  publicRuntimeConfig: {
+    electionMayorFeatureToggle: process.env.ELECTION_MAYOR_FEATURE_TOGGLE,
+  },
   serverMiddleware: [
     '~/server-middleware/header.js',
     { path: '/api/public', handler: '~/server-middleware/apis/public.js' },
