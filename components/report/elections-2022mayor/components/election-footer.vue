@@ -9,6 +9,7 @@
       href="https://www.readr.tw/project/3/election2022/index.html"
       rel="noopener noreferrer"
       target="_blank"
+      @click="sendGaEvent('homepage', 'click', '完整開票內容')"
       >完整開票內容</a
     >
   </div>
@@ -33,6 +34,11 @@ export default {
   computed: {
     formattedDate() {
       return this.updatedAt.slice(0, -3).replace('-', '/').replace('-', '/')
+    },
+  },
+  methods: {
+    sendGaEvent(category, action, label, value) {
+      this.$ga.event(category, action, label, value)
     },
   },
 }
