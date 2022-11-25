@@ -240,7 +240,7 @@ export default {
   },
 
   async asyncData({ $config }) {
-    const startTime = new Date(Date.UTC(2022, 10, 25, 3, 20))
+    const startTime = new Date(Date.UTC(2022, 10, 25, 10))
     const endTime = new Date(Date.UTC(2022, 10, 27, 16))
     const now = new Date()
     if (
@@ -251,8 +251,7 @@ export default {
       return { polling: [] }
     }
     const data = await axios.get(
-      // 'https://whoareyou-gcs.readr.tw/elections/2022/mayor/special_municipality.json'
-      'https://whoareyou-gcs.readr.tw/elections-dev/2022/mayor/special_municipality.json'
+      'https://whoareyou-gcs.readr.tw/elections/2022/mayor/special_municipality.json'
     )
     return {
       polling: data.data?.polling || [],
@@ -449,7 +448,7 @@ export default {
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
 
-    const startTime = new Date(Date.UTC(2022, 10, 25, 3, 20))
+    const startTime = new Date(Date.UTC(2022, 10, 25, 10))
     const endTime = new Date(Date.UTC(2022, 10, 27, 16))
     const now = new Date()
 
@@ -459,7 +458,7 @@ export default {
       setInterval(() => {
         axios
           .get(
-            'https://whoareyou-gcs.readr.tw/elections-dev/2022/mayor/special_municipality.json'
+            'https://whoareyou-gcs.readr.tw/elections/2022/mayor/special_municipality.json'
           )
           .then(({ data }) => {
             this.polling = data?.polling || this.polling
