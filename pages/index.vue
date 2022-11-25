@@ -240,7 +240,14 @@ export default {
   },
 
   async asyncData({ $config }) {
-    if ($config.electionMayorFeatureToggle !== 'on') {
+    const startTime = new Date(Date.UTC(2022, 10, 25, 3, 20))
+    const endTime = new Date(Date.UTC(2022, 10, 27, 16))
+    const now = new Date()
+    if (
+      $config.electionMayorFeatureToggle !== 'on' ||
+      startTime > now ||
+      endTime < now
+    ) {
       return { polling: [] }
     }
     const data = await axios.get(
@@ -442,7 +449,11 @@ export default {
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
 
-    if (this.isRunning) {
+    const startTime = new Date(Date.UTC(2022, 10, 25, 3, 20))
+    const endTime = new Date(Date.UTC(2022, 10, 27, 16))
+    const now = new Date()
+
+    if (this.isRunning && startTime < now && endTime > now) {
       const pollingMillisecond = 1 * 60 * 1000
 
       setInterval(() => {
