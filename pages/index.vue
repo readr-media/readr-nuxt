@@ -240,7 +240,7 @@ export default {
   },
 
   async asyncData({ $config }) {
-    const startTime = new Date(Date.UTC(2022, 10, 25, 10))
+    const startTime = new Date(Date.UTC(2022, 10, 26, 7, 30))
     const endTime = new Date(Date.UTC(2022, 10, 27, 16))
     const now = new Date()
     if (
@@ -448,9 +448,10 @@ export default {
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
 
-    const startTime = new Date(Date.UTC(2022, 10, 25, 10))
+    const startTime = new Date(Date.UTC(2022, 10, 26, 7, 30))
     const endTime = new Date(Date.UTC(2022, 10, 27, 16))
     const now = new Date()
+    console.log(startTime, endTime)
 
     if (this.isRunning && startTime < now && endTime > now) {
       const pollingMillisecond = 1 * 60 * 1000
