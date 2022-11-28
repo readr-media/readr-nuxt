@@ -2,12 +2,6 @@
   <div class="g-page-wrapper home">
     <RdNavbar />
 
-    <ElectionMayor
-      v-if="polling.length"
-      :polling="polling"
-      :updatedAt="updatedAt"
-    />
-
     <RdEditorChoice
       v-if="shouldOpenEditorChoices"
       :posts="transformedEditorChoice"
@@ -97,7 +91,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import axios, { get as axiosGet } from 'axios'
+import { get as axiosGet } from 'axios'
 import gqlCombineQuery from 'graphql-combine-query'
 
 import RdNavbar from '~/components/shared/RdNavbar.vue'
@@ -110,7 +104,6 @@ import RdDatabaseList from '~/components/app/RdDatabaseList.vue'
 import RdCollaboratorWall from '~/components/app/RdCollaboratorWall.vue'
 import RdCollaborativeList from '~/components/app/RdCollaborativeList.vue'
 import RdButtonDonate from '~/components/shared/Button/RdButtonDonate.vue'
-import ElectionMayor from '~/components/report/elections-2022mayor/election-mayor.vue'
 
 import { intersect } from '~/helpers/vue/directives/index.js'
 
@@ -146,7 +139,6 @@ export default {
     RdCollaboratorWall,
     RdCollaborativeList,
     RdButtonDonate,
-    ElectionMayor,
   },
 
   directives: {
@@ -239,27 +231,6 @@ export default {
     },
   },
 
-  async asyncData({ $config }) {
-    const startTime = new Date(Date.UTC(2022, 10, 26, 7, 30))
-    const endTime = new Date(Date.UTC(2022, 10, 27, 16))
-    const now = new Date()
-    if (
-      $config.electionMayorFeatureToggle !== 'on' ||
-      startTime > now ||
-      endTime < now
-    ) {
-      return { polling: [] }
-    }
-    const data = await axios.get(
-      'https://whoareyou-gcs.readr.tw/elections/2022/mayor/special_municipality.json'
-    )
-    return {
-      polling: data.data?.polling || [],
-      updatedAt: data.data?.updatedAt || '',
-      isRunning: data.data?.is_running || false,
-    }
-  },
-
   data() {
     return {
       editorChoices: [],
@@ -280,9 +251,6 @@ export default {
 
       isLoadingCategoryLists: false,
       scrollDepthObserver: undefined,
-      polling: [],
-      updatedAt: '',
-      isRunning: false,
     }
   },
 
@@ -447,35 +415,6 @@ export default {
     this.loadCollaboratorsCount()
     this.scrollTo(this.$route.hash)
     this.setupScrollDepthObserver()
-
-    const startTime = new Date(Date.UTC(2022, 10, 26, 7, 30))
-    const endTime = new Date(Date.UTC(2022, 10, 27, 16))
-    const now = new Date()
-
-    if (this.isRunning && startTime < now && endTime > now) {
-      axios
-        .get(
-          'https://whoareyou-gcs.readr.tw/elections/2022/mayor/special_municipality.json'
-        )
-        .then(({ data }) => {
-          this.polling = data?.polling || this.polling
-          this.updatedAt = data?.updatedAt || this.updatedAt
-        })
-        .catch((error) => console.error(error))
-      const pollingMillisecond = 1 * 60 * 1000
-
-      setInterval(() => {
-        axios
-          .get(
-            'https://whoareyou-gcs.readr.tw/elections/2022/mayor/special_municipality.json'
-          )
-          .then(({ data }) => {
-            this.polling = data?.polling || this.polling
-            this.updatedAt = data?.updatedAt || this.updatedAt
-          })
-          .catch((error) => console.error(error))
-      }, pollingMillisecond)
-    }
   },
 
   beforeDestroy() {
