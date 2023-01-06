@@ -72,7 +72,7 @@ steps:
       - '-f'
       - $_FILE_TO_DEPLOY
       - '--validate=true'
-timeout: 900s
+timeout: 1200s
 images:
   - gcr.io/$PROJECT_ID/readr-nuxt
 substitutions:
