@@ -8,6 +8,7 @@ function getHref({ style, id, slug } = {}) {
     case 'embedded':
     case 'frame':
     case 'blank':
+    case 'scrollablevideo':
       return `/post/${id}`
     case 'report':
       return `${SITE_URL}/project/${slug}`

@@ -107,7 +107,15 @@ const post = gql`
       relatedPosts(
         where: {
           state: published
-          style_in: [news, report, embedded, project3, frame, blank]
+          style_in: [
+            news
+            report
+            embedded
+            project3
+            frame
+            blank
+            scrollablevideo
+          ]
         }
       ) {
         id
