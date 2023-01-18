@@ -41,6 +41,7 @@ const actions = {
           'report',
           'frame',
           'blank',
+          'scrollablevideo',
         ],
       },
     })
@@ -59,6 +60,7 @@ const actions = {
           'report',
           'frame',
           'blank',
+          'scrollablevideo',
         ],
       },
     })
