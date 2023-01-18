@@ -34,6 +34,7 @@ if ((this.postStyle === 'report' || this.postStyle === 'project3') && window) {
 - News：路徑是 **./post/post id** ，交由 **RdNews** 元件，用於一般文章頁。
 - Embedded：路徑是 **./post/post id** ，交由 **RdReport.vue** 元件，用 **archieml** 解析內容，專門用於上稿在 readr-nuxt 內部的客製化專題。
 - Frame：路徑是 **./post/post id** ，交由 **RdFrame.vue** 元件，用於內文是 iframe 且有特殊導覽列的文章。
+- Scrollablevideo: **./post/post id** ，交由 **RdScrollablevideo.vue** 元件，用於需將捲動式影片呈現於文章標題之前的文章。
 - Blank：路徑是 **./post/post id** ，交由 **RdBlank.vue** 元件，主要用於內文是 iframe 且無需導覽列的文章。
 - Report：路徑是 **./report/post slug** ，用於原本就部署於 ./report 路徑底下的舊專題。
 - Project3：**./project/3/post slug** ，用於部署於 ./project/3 路徑底下的較新專題。

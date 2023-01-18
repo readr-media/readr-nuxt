@@ -4,6 +4,7 @@
     <RdFrame v-if="shouldMountFrame" :post="post" />
     <RdNews v-if="shouldMountNews" :news="post" />
     <RdReport v-if="shouldMountEmbeddedReport" :report="post" />
+    <RdScrollablevideo v-if="shouldMountScrollablevideo" :post="post" />
   </div>
 </template>
 
@@ -12,7 +13,15 @@
 import { post } from '~/apollo/queries/post.js'
 import { SITE_TITLE, SITE_URL } from '~/helpers/index.js'
 
-const validStyles = ['news', 'embedded', 'project3', 'report', 'frame', 'blank']
+const validStyles = [
+  'news',
+  'embedded',
+  'project3',
+  'report',
+  'frame',
+  'blank',
+  'scrollablevideo',
+]
 
 export default {
   name: 'Post',
@@ -21,6 +30,8 @@ export default {
     RdReport: () => import('~/components/app/Report/RdReport.vue'),
     RdFrame: () => import('~/components/app/Frame/RdFrame.vue'),
     RdBlank: () => import('~/components/app/Blank/RdBlank.vue'),
+    RdScrollablevideo: () =>
+      import('~/components/app/Scrollablevideo/RdScrollablevideo.vue'),
   },
   apollo: {
     post: {
@@ -94,6 +105,9 @@ export default {
     },
     shouldMountBlank() {
       return this.postStyle === 'blank'
+    },
+    shouldMountScrollablevideo() {
+      return this.postStyle === 'scrollablevideo'
     },
   },
   mounted() {
