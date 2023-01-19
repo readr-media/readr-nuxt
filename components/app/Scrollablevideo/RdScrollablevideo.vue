@@ -1,35 +1,35 @@
 <template>
   <div>
-    <div class="scrollablevideo">
-      <RdArticleContentHandler
-        v-for="(paragraph, index) in [firstEmbeddcode]"
-        :key="index"
-        :paragraph="paragraph"
-        :isSummary="false"
-      />
-    </div>
     <div class="g-page-wrapper news">
       <RdNavbar />
-      <RdArticleVideo
-        v-if="doesHaveHeroVideo"
-        :videoSrc="transformedNews.heroVideo.src"
-        :videoCap="transformedNews.heroCaption"
-        :poster="videoPoster"
-        :shouldAutoPlay="true"
-        :shouldLoop="true"
-        :shouldShowControls="false"
-        class="news__cover"
-      />
-      <RdCoverImage
-        v-else
-        :imgSrc="transformedNews.heroImg.src"
-        :imgCap="transformedNews.heroCaption"
-        class="news__cover"
-      />
-
+      <div class="news__cover">
+        <RdArticleVideo
+          v-if="doesHaveHeroVideo"
+          :videoSrc="transformedNews.heroVideo.src"
+          :videoCap="transformedNews.heroCaption"
+          :poster="videoPoster"
+          :shouldAutoPlay="true"
+          :shouldLoop="true"
+          :shouldShowControls="false"
+        />
+        <RdCoverImage
+          v-else
+          :imgSrc="transformedNews.heroImg.src"
+          :imgCap="transformedNews.heroCaption"
+        />
+      </div>
+      <h1 class="news__title">{{ transformedNews.title }}</h1>
+      <div class="scrollablevideo">
+        <RdArticleContentHandler
+          v-for="(paragraph, index) in [firstEmbeddcode]"
+          :key="index"
+          :paragraph="paragraph"
+          :isSummary="false"
+        />
+      </div>
       <section class="news__content">
         <RdArticleHeading
-          :title="transformedNews.title"
+          title=""
           :date="transformedNews.date"
           :categories="transformedNews.categories"
           :readTimeText="transformedNews.readTime"
@@ -471,18 +471,56 @@ export default {
   z-index: 1000;
 }
 .g-page-wrapper {
-  padding: 70px 0 0;
+  /* padding: 70px 0 0; */
+  padding: 0;
   @include media-breakpoint-up(sm) {
-    padding: 86px 0 0;
+    /* padding: 86px 0 0; */
+    padding: 0;
   }
 }
 .news {
   &__cover {
+    position: relative;
+    z-index: 500;
     width: 100%;
-    max-width: 960px;
-    margin: 0 auto 24px;
+    /* max-width: 960px; */
+    /* margin: 0 auto 24px; */
+    background-color: #ebf02c;
+    margin: 0 auto;
+    height: 100vh;
+    ::v-deep {
+      .cover-image__img {
+        margin-top: 0;
+        height: 100vh;
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+
     @include media-breakpoint-up(lg) {
-      margin: 24px auto 60px;
+      /* margin: 24px auto 60px; */
+      margin: 0 auto;
+    }
+  }
+  &__title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 501;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: 0.04em;
+    color: white;
+    margin: 0 0 16px;
+    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5));
+
+    @include media-breakpoint-up(md) {
+      font-size: 36px;
+      line-height: 1.5;
+      letter-spacing: 0.03em;
     }
   }
   &__content {
