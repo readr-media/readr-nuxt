@@ -471,13 +471,17 @@ export default {
   z-index: 1000;
 }
 .g-page-wrapper {
-  padding: 70px 0 0;
+  /* padding: 70px 0 0; */
+  padding: 0;
   @include media-breakpoint-up(sm) {
-    padding: 86px 0 0;
+    /* padding: 86px 0 0; */
+    padding: 0;
   }
 }
 .news {
   &__cover {
+    position: relative;
+    z-index: 500;
     width: 100%;
     /* max-width: 960px; */
     /* margin: 0 auto 24px; */
@@ -504,13 +508,15 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    z-index: 100;
+    z-index: 501;
     font-size: 28px;
     font-weight: 700;
     line-height: 36px;
     letter-spacing: 0.04em;
     color: white;
     margin: 0 0 16px;
+    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5));
+
     @include media-breakpoint-up(md) {
       font-size: 36px;
       line-height: 1.5;
@@ -522,9 +528,11 @@ export default {
     max-width: 568px;
     margin: 0 auto;
     padding: 0 20px;
+    padding-top: 70px;
     @include media-breakpoint-up(md) {
       width: 568px;
       padding: 0;
+      padding-top: 86px;
     }
     @include media-breakpoint-up(xl) {
       width: 600px;
