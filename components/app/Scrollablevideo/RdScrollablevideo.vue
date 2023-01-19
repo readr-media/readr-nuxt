@@ -25,6 +25,7 @@
           :key="index"
           :paragraph="paragraph"
           :isSummary="false"
+          articleType="scrollablevideo"
         />
       </div>
       <section class="news__content">
@@ -52,6 +53,7 @@
               :key="paragraph.id"
               :paragraph="paragraph"
               :isSummary="false"
+              articleType="scrollablevideo"
             />
           </template>
         </article>
