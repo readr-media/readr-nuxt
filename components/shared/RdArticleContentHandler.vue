@@ -30,8 +30,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    articleType: {
+      type: String,
+      default: '',
+    },
   },
   render(h, { props }) {
+    const articleType = props.articleType
     const content = props.paragraph?.content?.[0]
     const type = props.paragraph?.type
     switch (type) {
@@ -79,7 +84,11 @@ export default {
 
       case 'embeddedcode':
         return (
-          <RdEmbeddedCode class="g-article-embedded-code" content={content} />
+          <RdEmbeddedCode
+            class="g-article-embedded-code"
+            content={content}
+            articleType={articleType}
+          />
         )
       case 'annotation':
         return (

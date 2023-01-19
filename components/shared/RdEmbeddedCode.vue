@@ -4,10 +4,15 @@
     class="embeddedcode"
     :class="{ 'full-height': caption === 'reporter-scroll-video' }"
   >
-    <LazyRenderer v-if="!isFlourish" @load="insertScriptsInBody(embeddedCode)">
+    <LazyRenderer
+      v-if="!shouldEmbedImmediately"
+      @load="insertScriptsInBody(embeddedCode)"
+    >
       <p v-if="caption" class="caption">{{ caption }}</p>
     </LazyRenderer>
-    <p v-if="isFlourish && caption" class="caption">{{ caption }}</p>
+    <p v-if="shouldEmbedImmediately && caption" class="caption">
+      {{ caption }}
+    </p>
   </div>
 </template>
 
@@ -20,6 +25,10 @@ export default {
       required: true,
       default: () => ({}),
     },
+    articleType: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     caption() {
@@ -31,9 +40,12 @@ export default {
     isFlourish() {
       return this.embeddedCode?.includes('flourish')
     },
+    shouldEmbedImmediately() {
+      return this.isFlourish || this.articleType === 'scrollablevideo'
+    },
   },
   mounted() {
-    if (this.isFlourish) {
+    if (this.shouldEmbedImmediately) {
       this.insertScriptsInBody(this.embeddedCode)
     }
   },
