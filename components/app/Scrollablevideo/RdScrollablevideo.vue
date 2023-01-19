@@ -528,11 +528,9 @@ export default {
     max-width: 568px;
     margin: 0 auto;
     padding: 0 20px;
-    padding-top: 70px;
     @include media-breakpoint-up(md) {
       width: 568px;
       padding: 0;
-      padding-top: 86px;
     }
     @include media-breakpoint-up(xl) {
       width: 600px;
