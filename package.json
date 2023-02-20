@@ -27,7 +27,7 @@
     "@koa/cors": "^3.1.0",
     "@nuxtjs/apollo": "^4.0.1-rc.1",
     "@nuxtjs/firebase": "^7.1.0",
-    "@nuxtjs/gtm": "^2.5.0",
+    "@nuxtjs/gtm": "^2.4.0",
     "@readr-media/old-news-project-slugs": "^1.1.1",
     "@readr-media/web-components": "^2.5.2",
     "archieml": "^0.4.2",
