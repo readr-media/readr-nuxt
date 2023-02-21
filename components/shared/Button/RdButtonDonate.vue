@@ -1,6 +1,6 @@
 <template>
   <a
-    href="https://www.readr.tw/donate"
+    href="/donate"
     target="_blank"
     rel="noopener noreferrer"
     @click="$emit('sendGaEvent')"

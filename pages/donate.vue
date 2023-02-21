@@ -1,37 +1,18 @@
+<!-- 
+  考量未來會在網站上實作捐款頁的需求，維持使用該檔案，目前先將設定轉址到外部頁面，
+  未來要實作捐款頁時，直接在該檔案中進行修改即可。
+-->
+
 <template>
-  <div>
-    <RdHeader />
-    <RdDonateContainer />
-  </div>
+  <p>Donation Page</p>
 </template>
 
 <script>
-import RdHeader from '~/components/shared/Header/RdHeader.vue'
-import RdDonateContainer from '~/components/app/Donate/RdDonateContainer.vue'
-
-import { SITE_TITLE } from '~/helpers/index.js'
+import { DONATION_PAGE_URL } from '~/configs/config'
 
 export default {
-  name: 'Donate',
-
-  components: {
-    RdHeader,
-    RdDonateContainer,
-  },
-  head() {
-    const metaTitle = `贊助 READr - ${SITE_TITLE}`
-
-    return {
-      title: metaTitle,
-      meta: [{ hid: 'og:title', property: 'og:title', content: metaTitle }],
-      script: [
-        {
-          hid: 'tappay',
-          src: 'https://js.tappaysdk.com/tpdirect/v3',
-          defer: true,
-        },
-      ],
-    }
+  middleware: ({ redirect }) => {
+    redirect(DONATION_PAGE_URL)
   },
 }
 </script>
