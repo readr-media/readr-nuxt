@@ -34,11 +34,7 @@
           閱讀進度<span>{{ percent }}%</span>
         </div>
         <div v-if="!isPostPage" class="right__donate">
-          <a
-            href="https://www.readr.tw/donate"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="/donate" target="_blank" rel="noopener noreferrer">
             贊助我們
           </a>
         </div>
