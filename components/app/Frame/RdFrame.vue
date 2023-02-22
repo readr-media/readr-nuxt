@@ -409,10 +409,20 @@ export default {
   background-color: #f6f6f5;
   &__cover {
     width: 100%;
-    max-width: 960px;
-    margin: 0 auto 24px;
+    margin: 0px auto 24px;
+
     @include media-breakpoint-up(lg) {
-      margin: 24px auto 60px;
+      margin: 0px auto 60px;
+    }
+    &::v-deep {
+      .cover-image__img,
+      .video__wrapper {
+        width: auto;
+        height: calc(100vh - 70px);
+        @include media-breakpoint-up(sm) {
+          height: calc(100vh - 86px);
+        }
+      }
     }
   }
   &__content {
