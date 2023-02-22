@@ -3606,10 +3606,10 @@
   resolved "https://registry.yarnpkg.com/@readr-media/old-news-project-slugs/-/old-news-project-slugs-1.1.1.tgz#e3fc56166c213b10d217c6c9d75e9c0e65ac35fc"
   integrity sha512-bdfYgoTFsmbpPlyQay6EQGIHwombFB1+w6gq9/gEeyy+9fA9u6W2ah+gX2XQ9SnMIFvLfbWauPiI4xb4C5I64A==
 
-"@readr-media/web-components@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@readr-media/web-components/-/web-components-2.4.0.tgz#23a216e9033055e86c52234ddef360a9041146c7"
-  integrity sha512-FDHQy2+ZjXl+/TU6NOocEeYbb0Oqd9LjRagt7eoQIOD5Gmiw5xbehy1FoLLl9n86eKCkUuPetZEBKA84KPGmKQ==
+"@readr-media/web-components@^2.5.2":
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/@readr-media/web-components/-/web-components-2.5.2.tgz#f9325382b25b00251be6aefa6313730bf5c0565c"
+  integrity sha512-MXetyNu1Qbk84KU5hTA7gIFcTo4Z//f5lEaAbL+6csju0jsLFNqA2sBtbz4U81RQrQfw7UeHcAyIRvtd60CgKw==
   dependencies:
     "@readr-media/old-news-project-slugs" "^1.1.1"
     "@stencil/core" "^2.3.0"
@@ -3628,14 +3628,14 @@
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
 "@stencil/core@^2.3.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@stencil/core/-/core-2.4.0.tgz#17b45629c8986e35dcbce3f7dab7d64beede83f2"
-  integrity sha512-gU6+Yyd6O0KrCSS/O6j8KKqmRo+/Dcs2fI0+APCpbAWK+nqhwDISpdnSEfGDCLMoAC08XOZCycBRk2K1VGnEcg==
+  version "2.22.2"
+  resolved "https://registry.yarnpkg.com/@stencil/core/-/core-2.22.2.tgz#f518b6bfae85352c72cd07fcaf2f2b61e0581fd9"
+  integrity sha512-r+vbxsGNcBaV1VDOYW25lv4QfXTlNoIb5GpUX7rZ+cr59yqYCZC5tlV+IzX6YgHKW62ulCc9M3RYtTfHtNbNNw==
 
 "@stencil/sass@^1.3.2":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@stencil/sass/-/sass-1.4.1.tgz#ef5a1dd1b56c024ed08e80475e8a6f8d1c25bb10"
-  integrity sha512-aFKoqtxZ/8BRbvNFiWRycGiqvMI22Ifn5qsKfq0U23j43XD81jT6d7K0WQd55ejNpoSpdxJcbOuFgQy3mXizfA==
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@stencil/sass/-/sass-1.5.2.tgz#861dffe90a8d911b6b2af4a36d8928b5264a8646"
+  integrity sha512-nJ93pUSylsGsMX0eLmhxh1oEljcUjj5mYjhB9ziCdoaydAdjukrUoqDCC7tdVbOcBo2hKptQyWqCtETnBGYsXQ==
 
 "@stylelint/postcss-css-in-js@^0.37.1":
   version "0.37.2"
