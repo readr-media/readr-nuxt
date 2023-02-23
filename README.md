@@ -17,6 +17,15 @@
 3. 在終端機輸入 `yarn install`。
 4. 安裝完套件後，輸入 `yarn dev`，等它構建完，會有一個 `Server listening on XXX` 的指示，將 `XXX` 輸進瀏覽器的網址列，Enter，你就能看見 READr 囉！
 
+## Environment Variables
+| 變數名稱 | 資料型態 | 初始值 | 變數說明 |
+| --- | --- | --- | --- |
+| RELEASE_TARGET | 字串 | unknown | 出現在 [kubernetes-configs](https://github.com/mirror-media/kubernetes-configs) 中，但找不到使用地方，作用不明 |
+
+## Feature Toggle
+| 變數名稱 | 資料型態 | 初始值 | 變數說明 |
+| --- | --- | --- | --- |
+
 ## 資料夾結構
 
 ```
