@@ -29,7 +29,7 @@
     "@nuxtjs/firebase": "^7.1.0",
     "@nuxtjs/gtm": "^2.4.0",
     "@readr-media/old-news-project-slugs": "^1.1.1",
-    "@readr-media/web-components": "^2.5.2",
+    "@readr-media/web-components": "^2.6.0",
     "archieml": "^0.4.2",
     "axios": "^0.19.2",
     "cors": "^2.8.5",
