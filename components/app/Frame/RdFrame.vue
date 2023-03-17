@@ -247,10 +247,20 @@ export default {
         )
         .map((key) => {
           return key === 'otherByline' && typeof this.post[key] === 'string'
-            ? {
-                key,
-                data: this.post[key].split('、').map((d) => ({ name: d })),
-              }
+            ? this.post?.[key].startsWith('*')
+              ? // workaround: 特殊頁面需要客製化 credit 清單，在 cms Post 作者（其他）欄位中以星號開頭來啟用，以全形的'／'來產生換行效果
+                {
+                  key,
+                  data: this.post[key]
+                    .slice(1)
+                    .split('／')
+                    .map((d) => ({ name: d })),
+                  special: true,
+                }
+              : {
+                  key,
+                  data: this.post[key].split('、').map((d) => ({ name: d })),
+                }
             : {
                 key,
                 data: this.post[key],
