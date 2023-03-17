@@ -3,10 +3,19 @@
     <div class="credit-list">
       <ul>
         <li v-for="item in formatedList" :key="item.key">
-          <div class="title">{{ item.key }}：</div>
-          <span v-for="(person, i) in item.data" :key="i">
-            {{ i === 0 ? '' : '、' }}{{ person.name }}
-          </span>
+          <div v-if="!item.special" class="normal-item">
+            <div class="title">{{ item.key }}：</div>
+            <span v-for="(person, i) in item.data" :key="i">
+              {{ i === 0 ? '' : '、' }}{{ person.name }}
+            </span>
+          </div>
+          <!-- workaround: 特殊頁面需要客製化 credit 清單，在 cms Post 作者（其他）欄位中以星號開頭來啟用，以全形的'／'來產生換行效果 -->
+          <div v-else>
+            <div class="title">{{ item.key }}：</div>
+            <div v-for="(person, i) in item.data" :key="i">
+              {{ person.name }}
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -70,6 +79,7 @@ export default {
       return this.credits?.map((item) => ({
         key: CONTACT_MAPPING[item.key],
         data: item.data,
+        special: item.special,
       }))
     },
   },
@@ -147,8 +157,13 @@ export default {
       @include media-breakpoint-up(md) {
         font-size: 16px;
       }
+      .normal-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+      }
       .title {
-        display: block;
         color: rgba(0, 9, 40, 0.66);
       }
     }
