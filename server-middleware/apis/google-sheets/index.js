@@ -5,9 +5,6 @@
  * References:
  * https://developers.google.com/sheets/api/reference/rest
  */
- /*
- OAuth 失效，改用 service account 嘗試 2023/10/5
- */
 
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
