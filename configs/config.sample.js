@@ -5,12 +5,6 @@ Object.assign(module.exports, {
 
   ENV: 'local',
 
-  TAPPAY: {
-    APP_ID: '',
-    SECRET: '',
-    ENV: 'sandbox',
-  },
-
   EZPAY: {
     KEY: '',
     IV: '',

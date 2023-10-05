@@ -149,14 +149,6 @@ Object.assign(module.exports, {
       path: '/api/google-sheets',
       handler: '~/server-middleware/apis/google-sheets/index.js',
     },
-    {
-      path: '/api/donate',
-      handler: '~/server-middleware/apis/donate/index.js',
-    },
-    {
-      path: '/api/subscriptions',
-      handler: '~/server-middleware/apis/subscriptions.js',
-    },
   ],
   /*
    ** Nuxt.js dev-modules
