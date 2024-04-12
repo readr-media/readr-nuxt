@@ -15,56 +15,57 @@
 <script>
 import ListHeading from './ListHeading.vue'
 import ArticleList from './ArticleList.vue'
-import { latestPosts } from '~/apollo/queries/posts.js'
-import {
-  getHref,
-  formatReadTime,
-  formatPostDate,
-  isReport,
-} from '~/helpers/index.js'
+// import { latestPosts } from '~/apollo/queries/posts.js'
+// import {
+//   getHref,
+//   formatReadTime,
+//   formatPostDate,
+//   isReport,
+// } from '~/helpers/index.js'
 export default {
   components: {
     ListHeading,
     ArticleList,
   },
-  apollo: {
-    latestPosts: {
-      query: latestPosts,
-      prefetch: false,
-      variables() {
-        return {
-          first: 4,
-        }
-      },
-    },
-  },
+  // apollo: {
+  //   latestPosts: {
+  //     query: latestPosts,
+  //     prefetch: false,
+  //     variables() {
+  //       return {
+  //         first: 4,
+  //       }
+  //     },
+  //   },
+  // },
   computed: {
     transformedLatestPosts() {
-      return this.latestPosts?.map((post) => {
-        const {
-          id = '',
-          title = '',
-          heroImage = {},
-          readingTime = 0,
-          publishTime = '',
-          style = '',
-        } = post || {}
+      return []
+      // return this.latestPosts?.map((post) => {
+      //   const {
+      //     id = '',
+      //     title = '',
+      //     heroImage = {},
+      //     readingTime = 0,
+      //     publishTime = '',
+      //     style = '',
+      //   } = post || {}
 
-        return {
-          id,
-          title,
-          href: getHref(post),
-          date: formatPostDate(publishTime),
-          readTime: formatReadTime(readingTime),
-          isReport: isReport(style),
-          img: {
-            src:
-              heroImage?.urlMobileSized ||
-              heroImage?.urlTabletSized ||
-              require('~/assets/imgs/default/post.svg'),
-          },
-        }
-      })
+      //   return {
+      //     id,
+      //     title,
+      //     href: getHref(post),
+      //     date: formatPostDate(publishTime),
+      //     readTime: formatReadTime(readingTime),
+      //     isReport: isReport(style),
+      //     img: {
+      //       src:
+      //         heroImage?.urlMobileSized ||
+      //         heroImage?.urlTabletSized ||
+      //         require('~/assets/imgs/default/post.svg'),
+      //     },
+      //   }
+      // })
     },
   },
 }

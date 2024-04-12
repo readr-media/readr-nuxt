@@ -38,8 +38,11 @@ export default {
   mounted() {
     console.log(this.mobileContent)
   },
-
-  methods: {},
+  methods: {
+    sendGaEvent({ action, label, value }) {
+      this.$ga.event('projects', action, label, value)
+    },
+  },
 }
 </script>
 

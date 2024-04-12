@@ -43,9 +43,6 @@ export default {
       }
     },
   },
-  mounted() {
-    console.log('this.report', JSON.stringify(this.report))
-  },
 }
 </script>
 
