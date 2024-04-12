@@ -82,6 +82,11 @@ export default {
     })
     this.paragraph.push(temp)
   },
+  methods: {
+    sendGaEvent({ action, label, value }) {
+      this.$ga.event('projects', action, label, value)
+    },
+  },
 }
 </script>
 

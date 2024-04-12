@@ -1,135 +1,48 @@
 <template>
   <div class="post-and-report-wrapper">
-    <RdBlank v-if="shouldMountBlank" :post="post" />
-    <RdFrame v-if="shouldMountFrame" :post="post" />
-    <RdNews v-if="shouldMountNews" :news="post" />
     <RdReport v-if="shouldMountEmbeddedReport" :report="post" />
-    <RdScrollablevideo v-if="shouldMountScrollablevideo" :post="post" />
   </div>
 </template>
 
 <script>
-// import { news, report } from '~/apollo/queries/post.js'
-import { post } from '~/apollo/queries/post.js'
 import { SITE_TITLE, SITE_URL } from '~/helpers/index.js'
-
-const validStyles = [
-  'news',
-  'embedded',
-  'project3',
-  'report',
-  'frame',
-  'blank',
-  'scrollablevideo',
-]
 
 export default {
   name: 'Post',
   components: {
-    RdNews: () => import('~/components/app/RdNews.vue'),
     RdReport: () => import('~/components/app/Report/RdReport.vue'),
-    RdFrame: () => import('~/components/app/Frame/RdFrame.vue'),
-    RdBlank: () => import('~/components/app/Blank/RdBlank.vue'),
-    RdScrollablevideo: () =>
-      import('~/components/app/Scrollablevideo/RdScrollablevideo.vue'),
   },
-  apollo: {
-    post: {
-      query() {
-        return post
-      },
-      variables() {
-        return {
-          id: this.postId,
-        }
-      },
-      update(data) {
-        if (
-          !data.post?.title ||
-          data.post?.state !== 'published' ||
-          (data.post?.style && !validStyles.includes(data.post?.style))
-        ) {
-          this.has404Err = true
-          if (process.server) {
-            this.$nuxt.context.res.statusCode = 404
-          }
-        }
-        return data?.post ?? {}
-      },
-      // doc: https://v4.apollo.vuejs.org/guide-composable/error-handling.html#error-policies
-      errorPolicy: 'all',
-      error(error) {
-        const statusCode = error.networkError?.statusCode ?? 404
-        const is5xxError = /^5[0-9]/
-        const status = is5xxError.test(statusCode) ? 500 : 404
-        this[`has${status}Err`] = true
-        if (process.server) {
-          this.$nuxt.context.res.statusCode = status
-        }
-        // eslint-disable-next-line no-console
-        console.log('[GQL_ERR]', error)
-      },
-    },
-  },
+  async asyncData({ params, error }) {
+    try {
+      // Dynamically import the JavaScript file based on the page ID
 
+      const module = await import(`~/consts/post-${params?.id}.js`)
+
+      const { post } = module
+      return { post }
+    } catch (e) {
+      console.error('error message?', e)
+    }
+  },
   data() {
     return {
       post: {},
-      has404Err: false,
-      has500Err: false,
     }
   },
-
   computed: {
     postId() {
       return this.$route.params.id
     },
-    postSlug() {
-      return this.post?.slug ?? ''
-    },
     postStyle() {
       return this.post?.style ?? ''
-    },
-    /**
-     * 如果文章樣式為 news、embedded、frame 或 blank，
-     * 要個別用對應的元件呈現
-     */
-    shouldMountNews() {
-      return this.postStyle === 'news' || this.postStyle === ''
     },
     shouldMountEmbeddedReport() {
       return this.postStyle === 'embedded'
     },
-    shouldMountFrame() {
-      return this.postStyle === 'frame'
-    },
-    shouldMountBlank() {
-      return this.postStyle === 'blank'
-    },
-    shouldMountScrollablevideo() {
-      return this.postStyle === 'scrollablevideo'
-    },
   },
   mounted() {
-    if (this.has404Err) {
+    if (Object.keys(this.post).length === 0) {
       this.$nuxt.error({ statusCode: 404 })
-    }
-    if (this.has500Err) {
-      this.$nuxt.error({ statusCode: 500 })
-    }
-    /**
-     * 如果文章樣式為 report 或 project3，則要導向特定網址
-     */
-    if (
-      (this.postStyle === 'report' || this.postStyle === 'project3') &&
-      window
-    ) {
-      if (this.postSlug) {
-        const url = this.postStyle === 'report' ? 'project' : 'project/3'
-        window.location.href = `${SITE_URL}/${url}/${this.postSlug}`
-      } else {
-        this.$nuxt.error({ statusCode: 404 })
-      }
     }
   },
   head() {
