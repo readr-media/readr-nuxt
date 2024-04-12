@@ -13,11 +13,6 @@ steps:
         ./dockerignore/kubernetes-configs/readr-nuxt/overlays/prod/configs/config.js
       - ./configs/config.js
 
-  - name: bash
-    args:
-      - rm
-      - "-R"
-      - ./configs.build
   - name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
     args:
