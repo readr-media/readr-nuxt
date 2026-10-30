@@ -51,7 +51,9 @@ pipeline:
       branch: [master]
 
   build:
-    image: node:14.16.0-slim
+    image: node:24.22.1-slim
+    environment:
+      - NODE_OPTIONS=--openssl-legacy-provider
     commands:
     - apt-get update && apt-get install -y node-gyp
     - yarn install

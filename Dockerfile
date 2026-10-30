@@ -1,6 +1,7 @@
-FROM node:14.16.0-slim
+FROM node:24.22.1-slim
 
 ENV APP_DIR /app
+ENV NODE_OPTIONS --openssl-legacy-provider
 
 RUN mkdir -p $APP_DIR
 
